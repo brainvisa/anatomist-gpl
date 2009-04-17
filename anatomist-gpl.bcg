@@ -1,0 +1,29 @@
+#print 'anatomist-ggp.bcg'
+#print currentComponentFile
+
+anatomistgpl_modules = [ 'pyanatomist',  ]
+anatomistgpl_weakdeps = []
+anatomistgpl_subprojects = anatomist_modules + anatomist_weakdeps
+
+class AnatomistGplComponent( GenericMakerModuleComponent ):
+  _name = 'anatomist-gpl'
+
+  def dependencies( self ):
+    global anatomistgpl_modules
+    return anatomistgpl_modules
+
+  def weakDependencies( self ):
+    global anatomistgpl_weakdeps
+    deps = []
+    for component in anatomistgpl_weakdeps:
+      if weakDependency( component ):
+        deps.append( component )
+    return deps
+
+  def libraries( self ):
+    return []
+
+currentComponentDirectory = os.path.dirname( currentComponentFile )
+c = options.setdefault( None, {} )
+c['sources'] = currentComponentDirectory + ':' + c['sources']
+
