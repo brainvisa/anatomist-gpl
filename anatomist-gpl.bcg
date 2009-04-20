@@ -1,16 +1,16 @@
 #print 'anatomist-ggp.bcg'
 #print currentComponentFile
 
-anatomistgpl_modules = [ 'pyanatomist',  ]
+anatomistgpl_modules = [ 'pyanatomist', ]
 anatomistgpl_weakdeps = []
-anatomistgpl_subprojects = anatomist_modules + anatomist_weakdeps
+anatomistgpl_subprojects = anatomistgpl_modules + anatomistgpl_weakdeps
 
 class AnatomistGplComponent( GenericMakerModuleComponent ):
   _name = 'anatomist-gpl'
 
   def dependencies( self ):
     global anatomistgpl_modules
-    return anatomistgpl_modules
+    return [ 'anatomist-free' ] + anatomistgpl_modules
 
   def weakDependencies( self ):
     global anatomistgpl_weakdeps
@@ -24,6 +24,7 @@ class AnatomistGplComponent( GenericMakerModuleComponent ):
     return []
 
 currentComponentDirectory = os.path.dirname( currentComponentFile )
-c = options.setdefault( None, {} )
-c['sources'] = currentComponentDirectory + ':' + c['sources']
-
+for component in anatomistgpl_modules:
+  c = options.setdefault( component, {} )
+  c[ 'source' ] = os.path.join( currentComponentDirectory, component )
+  c[ 'version' ] = '4.0'
