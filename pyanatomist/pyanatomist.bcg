@@ -15,7 +15,7 @@ class PyAnatomist( GenericMakerComponent ):
 
   def dependencies( self ):
     return [ 'anatomist-free', PyQtComponent, 'pyaims(aims)',
-      'soma-base(soma)' ]
+      'soma', 'soma-base' ]
 
   def build( self, instances ):
     if not self._found or self._data[ 'enabled' ] == '0':
