@@ -27,4 +27,4 @@ currentComponentDirectory = os.path.dirname( currentComponentFile )
 for component in anatomistgpl_modules:
   c = options.setdefault( component, {} )
   c[ 'source' ] = os.path.join( currentComponentDirectory, component )
-  c[ 'version' ] = '4.0'
+  c[ 'version' ] = '3.2'
