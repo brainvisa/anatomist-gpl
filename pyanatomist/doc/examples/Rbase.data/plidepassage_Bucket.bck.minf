@@ -1,0 +1,6 @@
+attributes = {
+    'data_type' : 'VOID',
+    'file_type' : 'BCK',
+    'object_type' : 'Bucket',
+    'voxel_size' : [ 0.9375, 0.9375, 1.3, 1 ]
+  }
