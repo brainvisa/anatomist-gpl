@@ -49,19 +49,22 @@ inline void* pyanatomistConvertTo_anatomist_ObjectMenuR( PyObject * o )
 
 inline int pyanatomistObjectMenu_Check( PyObject* o )
 {
-  return sipIsSubClassInstance( o, sipClass_anatomist_ObjectMenu );
+  return sipCanConvertToInstance( o, sipClass_anatomist_ObjectMenu,
+                                  SIP_NOT_NONE | SIP_NO_CONVERTORS );
 }
 
 
 inline int pyanatomistObjectMenuP_Check( PyObject* o )
 {
-  return sipIsSubClassInstance( o, sipClass_anatomist_ObjectMenu );
+  return sipCanConvertToInstance( o, sipClass_anatomist_ObjectMenu,
+                                  SIP_NOT_NONE | SIP_NO_CONVERTORS );
 }
 
 
 inline int pyanatomistObjectMenuR_Check( PyObject* o )
 {
-  return sipIsSubClassInstance( o, sipClass_rc_ptr_ObjectMenu );
+  return sipCanConvertToInstance( o, sipClass_rc_ptr_ObjectMenu,
+                                  SIP_NOT_NONE | SIP_NO_CONVERTORS );
 }
 
 #endif
