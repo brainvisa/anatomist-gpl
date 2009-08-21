@@ -540,7 +540,8 @@ typedef std::set<anatomist::AWindow * > set_AWindowPtr;
             if( item )
               {
                 ao = reinterpret_cast<anatomist::AObject *>
-                  ( sipForceConvertTo_anatomist_AObject( item, &iserr ) );
+                  ( sipForceConvertToInstance( item,
+                    sipClass_anatomist_AObject, 0, 0, 0, &iserr ) );
                 if( !ao || iserr )
                   {
                     sipIsErr = 1;
@@ -557,7 +558,8 @@ typedef std::set<anatomist::AWindow * > set_AWindowPtr;
                 if( item )
                   {
                     aw = reinterpret_cast<anatomist::AWindow *>
-                      ( sipForceConvertTo_anatomist_AWindow( item, &iserr ) );
+                      ( sipForceConvertToInstance( itemn
+                        sipClass_anatomist_AWindow, 0, 0, 0, &iserr ) );
                     if( !aw || iserr )
                       {
                         sipIsErr = 1;
@@ -645,7 +647,8 @@ typedef std::set<anatomist::AWindow * > set_AWindowPtr;
             if( item )
               {
                 ao = reinterpret_cast<anatomist::AObject *>
-                  ( sipForceConvertTo_anatomist_AObject( item, &iserr ) );
+                  ( sipForceConvertToInstance( item,
+                    sipClass_anatomist_AObject, 0, 0, 0, &iserr ) );
                 if( !ao || iserr )
                   {
                     sipIsErr = 1;
@@ -720,7 +723,8 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
             if( item )
               {
                 ao = reinterpret_cast<anatomist::AObject *>
-                  ( sipForceConvertTo_anatomist_AObject( item, &iserr ) );
+                  ( sipForceConvertToInstance( item,
+                    sipClass_anatomist_AObject, 0, 0, 0, &iserr ) );
                 if( !ao || iserr )
                   {
                     sipIsErr = 1;

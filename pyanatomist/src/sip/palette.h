@@ -19,7 +19,8 @@ inline void* pyanatomistConvertTo_anatomist_APalette( PyObject * o )
 
 inline int pyanatomistAPalette_Check( PyObject* o )
 {
-  return sipIsSubClassInstance( o, sipClass_anatomist_APalette );
+  return sipCanConvertToInstance( o, sipClass_anatomist_APalette,
+                                  SIP_NOT_NONE | SIP_NO_CONVERTORS );
 }
 
 // --
@@ -40,7 +41,8 @@ inline void* pyanatomistConvertTo_anatomist_APaletteP( PyObject * o )
 
 inline int pyanatomistAPaletteP_Check( PyObject* o )
 {
-  return sipIsSubClassInstance( o, sipClass_anatomist_APalette );
+  return sipCanConvertToInstance( o, sipClass_anatomist_APalette,
+                                  SIP_NOT_NONE | SIP_NO_CONVERTORS );
 }
 
 // --
@@ -61,7 +63,8 @@ inline void* pyanatomistConvertTo_anatomist_APaletteR( PyObject * o )
 
 inline int pyanatomistAPaletteR_Check( PyObject* o )
 {
-  return sipIsSubClassInstance( o, sipClass_rc_ptr_APalette );
+  return sipCanConvertToInstance( o, sipClass_rc_ptr_APalette,
+                                  SIP_NOT_NONE | SIP_NO_CONVERTORS );
 }
 
 
