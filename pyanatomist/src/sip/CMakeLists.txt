@@ -11,12 +11,12 @@ file( GLOB _sipSources "${CMAKE_CURRENT_SOURCE_DIR}/*.sip" )
 
 file( MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/${ANATOMIST_RELATIVE_SIP_DIRECTORY}" )
 exec_program( "${PYTHON_EXECUTABLE}"
-  ARGS "${AIMS_SIP_DIRECTORY}/maketemplates.py"
-        -s "${AIMS_SIP_DIRECTORY}"
+  ARGS "${AIMS-FREE_SIP_DIRECTORY}/maketemplates.py"
+        -s "${AIMS-FREE_SIP_DIRECTORY}"
         -i "${CMAKE_CURRENT_SOURCE_DIR}/generatedtypes.py"
         -p "${CMAKE_CURRENT_SOURCE_DIR}"
         -o "${CMAKE_BINARY_DIR}/${ANATOMIST_RELATIVE_SIP_DIRECTORY}"
-        -t "${AIMS_SIP_DIRECTORY}/typessub.py"
+        -t "${AIMS-FREE_SIP_DIRECTORY}/typessub.py"
         -t "${CMAKE_CURRENT_SOURCE_DIR}/anatypessub.py"
         -l
   OUTPUT_VARIABLE _generatedSipFileList 
@@ -31,7 +31,7 @@ BRAINVISA_ADD_SIP_PYTHON_MODULE( anatomistsip
   "${CMAKE_BINARY_DIR}/${ANATOMIST_RELATIVE_SIP_DIRECTORY}/anatomist_VOID.sip"
   SIP_SOURCES ${_generatedSipFileList} ${_sipSources}
   SIP_INCLUDE "${CMAKE_BINARY_DIR}/${ANATOMIST_RELATIVE_SIP_DIRECTORY}"
-    "${AIMS_SIP_DIRECTORY}" "${PYQT_SIP_DIR}" )
+    "${AIMS-FREE_SIP_DIRECTORY}" "${PYQT_SIP_DIR}" )
 target_link_libraries( anatomistsip 
   ${PYTHON_LIBRARY}
   pyanatomistexports
