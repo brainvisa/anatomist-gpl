@@ -1,0 +1,37 @@
+cmake_minimum_required( VERSION 2.6 )
+find_package( brainvisa-cmake REQUIRED )
+BRAINVISA_PROJECT()
+
+BRAINVISA_FIND_PACKAGE( anatomist-free REQUIRED )
+include( "${ANATOMIST-FREE_USE_FILE}" )
+
+find_package( PythonInterp )
+if( PYTHONINTERP_FOUND )
+  find_package( PythonLibs )
+  find_package( SIP )
+  find_package( Numpy )
+  find_package( PyQt )
+endif( PYTHONINTERP_FOUND )
+
+set( ANATOMIST-GPL_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/include" )
+if( PYTHONLIBS_FOUND )
+  set( ANATOMIST-GPL_INCLUDE_DIRS ${ANATOMIST-GPL_INCLUDE_DIRS} 
+       "${PYTHON_INCLUDE_PATH}" )
+endif()
+if( NUMPY_FOUND )
+  set( ANATOMIST-GPL_INCLUDE_DIRS ${ANATOMIST-GPL_INCLUDE_DIRS}
+       "${NUMPY_INCLUDE_DIR}" )
+endif()
+if( SIP_FOUND )
+  set( ANATOMIST-GPL_INCLUDE_DIRS ${ANATOMIST-GPL_INCLUDE_DIRS}
+       "${SIP_INCLUDE_DIR}" )
+endif()
+include_directories( ${ANATOMIST-GPL_INCLUDE_DIRS} )
+
+if( PYTHONLIBS_FOUND AND SIP_FOUND AND NUMPY_FOUND AND PYQT_FOUND )
+  set( ANATOMIST_RELATIVE_SIP_DIRECTORY
+       "share/sip/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}" )
+  add_subdirectory( pyanatomist )
+else( PYTHONLIBS_FOUND AND SIP_FOUND AND PYQT_FOUND )
+  message( "WARNING: Not building pyanatomist due to missing dependency:\n  PYTHONLIBS_FOUND=${PYTHONLIBS_FOUND}\nSIP_FOUND=${SIP_FOUND}\nNUMPY_FOUND=${NUMPY_FOUND}\nPYQT_FOUND=${PYQT_FOUND}\n" )
+endif( PYTHONLIBS_FOUND AND SIP_FOUND AND NUMPY_FOUND AND PYQT_FOUND )
