@@ -1,6 +1,7 @@
 BRAINVISA_GET_FILE_LIST_FROM_PRO( pyanatomist.pro "HEADERS" _headers "SOURCES" _sources )
-BRAINVISA_COPY_AND_INSTALL_HEADERS( _headers pyanatomist )
+BRAINVISA_COPY_AND_INSTALL_HEADERS( _headers pyanatomist headersTarget )
 add_library( pyanatomistexports SHARED ${_sources} )
+add_dependencies( pyanatomistexports ${headersTarget} )
 set_property( TARGET pyanatomistexports PROPERTY VERSION ${${PROJECT_NAME}_VERSION} )
 set( _libraries ${OPENGL_LIBRARIES} ${AIMS-GPL_LIBRARIES} )
 if( APPLE )
