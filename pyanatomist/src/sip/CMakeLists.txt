@@ -32,7 +32,7 @@ BRAINVISA_ADD_SIP_PYTHON_MODULE( anatomistsip
   "${CMAKE_BINARY_DIR}/${ANATOMIST_RELATIVE_SIP_DIRECTORY}/anatomist_VOID.sip"
   SIP_SOURCES ${_generatedSipFileList} ${_sipSources}
   SIP_INCLUDE "${CMAKE_BINARY_DIR}/${ANATOMIST_RELATIVE_SIP_DIRECTORY}"
-    "${AIMS-FREE_SIP_DIRECTORY}" "${PYQT_SIP_DIR}" )
+    "${AIMS-FREE_SIP_DIRECTORY}" "${PYQT${DESIRED_QT_VERSION}_SIP_DIR}" )
 add_dependencies( anatomistsip ${headersTarget} )
 target_link_libraries( anatomistsip 
   ${PYTHON_LIBRARY}
