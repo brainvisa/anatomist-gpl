@@ -1,11 +1,12 @@
 BRAINVISA_GET_FILE_LIST_FROM_PRO( "${CMAKE_CURRENT_SOURCE_DIR}/sip.pro" "HEADERS" _headers "SOURCES" _sources )
-BRAINVISA_COPY_AND_INSTALL_HEADERS( _headers pyanatomist )
+BRAINVISA_COPY_AND_INSTALL_HEADERS( _headers pyanatomist headersTarget )
 
 file( GLOB _sipTemplates RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/*.tpl" )
 BRAINVISA_COPY_FILES( ${PROJECT_NAME}-devel
-                 anatypessub.py ${_sipTemplates}
-                 SOURCE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-                 DESTINATION "${ANATOMIST_RELATIVE_SIP_DIRECTORY}" )
+                      anatypessub.py ${_sipTemplates}
+                      SOURCE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+                      DESTINATION "${ANATOMIST_RELATIVE_SIP_DIRECTORY}"
+                      IMMEDIATE )
 
 file( GLOB _sipSources "${CMAKE_CURRENT_SOURCE_DIR}/*.sip" )
 
@@ -23,7 +24,7 @@ exec_program( "${PYTHON_EXECUTABLE}"
   RETURN_VALUE _returnValue )
 
 if( NOT _returnValue EQUAL 0 )
-  message( FATAL_ERROR "The sip generation from ${PROJECT_NAME} templates returned an error:\n  ${_generatedSipFileList}\n========================")
+  message( SEND_ERROR "The sip generation from ${PROJECT_NAME} templates returned an error:\n  ${_generatedSipFileList}\n========================")
 endif( NOT _returnValue EQUAL 0 )
 
 BRAINVISA_ADD_SIP_PYTHON_MODULE( anatomistsip
@@ -31,11 +32,12 @@ BRAINVISA_ADD_SIP_PYTHON_MODULE( anatomistsip
   "${CMAKE_BINARY_DIR}/${ANATOMIST_RELATIVE_SIP_DIRECTORY}/anatomist_VOID.sip"
   SIP_SOURCES ${_generatedSipFileList} ${_sipSources}
   SIP_INCLUDE "${CMAKE_BINARY_DIR}/${ANATOMIST_RELATIVE_SIP_DIRECTORY}"
-    "${AIMS-FREE_SIP_DIRECTORY}" "${PYQT_SIP_DIR}" )
+    "${AIMS-FREE_SIP_DIRECTORY}" "${PYQT${DESIRED_QT_VERSION}_SIP_DIR}" )
+add_dependencies( anatomistsip ${headersTarget} )
 target_link_libraries( anatomistsip 
   ${PYTHON_LIBRARY}
   pyanatomistexports
   ${AIMS_SIP_LIBRARIES} )
 BRAINVISA_INSTALL( TARGETS anatomistsip 
-              DESTINATION python/anatomist
-              COMPONENT ${PROJECT_NAME} )
+                   DESTINATION python/anatomist
+                   COMPONENT ${PROJECT_NAME} )
