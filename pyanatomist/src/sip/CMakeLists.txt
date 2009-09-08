@@ -39,7 +39,7 @@ add_dependencies( anatomistsip ${headersTarget} )
 target_link_libraries( anatomistsip 
   ${PYTHON_LIBRARY}
   pyanatomistexports
-  ${AIMS_SIP_LIBRARIES} )
+  ${AIMS_PYAIMS_LIB} )
 BRAINVISA_INSTALL( TARGETS anatomistsip 
                    DESTINATION python/anatomist
                    COMPONENT ${PROJECT_NAME} )
