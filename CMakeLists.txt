@@ -32,7 +32,7 @@ include_directories( ${ANATOMIST-GPL_INCLUDE_DIRS} )
 
 if( PYTHONLIBS_FOUND AND SIP_FOUND AND NUMPY_FOUND AND PYQT${DESIRED_QT_VERSION}_FOUND )
   set( ANATOMIST_RELATIVE_SIP_DIRECTORY
-       "share/sip/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}" )
+       "share/anatomist-${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}/sip" )
   if( anatomist-free_FOUND AND aims-gpl_FOUND )
     add_subdirectory( pyanatomist )
   endif()
