@@ -20,6 +20,7 @@ exec_program( "${PYTHON_EXECUTABLE}"
         -t "${AIMS-FREE_SIP_DIRECTORY}/typessub.py"
         -t "${CMAKE_CURRENT_SOURCE_DIR}/anatypessub.py"
         -l
+        -m "${QT_MOC_EXECUTABLE}"
   OUTPUT_VARIABLE _generatedSipFileList 
   RETURN_VALUE _returnValue )
 
@@ -32,7 +33,8 @@ BRAINVISA_ADD_SIP_PYTHON_MODULE( anatomistsip
   "${CMAKE_BINARY_DIR}/${ANATOMIST_RELATIVE_SIP_DIRECTORY}/anatomist_VOID.sip"
   SIP_SOURCES ${_generatedSipFileList} ${_sipSources}
   SIP_INCLUDE "${CMAKE_BINARY_DIR}/${ANATOMIST_RELATIVE_SIP_DIRECTORY}"
-    "${AIMS-FREE_SIP_DIRECTORY}" "${PYQT${DESIRED_QT_VERSION}_SIP_DIR}" )
+    "${AIMS-FREE_SIP_DIRECTORY}" "${PYQT${DESIRED_QT_VERSION}_SIP_DIR}"
+  SIP_INSTALL "${ANATOMIST_RELATIVE_SIP_DIRECTORY}" )
 add_dependencies( anatomistsip ${headersTarget} )
 target_link_libraries( anatomistsip 
   ${PYTHON_LIBRARY}
