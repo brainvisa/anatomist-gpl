@@ -25,7 +25,7 @@ exec_program( "${PYTHON_EXECUTABLE}"
   RETURN_VALUE _returnValue )
 
 if( NOT _returnValue EQUAL 0 )
-  message( SEND_ERROR "The sip generation from ${PROJECT_NAME} templates returned an error:\n  ${_generatedSipFileList}\n========================")
+  message( SEND_ERROR "The sip generation from ${PROJECT_NAME} templates with \"${AIMS-FREE_SIP_DIRECTORY}/maketemplates.py\" returned an error:\n${_generatedSipFileList}\n========================")
 endif( NOT _returnValue EQUAL 0 )
 
 BRAINVISA_ADD_SIP_PYTHON_MODULE( anatomistsip
