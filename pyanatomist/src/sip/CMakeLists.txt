@@ -29,7 +29,7 @@ if( NOT _returnValue EQUAL 0 )
 endif( NOT _returnValue EQUAL 0 )
 
 BRAINVISA_ADD_SIP_PYTHON_MODULE( anatomistsip
-  anatomist 
+  anatomist/cpp 
   "${CMAKE_BINARY_DIR}/${ANATOMIST_RELATIVE_SIP_DIRECTORY}/anatomist_VOID.sip"
   SIP_SOURCES ${_generatedSipFileList} ${_sipSources}
   SIP_INCLUDE "${CMAKE_BINARY_DIR}/${ANATOMIST_RELATIVE_SIP_DIRECTORY}"
@@ -41,5 +41,5 @@ target_link_libraries( anatomistsip
   pyanatomistexports
   ${AIMS_PYAIMS_LIB} )
 BRAINVISA_INSTALL( TARGETS anatomistsip 
-                   DESTINATION python/anatomist
+                   DESTINATION python/anatomist/cpp
                    COMPONENT ${PROJECT_NAME} )
