@@ -1321,7 +1321,7 @@ class Anatomist(ObservableSingleton, object):
     @type nbCols: int
     @ivar nbCols: number of columns of the windows block
     """
-    def __init__(self, anatomistinstance, internalRep=None, nbCols=2, *args, **kwargs):
+    def __init__(self, anatomistinstance=None, internalRep=None, nbCols=2, *args, **kwargs):
       super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance, internalRep, *args, **kwargs)
       self.nbCols=nbCols
   

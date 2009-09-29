@@ -1198,6 +1198,17 @@ class Anatomist(base.Anatomist):
       return self.anatomistinstance.Referential( self.anatomistinstance, ref )
 
   ###############################################################################
+  class AWindowsBlock(AItem):
+    def __init__(self, anatomistinstance=None, internalRep=None, nbCols=2, *args, **kwargs):
+      super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance, internalRep, *args, **kwargs)
+      self.nbCols=nbCols
+
+    def __del__( self ):
+      if self.internalRep is not None:
+        self.anatomistinstance.execute( 'DeleteElement',
+          elements=self.internalRep )
+
+  ###############################################################################
   class Referential(AItem, base.Anatomist.Referential):
     """
     @type refUuid: string
