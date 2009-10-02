@@ -1302,7 +1302,14 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     def __init__(self, anatomistinstance=None, nbCols=2):
       super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance, nbCols=nbCols)
       self.internalID=anatomistinstance.newId()
-  
+
+    def __del__( self ):
+      if self.internalRep is not None:
+        self.anatomistinstance.execute( 'DeleteElement',
+          elements=[self.internalID] )
+      base.Anatomist.AWindowsBlock.__del__( self )
+      Anatomist.AItem.__del__( self )
+
   ###############################################################################
   class AWindowsGroup(AItem, base.Anatomist.AWindowsGroup):
     """
