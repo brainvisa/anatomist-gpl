@@ -36,6 +36,10 @@ public:
   float max1() const;
   float min2() const;
   float max2() const;
+  void setMin1( float x );
+  void setMax1( float x );
+  void setMin2( float x );
+  void setMax2( float x );
   void create( unsigned dimx, unsigned dimy = 1, unsigned dimz = 1,
                unsigned dimt = 1 );
   virtual void fill();
