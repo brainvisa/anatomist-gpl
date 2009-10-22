@@ -73,11 +73,6 @@ public:
     virtual void clearHasChangedFlags() const /AutoGen/;
     virtual void setPalette( const anatomist::AObjectPalette & ) /AutoGen/;
 
-    anatomist::AIterator * __iter__() /AutoGen, TransferBack/;
-%MethodCode
-    sipRes = new anatomist::AIterator(sipCpp->begin());
-%End
-
     anatomist::AObject * __getitem__(int) /AutoGen/;
 %MethodCode
     if ( a0 < (int) sipCpp->size())

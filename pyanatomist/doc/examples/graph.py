@@ -31,8 +31,7 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 import anatomist.direct.api as anatomist
 from soma import aims
-r = aims.Reader()
-g = r.read( 'Rbase.arg' )
+g = aims.read( 'Rbase.arg' )
 
 a = anatomist.Anatomist()
 
