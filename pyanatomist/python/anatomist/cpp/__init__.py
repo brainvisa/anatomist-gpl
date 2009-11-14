@@ -202,11 +202,12 @@ def aimsFromAnatomist( ao, options={ 'scale' : 1 } ):
   elif tn == 'TEXTURE':
     at = ao.attributed()
     if not at:
-      return None
-    try:
-      dt = at[ 'data_type' ]
-    except:
       dt = 'FLOAT'
+    else:
+      try:
+        dt = at[ 'data_type' ]
+      except:
+        dt = 'FLOAT'
     try:
       conv = getattr( AObjectConverter, 'aimsTexture_' + dt )
       aim = conv( ao, options ).get()
