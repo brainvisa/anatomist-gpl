@@ -1108,6 +1108,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         + Anatomist.AItem._getAttributeNames( self )
 
     def __eq__( self, other ):
+      if not hasattr( other, 'getInternalRep' ):
+        return False
       return self.getInternalRep() == other.getInternalRep()
 
     def extractTexture(self, time=-1):
