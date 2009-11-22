@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>AnaCustom</class>
+<class>AnaSimpleViewer</class>
 <widget class="QMainWindow">
     <property name="name">
-        <cstring>AnaCustom</cstring>
+        <cstring>AnaSimpleViewer</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -21,7 +21,7 @@
         </sizepolicy>
     </property>
     <property name="caption">
-        <string>AnaCustom</string>
+        <string>Anatomist Simple Viewer</string>
     </property>
     <vbox>
         <property name="name">
@@ -68,9 +68,57 @@
                         <property name="name">
                             <cstring>objectslist</cstring>
                         </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>7</hsizetype>
+                                <vsizetype>7</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>2</verstretch>
+                            </sizepolicy>
+                        </property>
                         <property name="selectionMode">
                             <enum>Extended</enum>
                         </property>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>infoBox</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>1</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="title">
+                            <string>information:</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>infoLabel</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>7</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>none</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignJustify|AlignTop</set>
+                                </property>
+                            </widget>
+                        </vbox>
                     </widget>
                 </vbox>
             </widget>
@@ -287,31 +335,31 @@
     <connection>
         <sender>fileOpenAction</sender>
         <signal>activated()</signal>
-        <receiver>AnaCustom</receiver>
+        <receiver>AnaSimpleViewer</receiver>
         <slot>fileOpen()</slot>
     </connection>
     <connection>
         <sender>fileSaveAction</sender>
         <signal>activated()</signal>
-        <receiver>AnaCustom</receiver>
+        <receiver>AnaSimpleViewer</receiver>
         <slot>fileSave()</slot>
     </connection>
     <connection>
         <sender>fileExitAction</sender>
         <signal>activated()</signal>
-        <receiver>AnaCustom</receiver>
+        <receiver>AnaSimpleViewer</receiver>
         <slot>fileExit()</slot>
     </connection>
     <connection>
         <sender>helpIndexAction</sender>
         <signal>activated()</signal>
-        <receiver>AnaCustom</receiver>
+        <receiver>AnaSimpleViewer</receiver>
         <slot>helpIndex()</slot>
     </connection>
     <connection>
         <sender>helpAboutAction</sender>
         <signal>activated()</signal>
-        <receiver>AnaCustom</receiver>
+        <receiver>AnaSimpleViewer</receiver>
         <slot>helpAbout()</slot>
     </connection>
 </connections>

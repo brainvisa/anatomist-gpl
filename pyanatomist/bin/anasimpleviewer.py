@@ -18,11 +18,13 @@ else:
 pix = qt.QPixmap( os.path.expandvars( '$BRAINVISA_SHARE/anatomist-3.2/icons/anatomist.png' ) )
 spl = qt.QSplashScreen( pix )
 spl.show()
+qt.qApp.processEvents()
 
 a = ana.Anatomist( '-b' )
 
-anasimpleviewerdir = os.path.expandvars( \
-  '$BRAINVISA_SHARE/anatomist-3.2/anasimpleviewer' )
+anasimpleviewerdir = os.path.join( \
+  a.anatomistSharedPath().utf8().data().strip( '\0' ),
+  'anasimpleviewer' )
 awin = qtui.QWidgetFactory.create( os.path.join( anasimpleviewerdir,
   'anasimpleviewer.ui' ) )
 
@@ -171,6 +173,8 @@ qt.qApp.setMainWidget( awin )
 
 awin.showMaximized()
 spl.finish( awin )
+
+a.config()[ 'setAutomaticReferential' ] = 1
 
 if runqt:
   qapp.exec_loop()
