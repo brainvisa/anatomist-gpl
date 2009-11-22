@@ -19,12 +19,12 @@ pix = qt.QPixmap( os.path.expandvars( '$BRAINVISA_SHARE/anatomist-3.2/icons/anat
 spl = qt.QSplashScreen( pix )
 spl.show()
 
-anacustomdir = '.'
-if not os.path.basename( sys.argv[0] ).lower().startswith( 'python' ) \
-  and not os.path.basename( sys.argv[0] ).lower().startswith( 'ipython' ):
-  anacustomdir = os.path.dirname( os.path.realpath( sys.argv[0] ) )
-awin = qtui.QWidgetFactory.create( os.path.join(anacustomdir,
-  'anacustom.ui' ) )
+a = ana.Anatomist( '-b' )
+
+anasimpleviewerdir = os.path.expandvars( \
+  '$BRAINVISA_SHARE/anatomist-3.2/anasimpleviewer' )
+awin = qtui.QWidgetFactory.create( os.path.join( anasimpleviewerdir,
+  'anasimpleviewer.ui' ) )
 
 fdialog = qt.QFileDialog()
 awindows = []
@@ -168,8 +168,6 @@ awin.connect( awin.child( 'editDeleteAction' ), qt.SIGNAL( 'activated()' ),
   editDelete )
 
 qt.qApp.setMainWidget( awin )
-
-a = ana.Anatomist( '-b' )
 
 awin.showMaximized()
 spl.finish( awin )
