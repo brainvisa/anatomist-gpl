@@ -47,5 +47,5 @@ class PyAnatomist( GenericMakerComponent ):
   def pythonModule( self ):
     return 'anatomist'
 
-
-
+  def shareDir( self ):
+    return os.path.join( 'share', 'anatomist-' + self.get( 'version' ) )
