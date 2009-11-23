@@ -66,7 +66,12 @@ class AnaSimpleViewer( qt.QObject ):
       a.execute( 'Camera', windows=[ awindows[-1] ],
         view_quaternion=[ 0.404603, 0.143829, 0.316813, 0.845718 ] )
     self.addObject( obj )
-    a.execute( 'LinkedCursor', window=awindows[0], position=(bb[1]-bb[0])/2 )
+    position = ( bb[1] - bb[0] ) / 2.
+    t = a.getTransformation( obj.getReferential(),
+      awindows[0].getReferential() )
+    if t:
+      position = t.transform( position )
+    a.execute( 'LinkedCursor', window=awindows[0], position=position )
 
   def addObject( self, obj ):
     if obj.objectType == 'VOLUME':
