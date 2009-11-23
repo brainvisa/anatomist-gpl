@@ -81,6 +81,7 @@ public:
   Point3df lastPosition( const anatomist::Referential *toref=0 ) const;
   int userLevel() const;
   void setUserLevel( int );
+  anatomist::GlobalConfiguration* config();
 };
 
 

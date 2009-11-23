@@ -13,13 +13,13 @@ LIBS += -L../../../lib -lpyanatomistexports${BUILDMODEEXT}
 SIPS = anatomist_VOID.sip
 
 HEADERS = anaqpixmap.h \
+          awindow.h \
           aobject.h \
-	  objectmenu.h \
-	  awindow.h \
-	  palette.h \
+          objectmenu.h \
+          palette.h \
           referential.h \
           refglitem.h \
           setaobject.h \
-	  setawindow.h \
-          transformation.h 
+          setawindow.h \
+          transformation.h
 

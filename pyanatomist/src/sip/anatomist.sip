@@ -49,6 +49,7 @@
 %Include list_rc_ptr_APalette.sip
 %Include objectparamselect.sip
 %Include objectreader.sip
+%Include globalconfig.sip
 
 
 class AnatomistSip
@@ -80,6 +81,7 @@ public:
   Point3df lastPosition( const anatomist::Referential *toref=0 ) const;
   int userLevel() const;
   void setUserLevel( int );
+  anatomist::GlobalConfiguration* config();
 
   void registerObject( anatomist::AObject *, bool = true );
 %MethodCode

@@ -279,15 +279,17 @@ class FusionFactory
 %End
 
 public:
-	FusionFactory();
-	virtual ~FusionFactory();
+  FusionFactory();
+  virtual ~FusionFactory();
 
-	virtual anatomist::FusionMethod *chooseMethod(vector_AObjectPtr &, bool=false);
-	virtual anatomist::FusionMethod *method(const std::string&) const;
+  virtual anatomist::FusionMethod *chooseMethod(vector_AObjectPtr &, bool=false);
+  virtual anatomist::FusionMethod *method(const std::string&) const;
+  virtual set_STRING allowedMethods( const set_AObjectPtr & ) const;
 
-	static anatomist::FusionFactory *factory();
-	static bool registerMethod(anatomist::FusionMethod * /Transfer/);
-	static bool canFusion(const set_AObjectPtr &);
+  static anatomist::FusionFactory *factory();
+  static bool registerMethod(anatomist::FusionMethod * /Transfer/);
+  static bool canFusion(const set_AObjectPtr &);
+  static set_STRING methods() const;
 };
 
 

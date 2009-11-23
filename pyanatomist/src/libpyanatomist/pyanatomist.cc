@@ -227,6 +227,11 @@ void AnatomistSip::setUserLevel( int x )
   theAnatomist->setUserLevel( x );
 }
 
+GlobalConfiguration* AnatomistSip::config()
+{
+  return theAnatomist->config();
+}
+
 // ------------------------
 
 carto::rc_ptr<AimsData_U8>
