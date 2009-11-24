@@ -261,7 +261,16 @@ class Anatomist(ObservableSingleton, object):
     @return: the newly created fusion object.
     """
     pass
-  
+
+  def getFusionInfo( self, objects=None ):
+    """
+    Gets information about fusion methods. If objects is not specified, the global list of all fusion methods is returned. Otherwise the allowed fusions for those specific objects is returned.
+
+    @rtype: dictionary
+    @return: fusion methods
+    """
+    pass
+
   def createReferential(self, filename=None):
     """
     This command does not exist in Anatomist because the command AssignReferential can create a new referential if needed. 

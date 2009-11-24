@@ -363,7 +363,16 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     o=self.AObject(self, c.createdObject())
     o.releaseAppRef()
     return o
-  
+
+  def getFusionInfo( self, objects=None ):
+    if objects is None:
+      return { 'all_methods' : list( cpp.FusionFactory.methods() ) }
+    else:
+      bObjects = self.convertParamsToObjects(objects)
+      return { 'allowed_methods' :
+        list( cpp.FusionFactory.factory().allowedMethods( bObjects ) ) }
+
+
   def createReferential(self, filename=""):
     """
     This command does not exist in Anatomist because the command AssignReferential can create a new referential if needed. 
@@ -461,7 +470,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         cpp.Referential.mniTemplateReferential())
       return self.mniTemplateRef
     else:
-      raise AttributeError
+      raise AttributeError( name )
 
   def __getattribute__( self, name ):
     '''

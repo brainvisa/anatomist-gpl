@@ -15,6 +15,7 @@
 #include <anatomist/commands/cLoadObject.h>
 #include <anatomist/commands/cGenerateTexture.h>
 #include <anatomist/commands/cExtractTexture.h>
+#include <anatomist/commands/cFusionInfo.h>
 #endif
 %End
 
@@ -48,6 +49,8 @@ namespace anatomist
       sipClass = sipClass_anatomist_ObjectInfoCommand;
     else if( dynamic_cast<anatomist::GetInfoCommand *>( sipCpp ) )
       sipClass = sipClass_anatomist_GetInfoCommand;
+    else if( dynamic_cast<anatomist::FusionInfoCommand *>( sipCpp ) )
+      sipClass = sipClass_anatomist_FusionInfoCommand;
     else
       sipClass = sipClass_anatomist_RegularCommand;
   else if( dynamic_cast<anatomist::WaitCommand *>( sipCpp ) )
@@ -941,6 +944,62 @@ typedef std::set<std::string> set_STRING;
                     bool modinfo = false
                   );
     virtual ~GetInfoCommand();
+
+    virtual std::string name() const;
+    carto::Object result();
+  };
+
+
+  class FusionInfoCommand : anatomist::RegularCommand
+  {
+%TypeHeaderCode
+#include <anatomist/commands/cFusionInfo.h>
+%End
+
+  public:
+
+    FusionInfoCommand( SIP_PYLIST = Py_None, const std::string & filename = "",
+                       const std::string & requestid = "",
+                       anatomist::CommandContext* context = 0 )
+      [( const std::vector<anatomist::AObject *> &, const std::string &="",
+         const std::string &="", anatomist::CommandContext*=0 )];
+%MethodCode
+    std::vector<anatomist::AObject *>   so;
+    if( !PyList_Check( a0 ) )
+      sipIsErr = 1;
+    else
+    {
+      int     i, no = PyList_GET_SIZE( a0 );
+      PyObject                *item;
+      anatomist::AObject      *ao;
+      int                     iserr = 0;
+      so.reserve( no );
+      for( i=0; i<no; ++i )
+      {
+        item = PyList_GetItem( a0, i );
+        if( item )
+        {
+          ao = reinterpret_cast<anatomist::AObject *>
+            ( sipForceConvertToInstance( item,
+              sipClass_anatomist_AObject, 0, 0, 0, &iserr ) );
+          if( !ao || iserr )
+          {
+            sipIsErr = 1;
+            break;
+          }
+          so.push_back( ao );
+        }
+      }
+      if( !sipIsErr )
+      {
+        Py_BEGIN_ALLOW_THREADS
+          sipCpp = new sipanatomist_FusionInfoCommand( so, *a1, *a2, a3 );
+        Py_END_ALLOW_THREADS
+      }
+    }
+%End
+
+    virtual ~FusionInfoCommand();
 
     virtual std::string name() const;
     carto::Object result();

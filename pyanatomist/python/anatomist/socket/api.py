@@ -338,7 +338,15 @@ class Anatomist(base.Anatomist):
     newObject.takeRef()
     newObject.releaseAppRef()
     return newObject
-  
+
+  def getFusionInfo( self, objects=None ):
+    if objects is None:
+      return self.executeAndWaitAnswer( "FusionInfo" )
+    else:
+      return self.executeAndWaitAnswer( "FusionInfo",
+        objects=self.makeList(objects) )
+
+
   def createReferential(self, filename=None):
     """
     This command does not exist in Anatomist because the command AssignReferential can create a new referential if needed. 
