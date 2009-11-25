@@ -18,7 +18,7 @@ namespace anatomist
 
 %ConvertToSubClassCode
   sipClass = 0;
-  if( dynamic_cast<QAWindow *>(sipCpp) )
+  if( dynamic_cast<QAWindow *>( static_cast<QAWindow *>( sipCpp ) ) )
   {
     *sipCppRet = static_cast<QAWindow *>( sipCpp );
     if( dynamic_cast<ControlledWindow *>( sipCpp ) )
@@ -26,8 +26,8 @@ namespace anatomist
         sipClass = sipClass_AWindow3D;
       else
         sipClass = sipClass_ControlledWindow;
-      else
-        sipClass = sipClass_QAWindow;
+    else
+      sipClass = sipClass_QAWindow;
   }
 %End
 
@@ -140,7 +140,7 @@ class View
 };
 
 
-class QAWindow : QMainWindow, anatomist::AWindow /Abstract/
+class QAWindow : QMainWindow, anatomist::AWindow
 {
 %TypeHeaderCode
 #include <qmainwindow.h>
