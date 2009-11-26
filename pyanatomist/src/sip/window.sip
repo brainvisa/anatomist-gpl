@@ -60,8 +60,10 @@ namespace anatomist
     bool isTemporary( anatomist::AObject* o ) const;
     anatomist::Referential *getReferential() const;
     virtual void setReferential( anatomist::Referential *ref );
+    virtual void show() /AutoGen/;
+    virtual void hide() /AutoGen/;
 
-static anatomist::AWindow* fromObject( carto::GenericObject );
+    static anatomist::AWindow* fromObject( carto::GenericObject );
 %MethodCode
   try
   {
