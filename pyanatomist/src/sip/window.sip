@@ -62,6 +62,7 @@ namespace anatomist
     virtual void setReferential( anatomist::Referential *ref );
     virtual void show() /AutoGen/;
     virtual void hide() /AutoGen/;
+    virtual const std::string & baseTitle() const /AutoGen/;
 
     static anatomist::AWindow* fromObject( carto::GenericObject );
 %MethodCode
@@ -156,6 +157,8 @@ public:
     carto::Object =carto::none(), Qt::WFlags=Qt::WType_TopLevel );
   virtual ~QAWindow();
   virtual void refreshNow() /AutoGen/;
+  virtual void close() /AutoGen/;
+  virtual bool close( int ) /AutoGen/;
   static QAWindow* fromObject( carto::GenericObject );
 %MethodCode
   try

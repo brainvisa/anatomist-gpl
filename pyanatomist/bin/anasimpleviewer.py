@@ -204,8 +204,8 @@ class AnaSimpleViewer( qt.QObject ):
     a.deleteObjects( objs )
 
 anasimple = AnaSimpleViewer()
-print 'fileOpenAction:', findChild( awin, 'fileOpenAction' )
-print awin.fileOpenAction
+#print 'fileOpenAction:', findChild( awin, 'fileOpenAction' )
+#print awin.fileOpenAction
 awin.connect( findChild( awin, 'fileOpenAction' ), qt.SIGNAL( 'activated()' ),
   anasimple.fileOpen )
 awin.connect( findChild( awin, 'fileExitAction' ), qt.SIGNAL( 'activated()' ),
