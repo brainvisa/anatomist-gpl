@@ -15,10 +15,12 @@ class ControlWindow : QMainWindow
 #include <anatomist/window/Window.h>
 %End
 
+/*
 %TypeCode
 #include <anatomist/control/controlMenuHandler.h>
 #include <anatomist/selection/qSelMenu.h>
 %End
+*/
 
 %ConvertToSubClassCode
   if( dynamic_cast<ControlWindow *>( sipCpp ) )
