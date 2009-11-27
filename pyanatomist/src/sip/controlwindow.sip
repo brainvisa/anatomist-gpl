@@ -45,12 +45,13 @@ public:
   void UnselectAllWindows();
   void enableClose( bool );
   bool closeEnabled() const;
-
+/*
   QPopupMenu* getPopup( const std::string & name );
 %MethodCode
   anatomist::AControlMenuHandler* mh = sipCpp->menuHandler();
   sipRes = mh->getPopup( *a0 );
 %End
+*/
 };
 
 
