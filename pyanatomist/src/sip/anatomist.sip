@@ -50,6 +50,7 @@
 %Include objectparamselect.sip
 %Include objectreader.sip
 %Include globalconfig.sip
+%Include awindowfactory.sip
 
 
 class AnatomistSip

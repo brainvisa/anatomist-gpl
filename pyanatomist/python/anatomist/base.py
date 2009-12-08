@@ -261,7 +261,16 @@ class Anatomist(ObservableSingleton, object):
     @return: the newly created fusion object.
     """
     pass
-  
+
+  def getFusionInfo( self, objects=None ):
+    """
+    Gets information about fusion methods. If objects is not specified, the global list of all fusion methods is returned. Otherwise the allowed fusions for those specific objects is returned.
+
+    @rtype: dictionary
+    @return: fusion methods
+    """
+    pass
+
   def createReferential(self, filename=None):
     """
     This command does not exist in Anatomist because the command AssignReferential can create a new referential if needed. 
@@ -778,7 +787,15 @@ class Anatomist(ObservableSingleton, object):
     @type kwargs: dictionary
     @param kwargs: parameters for the command
     """
-    params=dict( (k,self.convertParamsToIDs(v)) for k, v in kwargs.iteritems() if v is not None )
+    def ununderscore(k):
+      # this removes a trailing '_' from params names
+      # it allows to used reserved words as params, like raise, by appending
+      # an underscore, like in PyQt4:
+      # a.execute( 'WindowConfig', windows=[w], raise_=1 )
+      if k.endswith( '_' ):
+        return k[:-1]
+      return k
+    params=dict( (ununderscore(k),self.convertParamsToIDs(v)) for k, v in kwargs.iteritems() if v is not None )
     self.logCommand(command, **params )
     self.send(command, **params)
   

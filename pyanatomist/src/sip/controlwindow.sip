@@ -15,6 +15,13 @@ class ControlWindow : QMainWindow
 #include <anatomist/window/Window.h>
 %End
 
+/*
+%TypeCode
+#include <anatomist/control/controlMenuHandler.h>
+#include <anatomist/selection/qSelMenu.h>
+%End
+*/
+
 %ConvertToSubClassCode
   if( dynamic_cast<ControlWindow *>( sipCpp ) )
     sipClass = sipClass_ControlWindow;
@@ -40,6 +47,13 @@ public:
   void UnselectAllWindows();
   void enableClose( bool );
   bool closeEnabled() const;
+/*
+  QPopupMenu* getPopup( const std::string & name );
+%MethodCode
+  anatomist::AControlMenuHandler* mh = sipCpp->menuHandler();
+  sipRes = mh->getPopup( *a0 );
+%End
+*/
 };
 
 

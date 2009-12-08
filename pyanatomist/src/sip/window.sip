@@ -18,7 +18,7 @@ namespace anatomist
 
 %ConvertToSubClassCode
   sipClass = 0;
-  if( dynamic_cast<QAWindow *>(sipCpp) )
+  if( dynamic_cast<QAWindow *>( static_cast<QAWindow *>( sipCpp ) ) )
   {
     *sipCppRet = static_cast<QAWindow *>( sipCpp );
     if( dynamic_cast<ControlledWindow *>( sipCpp ) )
@@ -26,8 +26,8 @@ namespace anatomist
         sipClass = sipClass_AWindow3D;
       else
         sipClass = sipClass_ControlledWindow;
-      else
-        sipClass = sipClass_QAWindow;
+    else
+      sipClass = sipClass_QAWindow;
   }
 %End
 
@@ -60,8 +60,11 @@ namespace anatomist
     bool isTemporary( anatomist::AObject* o ) const;
     anatomist::Referential *getReferential() const;
     virtual void setReferential( anatomist::Referential *ref );
+    virtual void show() /AutoGen/;
+    virtual void hide() /AutoGen/;
+    virtual const std::string & baseTitle() const /AutoGen/;
 
-static anatomist::AWindow* fromObject( carto::GenericObject );
+    static anatomist::AWindow* fromObject( carto::GenericObject );
 %MethodCode
   try
   {
@@ -140,7 +143,7 @@ class View
 };
 
 
-class QAWindow : QMainWindow, anatomist::AWindow /Abstract/
+class QAWindow : QMainWindow, anatomist::AWindow
 {
 %TypeHeaderCode
 #include <qmainwindow.h>
@@ -154,6 +157,8 @@ public:
     carto::Object =carto::none(), Qt::WFlags=Qt::WType_TopLevel );
   virtual ~QAWindow();
   virtual void refreshNow() /AutoGen/;
+  virtual void close() /AutoGen/;
+  virtual bool close( int ) /AutoGen/;
   static QAWindow* fromObject( carto::GenericObject );
 %MethodCode
   try

@@ -151,7 +151,6 @@ def aimsFromAnatomist( ao, options={ 'scale' : 1 } ):
       if hdr:
         dt = hdr[ 'data_type' ]
         oc = getattr( AObjectConverter, 'aimsData_' + dt )
-        print 'oc:', oc
         aim = oc( ao, options )
         if not aim.isNull():
           return aim.get()
