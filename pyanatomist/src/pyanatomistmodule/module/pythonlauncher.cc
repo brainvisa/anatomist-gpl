@@ -61,8 +61,6 @@ void PythonLauncher::runModules()
   // cout << "PythonLauncher::runModules()\n";
 
   char		sep = FileUtil::separator();
-  string	shared1 = Path::singleton().shfjShared() + sep 
-    + "python";
   string	shared2 = Settings::globalPath() + sep + "python_plugins";
 
   if( Py_IsInitialized() )
@@ -75,13 +73,10 @@ void PythonLauncher::runModules()
   else
     Py_Initialize();
 
-  /* cout << "pythonpath 1: " << shared1 << endl;
-     cout << "pythonpath 2: " << shared2 << endl; */
+  /* cout << "pythonpath 2: " << shared2 << endl; */
 
   PyRun_SimpleString( "import sys; sys.argv = [ 'anatomist' ]" );
 
-  PyRun_SimpleString( (char *) ( string( "sys.path.insert( 0, '" ) + shared1 
-                                 + "' )" ).c_str() );
   PyRun_SimpleString( (char *) ( string( "sys.path.insert( 1, '" ) + shared2 
                                  + "' )" ).c_str() );
   PyRun_SimpleString( "import anatomist.cpp; anatomist.cpp.Anatomist()" );

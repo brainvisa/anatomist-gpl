@@ -4,7 +4,7 @@ BRAINVISA_ADD_MOC_FILES( _sources ${_headers} )
 
 add_library( pyanatomistmodule MODULE ${_sources} )
 set_property( TARGET pyanatomistmodule PROPERTY VERSION ${${PROJECT_NAME}_VERSION} )
-target_link_libraries( pyanatomistmodule pyanatomistexports "${PYTHON_LIBRARY}" )
+target_link_libraries( pyanatomistmodule pyanatomistexports "${PYTHON_LIBRARIES}" )
 BRAINVISA_INSTALL( TARGETS pyanatomistmodule
               DESTINATION lib
               COMPONENT ${PROJECT_NAME} )
