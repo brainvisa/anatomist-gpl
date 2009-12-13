@@ -10,6 +10,10 @@ BRAINVISA_DEPENDENCY( DEV DEPENDS anatomist-free DEV )
 include( "${AIMS-GPL_USE_FILE}" )
 include( "${ANATOMIST-FREE_USE_FILE}" )
 
+if( NOT anatomist-free_VERSION_MAJOR EQUAL ${${PROJECT_NAME}_VERSION_MAJOR}
+   AND NOT anatomist-free_VERSION_MINOR EQUAL ${${PROJECT_NAME}_VERSION_MINOR} )
+  message( "WARNING: anatomist-gpl has version ${${PROJECT_NAME}_VERSION} whereas anatomist-free has version ${anatomist-free_VERSION}. This can be a problem at runtime because shared files are all supposed to be in a directory called anatomist-${anatomist-free_VERSION_MAJOR}.${anatomist-free_VERSION_MINOR}." )
+endif()
 find_package( PythonInterp )
 if( PYTHONINTERP_FOUND )
   find_package( PythonLibs )
