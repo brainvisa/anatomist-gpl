@@ -32,7 +32,7 @@ class ContinuousTrackball : QObject, anatomist::Trackball
 
     virtual void beginTrackball( int x, int y, int globalX, int globalY );
     virtual void moveTrackball( int x, int y, int globalX, int globalY );
-    void endTrackball( int x, int y, int globalX, int globalY );
+    virtual void endTrackball( int x, int y, int globalX, int globalY );
     void startOrStop();
     void stop();
 };

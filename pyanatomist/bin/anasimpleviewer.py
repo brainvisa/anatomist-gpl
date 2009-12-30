@@ -61,6 +61,80 @@ else:
 #vl.addWidget( viewgrid )
 #viewgrid.show()
 
+
+class SimpleControl( ana.cpp.Control ):
+  def __init__( self, prio = 25, name='SimpleControl' ):
+    ana.cpp.Control.__init__( self, prio, name )
+
+  def eventAutoSubscription( self, pool ):
+    self.mouseLongEventSubscribe( qt.Qt.LeftButton, qt.Qt.NoButton,
+      pool.action( 'LinkAction' ).execLink,
+      pool.action( 'LinkAction' ).execLink,
+      pool.action( 'LinkAction' ).endLink, True )
+    self.mouseLongEventSubscribe( qt.Qt.MidButton, qt.Qt.ShiftButton,
+      pool.action( "Zoom3DAction" ).beginZoom,
+      pool.action( "Zoom3DAction" ).moveZoom,
+      pool.action( "Zoom3DAction" ).endZoom, True )
+    self.wheelEventSubscribe( pool.action( "Zoom3DAction" ).zoomWheel )
+    self.keyPressEventSubscribe( qt.Qt.Key_C, qt.Qt.ControlButton,
+      pool.action( "Trackball" ).setCenter )
+    self.keyPressEventSubscribe( qt.Qt.Key_C, qt.Qt.AltButton,
+      pool.action( "Trackball" ).showRotationCenter )
+    self.mouseLongEventSubscribe( qt.Qt.MidButton, qt.Qt.ControlButton,
+      pool.action( "Translate3DAction" ).beginTranslate,
+      pool.action( "Translate3DAction" ).moveTranslate,
+      pool.action( "Translate3DAction" ).endTranslate, True )
+    self.keyPressEventSubscribe( qt.Qt.Key_PageUp, qt.Qt.NoButton,
+      pool.action( "SliceAction" ).previousSlice )
+    self.keyPressEventSubscribe( qt.Qt.Key_PageDown, qt.Qt.NoButton,
+      pool.action( "SliceAction" ).nextSlice )
+    self.keyPressEventSubscribe( qt.Qt.Key_PageUp, qt.Qt.ShiftButton,
+      pool.action( "SliceAction" ).previousTime )
+    self.keyPressEventSubscribe( qt.Qt.Key_PageDown, qt.Qt.ShiftButton,
+      pool.action( "SliceAction" ).nextTime )
+    self.keyPressEventSubscribe( qt.Qt.Key_L, qt.Qt.ControlButton,
+      pool.action( "SliceAction" ).toggleLinkedOnSlider )
+    print pool.action( 'MovieAction' )
+    self.keyPressEventSubscribe( qt.Qt.Key_Space, qt.Qt.NoButton,
+      pool.action( "MovieAction" ).startOrStop )
+    self.keyPressEventSubscribe( qt.Qt.Key_S, qt.Qt.ControlButton,
+      pool.action( "MovieAction" ).sliceOn )
+    self.keyPressEventSubscribe( qt.Qt.Key_T, qt.Qt.ControlButton,
+      pool.action( "MovieAction" ).timeOn )
+    self.keyPressEventSubscribe( qt.Qt.Key_M, qt.Qt.ControlButton,
+      pool.action( "MovieAction" ).nextMode )
+    self.keyPressEventSubscribe( qt.Qt.Key_Plus, qt.Qt.NoButton,
+      pool.action( "MovieAction" ).increaseSpeed )
+    self.keyPressEventSubscribe( qt.Qt.Key_Plus, qt.Qt.ShiftButton,
+      pool.action( "MovieAction" ).increaseSpeed )
+    self.keyPressEventSubscribe( qt.Qt.Key_Minus, qt.Qt.NoButton,
+      pool.action( "MovieAction" ).decreaseSpeed )
+    self.myActions = { "MovieAction" : pool.action( "MovieAction" ),
+      "ContinuousTrackball" : pool.action( "ContinuousTrackball" ) }
+
+  def doAlsoOnDeselect( self, pool ):
+    for k,ac in self.myActions.iteritems():
+      if isinstance( a, ana.cpp.MovieAction ) and a.isRunning():
+        a.startOrStop()
+      if isinstance( a, ana.cpp.ContinuousTrackball ):
+        a.stop()
+
+
+class Simple3DControl( SimpleControl ):
+  def __init__( self, prio = 26, name='Simple3DControl' ):
+    SimpleControl.__init__( self, prio, name )
+
+  def eventAutoSubscription( self, pool ):
+    SimpleControl.eventAutoSubscription( self, pool )
+    self.mouseLongEventSubscribe ( \
+      qt.Qt.MidButton, qt.Qt.NoButton,
+      pool.action( 'ContinuousTrackball' ).beginTrackball,
+      pool.action( 'ContinuousTrackball' ).moveTrackball,
+      pool.action( 'ContinuousTrackball' ).endTrackball, True )
+    self.keyPressEventSubscribe( qt.Qt.Key_Space, qt.Qt.ControlButton,
+      pool.action( "ContinuousTrackball" ).startOrStop )
+
+
 class AnaSimpleViewer( qt.QObject ):
 
   def createWindow( self, wintype = 'Axial' ):
@@ -81,11 +155,14 @@ class AnaSimpleViewer( qt.QObject ):
             break
         if freeslot:
           break
-    print 'add', wintype, 'at', x, y
     viewgridlay.addWidget( w.getInternalRep(), x, y )
     self._winlayouts[x][y] = 1
     w.releaseAppRef()
     awindows.append( w )
+    if wintype == '3D':
+      a.execute( 'SetControl', windows=[w], control='Simple3DControl' )
+    else:
+      a.execute( 'SetControl', windows=[w], control='SimpleControl' )
 
   def loadObject( self, fname ):
     obj = a.loadObject( fname )
@@ -203,13 +280,21 @@ class AnaSimpleViewer( qt.QObject ):
     aobjects = [ o for o in aobjects if o not in objs ]
     a.deleteObjects( objs )
 
+def closeAll():
+  print "Exiting"
+  global vieww, viewgridlay, awindows, fusion2d, aobjects, anasimple
+  del vieww, viewgridlay
+  del anasimple
+  del awindows, fusion2d, aobjects
+  awin.close()
+
 anasimple = AnaSimpleViewer()
 #print 'fileOpenAction:', findChild( awin, 'fileOpenAction' )
 #print awin.fileOpenAction
 awin.connect( findChild( awin, 'fileOpenAction' ), qt.SIGNAL( 'activated()' ),
   anasimple.fileOpen )
 awin.connect( findChild( awin, 'fileExitAction' ), qt.SIGNAL( 'activated()' ),
-  awin.close )
+  closeAll )
 awin.connect( findChild( awin, 'editAddAction' ), qt.SIGNAL( 'activated()' ),
   anasimple.editAdd )
 awin.connect( findChild( awin, 'editRemoveAction' ), qt.SIGNAL( 'activated()' ),
@@ -221,8 +306,18 @@ qt.qApp.setMainWidget( awin )
 
 awin.showMaximized()
 spl.finish( awin )
+del spl
 
 a.config()[ 'setAutomaticReferential' ] = 1
+
+cd = ana.cpp.ControlDictionary.instance()
+cd.addControl( 'SimpleControl', SimpleControl, 25 )
+cd.addControl( 'Simple3DControl', Simple3DControl, 26 )
+cm = ana.cpp.ControlManager.instance()
+cm.addControl( 'QAGLWidget3D', '', 'SimpleControl' )
+cm.addControl( 'QAGLWidget3D', '', 'Simple3DControl' )
+
+del cd, cm
 
 if runqt:
   qapp.exec_loop()
