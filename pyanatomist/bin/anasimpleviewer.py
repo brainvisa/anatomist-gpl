@@ -163,6 +163,8 @@ class AnaSimpleViewer( qt.QObject ):
       a.execute( 'SetControl', windows=[w], control='Simple3DControl' )
     else:
       a.execute( 'SetControl', windows=[w], control='SimpleControl' )
+    a.execute( 'WindowConfig', windows=[w],
+      light={ 'background' : [ 0., 0., 0., 1. ] } )
 
   def loadObject( self, fname ):
     obj = a.loadObject( fname )
@@ -174,8 +176,8 @@ class AnaSimpleViewer( qt.QObject ):
       obj.attributed()[ 'colormaphints' ] = hints
     bb = obj.boundingbox()
     if len( awindows ) == 0:
-      self.createWindow( 'Axial' )
       self.createWindow( 'Coronal' )
+      self.createWindow( 'Axial' )
       self.createWindow( 'Sagittal' )
       self.createWindow( '3D' )
       a.execute( 'Camera', windows=[ awindows[-1] ],
@@ -189,6 +191,7 @@ class AnaSimpleViewer( qt.QObject ):
     a.execute( 'LinkedCursor', window=awindows[0], position=position )
 
   def addObject( self, obj ):
+    opts = {}
     if obj.objectType == 'VOLUME':
       global fusion2d
       if len( fusion2d ) == 0:
@@ -214,7 +217,9 @@ class AnaSimpleViewer( qt.QObject ):
         cmaps = colormaphints.chooseColormaps( hints )
         for x, y in zip( obj.children, cmaps ):
           x.setPalette( y )
-    a.addObjects( obj, awindows )
+    elif obj.objectType == 'GRAPH':
+      opts[ 'add_graph_nodes' ] = 1
+    a.addObjects( obj, awindows, **opts )
 
   def removeObject( self, obj ):
     if obj.objectType == 'VOLUME':
