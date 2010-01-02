@@ -16,16 +16,12 @@ if sys.modules.has_key( 'PyQt4'):
   from PyQt4.uic import loadUi
   uifile = 'anasimpleviewer-qt4.ui'
   findChild = lambda x, y: QtCore.QObject.findChild( x, QtCore.QObject, y )
-  print 'findChild 1:', findChild
 else:
   print 'PyQt4 Not loaded'
   import qt, qtui
   loadUi = qtui.QWidgetFactory.create
   uifile = 'anasimpleviewer.ui'
   findChild = qt.QObject.child
-  print 'findChild 2:', findChild
-
-print 'findChild:', findChild
 
 if qt.qApp.startingUp():
   qapp = qt.QApplication( sys.argv )
@@ -67,47 +63,58 @@ class SimpleControl( ana.cpp.Control ):
     ana.cpp.Control.__init__( self, prio, name )
 
   def eventAutoSubscription( self, pool ):
-    self.mouseLongEventSubscribe( qt.Qt.LeftButton, qt.Qt.NoButton,
+    if qt4:
+      key = QtCore.Qt
+      NoModifier = key.NoModifier
+      ShiftModifier = key.ShiftModifier
+      ControlModifier = key.ControlModifier
+      AltModifier = key.AltModifier
+    else:
+      key = qt.Qt
+      NoModifier = key.NoButton
+      ShiftModifier = key.ShiftButton
+      ControlModifier = key.ControlButton
+      AltModifier = key.AltButton
+    self.mouseLongEventSubscribe( key.LeftButton, NoModifier,
       pool.action( 'LinkAction' ).execLink,
       pool.action( 'LinkAction' ).execLink,
       pool.action( 'LinkAction' ).endLink, True )
-    self.mouseLongEventSubscribe( qt.Qt.MidButton, qt.Qt.ShiftButton,
+    self.mouseLongEventSubscribe( key.MidButton, ShiftModifier,
       pool.action( "Zoom3DAction" ).beginZoom,
       pool.action( "Zoom3DAction" ).moveZoom,
       pool.action( "Zoom3DAction" ).endZoom, True )
     self.wheelEventSubscribe( pool.action( "Zoom3DAction" ).zoomWheel )
-    self.keyPressEventSubscribe( qt.Qt.Key_C, qt.Qt.ControlButton,
+    self.keyPressEventSubscribe( key.Key_C, ControlModifier,
       pool.action( "Trackball" ).setCenter )
-    self.keyPressEventSubscribe( qt.Qt.Key_C, qt.Qt.AltButton,
+    self.keyPressEventSubscribe( key.Key_C, AltModifier,
       pool.action( "Trackball" ).showRotationCenter )
-    self.mouseLongEventSubscribe( qt.Qt.MidButton, qt.Qt.ControlButton,
+    self.mouseLongEventSubscribe( key.MidButton, ControlModifier,
       pool.action( "Translate3DAction" ).beginTranslate,
       pool.action( "Translate3DAction" ).moveTranslate,
       pool.action( "Translate3DAction" ).endTranslate, True )
-    self.keyPressEventSubscribe( qt.Qt.Key_PageUp, qt.Qt.NoButton,
+    self.keyPressEventSubscribe( key.Key_PageUp, NoModifier,
       pool.action( "SliceAction" ).previousSlice )
-    self.keyPressEventSubscribe( qt.Qt.Key_PageDown, qt.Qt.NoButton,
+    self.keyPressEventSubscribe( key.Key_PageDown, NoModifier,
       pool.action( "SliceAction" ).nextSlice )
-    self.keyPressEventSubscribe( qt.Qt.Key_PageUp, qt.Qt.ShiftButton,
+    self.keyPressEventSubscribe( key.Key_PageUp, ShiftModifier,
       pool.action( "SliceAction" ).previousTime )
-    self.keyPressEventSubscribe( qt.Qt.Key_PageDown, qt.Qt.ShiftButton,
+    self.keyPressEventSubscribe( key.Key_PageDown, ShiftModifier,
       pool.action( "SliceAction" ).nextTime )
-    self.keyPressEventSubscribe( qt.Qt.Key_L, qt.Qt.ControlButton,
+    self.keyPressEventSubscribe( key.Key_L, ControlModifier,
       pool.action( "SliceAction" ).toggleLinkedOnSlider )
-    print pool.action( 'MovieAction' )
-    self.keyPressEventSubscribe( qt.Qt.Key_Space, qt.Qt.NoButton,
+    self.keyPressEventSubscribe( key.Key_Space, NoModifier,
       pool.action( "MovieAction" ).startOrStop )
-    self.keyPressEventSubscribe( qt.Qt.Key_S, qt.Qt.ControlButton,
+    self.keyPressEventSubscribe( key.Key_S, ControlModifier,
       pool.action( "MovieAction" ).sliceOn )
-    self.keyPressEventSubscribe( qt.Qt.Key_T, qt.Qt.ControlButton,
+    self.keyPressEventSubscribe( key.Key_T, ControlModifier,
       pool.action( "MovieAction" ).timeOn )
-    self.keyPressEventSubscribe( qt.Qt.Key_M, qt.Qt.ControlButton,
+    self.keyPressEventSubscribe( key.Key_M, ControlModifier,
       pool.action( "MovieAction" ).nextMode )
-    self.keyPressEventSubscribe( qt.Qt.Key_Plus, qt.Qt.NoButton,
+    self.keyPressEventSubscribe( key.Key_Plus, NoModifier,
       pool.action( "MovieAction" ).increaseSpeed )
-    self.keyPressEventSubscribe( qt.Qt.Key_Plus, qt.Qt.ShiftButton,
+    self.keyPressEventSubscribe( key.Key_Plus, ShiftModifier,
       pool.action( "MovieAction" ).increaseSpeed )
-    self.keyPressEventSubscribe( qt.Qt.Key_Minus, qt.Qt.NoButton,
+    self.keyPressEventSubscribe( key.Key_Minus, NoModifier,
       pool.action( "MovieAction" ).decreaseSpeed )
     self.myActions = { "MovieAction" : pool.action( "MovieAction" ),
       "ContinuousTrackball" : pool.action( "ContinuousTrackball" ) }
@@ -125,13 +132,23 @@ class Simple3DControl( SimpleControl ):
     SimpleControl.__init__( self, prio, name )
 
   def eventAutoSubscription( self, pool ):
+    if qt4:
+      key = QtCore.Qt
+      NoModifier = key.NoModifier
+      ShiftModifier = key.ShiftModifier
+      ControlModifier = key.ControlModifier
+    else:
+      key = qt.Qt
+      NoModifier = key.NoButton
+      ShiftModifier = key.ShiftButton
+      ControlModifier = key.ControlButton
     SimpleControl.eventAutoSubscription( self, pool )
     self.mouseLongEventSubscribe ( \
-      qt.Qt.MidButton, qt.Qt.NoButton,
+      key.MidButton, NoModifier,
       pool.action( 'ContinuousTrackball' ).beginTrackball,
       pool.action( 'ContinuousTrackball' ).moveTrackball,
       pool.action( 'ContinuousTrackball' ).endTrackball, True )
-    self.keyPressEventSubscribe( qt.Qt.Key_Space, qt.Qt.ControlButton,
+    self.keyPressEventSubscribe( key.Key_Space, ControlModifier,
       pool.action( "ContinuousTrackball" ).startOrStop )
 
 
@@ -168,7 +185,10 @@ class AnaSimpleViewer( qt.QObject ):
 
   def loadObject( self, fname ):
     obj = a.loadObject( fname )
-    findChild( awin, 'objectslist' ).insertItem( obj.name )
+    if qt4:
+      findChild( awin, 'objectslist' ).addItem( obj.name )
+    else:
+      findChild( awin, 'objectslist' ).insertItem( obj.name )
     aobjects.append( obj )
     if obj.objectType == 'VOLUME':
       hints = colormaphints.checkVolume( \
@@ -249,12 +269,22 @@ class AnaSimpleViewer( qt.QObject ):
 
 
   def fileOpen( self ):
-    fdialog.setMode( fdialog.ExistingFiles )
-    fdialog.show()
-    if fdialog.exec_loop():
+    if qt4:
+      fdialog.setFileMode( fdialog.ExistingFiles )
+      fdialog.show()
+      res = fdialog.exec_()
+    else:
+      fdialog.setMode( fdialog.ExistingFiles )
+      fdialog.show()
+      res = fdialog.exec_loop()
+    if res:
       fnames = fdialog.selectedFiles()
-      for fname in fnames:
-        self.loadObject( fname.utf8().data() )
+      if qt4:
+        for fname in fnames:
+          self.loadObject( unicode( fname ) )
+      else:
+        for fname in fnames:
+          self.loadObject( fname.utf8().data() )
 
   def selectedObjects( self ):
     olist = findChild( awin, 'objectslist' )
@@ -307,7 +337,8 @@ awin.connect( findChild( awin, 'editRemoveAction' ), qt.SIGNAL( 'activated()' ),
 awin.connect( findChild( awin, 'editDeleteAction' ),
   qt.SIGNAL( 'activated()' ), anasimple.editDelete )
 
-qt.qApp.setMainWidget( awin )
+if not qt4:
+  qt.qApp.setMainWidget( awin )
 
 awin.showMaximized()
 spl.finish( awin )
@@ -325,4 +356,7 @@ cm.addControl( 'QAGLWidget3D', '', 'Simple3DControl' )
 del cd, cm
 
 if runqt:
-  qapp.exec_loop()
+  if qt4:
+    qapp.exec_()
+  else:
+    qapp.exec_loop()
