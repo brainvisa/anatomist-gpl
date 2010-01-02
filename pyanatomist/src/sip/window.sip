@@ -173,6 +173,10 @@ public:
     sipRes = 0;
   }
 %End
+
+protected:
+  virtual void dragEnterEvent( QDragEnterEvent* );
+  virtual void dropEvent( QDropEvent* );
 };
 
 
