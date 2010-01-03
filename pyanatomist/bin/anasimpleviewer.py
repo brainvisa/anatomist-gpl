@@ -172,6 +172,10 @@ class AnaSimpleViewer( qt.QObject ):
             break
         if freeslot:
           break
+    if qt4:
+      # in Qt4, the widget must not have a parent before calling
+      # layout.addWidget
+      w.setParent( None )
     viewgridlay.addWidget( w.getInternalRep(), x, y )
     self._winlayouts[x][y] = 1
     w.releaseAppRef()
@@ -289,9 +293,13 @@ class AnaSimpleViewer( qt.QObject ):
   def selectedObjects( self ):
     olist = findChild( awin, 'objectslist' )
     sobjs = []
-    for i in xrange( olist.count() ):
-      if olist.isSelected( i ):
-        sobjs.append( olist.text( i ).utf8().data().strip('\0') )
+    if qt4:
+      for o in olist.selectedItems():
+        sobjs.append( unicode( o.text() ).strip('\0') )
+    else:
+      for i in xrange( olist.count() ):
+        if olist.isSelected( i ):
+          sobjs.append( olist.text( i ).utf8().data().strip('\0') )
     return [ o for o in aobjects if o.name in sobjs ]
 
   def editAdd( self ):
@@ -309,8 +317,13 @@ class AnaSimpleViewer( qt.QObject ):
     for o in objs:
       self.removeObject( o )
     olist = findChild( awin, 'objectslist' )
-    for o in objs:
-      olist.removeItem( olist.index( olist.findItem( o.name ) ) )
+    if qt4:
+      for o in objs:
+        olist.takeItem( olist.row( olist.findItems( o.name,
+          QtCore.Qt.MatchExactly )[ 0 ] ) )
+    else:
+      for o in objs:
+        olist.removeItem( olist.index( olist.findItem( o.name ) ) )
     global aobjects
     aobjects = [ o for o in aobjects if o not in objs ]
     a.deleteObjects( objs )
