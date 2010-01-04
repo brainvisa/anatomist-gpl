@@ -16,16 +16,12 @@ if sys.modules.has_key( 'PyQt4'):
   from PyQt4.uic import loadUi
   uifile = 'anasimpleviewer-qt4.ui'
   findChild = lambda x, y: QtCore.QObject.findChild( x, QtCore.QObject, y )
-  print 'findChild 1:', findChild
 else:
   print 'PyQt4 Not loaded'
   import qt, qtui
   loadUi = qtui.QWidgetFactory.create
   uifile = 'anasimpleviewer.ui'
   findChild = qt.QObject.child
-  print 'findChild 2:', findChild
-
-print 'findChild:', findChild
 
 if qt.qApp.startingUp():
   qapp = qt.QApplication( sys.argv )
@@ -61,6 +57,101 @@ else:
 #vl.addWidget( viewgrid )
 #viewgrid.show()
 
+
+class SimpleControl( ana.cpp.Control ):
+  def __init__( self, prio = 25, name='SimpleControl' ):
+    ana.cpp.Control.__init__( self, prio, name )
+
+  def eventAutoSubscription( self, pool ):
+    if qt4:
+      key = QtCore.Qt
+      NoModifier = key.NoModifier
+      ShiftModifier = key.ShiftModifier
+      ControlModifier = key.ControlModifier
+      AltModifier = key.AltModifier
+    else:
+      key = qt.Qt
+      NoModifier = key.NoButton
+      ShiftModifier = key.ShiftButton
+      ControlModifier = key.ControlButton
+      AltModifier = key.AltButton
+    self.mouseLongEventSubscribe( key.LeftButton, NoModifier,
+      pool.action( 'LinkAction' ).execLink,
+      pool.action( 'LinkAction' ).execLink,
+      pool.action( 'LinkAction' ).endLink, True )
+    self.mouseLongEventSubscribe( key.MidButton, ShiftModifier,
+      pool.action( "Zoom3DAction" ).beginZoom,
+      pool.action( "Zoom3DAction" ).moveZoom,
+      pool.action( "Zoom3DAction" ).endZoom, True )
+    self.wheelEventSubscribe( pool.action( "Zoom3DAction" ).zoomWheel )
+    self.keyPressEventSubscribe( key.Key_C, ControlModifier,
+      pool.action( "Trackball" ).setCenter )
+    self.keyPressEventSubscribe( key.Key_C, AltModifier,
+      pool.action( "Trackball" ).showRotationCenter )
+    self.mouseLongEventSubscribe( key.MidButton, ControlModifier,
+      pool.action( "Translate3DAction" ).beginTranslate,
+      pool.action( "Translate3DAction" ).moveTranslate,
+      pool.action( "Translate3DAction" ).endTranslate, True )
+    self.keyPressEventSubscribe( key.Key_PageUp, NoModifier,
+      pool.action( "SliceAction" ).previousSlice )
+    self.keyPressEventSubscribe( key.Key_PageDown, NoModifier,
+      pool.action( "SliceAction" ).nextSlice )
+    self.keyPressEventSubscribe( key.Key_PageUp, ShiftModifier,
+      pool.action( "SliceAction" ).previousTime )
+    self.keyPressEventSubscribe( key.Key_PageDown, ShiftModifier,
+      pool.action( "SliceAction" ).nextTime )
+    self.keyPressEventSubscribe( key.Key_L, ControlModifier,
+      pool.action( "SliceAction" ).toggleLinkedOnSlider )
+    self.keyPressEventSubscribe( key.Key_Space, NoModifier,
+      pool.action( "MovieAction" ).startOrStop )
+    self.keyPressEventSubscribe( key.Key_S, ControlModifier,
+      pool.action( "MovieAction" ).sliceOn )
+    self.keyPressEventSubscribe( key.Key_T, ControlModifier,
+      pool.action( "MovieAction" ).timeOn )
+    self.keyPressEventSubscribe( key.Key_M, ControlModifier,
+      pool.action( "MovieAction" ).nextMode )
+    self.keyPressEventSubscribe( key.Key_Plus, NoModifier,
+      pool.action( "MovieAction" ).increaseSpeed )
+    self.keyPressEventSubscribe( key.Key_Plus, ShiftModifier,
+      pool.action( "MovieAction" ).increaseSpeed )
+    self.keyPressEventSubscribe( key.Key_Minus, NoModifier,
+      pool.action( "MovieAction" ).decreaseSpeed )
+    self.myActions = { "MovieAction" : pool.action( "MovieAction" ),
+      "ContinuousTrackball" : pool.action( "ContinuousTrackball" ) }
+
+  def doAlsoOnDeselect( self, pool ):
+    for k,ac in self.myActions.iteritems():
+      if isinstance( a, ana.cpp.MovieAction ) and a.isRunning():
+        a.startOrStop()
+      if isinstance( a, ana.cpp.ContinuousTrackball ):
+        a.stop()
+
+
+class Simple3DControl( SimpleControl ):
+  def __init__( self, prio = 26, name='Simple3DControl' ):
+    SimpleControl.__init__( self, prio, name )
+
+  def eventAutoSubscription( self, pool ):
+    if qt4:
+      key = QtCore.Qt
+      NoModifier = key.NoModifier
+      ShiftModifier = key.ShiftModifier
+      ControlModifier = key.ControlModifier
+    else:
+      key = qt.Qt
+      NoModifier = key.NoButton
+      ShiftModifier = key.ShiftButton
+      ControlModifier = key.ControlButton
+    SimpleControl.eventAutoSubscription( self, pool )
+    self.mouseLongEventSubscribe ( \
+      key.MidButton, NoModifier,
+      pool.action( 'ContinuousTrackball' ).beginTrackball,
+      pool.action( 'ContinuousTrackball' ).moveTrackball,
+      pool.action( 'ContinuousTrackball' ).endTrackball, True )
+    self.keyPressEventSubscribe( key.Key_Space, ControlModifier,
+      pool.action( "ContinuousTrackball" ).startOrStop )
+
+
 class AnaSimpleViewer( qt.QObject ):
 
   def createWindow( self, wintype = 'Axial' ):
@@ -81,15 +172,27 @@ class AnaSimpleViewer( qt.QObject ):
             break
         if freeslot:
           break
-    print 'add', wintype, 'at', x, y
+    if qt4:
+      # in Qt4, the widget must not have a parent before calling
+      # layout.addWidget
+      w.setParent( None )
     viewgridlay.addWidget( w.getInternalRep(), x, y )
     self._winlayouts[x][y] = 1
     w.releaseAppRef()
     awindows.append( w )
+    if wintype == '3D':
+      a.execute( 'SetControl', windows=[w], control='Simple3DControl' )
+    else:
+      a.execute( 'SetControl', windows=[w], control='SimpleControl' )
+    a.execute( 'WindowConfig', windows=[w],
+      light={ 'background' : [ 0., 0., 0., 1. ] } )
 
   def loadObject( self, fname ):
     obj = a.loadObject( fname )
-    findChild( awin, 'objectslist' ).insertItem( obj.name )
+    if qt4:
+      findChild( awin, 'objectslist' ).addItem( obj.name )
+    else:
+      findChild( awin, 'objectslist' ).insertItem( obj.name )
     aobjects.append( obj )
     if obj.objectType == 'VOLUME':
       hints = colormaphints.checkVolume( \
@@ -97,8 +200,8 @@ class AnaSimpleViewer( qt.QObject ):
       obj.attributed()[ 'colormaphints' ] = hints
     bb = obj.boundingbox()
     if len( awindows ) == 0:
-      self.createWindow( 'Axial' )
       self.createWindow( 'Coronal' )
+      self.createWindow( 'Axial' )
       self.createWindow( 'Sagittal' )
       self.createWindow( '3D' )
       a.execute( 'Camera', windows=[ awindows[-1] ],
@@ -112,6 +215,7 @@ class AnaSimpleViewer( qt.QObject ):
     a.execute( 'LinkedCursor', window=awindows[0], position=position )
 
   def addObject( self, obj ):
+    opts = {}
     if obj.objectType == 'VOLUME':
       global fusion2d
       if len( fusion2d ) == 0:
@@ -137,7 +241,9 @@ class AnaSimpleViewer( qt.QObject ):
         cmaps = colormaphints.chooseColormaps( hints )
         for x, y in zip( obj.children, cmaps ):
           x.setPalette( y )
-    a.addObjects( obj, awindows )
+    elif obj.objectType == 'GRAPH':
+      opts[ 'add_graph_nodes' ] = 1
+    a.addObjects( obj, awindows, **opts )
 
   def removeObject( self, obj ):
     if obj.objectType == 'VOLUME':
@@ -167,19 +273,33 @@ class AnaSimpleViewer( qt.QObject ):
 
 
   def fileOpen( self ):
-    fdialog.setMode( fdialog.ExistingFiles )
-    fdialog.show()
-    if fdialog.exec_loop():
+    if qt4:
+      fdialog.setFileMode( fdialog.ExistingFiles )
+      fdialog.show()
+      res = fdialog.exec_()
+    else:
+      fdialog.setMode( fdialog.ExistingFiles )
+      fdialog.show()
+      res = fdialog.exec_loop()
+    if res:
       fnames = fdialog.selectedFiles()
-      for fname in fnames:
-        self.loadObject( fname.utf8().data() )
+      if qt4:
+        for fname in fnames:
+          self.loadObject( unicode( fname ) )
+      else:
+        for fname in fnames:
+          self.loadObject( fname.utf8().data() )
 
   def selectedObjects( self ):
     olist = findChild( awin, 'objectslist' )
     sobjs = []
-    for i in xrange( olist.count() ):
-      if olist.isSelected( i ):
-        sobjs.append( olist.text( i ).utf8().data().strip('\0') )
+    if qt4:
+      for o in olist.selectedItems():
+        sobjs.append( unicode( o.text() ).strip('\0') )
+    else:
+      for i in xrange( olist.count() ):
+        if olist.isSelected( i ):
+          sobjs.append( olist.text( i ).utf8().data().strip('\0') )
     return [ o for o in aobjects if o.name in sobjs ]
 
   def editAdd( self ):
@@ -197,11 +317,24 @@ class AnaSimpleViewer( qt.QObject ):
     for o in objs:
       self.removeObject( o )
     olist = findChild( awin, 'objectslist' )
-    for o in objs:
-      olist.removeItem( olist.index( olist.findItem( o.name ) ) )
+    if qt4:
+      for o in objs:
+        olist.takeItem( olist.row( olist.findItems( o.name,
+          QtCore.Qt.MatchExactly )[ 0 ] ) )
+    else:
+      for o in objs:
+        olist.removeItem( olist.index( olist.findItem( o.name ) ) )
     global aobjects
     aobjects = [ o for o in aobjects if o not in objs ]
     a.deleteObjects( objs )
+
+def closeAll():
+  print "Exiting"
+  global vieww, viewgridlay, awindows, fusion2d, aobjects, anasimple
+  del vieww, viewgridlay
+  del anasimple
+  del awindows, fusion2d, aobjects
+  awin.close()
 
 anasimple = AnaSimpleViewer()
 #print 'fileOpenAction:', findChild( awin, 'fileOpenAction' )
@@ -209,7 +342,7 @@ anasimple = AnaSimpleViewer()
 awin.connect( findChild( awin, 'fileOpenAction' ), qt.SIGNAL( 'activated()' ),
   anasimple.fileOpen )
 awin.connect( findChild( awin, 'fileExitAction' ), qt.SIGNAL( 'activated()' ),
-  awin.close )
+  closeAll )
 awin.connect( findChild( awin, 'editAddAction' ), qt.SIGNAL( 'activated()' ),
   anasimple.editAdd )
 awin.connect( findChild( awin, 'editRemoveAction' ), qt.SIGNAL( 'activated()' ),
@@ -217,12 +350,26 @@ awin.connect( findChild( awin, 'editRemoveAction' ), qt.SIGNAL( 'activated()' ),
 awin.connect( findChild( awin, 'editDeleteAction' ),
   qt.SIGNAL( 'activated()' ), anasimple.editDelete )
 
-qt.qApp.setMainWidget( awin )
+if not qt4:
+  qt.qApp.setMainWidget( awin )
 
 awin.showMaximized()
 spl.finish( awin )
+del spl
 
 a.config()[ 'setAutomaticReferential' ] = 1
 
+cd = ana.cpp.ControlDictionary.instance()
+cd.addControl( 'SimpleControl', SimpleControl, 25 )
+cd.addControl( 'Simple3DControl', Simple3DControl, 26 )
+cm = ana.cpp.ControlManager.instance()
+cm.addControl( 'QAGLWidget3D', '', 'SimpleControl' )
+cm.addControl( 'QAGLWidget3D', '', 'Simple3DControl' )
+
+del cd, cm
+
 if runqt:
-  qapp.exec_loop()
+  if qt4:
+    qapp.exec_()
+  else:
+    qapp.exec_loop()

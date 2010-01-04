@@ -10,6 +10,12 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Anatomist Simple Viewer</string>
   </property>
@@ -109,7 +115,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>28</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -118,7 +124,7 @@
     </property>
     <addaction name="fileOpenAction"/>
     <addaction name="fileSaveAction"/>
-    <addaction name="fileExit"/>
+    <addaction name="fileExitAction"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -149,7 +155,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
    <addaction name="fileOpenAction"/>
    <addaction name="fileSaveAction"/>
@@ -174,7 +180,7 @@
     <string>&amp;Save...</string>
    </property>
   </action>
-  <action name="fileExit">
+  <action name="fileExitAction">
    <property name="text">
     <string>E&amp;xit</string>
    </property>

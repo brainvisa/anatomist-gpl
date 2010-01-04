@@ -15,7 +15,7 @@ class ControlWindow : QMainWindow
 #include <anatomist/window/Window.h>
 %End
 
-/*
+/* not available in Qt4...
 %TypeCode
 #include <anatomist/control/controlMenuHandler.h>
 #include <anatomist/selection/qSelMenu.h>
@@ -47,7 +47,8 @@ public:
   void UnselectAllWindows();
   void enableClose( bool );
   bool closeEnabled() const;
-/*
+
+/* not available in Qt4...
   QPopupMenu* getPopup( const std::string & name );
 %MethodCode
   anatomist::AControlMenuHandler* mh = sipCpp->menuHandler();

@@ -2,6 +2,12 @@
 namespace anatomist
 {
 
+  /* NOTE:
+  These creation functions are *not* factories, since the returned window
+  never belongs to python but always to C++ since ref-counting takes place
+  in C++.
+  */
+
   class AWindowCreator
   {
 %TypeHeaderCode

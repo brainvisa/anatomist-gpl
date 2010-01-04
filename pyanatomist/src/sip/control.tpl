@@ -32,7 +32,10 @@ class Action
   if( dynamic_cast<anatomist::Trackball *>( sipCpp ) )
   {
     if( dynamic_cast<anatomist::ContinuousTrackball *>( sipCpp ) )
+    {
       sipClass = sipClass_anatomist_ContinuousTrackball;
+      *sipCppRet = static_cast<anatomist::ContinuousTrackball *>( sipCpp );
+    }
     else
       sipClass = sipClass_anatomist_Trackball;
   }
@@ -54,6 +57,11 @@ class Action
     sipClass = sipClass_anatomist_SliceAction;
   else if( dynamic_cast<anatomist::DragObjectAction *>( sipCpp ) )
     sipClass = sipClass_anatomist_DragObjectAction;
+  else if( dynamic_cast<anatomist::MovieAction *>( sipCpp ) )
+  {
+    sipClass = sipClass_anatomist_MovieAction;
+    *sipCppRet = static_cast<anatomist::MovieAction *>( sipCpp );
+  }
   else
     sipClass = 0;
 %End
