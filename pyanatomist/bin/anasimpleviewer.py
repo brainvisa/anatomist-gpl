@@ -328,13 +328,15 @@ class AnaSimpleViewer( qt.QObject ):
     aobjects = [ o for o in aobjects if o not in objs ]
     a.deleteObjects( objs )
 
-def closeAll():
-  print "Exiting"
-  global vieww, viewgridlay, awindows, fusion2d, aobjects, anasimple
-  del vieww, viewgridlay
-  del anasimple
-  del awindows, fusion2d, aobjects
-  awin.close()
+  def closeAll( self ):
+    print "Exiting"
+    global vieww, viewgridlay, awindows, fusion2d, aobjects, anasimple
+    del vieww, viewgridlay
+    del anasimple
+    del awindows, fusion2d, aobjects
+    awin.close()
+    a = ana.Anatomist()
+    a.close()
 
 anasimple = AnaSimpleViewer()
 #print 'fileOpenAction:', findChild( awin, 'fileOpenAction' )
@@ -342,7 +344,7 @@ anasimple = AnaSimpleViewer()
 awin.connect( findChild( awin, 'fileOpenAction' ), qt.SIGNAL( 'activated()' ),
   anasimple.fileOpen )
 awin.connect( findChild( awin, 'fileExitAction' ), qt.SIGNAL( 'activated()' ),
-  closeAll )
+  anasimple.closeAll )
 awin.connect( findChild( awin, 'editAddAction' ), qt.SIGNAL( 'activated()' ),
   anasimple.editAdd )
 awin.connect( findChild( awin, 'editRemoveAction' ), qt.SIGNAL( 'activated()' ),
