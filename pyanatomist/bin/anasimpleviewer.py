@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import anatomist.direct.api as ana
+from anatomist.cpp.palettecontrastaction import PaletteContrastAction
 from soma import aims
 from soma.aims import colormaphints
 import sys, os
@@ -118,6 +119,16 @@ class SimpleControl( ana.cpp.Control ):
       pool.action( "MovieAction" ).decreaseSpeed )
     self.myActions = { "MovieAction" : pool.action( "MovieAction" ),
       "ContinuousTrackball" : pool.action( "ContinuousTrackball" ) }
+    self.mouseLongEventSubscribe( key.RightButton, NoModifier,
+      pool.action( 'PaletteContrastAction' ).startContrast,
+      pool.action( 'PaletteContrastAction' ).moveContrast,
+      pool.action( 'PaletteContrastAction' ).stopContrast, True )
+    self.mouseLongEventSubscribe( key.RightButton, ControlModifier,
+      pool.action( 'PaletteContrastAction' ).startContrast,
+      pool.action( 'PaletteContrastAction' ).moveContrastMin,
+      pool.action( 'PaletteContrastAction' ).stopContrast, True )
+    self.keyPressEventSubscribe( key.Key_C, NoModifier,
+      pool.action( "PaletteContrastAction" ).resetPalette )
 
   def doAlsoOnDeselect( self, pool ):
     for k,ac in self.myActions.iteritems():

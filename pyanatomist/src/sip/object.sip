@@ -106,6 +106,7 @@ namespace anatomist
     virtual anatomist::AObjectPalette *palette();
     virtual void setPalette( const anatomist::AObjectPalette & palette );
     virtual const anatomist::AObjectPalette *getOrCreatePalette() const;
+    virtual void adjustPalette();
     virtual Tree* optionTree() const /AutoGen/;
     virtual anatomist::Material & GetMaterial() /AutoGen/;
     long loadDate() const;
