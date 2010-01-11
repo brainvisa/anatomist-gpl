@@ -41,7 +41,6 @@ import sys, os
 
 qt4 = False
 if sys.modules.has_key( 'PyQt4'):
-  print 'PyQt4 loaded'
   qt4 = True
   from PyQt4 import QtCore, QtGui
   qt = QtGui
@@ -49,7 +48,6 @@ if sys.modules.has_key( 'PyQt4'):
   uifile = 'anasimpleviewer-qt4.ui'
   findChild = lambda x, y: QtCore.QObject.findChild( x, QtCore.QObject, y )
 else:
-  print 'PyQt4 Not loaded'
   import qt, qtui
   loadUi = qtui.QWidgetFactory.create
   uifile = 'anasimpleviewer.ui'
@@ -195,6 +193,10 @@ class Simple3DControl( SimpleControl ):
 
 
 class AnaSimpleViewer( qt.QObject ):
+
+  def __init__( self ):
+    qt.QObject.__init__( self )
+    self._vrenabled = False
 
   def createWindow( self, wintype = 'Axial' ):
     c = ana.cpp.CreateWindowCommand( wintype, -1, None, [], 1, vieww, 2,
@@ -380,8 +382,16 @@ class AnaSimpleViewer( qt.QObject ):
     a = ana.Anatomist()
     a.close()
 
+  def enableVolumeRendering( self ):
+    print 'enableVolumeRendering'
+    ac = findChild( awin, 'viewEnable_Volume_RenderingAction' )
+    print 'before:', ac.isOn()
+    ac.setOn( not ac.isOn() )
+    self._vrenabled = ac.isOn()
+    print 'after:', ac.isOn()
+
 anasimple = AnaSimpleViewer()
-#print 'fileOpenAction:', findChild( awin, 'fileOpenAction' )
+print 'fileOpenAction:', findChild( awin, 'fileOpenAction' )
 #print awin.fileOpenAction
 awin.connect( findChild( awin, 'fileOpenAction' ), qt.SIGNAL( 'activated()' ),
   anasimple.fileOpen )
@@ -389,10 +399,12 @@ awin.connect( findChild( awin, 'fileExitAction' ), qt.SIGNAL( 'activated()' ),
   anasimple.closeAll )
 awin.connect( findChild( awin, 'editAddAction' ), qt.SIGNAL( 'activated()' ),
   anasimple.editAdd )
-awin.connect( findChild( awin, 'editRemoveAction' ), qt.SIGNAL( 'activated()' ),
-  anasimple.editRemove )
+awin.connect( findChild( awin, 'editRemoveAction' ),
+  qt.SIGNAL( 'activated()' ), anasimple.editRemove )
 awin.connect( findChild( awin, 'editDeleteAction' ),
   qt.SIGNAL( 'activated()' ), anasimple.editDelete )
+awin.connect( findChild( awin, 'viewEnable_Volume_RenderingAction' ),
+  qt.SIGNAL( 'activated()' ), anasimple.enableVolumeRendering )
 
 if not qt4:
   qt.qApp.setMainWidget( awin )
