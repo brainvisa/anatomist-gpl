@@ -77,6 +77,7 @@ fdialog = qt.QFileDialog()
 awindows = []
 aobjects = []
 fusion2d = []
+volrender = None
 
 vieww = findChild( awin, 'windows' )
 if qt4:
@@ -258,63 +259,98 @@ class AnaSimpleViewer( qt.QObject ):
       position = t.transform( position )
     a.execute( 'LinkedCursor', window=awindows[0], position=position )
 
+  def _displayVolume( self, obj, opts={} ):
+    if self._vrenabled:
+      wins = [ x for x in awindows if x.subtype() != 0 ]
+      if len( wins ) != 0:
+        a.addObjects( obj, wins, **opts )
+      wins = [ x for x in awindows if x.subtype() == 0 ]
+      if len( wins ) == 0:
+        return
+      vr = a.fusionObjects( [ obj ], method='VolumeRenderingFusionMethod' )
+      clip = a.fusionObjects( [ vr ], method = 'FusionClipMethod' )
+      global volrender
+      volrender = [ clip, vr ]
+      a.addObjects( clip, wins, **opts )
+    else:
+      a.addObjects( obj, awindows, **opts )
+
+  def addVolume( self, obj, opts={} ):
+    global fusion2d, volrender
+    hasvr = False
+    if volrender:
+      a.deleteObjects( volrender )
+      hasvr = True
+      volrender = None
+    if len( fusion2d ) == 0:
+      fusion2d = [ None, obj ]
+    elif obj not in fusion2d:
+      fusobjs = fusion2d[1:] + [ obj ]
+      f2d = a.fusionObjects( fusobjs, method='Fusion2DMethod' )
+      if fusion2d[0] is not None:
+        a.deleteObjects( fusion2d[0] )
+      else:
+        a.removeObjects( fusion2d[1], awindows )
+      fusion2d = [ f2d ] + fusobjs
+      # repalette( fusobjs )
+      obj = f2d
+    else:
+      return
+    if obj.objectType == 'VOLUME':
+      cmap = colormaphints.chooseColormaps( \
+        ( obj.attributed()[ 'colormaphints' ], ) )
+      obj.setPalette( cmap[0] )
+    else:
+      hints = [ x.attributed()[ 'colormaphints' ] for x in obj.children ]
+      cmaps = colormaphints.chooseColormaps( hints )
+      for x, y in zip( obj.children, cmaps ):
+        x.setPalette( y )
+    self._displayVolume( obj, opts )
+
+  def removeVolume( self, obj, opts={} ):
+    global fusion2d, volrender
+    if obj in fusion2d:
+      hasvr = False
+      if volrender:
+        a.deleteObjects( volrender )
+        volrender = None
+        hasvr = True
+      fusobjs = [ o for o in fusion2d[1:] if o != obj ]
+      if len( fusobjs ) >= 2:
+        f2d = a.fusionObjects( fusobjs, method='Fusion2DMethod' )
+      else:
+        f2d = None
+      if fusion2d[0] is not None:
+        a.deleteObjects( fusion2d[0] )
+      else:
+        a.removeObjects( fusion2d[1], awindows )
+      if len( fusobjs ) == 0:
+        fusion2d = []
+      else:
+        fusion2d = [ f2d ] + fusobjs
+      # repalette( fusobjs )
+      if f2d:
+        obj = f2d
+      elif len( fusobjs ) == 1:
+        obj = fusobjs[0]
+      else:
+        return
+      self._displayVolume( obj, opts )
+
   def addObject( self, obj ):
     opts = {}
     if obj.objectType == 'VOLUME':
-      global fusion2d
-      if len( fusion2d ) == 0:
-        fusion2d = [ None, obj ]
-      elif obj not in fusion2d:
-        fusobjs = fusion2d[1:] + [ obj ]
-        f2d = a.fusionObjects( fusobjs, method='Fusion2DMethod' )
-        if fusion2d[0] is not None:
-          a.deleteObjects( fusion2d[0] )
-        else:
-          a.removeObjects( fusion2d[1], awindows )
-        fusion2d = [ f2d ] + fusobjs
-        # repalette( fusobjs )
-        obj = f2d
-      else:
-        return
-      if obj.objectType == 'VOLUME':
-        cmap = colormaphints.chooseColormaps( \
-          ( obj.attributed()[ 'colormaphints' ], ) )
-        obj.setPalette( cmap[0] )
-      else:
-        hints = [ x.attributed()[ 'colormaphints' ] for x in obj.children ]
-        cmaps = colormaphints.chooseColormaps( hints )
-        for x, y in zip( obj.children, cmaps ):
-          x.setPalette( y )
+      self.addVolume( obj, opts )
+      return
     elif obj.objectType == 'GRAPH':
       opts[ 'add_graph_nodes' ] = 1
     a.addObjects( obj, awindows, **opts )
 
   def removeObject( self, obj ):
     if obj.objectType == 'VOLUME':
-      global fusion2d
-      if obj in fusion2d:
-        fusobjs = [ o for o in fusion2d[1:] if o != obj ]
-        if len( fusobjs ) >= 2:
-          f2d = a.fusionObjects( fusobjs, method='Fusion2DMethod' )
-        else:
-          f2d = None
-        if fusion2d[0] is not None:
-          a.deleteObjects( fusion2d[0] )
-        else:
-          a.removeObjects( fusion2d[1], awindows )
-        if len( fusobjs ) == 0:
-          fusion2d = []
-        else:
-          fusion2d = [ f2d ] + fusobjs
-        # repalette( fusobjs )
-        if f2d:
-          a.addObjects( f2d, awindows )
-        elif len( fusobjs ) == 1:
-          a.addObjects( fusobjs[0], awindows )
-      else:
-        return
-    a.removeObjects( obj, awindows )
-
+      self.removeVolume( obj )
+    else:
+      a.removeObjects( obj, awindows )
 
   def fileOpen( self ):
     if qt4:
@@ -382,13 +418,46 @@ class AnaSimpleViewer( qt.QObject ):
     a = ana.Anatomist()
     a.close()
 
+  def stopVolumeRendering( self ):
+    global volrender
+    if not volrender:
+      return
+    a.deleteObjects( volrender )
+    volrender = None
+    if len( fusion2d ) != 0:
+      if fusion2d[0] is not None:
+        obj = fusion2d[0]
+      else:
+        obj = fusion2d[1]
+    wins = [ w for w in awindows if w.subtype() == 0 ]
+    a.addObjects( obj, wins )
+
+  def startVolumeRendering( self ):
+    if len( fusion2d ) == 0:
+      return
+    if fusion2d[0] is not None:
+      obj = fusion2d[0]
+    else:
+      obj = fusion2d[1]
+    wins = [ x for x in awindows if x.subtype() == 0 ]
+    if len( wins ) == 0:
+      return
+    vr = a.fusionObjects( [ obj ], method='VolumeRenderingFusionMethod' )
+    clip = a.fusionObjects( [ vr ], method = 'FusionClipMethod' )
+    global volrender
+    volrender = [ clip, vr ]
+    a.removeObjects( obj, wins )
+    a.addObjects( clip, wins )
+
+
   def enableVolumeRendering( self ):
-    print 'enableVolumeRendering'
     ac = findChild( awin, 'viewEnable_Volume_RenderingAction' )
-    print 'before:', ac.isOn()
-    ac.setOn( not ac.isOn() )
+    print 'enableVolumeRendering:', ac.isOn()
     self._vrenabled = ac.isOn()
-    print 'after:', ac.isOn()
+    if self._vrenabled:
+      self.startVolumeRendering()
+    else:
+      self.stopVolumeRendering()
 
 anasimple = AnaSimpleViewer()
 print 'fileOpenAction:', findChild( awin, 'fileOpenAction' )
