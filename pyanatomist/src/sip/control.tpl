@@ -144,6 +144,14 @@ class Control
     sipClass = sipClass_anatomist_Control3D;
   else if( dynamic_cast<anatomist::Select3DControl *>( sipCpp ) )
     sipClass = sipClass_anatomist_Select3DControl;
+  else if( dynamic_cast<anatomist::FlightControl *>( sipCpp ) )
+    sipClass = sipClass_anatomist_FlightControl;
+  else if( dynamic_cast<anatomist::ObliqueControl *>( sipCpp ) )
+    sipClass = sipClass_anatomist_ObliqueControl;
+  else if( dynamic_cast<anatomist::TransformControl *>( sipCpp ) )
+    sipClass = sipClass_anatomist_TransformControl;
+  else if( dynamic_cast<anatomist::CutControl *>( sipCpp ) )
+    sipClass = sipClass_anatomist_CutControl;
   else
     sipClass = 0;
 %End

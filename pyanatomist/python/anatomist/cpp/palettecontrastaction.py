@@ -59,24 +59,23 @@ class PaletteContrastAction( anatomist.Action ):
     diff = ( ( x - self._start[0] ) / 500., ( y - self._start[1] ) / 500. )
     a = anatomist.Anatomist()
     for o in objs:
-      if isinstance( o, anatomist.MObject ):
-        objs += [ mo for mo in o if mo not in objs ]
-      else:
-        pal = o.palette()
-        if pal:
-          if self._palettes.has_key( o ):
-            initpal = self._palettes[ o ]
+      pal = o.palette()
+      if pal:
+        if self._palettes.has_key( o ):
+          initpal = self._palettes[ o ]
+        else:
+          initpal = [ pal.min1(), pal.max1() ]
+          self._palettes[ o ] = initpal
+        val = initpal[1] + diff[1]
+        threshold = 0.5
+        if val < initpal[0] and initpal[1] > initpal[0]:
+          if diff[1] < -threshold:
+            val = initpal[0] + diff[1] + threshold
           else:
-            initpal = [ pal.min1(), pal.max1() ]
-            self._palettes[ o ] = initpal
-          val = initpal[1] + diff[1]
-          threshold = 0.5
-          if val < initpal[0] and initpal[1] > initpal[0]:
-            if diff[1] < -threshold:
-              val = initpal[0] + diff[1] + threshold
-            else:
-              val = initpal[0]
-          a.theProcessor().execute( 'SetObjectPalette', objects=[o], max=val )
+            val = initpal[0]
+        a.theProcessor().execute( 'SetObjectPalette', objects=[o], max=val )
+      elif isinstance( o, anatomist.MObject ):
+        objs += [ mo for mo in o if mo not in objs ]
 
   def moveContrastMin( self, x, y, globx, globy ):
     win = self.view().window()
@@ -84,18 +83,17 @@ class PaletteContrastAction( anatomist.Action ):
     diff = ( ( x - self._start[0] ) / 500., ( y - self._start[1] ) / 500. )
     a = anatomist.Anatomist()
     for o in objs:
-      if isinstance( o, anatomist.MObject ):
+      pal = o.palette()
+      if pal:
+        if self._palettes.has_key( o ):
+          initpal = self._palettes[ o ]
+        else:
+          initpal = [ pal.min1(), pal.max1() ]
+          self._palettes[ o ] = initpal
+        a.theProcessor().execute( 'SetObjectPalette', objects=[o],
+          min=initpal[0] + diff[1] )
+      elif isinstance( o, anatomist.MObject ):
         objs += [ mo for mo in o if mo not in objs ]
-      else:
-        pal = o.palette()
-        if pal:
-          if self._palettes.has_key( o ):
-            initpal = self._palettes[ o ]
-          else:
-            initpal = [ pal.min1(), pal.max1() ]
-            self._palettes[ o ] = initpal
-          a.theProcessor().execute( 'SetObjectPalette', objects=[o],
-            min=initpal[0] + diff[1] )
 
   def stopContrast( self, x, y, globx, globy ):
     del self._start
@@ -111,6 +109,8 @@ class PaletteContrastAction( anatomist.Action ):
         o.adjustPalette()
         a.theProcessor().execute( 'SetObjectPalette', objects=[o],
           min=pal.min1(), max=pal.max1() )
+      elif isinstance( o, anatomist.MObject ):
+        objs += [ mo for mo in o if mo not in objs ]
 
 
 ad = anatomist.ActionDictionary.instance()

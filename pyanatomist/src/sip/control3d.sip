@@ -266,5 +266,65 @@ class Select3DControl : anatomist::Control
 };
 
 
+class FlightControl : anatomist::Control
+{
+%TypeHeaderCode
+#include <anatomist/window3D/control3D.h>
+%End
+
+public:
+  FlightControl();
+  FlightControl( const anatomist::FlightControl & c );
+  virtual ~FlightControl();
+
+  virtual void eventAutoSubscription( anatomist::ActionPool * actionPool );
+  virtual void doAlsoOnDeselect( anatomist::ActionPool * actionPool );
+};
+
+
+class ObliqueControl : anatomist::Control
+{
+%TypeHeaderCode
+#include <anatomist/window3D/control3D.h>
+%End
+
+public:
+  ObliqueControl();
+  ObliqueControl( const anatomist::ObliqueControl & c );
+  virtual ~ObliqueControl();
+
+  virtual void eventAutoSubscription( anatomist::ActionPool * actionPool );
+};
+
+
+class TransformControl : anatomist::Control
+{
+%TypeHeaderCode
+#include <anatomist/window3D/control3D.h>
+%End
+
+public:
+  TransformControl();
+  TransformControl( const anatomist::TransformControl & c );
+  virtual ~TransformControl();
+
+  virtual void eventAutoSubscription( anatomist::ActionPool * actionPool );
+};
+
+
+class CutControl : anatomist::Control
+{
+%TypeHeaderCode
+#include <anatomist/window3D/control3D.h>
+%End
+
+public:
+  CutControl();
+  CutControl( const anatomist::CutControl & c );
+  virtual ~CutControl();
+
+  virtual void eventAutoSubscription( anatomist::ActionPool * actionPool );
+};
+
 };
 
