@@ -115,7 +115,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -142,8 +142,15 @@
     <addaction name="separator"/>
     <addaction name="helpAbout"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="viewEnable_Volume_RenderingAction"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -235,6 +242,14 @@
   <action name="helpAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="viewEnable_Volume_RenderingAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Enable Volume Rendering</string>
    </property>
   </action>
  </widget>

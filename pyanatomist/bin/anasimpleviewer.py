@@ -84,9 +84,6 @@ if qt4:
   viewgridlay = qt.QGridLayout( vieww )
 else:
   viewgridlay = qt.QGridLayout( vieww, 2, 2 )
-#vl = qt.QHBoxLayout( vieww )
-#vl.addWidget( viewgrid )
-#viewgrid.show()
 
 
 class SimpleControl( ana.cpp.Control ):
@@ -297,13 +294,18 @@ class AnaSimpleViewer( qt.QObject ):
     else:
       return
     if obj.objectType == 'VOLUME':
-      cmap = colormaphints.chooseColormaps( \
-        ( obj.attributed()[ 'colormaphints' ], ) )
-      obj.setPalette( cmap[0] )
+      if obj.attributed()[ 'colormaphints' ].has_key( \
+        'volume_contents_likelihoods' ):
+        cmap = colormaphints.chooseColormaps( \
+          ( obj.attributed()[ 'colormaphints' ], ) )
+        obj.setPalette( cmap[0] )
     else:
       hints = [ x.attributed()[ 'colormaphints' ] for x in obj.children ]
+      children = [ x for x,y in zip( obj.children, hints ) \
+        if y.has_key( 'volume_contents_likelihoods' ) ]
+      hints = [ x for x in hints if x.has_key( 'volume_contents_likelihoods' ) ]
       cmaps = colormaphints.chooseColormaps( hints )
-      for x, y in zip( obj.children, cmaps ):
+      for x, y in zip( children, cmaps ):
         x.setPalette( y )
     self._displayVolume( obj, opts )
 
@@ -450,17 +452,16 @@ class AnaSimpleViewer( qt.QObject ):
     a.addObjects( clip, wins )
 
 
-  def enableVolumeRendering( self ):
-    ac = findChild( awin, 'viewEnable_Volume_RenderingAction' )
-    print 'enableVolumeRendering:', ac.isOn()
-    self._vrenabled = ac.isOn()
+  def enableVolumeRendering( self, on ):
+    #ac = findChild( awin, 'viewEnable_Volume_RenderingAction' )
+    self._vrenabled = on
     if self._vrenabled:
       self.startVolumeRendering()
     else:
       self.stopVolumeRendering()
 
 anasimple = AnaSimpleViewer()
-print 'fileOpenAction:', findChild( awin, 'fileOpenAction' )
+#print 'fileOpenAction:', findChild( awin, 'fileOpenAction' )
 #print awin.fileOpenAction
 awin.connect( findChild( awin, 'fileOpenAction' ), qt.SIGNAL( 'activated()' ),
   anasimple.fileOpen )
@@ -472,8 +473,9 @@ awin.connect( findChild( awin, 'editRemoveAction' ),
   qt.SIGNAL( 'activated()' ), anasimple.editRemove )
 awin.connect( findChild( awin, 'editDeleteAction' ),
   qt.SIGNAL( 'activated()' ), anasimple.editDelete )
+print 'child:', findChild( awin, 'viewEnable_Volume_RenderingAction' )
 awin.connect( findChild( awin, 'viewEnable_Volume_RenderingAction' ),
-  qt.SIGNAL( 'activated()' ), anasimple.enableVolumeRendering )
+  qt.SIGNAL( 'toggled( bool )' ), anasimple.enableVolumeRendering )
 
 if not qt4:
   qt.qApp.setMainWidget( awin )
