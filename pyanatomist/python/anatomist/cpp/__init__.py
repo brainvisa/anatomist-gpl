@@ -496,13 +496,11 @@ class PyControlCreator( ControlDictionary.ControlCreatorBase ):
     return self._function()
 
 ControlDictionary.addControl = \
-                             lambda self, name, creator, prio: \
-                             self._addControl( name,
-                                               PyControlCreator( creator ),
-                                               prio )
+  lambda self, name, creator, prio, allowreplace=False: \
+    self._addControl( name, PyControlCreator( creator ), prio, allowreplace )
 ActionDictionary.addAction = \
-                           lambda self, name, creator: \
-                           self._addAction( name, PyActionCreator( creator ) )
+  lambda self, name, creator: \
+    self._addAction( name, PyActionCreator( creator ) )
 
 # create lambda subscribe functions
 Control.keyPressEventSubscribe = lambda self, key, state, func: \

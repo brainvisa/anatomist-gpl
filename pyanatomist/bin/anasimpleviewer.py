@@ -1,7 +1,39 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+#  This software and supporting documentation are distributed by
+#      Institut Federatif de Recherche 49
+#      CEA/NeuroSpin, Batiment 145,
+#      91191 Gif-sur-Yvette cedex
+#      France
+#
+# This software is governed by the CeCILL license version 2 under
+# French law and abiding by the rules of distribution of free software.
+# You can  use, modify and/or redistribute the software under the
+# terms of the CeCILL license version 2 as circulated by CEA, CNRS
+# and INRIA at the following URL "http://www.cecill.info".
+#
+# As a counterpart to the access to the source code and  rights to copy,
+# modify and redistribute granted by the license, users are provided only
+# with a limited warranty  and the software's author,  the holder of the
+# economic rights,  and the successive licensors  have only  limited
+# liability.
+#
+# In this respect, the user's attention is drawn to the risks associated
+# with loading,  using,  modifying and/or developing or reproducing the
+# software by the user in light of its specific status of free software,
+# that may mean  that it is complicated to manipulate,  and  that  also
+# therefore means  that it is reserved for developers  and  experienced
+# professionals having in-depth computer knowledge. Users are therefore
+# encouraged to load and test the software's suitability as regards their
+# requirements in conditions enabling the security of their systems and/or
+# data to be ensured and,  more generally, to use and operate it in the
+# same conditions as regards security.
+#
+# The fact that you are presently reading this means that you have had
+# knowledge of the CeCILL license version 2 and that you accept its terms.
 
 import anatomist.direct.api as ana
+from anatomist.cpp.palettecontrastaction import PaletteContrastAction
 from soma import aims
 from soma.aims import colormaphints
 import sys, os
@@ -9,7 +41,6 @@ import sys, os
 
 qt4 = False
 if sys.modules.has_key( 'PyQt4'):
-  print 'PyQt4 loaded'
   qt4 = True
   from PyQt4 import QtCore, QtGui
   qt = QtGui
@@ -17,7 +48,6 @@ if sys.modules.has_key( 'PyQt4'):
   uifile = 'anasimpleviewer-qt4.ui'
   findChild = lambda x, y: QtCore.QObject.findChild( x, QtCore.QObject, y )
 else:
-  print 'PyQt4 Not loaded'
   import qt, qtui
   loadUi = qtui.QWidgetFactory.create
   uifile = 'anasimpleviewer.ui'
@@ -47,15 +77,13 @@ fdialog = qt.QFileDialog()
 awindows = []
 aobjects = []
 fusion2d = []
+volrender = None
 
 vieww = findChild( awin, 'windows' )
 if qt4:
   viewgridlay = qt.QGridLayout( vieww )
 else:
   viewgridlay = qt.QGridLayout( vieww, 2, 2 )
-#vl = qt.QHBoxLayout( vieww )
-#vl.addWidget( viewgrid )
-#viewgrid.show()
 
 
 class SimpleControl( ana.cpp.Control ):
@@ -118,6 +146,16 @@ class SimpleControl( ana.cpp.Control ):
       pool.action( "MovieAction" ).decreaseSpeed )
     self.myActions = { "MovieAction" : pool.action( "MovieAction" ),
       "ContinuousTrackball" : pool.action( "ContinuousTrackball" ) }
+    self.mouseLongEventSubscribe( key.RightButton, NoModifier,
+      pool.action( 'PaletteContrastAction' ).startContrast,
+      pool.action( 'PaletteContrastAction' ).moveContrast,
+      pool.action( 'PaletteContrastAction' ).stopContrast, True )
+    self.mouseLongEventSubscribe( key.RightButton, ControlModifier,
+      pool.action( 'PaletteContrastAction' ).startContrast,
+      pool.action( 'PaletteContrastAction' ).moveContrastMin,
+      pool.action( 'PaletteContrastAction' ).stopContrast, True )
+    self.keyPressEventSubscribe( key.Key_C, NoModifier,
+      pool.action( "PaletteContrastAction" ).resetPalette )
 
   def doAlsoOnDeselect( self, pool ):
     for k,ac in self.myActions.iteritems():
@@ -153,6 +191,10 @@ class Simple3DControl( SimpleControl ):
 
 
 class AnaSimpleViewer( qt.QObject ):
+
+  def __init__( self ):
+    qt.QObject.__init__( self )
+    self._vrenabled = False
 
   def createWindow( self, wintype = 'Axial' ):
     c = ana.cpp.CreateWindowCommand( wintype, -1, None, [], 1, vieww, 2,
@@ -214,63 +256,103 @@ class AnaSimpleViewer( qt.QObject ):
       position = t.transform( position )
     a.execute( 'LinkedCursor', window=awindows[0], position=position )
 
-  def addObject( self, obj ):
-    opts = {}
-    if obj.objectType == 'VOLUME':
-      global fusion2d
-      if len( fusion2d ) == 0:
-        fusion2d = [ None, obj ]
-      elif obj not in fusion2d:
-        fusobjs = fusion2d[1:] + [ obj ]
-        f2d = a.fusionObjects( fusobjs, method='Fusion2DMethod' )
-        if fusion2d[0] is not None:
-          a.deleteObjects( fusion2d[0] )
-        else:
-          a.removeObjects( fusion2d[1], awindows )
-        fusion2d = [ f2d ] + fusobjs
-        # repalette( fusobjs )
-        obj = f2d
-      else:
+  def _displayVolume( self, obj, opts={} ):
+    if self._vrenabled:
+      wins = [ x for x in awindows if x.subtype() != 0 ]
+      if len( wins ) != 0:
+        a.addObjects( obj, wins, **opts )
+      wins = [ x for x in awindows if x.subtype() == 0 ]
+      if len( wins ) == 0:
         return
-      if obj.objectType == 'VOLUME':
+      vr = a.fusionObjects( [ obj ], method='VolumeRenderingFusionMethod' )
+      clip = a.fusionObjects( [ vr ], method = 'FusionClipMethod' )
+      global volrender
+      volrender = [ clip, vr ]
+      a.addObjects( clip, wins, **opts )
+    else:
+      a.addObjects( obj, awindows, **opts )
+
+  def addVolume( self, obj, opts={} ):
+    global fusion2d, volrender
+    hasvr = False
+    if volrender:
+      a.deleteObjects( volrender )
+      hasvr = True
+      volrender = None
+    if len( fusion2d ) == 0:
+      fusion2d = [ None, obj ]
+    elif obj not in fusion2d:
+      fusobjs = fusion2d[1:] + [ obj ]
+      f2d = a.fusionObjects( fusobjs, method='Fusion2DMethod' )
+      if fusion2d[0] is not None:
+        a.deleteObjects( fusion2d[0] )
+      else:
+        a.removeObjects( fusion2d[1], awindows )
+      fusion2d = [ f2d ] + fusobjs
+      # repalette( fusobjs )
+      obj = f2d
+    else:
+      return
+    if obj.objectType == 'VOLUME':
+      if obj.attributed()[ 'colormaphints' ].has_key( \
+        'volume_contents_likelihoods' ):
         cmap = colormaphints.chooseColormaps( \
           ( obj.attributed()[ 'colormaphints' ], ) )
         obj.setPalette( cmap[0] )
+    else:
+      hints = [ x.attributed()[ 'colormaphints' ] for x in obj.children ]
+      children = [ x for x,y in zip( obj.children, hints ) \
+        if y.has_key( 'volume_contents_likelihoods' ) ]
+      hints = [ x for x in hints if x.has_key( 'volume_contents_likelihoods' ) ]
+      cmaps = colormaphints.chooseColormaps( hints )
+      for x, y in zip( children, cmaps ):
+        x.setPalette( y )
+    self._displayVolume( obj, opts )
+
+  def removeVolume( self, obj, opts={} ):
+    global fusion2d, volrender
+    if obj in fusion2d:
+      hasvr = False
+      if volrender:
+        a.deleteObjects( volrender )
+        volrender = None
+        hasvr = True
+      fusobjs = [ o for o in fusion2d[1:] if o != obj ]
+      if len( fusobjs ) >= 2:
+        f2d = a.fusionObjects( fusobjs, method='Fusion2DMethod' )
       else:
-        hints = [ x.attributed()[ 'colormaphints' ] for x in obj.children ]
-        cmaps = colormaphints.chooseColormaps( hints )
-        for x, y in zip( obj.children, cmaps ):
-          x.setPalette( y )
+        f2d = None
+      if fusion2d[0] is not None:
+        a.deleteObjects( fusion2d[0] )
+      else:
+        a.removeObjects( fusion2d[1], awindows )
+      if len( fusobjs ) == 0:
+        fusion2d = []
+      else:
+        fusion2d = [ f2d ] + fusobjs
+      # repalette( fusobjs )
+      if f2d:
+        obj = f2d
+      elif len( fusobjs ) == 1:
+        obj = fusobjs[0]
+      else:
+        return
+      self._displayVolume( obj, opts )
+
+  def addObject( self, obj ):
+    opts = {}
+    if obj.objectType == 'VOLUME':
+      self.addVolume( obj, opts )
+      return
     elif obj.objectType == 'GRAPH':
       opts[ 'add_graph_nodes' ] = 1
     a.addObjects( obj, awindows, **opts )
 
   def removeObject( self, obj ):
     if obj.objectType == 'VOLUME':
-      global fusion2d
-      if obj in fusion2d:
-        fusobjs = [ o for o in fusion2d[1:] if o != obj ]
-        if len( fusobjs ) >= 2:
-          f2d = a.fusionObjects( fusobjs, method='Fusion2DMethod' )
-        else:
-          f2d = None
-        if fusion2d[0] is not None:
-          a.deleteObjects( fusion2d[0] )
-        else:
-          a.removeObjects( fusion2d[1], awindows )
-        if len( fusobjs ) == 0:
-          fusion2d = []
-        else:
-          fusion2d = [ f2d ] + fusobjs
-        # repalette( fusobjs )
-        if f2d:
-          a.addObjects( f2d, awindows )
-        elif len( fusobjs ) == 1:
-          a.addObjects( fusobjs[0], awindows )
-      else:
-        return
-    a.removeObjects( obj, awindows )
-
+      self.removeVolume( obj )
+    else:
+      a.removeObjects( obj, awindows )
 
   def fileOpen( self ):
     if qt4:
@@ -338,6 +420,46 @@ class AnaSimpleViewer( qt.QObject ):
     a = ana.Anatomist()
     a.close()
 
+  def stopVolumeRendering( self ):
+    global volrender
+    if not volrender:
+      return
+    a.deleteObjects( volrender )
+    volrender = None
+    if len( fusion2d ) != 0:
+      if fusion2d[0] is not None:
+        obj = fusion2d[0]
+      else:
+        obj = fusion2d[1]
+    wins = [ w for w in awindows if w.subtype() == 0 ]
+    a.addObjects( obj, wins )
+
+  def startVolumeRendering( self ):
+    if len( fusion2d ) == 0:
+      return
+    if fusion2d[0] is not None:
+      obj = fusion2d[0]
+    else:
+      obj = fusion2d[1]
+    wins = [ x for x in awindows if x.subtype() == 0 ]
+    if len( wins ) == 0:
+      return
+    vr = a.fusionObjects( [ obj ], method='VolumeRenderingFusionMethod' )
+    clip = a.fusionObjects( [ vr ], method = 'FusionClipMethod' )
+    global volrender
+    volrender = [ clip, vr ]
+    a.removeObjects( obj, wins )
+    a.addObjects( clip, wins )
+
+
+  def enableVolumeRendering( self, on ):
+    #ac = findChild( awin, 'viewEnable_Volume_RenderingAction' )
+    self._vrenabled = on
+    if self._vrenabled:
+      self.startVolumeRendering()
+    else:
+      self.stopVolumeRendering()
+
 anasimple = AnaSimpleViewer()
 #print 'fileOpenAction:', findChild( awin, 'fileOpenAction' )
 #print awin.fileOpenAction
@@ -347,10 +469,13 @@ awin.connect( findChild( awin, 'fileExitAction' ), qt.SIGNAL( 'activated()' ),
   anasimple.closeAll )
 awin.connect( findChild( awin, 'editAddAction' ), qt.SIGNAL( 'activated()' ),
   anasimple.editAdd )
-awin.connect( findChild( awin, 'editRemoveAction' ), qt.SIGNAL( 'activated()' ),
-  anasimple.editRemove )
+awin.connect( findChild( awin, 'editRemoveAction' ),
+  qt.SIGNAL( 'activated()' ), anasimple.editRemove )
 awin.connect( findChild( awin, 'editDeleteAction' ),
   qt.SIGNAL( 'activated()' ), anasimple.editDelete )
+print 'child:', findChild( awin, 'viewEnable_Volume_RenderingAction' )
+awin.connect( findChild( awin, 'viewEnable_Volume_RenderingAction' ),
+  qt.SIGNAL( 'toggled( bool )' ), anasimple.enableVolumeRendering )
 
 if not qt4:
   qt.qApp.setMainWidget( awin )

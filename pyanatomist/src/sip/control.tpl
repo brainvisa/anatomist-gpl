@@ -135,6 +135,27 @@ class Control
 #include <anatomist/controler/action.h>
 %End
 
+%TypeCode
+#include <anatomist/window3D/control3D.h>
+%End
+
+%ConvertToSubClassCode
+  if( dynamic_cast<anatomist::Control3D *>( sipCpp ) )
+    sipClass = sipClass_anatomist_Control3D;
+  else if( dynamic_cast<anatomist::Select3DControl *>( sipCpp ) )
+    sipClass = sipClass_anatomist_Select3DControl;
+  else if( dynamic_cast<anatomist::FlightControl *>( sipCpp ) )
+    sipClass = sipClass_anatomist_FlightControl;
+  else if( dynamic_cast<anatomist::ObliqueControl *>( sipCpp ) )
+    sipClass = sipClass_anatomist_ObliqueControl;
+  else if( dynamic_cast<anatomist::TransformControl *>( sipCpp ) )
+    sipClass = sipClass_anatomist_TransformControl;
+  else if( dynamic_cast<anatomist::CutControl *>( sipCpp ) )
+    sipClass = sipClass_anatomist_CutControl;
+  else
+    sipClass = 0;
+%End
+
 public:
   class KeyActionLink
   {
@@ -333,9 +354,9 @@ public:
 
   anatomist::Control* getControlInstance( const std::string & );
   void addControl( const std::string &, 
-                   anatomist::ControlDictionary::ControlCreatorBase * 
-        /Transfer/, 
-                   int ) /PyName=_addControl/;
+                   anatomist::ControlDictionary::ControlCreatorBase *
+                   /Transfer/,
+                   int, bool allowreplace = false ) /PyName=_addControl/;
   int testPriorityUnicity( int );
 
 private:

@@ -160,6 +160,9 @@
         <action name="editRemoveAction"/>
         <action name="editDeleteAction"/>
     </item>
+    <item text="View" name="View">
+        <action name="viewEnable_Volume_RenderingAction"/>
+    </item>
     <separator/>
     <item text="&amp;Help" name="helpMenu">
         <action name="helpIndexAction"/>
@@ -311,6 +314,28 @@
         </property>
         <property name="accel">
             <string>Ctrl+Del</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewEnable_Volume_RenderingAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Enable Volume Rendering</string>
+        </property>
+        <property name="menuText">
+            <string>Enable Volume Rendering</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>Action</cstring>
+        </property>
+        <property name="text">
+            <string>Action</string>
         </property>
     </action>
 </actions>
