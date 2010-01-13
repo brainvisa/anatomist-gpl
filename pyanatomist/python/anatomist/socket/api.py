@@ -249,6 +249,7 @@ class Anatomist(base.Anatomist):
       options+="}"
     #print 'options:', options
     self.execute("LoadObject", filename = filename, name=objectName, res_pointer = newObject, options = options)
+    self.sync()
     newObject.takeRef()
     newObject.releaseAppRef()
     if duplicate:
@@ -892,7 +893,7 @@ class Anatomist(base.Anatomist):
     Some commands gives no  answer so we don't know when anatomist has finished to process them. Use this method to make sure anatomist has finished all current processing. 
     It sends a simple request to anatomist and wait for the answer.
     """
-    self.executeAndWaitAnswer("GetInfo")
+    self.executeAndWaitAnswer("GetInfo", timeout=600)
 
   ###############################################################################
   class AItem(base.Anatomist.AItem):
