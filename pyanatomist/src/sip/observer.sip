@@ -12,6 +12,7 @@ namespace anatomist
 %TypeCode
 #include <anatomist/graph/Graph.h>
 #include <anatomist/graph/GraphObject.h>
+#include <anatomist/object/clippedobject.h>
 #include <anatomist/window3D/window3D.h>
 %End
 
@@ -27,6 +28,8 @@ namespace anatomist
         sipClass = sipClass_anatomist_AGraph;
       else if (dynamic_cast<anatomist::AGraphObject *>(sipCpp))
         sipClass = sipClass_anatomist_AGraphObject;
+      else if (dynamic_cast<anatomist::ClippedObject *>(sipCpp))
+        sipClass = sipClass_anatomist_ClippedObject;
       else if (dynamic_cast<anatomist::ObjectList *>(sipCpp))
         sipClass = sipClass_anatomist_ObjectList;
       else
@@ -67,6 +70,7 @@ namespace anatomist
 %TypeHeaderCode
 #include <anatomist/observer/Observer.h>
 #include <anatomist/observer/Observable.h>
+#include <anatomist/object/clippedobject.h>
 %End
 
 %TypeCode
@@ -88,6 +92,8 @@ namespace anatomist
         sipClass = sipClass_anatomist_AGraph;
       else if (dynamic_cast<anatomist::AGraphObject *>(sipCpp))
         sipClass = sipClass_anatomist_AGraphObject;
+      else if (dynamic_cast<anatomist::ClippedObject *>(sipCpp))
+        sipClass = sipClass_anatomist_ClippedObject;
       else if (dynamic_cast<anatomist::ObjectList *>(sipCpp))
         sipClass = sipClass_anatomist_ObjectList;
       else

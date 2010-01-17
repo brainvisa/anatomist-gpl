@@ -85,6 +85,12 @@ if qt4:
 else:
   viewgridlay = qt.QGridLayout( vieww, 2, 2 )
 
+class SimpleActions( ana.cpp.Action ):
+  def name( self ):
+    return 'SimpleActions'
+
+  def resetFOV( self ):
+    self.view().window().focusView()
 
 class SimpleControl( ana.cpp.Control ):
   def __init__( self, prio = 25, name='SimpleControl' ):
@@ -156,6 +162,8 @@ class SimpleControl( ana.cpp.Control ):
       pool.action( 'PaletteContrastAction' ).stopContrast, True )
     self.keyPressEventSubscribe( key.Key_C, NoModifier,
       pool.action( "PaletteContrastAction" ).resetPalette )
+    self.keyPressEventSubscribe( key.Key_Home, NoModifier,
+      pool.action( "SimpleActions" ).resetFOV )
 
   def doAlsoOnDeselect( self, pool ):
     for k,ac in self.myActions.iteritems():
@@ -195,6 +203,24 @@ class AnaSimpleViewer( qt.QObject ):
   def __init__( self ):
     qt.QObject.__init__( self )
     self._vrenabled = False
+    # register the function on the cursor notifier of anatomist. It will be
+    # called when the user clicks on a window
+    a.onCursorNotifier.add( self.clickHandler )
+
+  def clickHandler( self, eventName, params ):
+    '''Callback for linked cursor. In volume rendering mode, it will sync the
+    VR slice to the linked cursor.
+    '''
+    pos=params['position']
+    # print 'pos:', pos
+    if self._vrenabled and len( volrender ) >= 1:
+      clip = volrender[0]
+      t = a.getTransformation( params[ 'window' ].getReferential(),
+        clip.getReferential() )
+      if t is not None:
+        pos = t.transform( pos[:3] )
+      clip.setOffset( pos[:3] )
+      clip.notifyObservers()
 
   def createWindow( self, wintype = 'Axial' ):
     c = ana.cpp.CreateWindowCommand( wintype, -1, None, [], 1, vieww, 2,
@@ -274,6 +300,8 @@ class AnaSimpleViewer( qt.QObject ):
 
   def addVolume( self, obj, opts={} ):
     global fusion2d, volrender
+    if obj in fusion2d:
+      return
     hasvr = False
     if volrender:
       a.deleteObjects( volrender )
@@ -281,7 +309,7 @@ class AnaSimpleViewer( qt.QObject ):
       volrender = None
     if len( fusion2d ) == 0:
       fusion2d = [ None, obj ]
-    elif obj not in fusion2d:
+    else:
       fusobjs = fusion2d[1:] + [ obj ]
       f2d = a.fusionObjects( fusobjs, method='Fusion2DMethod' )
       if fusion2d[0] is not None:
@@ -291,8 +319,6 @@ class AnaSimpleViewer( qt.QObject ):
       fusion2d = [ f2d ] + fusobjs
       # repalette( fusobjs )
       obj = f2d
-    else:
-      return
     if obj.objectType == 'VOLUME':
       if obj.attributed()[ 'colormaphints' ].has_key( \
         'volume_contents_likelihoods' ):
@@ -352,7 +378,7 @@ class AnaSimpleViewer( qt.QObject ):
     if obj.objectType == 'VOLUME':
       self.removeVolume( obj )
     else:
-      a.removeObjects( obj, awindows )
+      a.removeObjects( obj, awindows, remove_children=True )
 
   def fileOpen( self ):
     if qt4:
@@ -486,6 +512,8 @@ del spl
 
 a.config()[ 'setAutomaticReferential' ] = 1
 
+ad = ana.cpp.ActionDictionary.instance()
+ad.addAction( 'SimpleActions', SimpleActions )
 cd = ana.cpp.ControlDictionary.instance()
 cd.addControl( 'SimpleControl', SimpleControl, 25 )
 cd.addControl( 'Simple3DControl', Simple3DControl, 26 )

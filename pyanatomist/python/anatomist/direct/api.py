@@ -718,7 +718,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       add_children, add_graph_nodes, add_graph_relations)
     self.execute(c)
 
-  def removeObjects(self, objects, windows):
+  def removeObjects(self, objects, windows, remove_children=False):
     """
     Removes objects from windows. 
     
@@ -729,7 +729,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     bObjects=self.convertParamsToObjects(objects)
     bWindows=self.convertParamsToObjects(windows)
-    c=cpp.RemoveObjectCommand(self.makeList(bObjects), self.makeList(bWindows))
+    c=cpp.RemoveObjectCommand(self.makeList(bObjects), self.makeList(bWindows),
+      int(remove_children) )
     self.execute(c)
       
   def assignReferential(self, referential, elements):

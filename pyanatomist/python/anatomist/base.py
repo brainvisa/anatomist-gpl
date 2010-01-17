@@ -544,7 +544,7 @@ class Anatomist(ObservableSingleton, object):
       add_graph_nodes=int(add_graph_nodes),
       add_graph_relations=int(add_graph_relations))
   
-  def removeObjects(self, objects, windows):
+  def removeObjects(self, objects, windows, remove_children=False):
     """
     Removes objects from windows. 
     
@@ -554,7 +554,7 @@ class Anatomist(ObservableSingleton, object):
     @param windows : list of windows from which the objects must be removed
     """
     self.execute("RemoveObject", objects=self.makeList(objects),
-      windows=self.makeList(windows))
+      windows=self.makeList(windows), remove_children=int(remove_children) )
     
   def deleteObjects(self, objects):
     """

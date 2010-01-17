@@ -37,4 +37,45 @@ public:
   virtual ~SliceableObject();
 };
 
+
+class SelfSliceable
+{
+%TypeHeaderCode
+#include <anatomist/object/selfsliceable.h>
+%End
+
+public:
+  SelfSliceable();
+  SelfSliceable( const Point3df & pos, const aims::Quaternion & quat );
+  virtual ~SelfSliceable();
+
+  void setOffset( const Point3df & pos );
+  void setQuaternion( const aims::Quaternion & quat );
+  void setSlice( const Point3df & pos, const aims::Quaternion & quat );
+  aims::Quaternion quaternion() const;
+  Point3df offset() const;
+  void setPlane( const Point4df & plane );
+  Point4df plane() const;
+
+  virtual void sliceChanged();
+
+  virtual void setOffsetSilent( const Point3df & pos );
+  virtual void setQuaternionSilent( const aims::Quaternion & quat );
+  virtual void setSliceSilent( const Point3df & pos,
+                               const aims::Quaternion & quat );
+  void setPlaneSilent( const Point4df & plane );
+};
+
+
+class ClippedObject : anatomist::MObject, anatomist::SelfSliceable
+{
+%TypeHeaderCode
+#include <anatomist/object/clippedobject.h>
+%End
+
+public:
+  ClippedObject( const vector_AObjectPtr & );
+  virtual ~ClippedObject();
+};
+
 };
