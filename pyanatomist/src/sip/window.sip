@@ -291,6 +291,11 @@ public:
   void refreshTempNow();
   void refreshLightView();
   void refreshLightViewNow();
+  void muteAxial();
+  void muteCoronal();
+  void muteSagittal();
+  void muteOblique();
+  void mute3D();
 };
 
 

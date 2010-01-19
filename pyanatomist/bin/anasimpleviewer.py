@@ -210,12 +210,53 @@ class AnaSimpleViewer( qt.QObject ):
   def clickHandler( self, eventName, params ):
     '''Callback for linked cursor. In volume rendering mode, it will sync the
     VR slice to the linked cursor.
+    It also updates the volumes values view
     '''
-    pos=params['position']
-    # print 'pos:', pos
+    pos = params[ 'position' ]
+    win = params[ 'window' ]
+    wref = win.getReferential()
+    tr = a.getTransformation( wref, a.mniTemplateRef )
+    if tr:
+      pos2 = tr.transform( pos[:3] )
+    else:
+      pos2 = pos
+    x = findChild( awin, 'coordXEdit' )
+    x.setText( '%8.3f' % pos2[0] )
+    y = findChild( awin, 'coordYEdit' )
+    y.setText( '%8.3f' % pos2[1] )
+    z = findChild( awin, 'coordZEdit' )
+    z.setText( '%8.3f' % pos2[2] )
+    t = findChild( awin, 'coordTEdit' )
+    t.setText( '%8.3f' % pos[3] )
+    valbox = findChild( awin, 'volumesBox' )
+    valbox.clear()
+    valbox.setColumnMode( 2 )
+    valbox.setRowMode( qt.QListBox.Variable )
+    col1 = []
+    for obj in fusion2d[1:]:
+      aimsv = ana.cpp.AObjectConverter.aims( obj )
+      oref = obj.getReferential()
+      tr = a.getTransformation( wref, oref )
+      if tr:
+        pos2 = tr.transform( pos[:3] )
+      else:
+        pos2 = pos[:3]
+      vs = obj.VoxelSize()
+      pos2 = [ int(round(x/y)) for x,y in zip(pos2,vs) ]
+      valbox.insertItem( obj.name )
+      if pos2[0]>=0 and pos2[1]>=0 and pos2[2]>=0 and pos[3]>=0 \
+        and pos2[0]<aimsv.dimX() and pos2[1]<aimsv.dimY() \
+        and pos2[2]<aimsv.dimZ() and pos[3]<aimsv.dimT():
+        col1.append( str( aimsv.value( *pos2 ) ) )
+      else:
+        col1.append( '' )
+    for x in col1:
+      valbox.insertItem( x )
+
+    # update VR
     if self._vrenabled and len( volrender ) >= 1:
       clip = volrender[0]
-      t = a.getTransformation( params[ 'window' ].getReferential(),
+      t = a.getTransformation( win.getReferential(),
         clip.getReferential() )
       if t is not None:
         pos = t.transform( pos[:3] )
@@ -252,6 +293,16 @@ class AnaSimpleViewer( qt.QObject ):
       a.execute( 'SetControl', windows=[w], control='Simple3DControl' )
     else:
       a.execute( 'SetControl', windows=[w], control='SimpleControl' )
+      a.assignReferential( a.mniTemplateRef, w )
+      # force redrawing in MNI orientation
+      if wintype == 'Axial':
+        w.muteAxial()
+      elif wintype == 'Coronal':
+        w.muteCoronal()
+      elif wintype == 'Sagittal':
+        w.muteSagittal()
+      elif wintype == 'Oblique':
+        w.muteOblique()
     a.execute( 'WindowConfig', windows=[w],
       light={ 'background' : [ 0., 0., 0., 1. ] } )
 
@@ -511,6 +562,7 @@ spl.finish( awin )
 del spl
 
 a.config()[ 'setAutomaticReferential' ] = 1
+a.config()[ 'windowSizeFactor' ] = 1.
 
 ad = ana.cpp.ActionDictionary.instance()
 ad.addAction( 'SimpleActions', SimpleActions )
