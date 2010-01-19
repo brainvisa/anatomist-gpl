@@ -230,27 +230,47 @@ class AnaSimpleViewer( qt.QObject ):
     t.setText( '%8.3f' % pos[3] )
     valbox = findChild( awin, 'volumesBox' )
     valbox.clear()
-    if not qt4:
+    if qt4:
+      valbox.setColumnCount( 2 )
+      valbox.setHorizontalHeaderLabels( [ 'Volume:', 'Value:' ] )
+      if len( fusion2d ) > 1:
+        valbox.setRowCount( len(fusion2d)-1 )
+        valbox.setVerticalHeaderLabels( [ '' ] * (len(fusion2d)-1) )
+    else:
       valbox.setColumnMode( 2 )
       valbox.setRowMode( qt.QListBox.Variable )
       col1 = []
-      for obj in fusion2d[1:]:
-        aimsv = ana.cpp.AObjectConverter.aims( obj )
-        oref = obj.getReferential()
-        tr = a.getTransformation( wref, oref )
-        if tr:
-          pos2 = tr.transform( pos[:3] )
-        else:
-          pos2 = pos[:3]
-        vs = obj.VoxelSize()
-        pos2 = [ int(round(x/y)) for x,y in zip(pos2,vs) ]
+    i = 0
+    for obj in fusion2d[1:]:
+      aimsv = ana.cpp.AObjectConverter.aims( obj )
+      oref = obj.getReferential()
+      tr = a.getTransformation( wref, oref )
+      if tr:
+        pos2 = tr.transform( pos[:3] )
+      else:
+        pos2 = pos[:3]
+      vs = obj.VoxelSize()
+      pos2 = [ int(round(x/y)) for x,y in zip(pos2,vs) ]
+      if qt4:
+        newItem = qt.QTableWidgetItem( obj.name )
+        valbox.setItem( i, 0, newItem )
+      else:
         valbox.insertItem( obj.name )
-        if pos2[0]>=0 and pos2[1]>=0 and pos2[2]>=0 and pos[3]>=0 \
-          and pos2[0]<aimsv.dimX() and pos2[1]<aimsv.dimY() \
-          and pos2[2]<aimsv.dimZ() and pos[3]<aimsv.dimT():
-          col1.append( str( aimsv.value( *pos2 ) ) )
-        else:
-          col1.append( '' )
+      if pos2[0]>=0 and pos2[1]>=0 and pos2[2]>=0 and pos[3]>=0 \
+        and pos2[0]<aimsv.dimX() and pos2[1]<aimsv.dimY() \
+        and pos2[2]<aimsv.dimZ() and pos[3]<aimsv.dimT():
+        txt = str( aimsv.value( *pos2 ) )
+      else:
+        txt = ''
+      if qt4:
+        newitem = qt.QTableWidgetItem( txt )
+        valbox.setItem( i, 1, newitem )
+        i += 1
+      else:
+        col1.append( txt )
+    if qt4:
+      valbox.resizeColumnsToContents()
+    else:
       for x in col1:
         valbox.insertItem( x )
 
@@ -539,8 +559,6 @@ class AnaSimpleViewer( qt.QObject ):
       self.stopVolumeRendering()
 
 anasimple = AnaSimpleViewer()
-#print 'fileOpenAction:', findChild( awin, 'fileOpenAction' )
-#print awin.fileOpenAction
 awin.connect( findChild( awin, 'fileOpenAction' ), qt.SIGNAL( 'activated()' ),
   anasimple.fileOpen )
 awin.connect( findChild( awin, 'fileExitAction' ), qt.SIGNAL( 'activated()' ),
@@ -551,7 +569,6 @@ awin.connect( findChild( awin, 'editRemoveAction' ),
   qt.SIGNAL( 'activated()' ), anasimple.editRemove )
 awin.connect( findChild( awin, 'editDeleteAction' ),
   qt.SIGNAL( 'activated()' ), anasimple.editDelete )
-print 'child:', findChild( awin, 'viewEnable_Volume_RenderingAction' )
 awin.connect( findChild( awin, 'viewEnable_Volume_RenderingAction' ),
   qt.SIGNAL( 'toggled( bool )' ), anasimple.enableVolumeRendering )
 

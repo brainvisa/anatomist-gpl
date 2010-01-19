@@ -1,56 +1,54 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
+<ui version="4.0" >
  <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
+ <widget class="QMainWindow" name="MainWindow" >
+  <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1014</width>
-    <height>771</height>
+    <width>725</width>
+    <height>781</height>
    </rect>
   </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="Maximum" hsizetype="Maximum" >
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="windowTitle">
+  <property name="windowTitle" >
    <string>Anatomist Simple Viewer</string>
   </property>
-  <property name="windowIcon">
-   <iconset>
-    <normaloff>../../../../../../anatomist-free/branches/stable/shared/icons/anatomist.ico</normaloff>../../../../../../anatomist-free/branches/stable/shared/icons/anatomist.ico</iconset>
+  <property name="windowIcon" >
+   <iconset>../../../../../../anatomist-free/branches/stable/shared/icons/anatomist.ico</iconset>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QHBoxLayout" >
     <item>
-     <widget class="QFrame" name="frame">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <widget class="QFrame" name="frame" >
+      <property name="sizePolicy" >
+       <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="frameShape">
+      <property name="frameShape" >
        <enum>QFrame::StyledPanel</enum>
       </property>
-      <property name="frameShadow">
+      <property name="frameShadow" >
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" >
        <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
+        <widget class="QLabel" name="label" >
+         <property name="text" >
           <string>Objects:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="objectslist">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <widget class="QListWidget" name="objectslist" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
            <horstretch>0</horstretch>
            <verstretch>2</verstretch>
           </sizepolicy>
@@ -58,33 +56,33 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <widget class="QGroupBox" name="groupBox" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
            <horstretch>0</horstretch>
            <verstretch>1</verstretch>
           </sizepolicy>
          </property>
-         <property name="title">
+         <property name="title" >
           <string>coords:</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0">
-           <widget class="QLabel" name="infoLabel">
-            <property name="text">
+         <layout class="QGridLayout" >
+          <item row="0" column="0" >
+           <widget class="QLabel" name="infoLabel" >
+            <property name="text" >
              <string>x:</string>
             </property>
-            <property name="alignment">
+            <property name="alignment" >
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
+          <item row="0" column="1" >
+           <spacer>
+            <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" stdset="0">
+            <property name="sizeHint" >
              <size>
               <width>11</width>
               <height>20</height>
@@ -92,22 +90,22 @@
             </property>
            </spacer>
           </item>
-          <item row="0" column="2">
-           <widget class="QLineEdit" name="coordXEdit"/>
+          <item row="0" column="2" >
+           <widget class="QLineEdit" name="coordXEdit" />
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
+          <item row="1" column="0" >
+           <widget class="QLabel" name="label_2" >
+            <property name="text" >
              <string>y:</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
-           <spacer name="horizontalSpacer_2">
-            <property name="orientation">
+          <item row="1" column="1" >
+           <spacer>
+            <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" stdset="0">
+            <property name="sizeHint" >
              <size>
               <width>11</width>
               <height>20</height>
@@ -115,22 +113,22 @@
             </property>
            </spacer>
           </item>
-          <item row="1" column="2">
-           <widget class="QLineEdit" name="coordYEdit"/>
+          <item row="1" column="2" >
+           <widget class="QLineEdit" name="coordYEdit" />
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
+          <item row="2" column="0" >
+           <widget class="QLabel" name="label_3" >
+            <property name="text" >
              <string>z:</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <spacer name="horizontalSpacer_3">
-            <property name="orientation">
+          <item row="2" column="1" >
+           <spacer>
+            <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" stdset="0">
+            <property name="sizeHint" >
              <size>
               <width>11</width>
               <height>20</height>
@@ -138,22 +136,22 @@
             </property>
            </spacer>
           </item>
-          <item row="2" column="2">
-           <widget class="QLineEdit" name="coordZEdit"/>
+          <item row="2" column="2" >
+           <widget class="QLineEdit" name="coordZEdit" />
           </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
+          <item row="3" column="0" >
+           <widget class="QLabel" name="label_4" >
+            <property name="text" >
              <string>t:</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <spacer name="horizontalSpacer_4">
-            <property name="orientation">
+          <item row="3" column="1" >
+           <spacer>
+            <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" stdset="0">
+            <property name="sizeHint" >
              <size>
               <width>11</width>
               <height>20</height>
@@ -161,190 +159,189 @@
             </property>
            </spacer>
           </item>
-          <item row="3" column="2">
-           <widget class="QLineEdit" name="coordTEdit"/>
+          <item row="3" column="2" >
+           <widget class="QLineEdit" name="coordTEdit" />
           </item>
          </layout>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Volume values:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QListWidget" name="volumesBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <widget class="QTableWidget" name="volumesBox" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
            <horstretch>0</horstretch>
            <verstretch>1</verstretch>
           </sizepolicy>
          </property>
+         <column>
+          <property name="text" >
+           <string>Volume:</string>
+          </property>
+         </column>
+         <column>
+          <property name="text" >
+           <string>Value:</string>
+          </property>
+         </column>
         </widget>
        </item>
       </layout>
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="windows">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <widget class="QFrame" name="windows" >
+      <property name="sizePolicy" >
+       <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
         <horstretch>4</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="frameShape">
+      <property name="frameShape" >
        <enum>QFrame::StyledPanel</enum>
       </property>
-      <property name="frameShadow">
+      <property name="frameShadow" >
        <enum>QFrame::Raised</enum>
       </property>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1014</width>
-     <height>28</height>
+     <width>725</width>
+     <height>24</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu_File">
-    <property name="title">
+   <widget class="QMenu" name="menu_File" >
+    <property name="title" >
      <string>&amp;File</string>
     </property>
-    <addaction name="fileOpenAction"/>
-    <addaction name="fileSaveAction"/>
-    <addaction name="fileExitAction"/>
+    <addaction name="fileOpenAction" />
+    <addaction name="fileSaveAction" />
+    <addaction name="fileExitAction" />
    </widget>
-   <widget class="QMenu" name="menuEdit">
-    <property name="title">
+   <widget class="QMenu" name="menuEdit" >
+    <property name="title" >
      <string>Edit</string>
     </property>
-    <addaction name="editAddAction"/>
-    <addaction name="editRemoveAction"/>
-    <addaction name="editDeleteAction"/>
+    <addaction name="editAddAction" />
+    <addaction name="editRemoveAction" />
+    <addaction name="editDeleteAction" />
    </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="title">
+   <widget class="QMenu" name="menuHelp" >
+    <property name="title" >
      <string>Help</string>
     </property>
-    <addaction name="helpIndexAction"/>
-    <addaction name="separator"/>
-    <addaction name="helpAbout"/>
+    <addaction name="helpIndexAction" />
+    <addaction name="separator" />
+    <addaction name="helpAbout" />
    </widget>
-   <widget class="QMenu" name="menuView">
-    <property name="title">
+   <widget class="QMenu" name="menuView" >
+    <property name="title" >
      <string>View</string>
     </property>
-    <addaction name="viewEnable_Volume_RenderingAction"/>
+    <addaction name="viewEnable_Volume_RenderingAction" />
    </widget>
-   <addaction name="menu_File"/>
-   <addaction name="menuEdit"/>
-   <addaction name="menuView"/>
-   <addaction name="menuHelp"/>
+   <addaction name="menu_File" />
+   <addaction name="menuEdit" />
+   <addaction name="menuView" />
+   <addaction name="menuHelp" />
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
+  <widget class="QStatusBar" name="statusbar" />
+  <widget class="QToolBar" name="toolBar" >
+   <property name="windowTitle" >
     <string>toolBar</string>
    </property>
-   <attribute name="toolBarArea">
+   <attribute name="toolBarArea" >
     <enum>TopToolBarArea</enum>
    </attribute>
-   <attribute name="toolBarBreak">
+   <attribute name="toolBarBreak" >
     <bool>false</bool>
    </attribute>
-   <addaction name="fileOpenAction"/>
-   <addaction name="fileSaveAction"/>
-   <addaction name="separator"/>
-   <addaction name="editAddAction"/>
-   <addaction name="editRemoveAction"/>
-   <addaction name="editDeleteAction"/>
-   <addaction name="separator"/>
-   <addaction name="helpIndexAction"/>
+   <addaction name="fileOpenAction" />
+   <addaction name="fileSaveAction" />
+   <addaction name="separator" />
+   <addaction name="editAddAction" />
+   <addaction name="editRemoveAction" />
+   <addaction name="editDeleteAction" />
+   <addaction name="separator" />
+   <addaction name="helpIndexAction" />
   </widget>
-  <action name="fileOpenAction">
-   <property name="icon">
-    <iconset>
-     <normaloff>../../../../../../anatomist-free/branches/stable/shared/icons/anatomist.ico</normaloff>../../../../../../anatomist-free/branches/stable/shared/icons/anatomist.ico</iconset>
+  <action name="fileOpenAction" >
+   <property name="icon" >
+    <iconset>../../../../../../anatomist-free/branches/stable/shared/icons/anatomist.ico</iconset>
    </property>
-   <property name="text">
+   <property name="text" >
     <string>&amp;Open...</string>
    </property>
   </action>
-  <action name="fileSaveAction">
-   <property name="text">
+  <action name="fileSaveAction" >
+   <property name="text" >
     <string>&amp;Save...</string>
    </property>
   </action>
-  <action name="fileExitAction">
-   <property name="text">
+  <action name="fileExitAction" >
+   <property name="text" >
     <string>E&amp;xit</string>
    </property>
-   <property name="shortcut">
+   <property name="shortcut" >
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="editAddAction">
-   <property name="icon">
-    <iconset>
-     <normaloff>../../../../../../../../../../../../home/appli/neurosvn/anatomist/anatomist-free/branches/stable/shared/icons/add.xpm</normaloff>../../../../../../../../../../../../home/appli/neurosvn/anatomist/anatomist-free/branches/stable/shared/icons/add.xpm</iconset>
+  <action name="editAddAction" >
+   <property name="icon" >
+    <iconset>../../../../../../../../../../../../home/appli/neurosvn/anatomist/anatomist-free/branches/stable/shared/icons/add.xpm</iconset>
    </property>
-   <property name="text">
+   <property name="text" >
     <string>Add</string>
    </property>
-   <property name="shortcut">
+   <property name="shortcut" >
     <string>+</string>
    </property>
   </action>
-  <action name="editRemoveAction">
-   <property name="icon">
-    <iconset>
-     <normaloff>../../../../../../../../../../../../home/appli/neurosvn/anatomist/anatomist-free/branches/stable/shared/icons/remove.xpm</normaloff>../../../../../../../../../../../../home/appli/neurosvn/anatomist/anatomist-free/branches/stable/shared/icons/remove.xpm</iconset>
+  <action name="editRemoveAction" >
+   <property name="icon" >
+    <iconset>../../../../../../../../../../../../home/appli/neurosvn/anatomist/anatomist-free/branches/stable/shared/icons/remove.xpm</iconset>
    </property>
-   <property name="text">
+   <property name="text" >
     <string>Remove</string>
    </property>
-   <property name="shortcut">
+   <property name="shortcut" >
     <string>-</string>
    </property>
   </action>
-  <action name="editDeleteAction">
-   <property name="icon">
-    <iconset>
-     <normaloff>../../../../../../../../../../../../tmp/delete.png</normaloff>../../../../../../../../../../../../tmp/delete.png</iconset>
+  <action name="editDeleteAction" >
+   <property name="icon" >
+    <iconset>../../../../../../../../../../../../tmp/delete.png</iconset>
    </property>
-   <property name="text">
+   <property name="text" >
     <string>Delete</string>
    </property>
-   <property name="shortcut">
+   <property name="shortcut" >
     <string>Ctrl+Del</string>
    </property>
   </action>
-  <action name="helpIndexAction">
-   <property name="text">
+  <action name="helpIndexAction" >
+   <property name="text" >
     <string>Index</string>
    </property>
-   <property name="shortcut">
+   <property name="shortcut" >
     <string>F1</string>
    </property>
   </action>
-  <action name="helpAbout">
-   <property name="text">
+  <action name="helpAbout" >
+   <property name="text" >
     <string>About</string>
    </property>
   </action>
-  <action name="viewEnable_Volume_RenderingAction">
-   <property name="checkable">
+  <action name="viewEnable_Volume_RenderingAction" >
+   <property name="checkable" >
     <bool>true</bool>
    </property>
-   <property name="text">
+   <property name="text" >
     <string>Enable Volume Rendering</string>
    </property>
   </action>
