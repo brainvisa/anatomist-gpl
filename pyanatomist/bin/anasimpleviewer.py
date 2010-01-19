@@ -630,6 +630,22 @@ class AnaSimpleViewer( qt.QObject ):
     else:
       self.stopVolumeRendering()
 
+  def coordsChanged( self ):
+    '''set the cursor on the position entered in the coords fields
+    '''
+    if len( awindows ) == 0:
+      return
+    pos = [ findChild( awin, 'coordXEdit' ).text().toFloat()[0],
+      findChild( awin, 'coordYEdit' ).text().toFloat()[0],
+      findChild( awin, 'coordZEdit' ).text().toFloat()[0],
+    ]
+    # take coords transformation into account
+    tr = a.getTransformation( a.mniTemplateRef, awindows[0].getReferential() )
+    if tr is not None:
+      pos = tr.transform( pos )
+    t = findChild( awin, 'coordTEdit' ).text().toFloat()[0]
+    a.execute( 'LinkedCursor', window=awindows[0], position=pos[:3]+[t] )
+
 
 # instantiate the machine
 anasimple = AnaSimpleViewer()
@@ -646,6 +662,34 @@ awin.connect( findChild( awin, 'editDeleteAction' ),
   qt.SIGNAL( 'activated()' ), anasimple.editDelete )
 awin.connect( findChild( awin, 'viewEnable_Volume_RenderingAction' ),
   qt.SIGNAL( 'toggled( bool )' ), anasimple.enableVolumeRendering )
+# manually entered coords
+le = findChild( awin, 'coordXEdit' )
+le.setValidator( qt.QDoubleValidator( le ) )
+le = findChild( awin, 'coordYEdit' )
+le.setValidator( qt.QDoubleValidator( le ) )
+le = findChild( awin, 'coordZEdit' )
+le.setValidator( qt.QDoubleValidator( le ) )
+le = findChild( awin, 'coordTEdit' )
+le.setValidator( qt.QDoubleValidator( le ) )
+del le
+if qt4:
+  awin.connect( findChild( awin, 'coordXEdit' ),
+    qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
+  awin.connect( findChild( awin, 'coordYEdit' ),
+    qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
+  awin.connect( findChild( awin, 'coordZEdit' ),
+    qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
+  awin.connect( findChild( awin, 'coordTEdit' ),
+    qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
+else:
+  awin.connect( findChild( awin, 'coordXEdit' ),
+    qt.SIGNAL( 'returnPressed()' ), anasimple.coordsChanged )
+  awin.connect( findChild( awin, 'coordYEdit' ),
+    qt.SIGNAL( 'returnPressed()' ), anasimple.coordsChanged )
+  awin.connect( findChild( awin, 'coordZEdit' ),
+    qt.SIGNAL( 'returnPressed()' ), anasimple.coordsChanged )
+  awin.connect( findChild( awin, 'coordTEdit' ),
+    qt.SIGNAL( 'returnPressed()' ), anasimple.coordsChanged )
 
 if not qt4:
   qt.qApp.setMainWidget( awin )

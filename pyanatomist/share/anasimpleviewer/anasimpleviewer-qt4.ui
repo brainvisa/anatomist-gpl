@@ -173,6 +173,9 @@
            <verstretch>1</verstretch>
           </sizepolicy>
          </property>
+         <property name="editTriggers" >
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
          <column>
           <property name="text" >
            <string>Volume:</string>

@@ -155,9 +155,6 @@
                                     <property name="name">
                                         <cstring>coordZEdit</cstring>
                                     </property>
-                                    <property name="readOnly">
-                                        <bool>true</bool>
-                                    </property>
                                 </widget>
                                 <spacer row="2" column="2">
                                     <property name="name">
@@ -188,16 +185,10 @@
                                     <property name="name">
                                         <cstring>coordYEdit</cstring>
                                     </property>
-                                    <property name="readOnly">
-                                        <bool>true</bool>
-                                    </property>
                                 </widget>
                                 <widget class="QLineEdit" row="0" column="3" rowspan="2" colspan="1">
                                     <property name="name">
                                         <cstring>coordXEdit</cstring>
-                                    </property>
-                                    <property name="readOnly">
-                                        <bool>true</bool>
                                     </property>
                                 </widget>
                                 <widget class="QLineEdit" row="4" column="3">
