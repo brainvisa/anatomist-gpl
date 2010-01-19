@@ -230,28 +230,29 @@ class AnaSimpleViewer( qt.QObject ):
     t.setText( '%8.3f' % pos[3] )
     valbox = findChild( awin, 'volumesBox' )
     valbox.clear()
-    valbox.setColumnMode( 2 )
-    valbox.setRowMode( qt.QListBox.Variable )
-    col1 = []
-    for obj in fusion2d[1:]:
-      aimsv = ana.cpp.AObjectConverter.aims( obj )
-      oref = obj.getReferential()
-      tr = a.getTransformation( wref, oref )
-      if tr:
-        pos2 = tr.transform( pos[:3] )
-      else:
-        pos2 = pos[:3]
-      vs = obj.VoxelSize()
-      pos2 = [ int(round(x/y)) for x,y in zip(pos2,vs) ]
-      valbox.insertItem( obj.name )
-      if pos2[0]>=0 and pos2[1]>=0 and pos2[2]>=0 and pos[3]>=0 \
-        and pos2[0]<aimsv.dimX() and pos2[1]<aimsv.dimY() \
-        and pos2[2]<aimsv.dimZ() and pos[3]<aimsv.dimT():
-        col1.append( str( aimsv.value( *pos2 ) ) )
-      else:
-        col1.append( '' )
-    for x in col1:
-      valbox.insertItem( x )
+    if not qt4:
+      valbox.setColumnMode( 2 )
+      valbox.setRowMode( qt.QListBox.Variable )
+      col1 = []
+      for obj in fusion2d[1:]:
+        aimsv = ana.cpp.AObjectConverter.aims( obj )
+        oref = obj.getReferential()
+        tr = a.getTransformation( wref, oref )
+        if tr:
+          pos2 = tr.transform( pos[:3] )
+        else:
+          pos2 = pos[:3]
+        vs = obj.VoxelSize()
+        pos2 = [ int(round(x/y)) for x,y in zip(pos2,vs) ]
+        valbox.insertItem( obj.name )
+        if pos2[0]>=0 and pos2[1]>=0 and pos2[2]>=0 and pos[3]>=0 \
+          and pos2[0]<aimsv.dimX() and pos2[1]<aimsv.dimY() \
+          and pos2[2]<aimsv.dimZ() and pos[3]<aimsv.dimT():
+          col1.append( str( aimsv.value( *pos2 ) ) )
+        else:
+          col1.append( '' )
+      for x in col1:
+        valbox.insertItem( x )
 
     # update VR
     if self._vrenabled and len( volrender ) >= 1:
