@@ -604,8 +604,8 @@ typedef std::set<anatomist::AWindow * > set_AWindowPtr;
 
   public:
 
-    RemoveObjectCommand(const set_AObjectPtr &,
-        const set_AWindowPtr);
+    RemoveObjectCommand( const set_AObjectPtr &,
+        const set_AWindowPtr, bool = false );
 
     virtual ~RemoveObjectCommand();
     virtual std::string name() const;
