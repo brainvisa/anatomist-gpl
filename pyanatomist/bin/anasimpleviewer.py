@@ -310,6 +310,7 @@ class AnaSimpleViewer( qt.QObject ):
       { '__syntax__' : 'dictionary', 'no_decoration' : 1 } )
     a.execute( c )
     w = a.AWindow( a, c.createdWindow() )
+    c.createdWindow().setAcceptDrops( False )
     # insert in grid layout
     x = 0
     y = 0
@@ -358,6 +359,11 @@ class AnaSimpleViewer( qt.QObject ):
     '''Load an object and display it in all anasimpleviewer windows
     '''
     obj = a.loadObject( fname )
+    self.registerObject( obj )
+
+  def registerObject( self, obj ):
+    '''Register an object in anasimpleviewer objects list, and display it
+    '''
     if qt4:
       findChild( awin, 'objectslist' ).addItem( obj.name )
     else:
@@ -646,6 +652,40 @@ class AnaSimpleViewer( qt.QObject ):
     t = findChild( awin, 'coordTEdit' ).text().toFloat()[0]
     a.execute( 'LinkedCursor', window=awindows[0], position=pos[:3]+[t] )
 
+  def dragEnterEvent( self, win, event ):
+    x = ana.cpp.QAObjectDrag.canDecode( event ) \
+      or ana.cpp.QAObjectDrag.canDecodeURI( event )
+    if x:
+      event.accept()
+    else:
+      event.reject()
+
+  def dropEvent( self, win, event ):
+    o = ana.cpp.set_AObjectPtr()
+    if ana.cpp.QAObjectDrag.decode( event, o ):
+      for obj in o:
+        ob = a.AObject(o)
+        if ob not in aobjects:
+          self.registerObject( ob )
+        else:
+          self.addObject( ob )
+      event.accept()
+      return
+    else:
+      things = ana.cpp.QAObjectDrag.decodeURI( event )
+      if things is not None:
+        for obj in things[0]:
+          objnames = [ x.fileName() for x in aobjects ]
+          if obj not in objnames:
+            self.loadObject( obj )
+          else:
+            o = [ x for x in aobjects if x.fileName() == obj ][0]
+            self.addObject( o )
+        # TODO: things[1]: .ana scripts
+        event.accept()
+        return
+    event.reject()
+
 
 # instantiate the machine
 anasimple = AnaSimpleViewer()
@@ -693,6 +733,11 @@ else:
 
 if not qt4:
   qt.qApp.setMainWidget( awin )
+
+awin.dropEvent = lambda awin, event: anasimple.dropEvent( awin, event )
+awin.dragEnterEvent = lambda awin, event: anasimple.dragEnterEvent( awin, event )
+awin.setAcceptDrops( True )
+
 
 # display on the whole screen
 awin.showMaximized()
