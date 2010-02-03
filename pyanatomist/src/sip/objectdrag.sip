@@ -36,11 +36,19 @@ namespace anatomist
     std::list<QString>::iterator il, el = l1.end();
     int i = 0;
     for( il=l1.begin(); il!=el; ++il, ++i  )
+#if QT_VERSION >= 0x040000
       PyList_SetItem( objs, i, PyString_FromString( il->toLocal8Bit().data() ) );
+#else
+      PyList_SetItem( objs, i, PyString_FromString( il->latin1() ) );
+#endif
     PyObject *ana = PyList_New( l2.size() );
     i = 0;
     for( il=l2.begin(), el=l2.end(); il!=el; ++il, ++i  )
+#if QT_VERSION >= 0x040000
       PyList_SetItem( ana, i, PyString_FromString( il->toLocal8Bit().data() ) );
+#else
+      PyList_SetItem( ana, i, PyString_FromString( il->latin1() ) );
+#endif
     sipRes = PyTuple_New( 2 );
     PyTuple_SetItem( sipRes, 0, objs );
     PyTuple_SetItem( sipRes, 1, ana );
