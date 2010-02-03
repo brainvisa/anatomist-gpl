@@ -38,6 +38,7 @@
 %Include primitive.sip
 %Include rcptr_GLItem.sip
 %Include list_RefGLItem.sip
+//%Include list_QString.sip
 %Include geometry.sip
 %Include viewstate.sip
 %Include rcptr_AObject.sip
@@ -51,6 +52,7 @@
 %Include objectreader.sip
 %Include globalconfig.sip
 %Include awindowfactory.sip
+%Include objectdrag.sip
 
 
 class AnatomistSip

@@ -30,8 +30,8 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license version 2 and that you accept its terms.
  */
-#ifndef PYANATOMIST_MAPINTQWIDGET_H
-#define PYANATOMIST_MAPINTQWIDGET_H
+#ifndef PYANATOMIST_QPIXMAP_H
+#define PYANATOMIST_QPIXMAP_H
 
 #include <qwidget.h>
 
