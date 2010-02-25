@@ -76,6 +76,9 @@ else:
   from soma.qt3gui.qt3thread import QtThreadCall
   from qt import QProcess, SIGNAL, qApp  
 
+
+from soma import somaqt
+
 class Anatomist(base.Anatomist):
   """
   Interface to communicate with an Anatomist Application sending commands on a socket.
@@ -741,7 +744,7 @@ class Anatomist(base.Anatomist):
       """
       if Anatomist.anatomistExecutable is not None:
         port = self.comm.findFreePort()
-        self.anaServerProcess = QProcess()
+        self.anaServerProcess = somaqt.makeQProcess()
         
         if USE_QT4:
           arguments = [ '-s', str( port ) ]
