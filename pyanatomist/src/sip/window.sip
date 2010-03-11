@@ -296,6 +296,12 @@ public:
   void muteSagittal();
   void muteOblique();
   void mute3D();
+  virtual anatomist::AObject* objectAtCursorPosition( int x, int y );
+/*  virtual std::list<anatomist::AObject*> *objectsAtCursorPosition( int x,
+      int y, int tolerenceRadius );
+      */
+  virtual int polygonAtCursorPosition( int x, int y,
+                                       const anatomist::AObject* obj );
 };
 
 

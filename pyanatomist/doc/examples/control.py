@@ -36,6 +36,9 @@ import qt, sys, math
 sys.path.insert( 0, '.' )
 import sphere
 
+selmesh = None
+selanamesh = None
+
 class MyAction( anatomist.cpp.Action ):
   def name( self ):
     return 'MyAction'
@@ -56,6 +59,34 @@ class MyAction( anatomist.cpp.Action ):
     print 'move radius', x, y
     s.setRadius( math.exp( 0.01 * ( self._initial[1] - y ) ) * self._radius )
 
+  def takePolygon( self, x, y, globx, globy ):
+    #print 'takePolygon', x, y
+    w = self.view().window()
+    obj = w.objectAtCursorPosition( x, y )
+    #print 'object:', obj
+    if obj is not None:
+      print 'object:', obj, obj.name()
+      poly = w.polygonAtCursorPosition( x, y, obj )
+      #print 'polygon:', poly
+      mesh = anatomist.cpp.AObjectConverter.aims( obj )
+      #print 'mesh:', mesh
+      ppoly = mesh.polygon()[poly]
+      vert = mesh.vertex()
+      #print ppoly[0], ppoly[1], ppoly[2]
+      #print vert[ppoly[0]], vert[ppoly[1]], vert[ppoly[2]]
+      global selmesh, selanamesh
+      if selmesh is None:
+        selmesh = aims.AimsSurfaceTriangle()
+      selmesh.vertex().assign( [ vert[ppoly[0]], vert[ppoly[1]], vert[ppoly[2]] ] )
+      selmesh.polygon().assign( [ aims.AimsVector_U32_3( 0, 1, 2 ) ] )
+      if selanamesh is None:
+        selanamesh = anatomist.cpp.AObjectConverter.anatomist( selmesh )
+        a = anatomist.Anatomist()
+        a.execute( 'SetMaterial', objects=[selanamesh], diffuse=[0,0,1.,1.] )
+        a.execute( 'AddObject', objects=[selanamesh], windows=[w] )
+      selanamesh.setChanged()
+      selanamesh.notifyObservers()
+
 class MyControl( anatomist.cpp.Control ):
   def __init__( self, prio = 25 ):
     anatomist.cpp.Control.__init__( self, prio, 'MyControl' )
@@ -69,6 +100,8 @@ class MyControl( anatomist.cpp.Control ):
       pool.action( 'MyAction' ).moveRadius,
       pool.action( 'MyAction' ).endMoveRadius,
       False )
+    self.mousePressButtonEventSubscribe( qt.Qt.RightButton, qt.Qt.NoButton,
+      pool.action( 'MyAction' ).takePolygon )
 
 
 a = anatomist.Anatomist()
