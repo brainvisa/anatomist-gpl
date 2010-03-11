@@ -37,7 +37,7 @@ BRAINVISA_ADD_SIP_PYTHON_MODULE( anatomistsip
   SIP_INSTALL "${ANATOMIST_RELATIVE_SIP_DIRECTORY}" )
 add_dependencies( anatomistsip ${headersTarget} )
 target_link_libraries( anatomistsip 
-  ${PYTHON_LIBRARIES}
+  "${PYTHON_LIBRARY}"
   pyanatomistexports
   "${AIMS_PYAIMS_LIBRARY}" )
 BRAINVISA_INSTALL( TARGETS anatomistsip 
