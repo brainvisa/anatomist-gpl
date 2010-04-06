@@ -105,12 +105,12 @@ class MeasuresWindow( QSplitter ):
     # convert the AimsData volume to Anatomist API
     avol = self.anatomist.toAObject( self.volume )
     # put volume in window
-    self.anatomist.addObjects( [ avol ], [ self.aWindow ] )
+    self.aWindow.addObjects( avol )
 
     self._ignoreClicked = False
     voxelSize = self.volume.header()[ 'voxel_size' ]
-    x = self.volume.header()[ 'volume_dimension' ]
-    volumeSize = [ int(i) for i in x ]
+    tmp = self.volume.header()[ 'volume_dimension' ]
+    volumeSize = [ int(i) for i in tmp ]
     volumeCenter = [v*s/2 for v,s in zip( volumeSize, voxelSize )]
     self.clicked( volumeCenter )
 
