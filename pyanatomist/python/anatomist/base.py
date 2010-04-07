@@ -702,7 +702,7 @@ class Anatomist(ObservableSingleton, object):
         ghost = material.ghost
     self.execute("SetMaterial", objects=self.makeList(objects), ambient=ambient, diffuse=diffuse, emission=emission, specular=specular, shininess=shininess, refresh=refresh, lighting=lighting, smooth_shading=smooth_shading, polygon_filtering=polygon_filtering, depth_buffer=depth_buffer, face_culling=face_culling, polygon_mode=polygon_mode, unlit_color=unlit_color, line_width=line_width, ghost=ghost)
 
-  def setObjectPalette(self, objects, palette, minVal=None, maxVal=None, palette2=None,  minVal2=None, maxVal2=None, mixMethod=None, linMixFactor=None, palette1Dmapping=None, absoluteMode=False):
+  def setObjectPalette(self, objects, palette=None, minVal=None, maxVal=None, palette2=None,  minVal2=None, maxVal2=None, mixMethod=None, linMixFactor=None, palette1Dmapping=None, absoluteMode=False):
     """
     Assign a palette to objects
     @type objects: list of AObject
@@ -1113,7 +1113,7 @@ class Anatomist(ObservableSingleton, object):
       smooth_shading, polygon_filtering, depth_buffer, face_culling,
       polygon_mode, unlit_color, line_width, ghost)
       
-    def setPalette(self, palette, minVal=None, maxVal=None, palette2=None,  minVal2=None, maxVal2=None, mixMethod=None, linMixFactor=None, palette1Dmapping=None, absoluteMode=False):
+    def setPalette(self, palette=None, minVal=None, maxVal=None, palette2=None,  minVal2=None, maxVal2=None, mixMethod=None, linMixFactor=None, palette1Dmapping=None, absoluteMode=False):
       """
       Assign a palette to object
       
