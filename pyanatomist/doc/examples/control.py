@@ -32,7 +32,13 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 import anatomist.direct.api as anatomist
 from soma import aims
-import qt, sys, math
+import sys, math
+if sys.modules.has_key( 'PyQt4' ):
+  qt4 = True
+  from PyQt4 import QtGui as qt
+  from PyQt4 import QtCore
+else:
+  import qt
 sys.path.insert( 0, '.' )
 import sphere
 
@@ -92,15 +98,27 @@ class MyControl( anatomist.cpp.Control ):
     anatomist.cpp.Control.__init__( self, prio, 'MyControl' )
 
   def eventAutoSubscription( self, pool ):
-    self.keyPressEventSubscribe( qt.Qt.Key_Escape, qt.Qt.NoButton, 
+    if qt4:
+      key = QtCore.Qt
+      NoModifier = key.NoModifier
+      ShiftModifier = key.ShiftModifier
+      ControlModifier = key.ControlModifier
+      AltModifier = key.AltModifier
+    else:
+      key = qt.Qt
+      NoModifier = key.NoButton
+      ShiftModifier = key.ShiftButton
+      ControlModifier = key.ControlButton
+      AltModifier = key.AltButton
+    self.keyPressEventSubscribe( key.Key_Escape, NoModifier,
                                  pool.action( 'MyAction' ).resetRadius )
     self.mouseLongEventSubscribe( \
-      qt.Qt.LeftButton, qt.Qt.NoButton,
+      key.LeftButton, NoModifier,
       pool.action( 'MyAction' ).startMoveRadius,
       pool.action( 'MyAction' ).moveRadius,
       pool.action( 'MyAction' ).endMoveRadius,
       False )
-    self.mousePressButtonEventSubscribe( qt.Qt.RightButton, qt.Qt.NoButton,
+    self.mousePressButtonEventSubscribe( key.RightButton, NoModifier,
       pool.action( 'MyAction' ).takePolygon )
 
 

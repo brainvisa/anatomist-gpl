@@ -1,0 +1,250 @@
+
+#  This software and supporting documentation are distributed by
+#      Institut Federatif de Recherche 49
+#      CEA/NeuroSpin, Batiment 145,
+#      91191 Gif-sur-Yvette cedex
+#      France
+#
+# This software is governed by the CeCILL license version 2 under
+# French law and abiding by the rules of distribution of free software.
+# You can  use, modify and/or redistribute the software under the
+# terms of the CeCILL license version 2 as circulated by CEA, CNRS
+# and INRIA at the following URL "http://www.cecill.info".
+#
+# As a counterpart to the access to the source code and  rights to copy,
+# modify and redistribute granted by the license, users are provided only
+# with a limited warranty  and the software's author,  the holder of the
+# economic rights,  and the successive licensors  have only  limited
+# liability.
+#
+# In this respect, the user's attention is drawn to the risks associated
+# with loading,  using,  modifying and/or developing or reproducing the
+# software by the user in light of its specific status of free software,
+# that may mean  that it is complicated to manipulate,  and  that  also
+# therefore means  that it is reserved for developers  and  experienced
+# professionals having in-depth computer knowledge. Users are therefore
+# encouraged to load and test the software's suitability as regards their
+# requirements in conditions enabling the security of their systems and/or
+# data to be ensured and,  more generally, to use and operate it in the
+# same conditions as regards security.
+#
+# The fact that you are presently reading this means that you have had
+# knowledge of the CeCILL license version 2 and that you accept its terms.
+import anatomist.direct.api as anatomist
+from soma import aims
+import sys, math, numpy
+if sys.modules.has_key( 'PyQt4' ):
+  qt4 = True
+  from PyQt4 import QtGui as qt
+  from PyQt4 import QtCore
+else:
+  import qt
+sys.path.insert( 0, '.' )
+import sphere
+
+selmesh = None
+selanamesh = None
+
+class TexDrawAction( anatomist.cpp.Action ):
+  def name( self ):
+    return 'TexDrawAction'
+
+  def takePolygon( self, x, y, globx, globy ):
+    #print 'takePolygon', x, y
+    w = self.view().window()
+    obj = w.objectAtCursorPosition( x, y )
+    #print 'object:', obj
+    if obj is not None:
+      print 'object:', obj, obj.name()
+      poly = w.polygonAtCursorPosition( x, y, obj )
+      #print 'polygon:', poly
+      mesh = anatomist.cpp.AObjectConverter.aims( obj )
+      #print 'mesh:', mesh
+      ppoly = mesh.polygon()[poly]
+      vert = mesh.vertex()
+      #print ppoly[0], ppoly[1], ppoly[2]
+      #print vert[ppoly[0]], vert[ppoly[1]], vert[ppoly[2]]
+      global selmesh, selanamesh
+      if selmesh is None:
+        selmesh = aims.AimsSurfaceTriangle()
+      selmesh.vertex().assign( [ vert[ppoly[0]], vert[ppoly[1]], vert[ppoly[2]] ] )
+      selmesh.polygon().assign( [ aims.AimsVector_U32_3( 0, 1, 2 ) ] )
+      if selanamesh is None:
+        selanamesh = anatomist.cpp.AObjectConverter.anatomist( selmesh )
+        a = anatomist.Anatomist()
+        a.execute( 'SetMaterial', objects=[selanamesh], diffuse=[0,0,1.,1.] )
+        a.execute( 'AddObject', objects=[selanamesh], windows=[w] )
+      selanamesh.setChanged()
+      selanamesh.notifyObservers()
+
+  def newtexture( self, x, y, globx, globy ):
+    print 'new texture'
+    w = self.view().window()
+    aw = a.AWindow( a, w )
+    obj = w.objectAtCursorPosition( x, y )
+    #print 'object:', obj
+    if obj is not None:
+      if obj.objectTypeName( obj.type() ) == 'SURFACE':
+        surf = obj
+        texs = []
+      #elif obj.objectTypeName( obj.type() ) == 'TEXTURED SURF.':
+        #surf = [ o for o in obj if o.type() == 3 ]
+        #if len( surf ) != 1:
+          #return
+        #surf = surf[0]
+        #texs = [ o for o in obj if o.type() == 18 ]
+      else:
+        return
+      gl = surf.glAPI()
+      if gl:
+        vs = anatomist.cpp.ViewState()
+        nv = gl.glNumVertex( vs )
+        if nv > 0:
+          tex = aims.TimeTexture_FLOAT()
+          t = tex[0]
+          t.reserve( nv )
+          for i in xrange(nv):
+            t.push_back(0.)
+          atex = a.toAObject( tex )
+          #atex = a.AObject( a, surf ).generateTexture()
+          texs.append( atex )
+          # ...
+          tsurf = a.fusionObjects( [ atex, obj ], method='FusionTexSurfMethod' )
+          tsurf.setPalette( palette='Blue-Red-fusion' )
+          self._texsurf = tsurf
+          #tsurf.takeRef()
+          aw.removeObjects( obj )
+          aw.addObjects( tsurf )
+
+  def startDraw( self, x, y, globx, globy ):
+    print 'startDraw'
+    w = self.view().window()
+    obj = w.objectAtCursorPosition( x, y )
+    #print 'object:', obj
+    if obj is not None:
+      texs = []
+      if obj.objectTypeName( obj.type() ) == 'SURFACE':
+        print 'surface'
+        surf = obj
+        p = obj.parents()
+        for o in parents:
+          if o.objectTypeName( o.type() ) == 'TEXTURED SURF.':
+            print 'texsurf parent found'
+            texs = [ ob for ob in o if ob.type() == 18 ]
+            break
+      elif obj.objectTypeName( obj.type() ) == 'TEXTURED SURF.':
+        print 'texsurf'
+        surf = [ o for o in obj if o.type() == 3 ]
+        if len( surf ) != 1:
+          return
+        surf = surf[0]
+        texs = [ o for o in obj if o.type() == 18 ]
+      else:
+        return
+      print 'textures:', texs
+      if len( texs ) == 0:
+        return
+      self._surf = surf
+      self._tex = texs[-1]
+      self._mesh = anatomist.cpp.AObjectConverter.aims( surf )
+      self._aimstex = anatomist.cpp.AObjectConverter.aims( self._tex, { 'scale' : 0 } )
+
+  def endDraw( self, x, y, globx, globy ):
+    print 'endDraw'
+    if hasattr( self, '_aimstex' ):
+      del self._aimstex
+      del self._mesh
+      del self._tex
+      del self._surf
+
+  def moveDraw( self, x, y, globx, globy ):
+    print 'moveDraw'
+    if not hasattr( self, '_aimstex' ):
+      return
+    w = self.view().window()
+    obj = self._texsurf
+    poly = w.polygonAtCursorPosition( x, y, obj )
+    if poly < 0 or poly >= len( self._mesh.polygon() ):
+      print 'OUT'
+      return
+    ppoly = self._mesh.polygon()[poly]
+    print 'poly:', poly, ppoly
+    vert = self._mesh.vertex()
+    pos = aims.Point3df()
+    pos = w.positionFromCursor( x, y )
+    print 'pos:', pos
+    v = ppoly[ numpy.argmin( [ (vert[p]-pos).norm() for p in ppoly ] ) ]
+    print 'vertex:', v, vert[v]
+    self._aimstex[0][v] = 1.
+    self._tex.setChanged()
+    self._tex.notifyObservers()
+
+
+class TexDrawControl( anatomist.cpp.Control ):
+  def __init__( self, prio = 25 ):
+    anatomist.cpp.Control.__init__( self, prio, 'TexDrawControl' )
+
+  def eventAutoSubscription( self, pool ):
+    if qt4:
+      key = QtCore.Qt
+      NoModifier = key.NoModifier
+      ShiftModifier = key.ShiftModifier
+      ControlModifier = key.ControlModifier
+      AltModifier = key.AltModifier
+    else:
+      key = qt.Qt
+      NoModifier = key.NoButton
+      ShiftModifier = key.ShiftButton
+      ControlModifier = key.ControlButton
+      AltModifier = key.AltButton
+    self.mouseLongEventSubscribe( \
+      key.LeftButton, NoModifier,
+      pool.action( 'TexDrawAction' ).startDraw,
+      pool.action( 'TexDrawAction' ).moveDraw,
+      pool.action( 'TexDrawAction' ).endDraw,
+      False )
+    self.mousePressButtonEventSubscribe( \
+      key.RightButton, ControlModifier,
+      pool.action( 'TexDrawAction' ).newtexture )
+    self.mousePressButtonEventSubscribe( key.RightButton, NoModifier,
+      pool.action( 'TexDrawAction' ).takePolygon )
+    self.mouseLongEventSubscribe( key.MidButton, ShiftModifier,
+      pool.action( "Zoom3DAction" ).beginZoom,
+      pool.action( "Zoom3DAction" ).moveZoom,
+      pool.action( "Zoom3DAction" ).endZoom, True )
+    self.wheelEventSubscribe( pool.action( "Zoom3DAction" ).zoomWheel )
+    self.keyPressEventSubscribe( key.Key_C, ControlModifier,
+      pool.action( "Trackball" ).setCenter )
+    self.keyPressEventSubscribe( key.Key_C, AltModifier,
+      pool.action( "Trackball" ).showRotationCenter )
+    self.mouseLongEventSubscribe( key.MidButton, ControlModifier,
+      pool.action( "Translate3DAction" ).beginTranslate,
+      pool.action( "Translate3DAction" ).moveTranslate,
+      pool.action( "Translate3DAction" ).endTranslate, True )
+    self.mouseLongEventSubscribe ( \
+      key.MidButton, NoModifier,
+      pool.action( 'ContinuousTrackball' ).beginTrackball,
+      pool.action( 'ContinuousTrackball' ).moveTrackball,
+      pool.action( 'ContinuousTrackball' ).endTrackball, True )
+    self.keyPressEventSubscribe( key.Key_Space, ControlModifier,
+      pool.action( "ContinuousTrackball" ).startOrStop )
+
+
+
+a = anatomist.Anatomist()
+
+pix = qt.QPixmap( 'control.xpm' )
+anatomist.cpp.IconDictionary.instance().addIcon( 'TexDrawControl',
+  pix )
+ad = anatomist.cpp.ActionDictionary.instance()
+ad.addAction( 'TexDrawAction', TexDrawAction )
+cd = anatomist.cpp.ControlDictionary.instance()
+cd.addControl( 'TexDrawControl', TexDrawControl, 26 )
+cm = anatomist.cpp.ControlManager.instance()
+cm.addControl( 'QAGLWidget3D', '', 'TexDrawControl' )
+
+s = sphere.ASphere()
+a.registerObject( s )
+aw = a.createWindow( '3D' )
+a.addObjects( [ s ], [ aw ] )
+
