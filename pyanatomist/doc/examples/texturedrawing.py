@@ -40,7 +40,6 @@ if sys.modules.has_key( 'PyQt4' ):
 else:
   import qt
 sys.path.insert( 0, '.' )
-import sphere
 
 selmesh = None
 selanamesh = None
@@ -53,29 +52,46 @@ class TexDrawAction( anatomist.cpp.Action ):
     #print 'takePolygon', x, y
     w = self.view().window()
     obj = w.objectAtCursorPosition( x, y )
-    #print 'object:', obj
     if obj is not None:
       print 'object:', obj, obj.name()
-      poly = w.polygonAtCursorPosition( x, y, obj )
-      #print 'polygon:', poly
-      mesh = anatomist.cpp.AObjectConverter.aims( obj )
-      #print 'mesh:', mesh
-      ppoly = mesh.polygon()[poly]
-      vert = mesh.vertex()
-      #print ppoly[0], ppoly[1], ppoly[2]
-      #print vert[ppoly[0]], vert[ppoly[1]], vert[ppoly[2]]
-      global selmesh, selanamesh
-      if selmesh is None:
-        selmesh = aims.AimsSurfaceTriangle()
-      selmesh.vertex().assign( [ vert[ppoly[0]], vert[ppoly[1]], vert[ppoly[2]] ] )
-      selmesh.polygon().assign( [ aims.AimsVector_U32_3( 0, 1, 2 ) ] )
-      if selanamesh is None:
-        selanamesh = anatomist.cpp.AObjectConverter.anatomist( selmesh )
-        a = anatomist.Anatomist()
-        a.execute( 'SetMaterial', objects=[selanamesh], diffuse=[0,0,1.,1.] )
-        a.execute( 'AddObject', objects=[selanamesh], windows=[w] )
-      selanamesh.setChanged()
-      selanamesh.notifyObservers()
+      surf = None
+      if obj.objectTypeName( obj.type() ) == 'SURFACE':
+        surf = obj
+      elif isinstance( obj, anatomist.cpp.MObject ):
+        surf = [ o for o in obj if o.type() == 3 ]
+        if len( surf ) != 1:
+          return
+        surf = surf[0]
+      if surf is not None:
+        poly = w.polygonAtCursorPosition( x, y, obj )
+        if poly == 0xffffff: # white
+          return # background
+        print 'polygon:', poly
+        mesh = anatomist.cpp.AObjectConverter.aims( surf )
+        #print 'mesh:', mesh
+        ppoly = mesh.polygon()[poly]
+        vert = mesh.vertex()
+        global selmesh, selanamesh
+        if selmesh is None:
+          selmesh = aims.AimsSurfaceTriangle()
+        selmesh.vertex().assign( [ vert[ppoly[0]], vert[ppoly[1]],
+          vert[ppoly[2]] ] )
+        selmesh.polygon().assign( [ aims.AimsVector_U32_3( 0, 1, 2 ) ] )
+        if selanamesh is None:
+          selanamesh = anatomist.cpp.AObjectConverter.anatomist( selmesh )
+          a = anatomist.Anatomist()
+          a.execute( 'SetMaterial', objects=[selanamesh], diffuse=[0,0,1.,1.] )
+          a.execute( 'AddObject', objects=[selanamesh], windows=[w] )
+        selanamesh.setChanged()
+        selanamesh.notifyObservers()
+
+  def delPolygon( self ):
+    global selmesh, selanamesh
+    selmesh = None
+    # keep object ID and release python reference to it
+    id = a.convertSingleObjectParamsToIDs( selanamesh )
+    selanamesh = None
+    a.execute( 'DeleteElement', elements=[ id ] )
 
   def newtexture( self, x, y, globx, globy ):
     print 'new texture'
@@ -87,12 +103,17 @@ class TexDrawAction( anatomist.cpp.Action ):
       if obj.objectTypeName( obj.type() ) == 'SURFACE':
         surf = obj
         texs = []
-      #elif obj.objectTypeName( obj.type() ) == 'TEXTURED SURF.':
-        #surf = [ o for o in obj if o.type() == 3 ]
-        #if len( surf ) != 1:
-          #return
-        #surf = surf[0]
-        #texs = [ o for o in obj if o.type() == 18 ]
+      elif obj.objectTypeName( obj.type() ) == 'TEXTURED SURF.':
+        print 'TEXTURED SURF.'
+        surf = [ o for o in obj if o.type() == 3 ]
+        if len( surf ) != 1:
+          print 'not one mesh, but', len( surf )
+          return
+        surf = surf[0]
+        texs = [ o for o in obj if o.type() == 18 ]
+        self._texsurf = obj
+        print 'draw initiated'
+        return
       else:
         return
       gl = surf.glAPI()
@@ -117,23 +138,28 @@ class TexDrawAction( anatomist.cpp.Action ):
           aw.addObjects( tsurf )
 
   def startDraw( self, x, y, globx, globy ):
-    print 'startDraw'
+    self._startDraw( x, y, 1. )
+
+  def startErase( self, x, y, globx, globy ):
+    self._startDraw( x, y, 0. )
+
+  def _startDraw( self, x, y, value ):
+    #if not hasattr( self, '_texsurf' ):
+      #print 'You should initiate the drawing session using ctrl+right click'
+      #return
     w = self.view().window()
     obj = w.objectAtCursorPosition( x, y )
     #print 'object:', obj
     if obj is not None:
       texs = []
       if obj.objectTypeName( obj.type() ) == 'SURFACE':
-        print 'surface'
         surf = obj
         p = obj.parents()
-        for o in parents:
+        for o in p:
           if o.objectTypeName( o.type() ) == 'TEXTURED SURF.':
-            print 'texsurf parent found'
             texs = [ ob for ob in o if ob.type() == 18 ]
             break
       elif obj.objectTypeName( obj.type() ) == 'TEXTURED SURF.':
-        print 'texsurf'
         surf = [ o for o in obj if o.type() == 3 ]
         if len( surf ) != 1:
           return
@@ -141,16 +167,15 @@ class TexDrawAction( anatomist.cpp.Action ):
         texs = [ o for o in obj if o.type() == 18 ]
       else:
         return
-      print 'textures:', texs
       if len( texs ) == 0:
         return
       self._surf = surf
       self._tex = texs[-1]
       self._mesh = anatomist.cpp.AObjectConverter.aims( surf )
       self._aimstex = anatomist.cpp.AObjectConverter.aims( self._tex, { 'scale' : 0 } )
+      self.draw( x, y, value )
 
   def endDraw( self, x, y, globx, globy ):
-    print 'endDraw'
     if hasattr( self, '_aimstex' ):
       del self._aimstex
       del self._mesh
@@ -158,24 +183,28 @@ class TexDrawAction( anatomist.cpp.Action ):
       del self._surf
 
   def moveDraw( self, x, y, globx, globy ):
-    print 'moveDraw'
+    self.draw( x, y, 1. )
+
+  def erase( self, x, y, globx, globy ):
+    self.draw( x, y, 0. )
+
+  def draw( self, x, y, value ):
     if not hasattr( self, '_aimstex' ):
       return
     w = self.view().window()
     obj = self._texsurf
     poly = w.polygonAtCursorPosition( x, y, obj )
-    if poly < 0 or poly >= len( self._mesh.polygon() ):
-      print 'OUT'
+    if poly == 0xffffff or poly < 0 or poly >= len( self._mesh.polygon() ):
       return
     ppoly = self._mesh.polygon()[poly]
-    print 'poly:', poly, ppoly
+    #print 'poly:', poly, ppoly
     vert = self._mesh.vertex()
     pos = aims.Point3df()
     pos = w.positionFromCursor( x, y )
-    print 'pos:', pos
+    #print 'pos:', pos
     v = ppoly[ numpy.argmin( [ (vert[p]-pos).norm() for p in ppoly ] ) ]
-    print 'vertex:', v, vert[v]
-    self._aimstex[0][v] = 1.
+    #print 'vertex:', v, vert[v]
+    self._aimstex[0][v] = value
     self._tex.setChanged()
     self._tex.notifyObservers()
 
@@ -203,11 +232,27 @@ class TexDrawControl( anatomist.cpp.Control ):
       pool.action( 'TexDrawAction' ).moveDraw,
       pool.action( 'TexDrawAction' ).endDraw,
       False )
+    self.mouseLongEventSubscribe( \
+      key.LeftButton, NoModifier,
+      pool.action( 'TexDrawAction' ).startDraw,
+      pool.action( 'TexDrawAction' ).moveDraw,
+      pool.action( 'TexDrawAction' ).endDraw,
+      False )
+    self.mouseLongEventSubscribe( \
+      key.LeftButton, ControlModifier,
+      pool.action( 'TexDrawAction' ).startErase,
+      pool.action( 'TexDrawAction' ).erase,
+      pool.action( 'TexDrawAction' ).endDraw,
+      False )
     self.mousePressButtonEventSubscribe( \
       key.RightButton, ControlModifier,
       pool.action( 'TexDrawAction' ).newtexture )
+    # polygon picking
     self.mousePressButtonEventSubscribe( key.RightButton, NoModifier,
       pool.action( 'TexDrawAction' ).takePolygon )
+    self.keyPressEventSubscribe( key.Key_Escape, NoModifier,
+      pool.action( "TexDrawAction" ).delPolygon )
+    # now plug the standard actions
     self.mouseLongEventSubscribe( key.MidButton, ShiftModifier,
       pool.action( "Zoom3DAction" ).beginZoom,
       pool.action( "Zoom3DAction" ).moveZoom,
@@ -243,8 +288,10 @@ cd.addControl( 'TexDrawControl', TexDrawControl, 26 )
 cm = anatomist.cpp.ControlManager.instance()
 cm.addControl( 'QAGLWidget3D', '', 'TexDrawControl' )
 
-s = sphere.ASphere()
-a.registerObject( s )
+s = a.loadObject( 'test.mesh' )
 aw = a.createWindow( '3D' )
 a.addObjects( [ s ], [ aw ] )
+a.execute( 'SetControl', windows=[aw], control='TexDrawControl' )
+
+qt.QMessageBox.information( None, 'texture drawing', '1. put a mesh in a 3D view\n2.select the "Mickey" control\n3. ctrl+right click on the mesh to create an empty texture or initiate the drawinf session\n4. draw on the mesh using the mouse left button\n   ctrl+left button erases', qt.QMessageBox.Ok )
 
