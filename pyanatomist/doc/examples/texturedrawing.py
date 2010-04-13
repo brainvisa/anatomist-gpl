@@ -103,17 +103,17 @@ class TexDrawAction( anatomist.cpp.Action ):
       if obj.objectTypeName( obj.type() ) == 'SURFACE':
         surf = obj
         texs = []
-      elif obj.objectTypeName( obj.type() ) == 'TEXTURED SURF.':
-        print 'TEXTURED SURF.'
-        surf = [ o for o in obj if o.type() == 3 ]
-        if len( surf ) != 1:
-          print 'not one mesh, but', len( surf )
-          return
-        surf = surf[0]
-        texs = [ o for o in obj if o.type() == 18 ]
-        self._texsurf = obj
-        print 'draw initiated'
-        return
+      #elif obj.objectTypeName( obj.type() ) == 'TEXTURED SURF.':
+        #print 'TEXTURED SURF.'
+        #surf = [ o for o in obj if o.type() == 3 ]
+        #if len( surf ) != 1:
+          #print 'not one mesh, but', len( surf )
+          #return
+        #surf = surf[0]
+        #texs = [ o for o in obj if o.type() == 18 ]
+        #self._texsurf = obj
+        #print 'draw initiated'
+        #return
       else:
         return
       gl = surf.glAPI()
@@ -144,9 +144,6 @@ class TexDrawAction( anatomist.cpp.Action ):
     self._startDraw( x, y, 0. )
 
   def _startDraw( self, x, y, value ):
-    #if not hasattr( self, '_texsurf' ):
-      #print 'You should initiate the drawing session using ctrl+right click'
-      #return
     w = self.view().window()
     obj = w.objectAtCursorPosition( x, y )
     #print 'object:', obj
@@ -155,16 +152,26 @@ class TexDrawAction( anatomist.cpp.Action ):
       if obj.objectTypeName( obj.type() ) == 'SURFACE':
         surf = obj
         p = obj.parents()
+        found = False
         for o in p:
-          if o.objectTypeName( o.type() ) == 'TEXTURED SURF.':
+          if o.objectTypeName( o.type() ) == 'TEXTURED SURF.' \
+            and w.hasObject( o ):
             texs = [ ob for ob in o if ob.type() == 18 ]
+            self._texsurf = o
+            found = True
             break
+        if not found:
+          # create a new texture
+          self.newtexture( x, y, 0, 0 )
+          self._startDraw( x, y, value )
+          return
       elif obj.objectTypeName( obj.type() ) == 'TEXTURED SURF.':
         surf = [ o for o in obj if o.type() == 3 ]
         if len( surf ) != 1:
           return
         surf = surf[0]
         texs = [ o for o in obj if o.type() == 18 ]
+        self._texsurf = obj
       else:
         return
       if len( texs ) == 0:
