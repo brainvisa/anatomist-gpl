@@ -19,7 +19,7 @@
    <string>Anatomist Simple Viewer</string>
   </property>
   <property name="windowIcon" >
-   <iconset>../../../../../../anatomist-free/branches/stable/shared/icons/anatomist.ico</iconset>
+   <iconset>../icons/anatomist.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget" >
    <layout class="QHBoxLayout" >
@@ -275,13 +275,16 @@
   </widget>
   <action name="fileOpenAction" >
    <property name="icon" >
-    <iconset>../../../../../../anatomist-free/branches/stable/shared/icons/anatomist.ico</iconset>
+    <iconset>../icons/icon.xpm</iconset>
    </property>
    <property name="text" >
     <string>&amp;Open...</string>
    </property>
   </action>
   <action name="fileSaveAction" >
+   <property name="icon" >
+    <iconset>../icons/save.png</iconset>
+   </property>
    <property name="text" >
     <string>&amp;Save...</string>
    </property>
@@ -296,7 +299,7 @@
   </action>
   <action name="editAddAction" >
    <property name="icon" >
-    <iconset>../../../../../../../../../../../../home/appli/neurosvn/anatomist/anatomist-free/branches/stable/shared/icons/add.xpm</iconset>
+    <iconset>../icons/add.xpm</iconset>
    </property>
    <property name="text" >
     <string>Add</string>
@@ -307,7 +310,7 @@
   </action>
   <action name="editRemoveAction" >
    <property name="icon" >
-    <iconset>../../../../../../../../../../../../home/appli/neurosvn/anatomist/anatomist-free/branches/stable/shared/icons/remove.xpm</iconset>
+    <iconset>../icons/remove.xpm</iconset>
    </property>
    <property name="text" >
     <string>Remove</string>
@@ -318,7 +321,7 @@
   </action>
   <action name="editDeleteAction" >
    <property name="icon" >
-    <iconset>../../../../../../../../../../../../tmp/delete.png</iconset>
+    <iconset>../icons/delete.png</iconset>
    </property>
    <property name="text" >
     <string>Delete</string>
