@@ -45,6 +45,7 @@ if sys.modules.has_key( 'PyQt4'):
   qt4 = True
   from PyQt4 import QtCore, QtGui
   qt = QtGui
+  from PyQt4 import uic
   from PyQt4.uic import loadUi
   uifile = 'anasimpleviewer-qt4.ui'
   findChild = lambda x, y: QtCore.QObject.findChild( x, QtCore.QObject, y )
@@ -62,7 +63,7 @@ else:
   runqt = False
 
 # splash
-pix = qt.QPixmap( os.path.expandvars( '$BRAINVISA_SHARE/anatomist-3.2/icons/anatomist.png' ) )
+pix = qt.QPixmap( os.path.expandvars( '$BRAINVISA_SHARE/anatomist-4.0/icons/anatomist.png' ) )
 spl = qt.QSplashScreen( pix )
 spl.show()
 qt.qApp.processEvents()
@@ -74,7 +75,13 @@ a = ana.Anatomist( '-b' )
 anasimpleviewerdir = os.path.join( \
   unicode( a.anatomistSharedPath() ),
   'anasimpleviewer' )
+cwd = os.getcwd()
+# PyQt4 uic doesn' seem to allow specifying the directory when looking for
+# icon files: we have no other choice than globally changing the working
+# directory
+os.chdir( anasimpleviewerdir )
 awin = loadUi( os.path.join( anasimpleviewerdir, uifile ) )
+os.chdir( cwd )
 
 # global variables: lists of windows, objects, a fusion2d with a number of
 # volumes in it, and a volume rendering object + clipping
