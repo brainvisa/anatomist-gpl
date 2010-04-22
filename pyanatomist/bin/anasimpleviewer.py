@@ -171,10 +171,10 @@ class SimpleControl( ana.cpp.Control ):
       pool.action( 'PaletteContrastAction' ).startContrast,
       pool.action( 'PaletteContrastAction' ).moveContrast,
       pool.action( 'PaletteContrastAction' ).stopContrast, True )
-    self.mouseLongEventSubscribe( key.RightButton, ControlModifier,
-      pool.action( 'PaletteContrastAction' ).startContrast,
-      pool.action( 'PaletteContrastAction' ).moveContrastMin,
-      pool.action( 'PaletteContrastAction' ).stopContrast, True )
+    #self.mouseLongEventSubscribe( key.RightButton, ControlModifier,
+      #pool.action( 'PaletteContrastAction' ).startContrast,
+      #pool.action( 'PaletteContrastAction' ).moveContrastMin,
+      #pool.action( 'PaletteContrastAction' ).stopContrast, True )
     self.keyPressEventSubscribe( key.Key_C, NoModifier,
       pool.action( "PaletteContrastAction" ).resetPalette )
     self.keyPressEventSubscribe( key.Key_Home, NoModifier,

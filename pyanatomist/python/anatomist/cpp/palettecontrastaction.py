@@ -67,13 +67,15 @@ class PaletteContrastAction( anatomist.Action ):
           initpal = [ pal.min1(), pal.max1() ]
           self._palettes[ o ] = initpal
         val = initpal[1] + diff[1]
+        minval = initpal[0] + diff[0]
         threshold = 0.5
         if val < initpal[0] and initpal[1] > initpal[0]:
           if diff[1] < -threshold:
             val = initpal[0] + diff[1] + threshold
           else:
             val = initpal[0]
-        a.theProcessor().execute( 'SetObjectPalette', objects=[o], max=val )
+        a.theProcessor().execute( 'SetObjectPalette', objects=[o], min=minval,
+          max=val )
       elif isinstance( o, anatomist.MObject ):
         objs += [ mo for mo in o if mo not in objs ]
 
