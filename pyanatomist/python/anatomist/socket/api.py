@@ -108,6 +108,8 @@ class Anatomist(base.Anatomist):
   mainThread=None
   
   def __new__(cls, *args, **kwargs):
+    print 'Anatomist.__new__:', args
+    print kwargs
     if kwargs.get("forceNewInstance", False):
       self=object.__new__(cls)
       self.__singleton_init__(*args, **kwargs)
@@ -116,10 +118,18 @@ class Anatomist(base.Anatomist):
     return self
   
   def __singleton_init__( self, *args, **kwargs):
+    host = kwargs.get( 'host', 'localhost' )
+    port = kwargs.get( 'port', None )
+    if host == 'localhost':
+      newanatomist = True
+    else:
+      newanatomist = False
+    newanatomist = kwargs.get( 'newanatomist', newanatomist )
     super(Anatomist, self).__singleton_init__(*args, **kwargs)
-    self.comm = ASocket( self, "localhost", ASocket.defaultPort )
+    self.comm = ASocket( self, host, port )
     self.launched = 0
     self._requestID = 0
+    self.newanatomist = newanatomist
     # must run Qt methods in qt thread
     if self.mainThread is None:
       self.mainThread=QtThreadCall()
@@ -742,10 +752,11 @@ class Anatomist(base.Anatomist):
       Executes Anatomist in server mode. 
       Parameters in args will be passed as anatomist command parameters.
       """
-      if Anatomist.anatomistExecutable is not None:
+      ok = False
+      if Anatomist.anatomistExecutable is not None and self.newanatomist:
         port = self.comm.findFreePort()
         self.anaServerProcess = somaqt.makeQProcess()
-        
+
         if USE_QT4:
           arguments = [ '-s', str( port ) ]
           arguments += args
@@ -763,9 +774,15 @@ class Anatomist(base.Anatomist):
             raise RuntimeError(  'Anatomist could not run'  )
           self.log( "<H1>Anatomist launched</H1>")
           self.log("Command : " +htmlEscape( string.join( command ) ) )
+        ok = True
+      elif not self.newanatomist:
+        self.log( "<H1>Connecting to Anatomist</H1>" )
+        self.log( '<p><li>host: ' + self.comm.dest + '</li><li>port: ' + str( self.comm.port ) + '</li></p>' )
+        ok = True
 
+      if ok:
         self.comm.initialize( )#port = port)
-        self.log( "Successfull connection to Anatomist on PORT: " +str( port ) )
+        self.log( "Successfull connection to Anatomist on PORT: " +str( self.comm.port ) )
         self.launched = 1
     
   def anaServerProcessExited( self, exitCode=0, exitStatus=0 ):
@@ -800,13 +817,14 @@ class Anatomist(base.Anatomist):
       if not self.launched:
           return
       super(Anatomist, self).close()
-      if USE_QT4:
-        isRunning=(self.anaServerProcess.state() == QProcess.Running)
-      else:
-        isRunning=self.anaServerProcess.isRunning( )
-      if isRunning:
-        self.log( 'Killing Anatomist' )
-        self.anaServerProcess.kill( )
+      if self.newanatomist:
+        if USE_QT4:
+          isRunning=(self.anaServerProcess.state() == QProcess.Running)
+        else:
+          isRunning=self.anaServerProcess.isRunning( )
+        if isRunning:
+          self.log( 'Killing Anatomist' )
+          self.anaServerProcess.kill( )
       sys.stdout.flush()
       self.comm.close()
       self._requestID = 0
