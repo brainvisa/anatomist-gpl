@@ -108,8 +108,6 @@ class Anatomist(base.Anatomist):
   mainThread=None
   
   def __new__(cls, *args, **kwargs):
-    print 'Anatomist.__new__:', args
-    print kwargs
     if kwargs.get("forceNewInstance", False):
       self=object.__new__(cls)
       self.__singleton_init__(*args, **kwargs)
