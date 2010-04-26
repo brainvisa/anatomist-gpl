@@ -776,10 +776,11 @@ class Anatomist(base.Anatomist):
       elif not self.newanatomist:
         self.log( "<H1>Connecting to Anatomist</H1>" )
         self.log( '<p><li>host: ' + self.comm.dest + '</li><li>port: ' + str( self.comm.port ) + '</li></p>' )
+        port = self.comm.port
         ok = True
 
       if ok:
-        self.comm.initialize( )#port = port)
+        self.comm.initialize( port = port)
         self.log( "Successfull connection to Anatomist on PORT: " +str( self.comm.port ) )
         self.launched = 1
     
