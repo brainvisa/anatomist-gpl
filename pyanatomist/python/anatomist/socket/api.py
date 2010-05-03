@@ -61,6 +61,7 @@ import string
 import time
 import sys, os
 import distutils.spawn
+import atexit
 
 USE_QT4=False
 if sys.modules.has_key( 'PyQt4' ):
@@ -783,7 +784,8 @@ class Anatomist(base.Anatomist):
         self.comm.initialize( port = port)
         self.log( "Successfull connection to Anatomist on PORT: " +str( self.comm.port ) )
         self.launched = 1
-    
+        atexit.register( self.close )
+
   def anaServerProcessExited( self, exitCode=0, exitStatus=0 ):
       """
       This method is called when anatomist process exited.
@@ -815,6 +817,10 @@ class Anatomist(base.Anatomist):
       """
       if not self.launched:
           return
+      # remove exit handler
+      for x in atexit._exithandlers:
+        if len(x) > 0 and x[0] == self.close:
+          atexit._exithandlers.remove( x )
       super(Anatomist, self).close()
       if self.newanatomist:
         if USE_QT4:
