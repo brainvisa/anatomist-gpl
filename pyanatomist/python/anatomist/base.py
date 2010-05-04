@@ -605,7 +605,16 @@ class Anatomist(ObservableSingleton, object):
         windows.append(e)
     self.execute("AssignReferential", ref_id = referential, objects=objects,
       windows=windows, central_ref=referential.centralRef)
-    
+ 
+  def applyBuiltinReferential(self, objects):
+    """
+    Extracts referentials / transformations from objects headers when they contain such information, and assign them.
+   
+    @type objects: list of AObject
+    @param objects: objects which referential information must be loaded
+    """
+    self.execute("ApplyBuiltinReferential", objects=self.makeList(objects) )
+   
   def camera(self, windows, zoom=None, observer_position=None, view_quaternion=None, slice_quaternion=None, force_redraw=False, cursor_position=None, boundingbox_min=None, boundingbox_max=None):
     """
     Sets the point of view, zoom, cursor position for 3D windows.
@@ -1095,6 +1104,12 @@ class Anatomist(ObservableSingleton, object):
       """
       self.anatomistinstance.assignReferential(referential, [self])
   
+    def applyBuiltinReferential(self):
+      """
+      Extract information about referential and transformations from the header of the object and assign the found referential. 
+      """
+      self.anatomistinstance.applyBuiltinReferential([self])
+
     def setMaterial(self, material=None, refresh=None, ambient=None,
       diffuse=None, emission=None, specular=None, shininess=None,
       lighting=None, smooth_shading=None, polygon_filtering=None,
