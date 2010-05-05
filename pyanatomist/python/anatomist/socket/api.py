@@ -77,8 +77,15 @@ else:
   from soma.qt3gui.qt3thread import QtThreadCall
   from qt import QProcess, SIGNAL, qApp  
 
+try:
+  from soma import somaqt
+except:
+  # the somaqt module is not present: either the PyQt bug (present in 4.10.0)
+  # is fixed, or there might be some instabilities in QProcess instantiation
+  # in multi-threaded contexts
+  class somaqt:
+    makeQProcess = QProcess
 
-from soma import somaqt
 
 class Anatomist(base.Anatomist):
   """
