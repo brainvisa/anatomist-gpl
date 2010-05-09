@@ -86,5 +86,18 @@ public:
 %End
 };
 
-};
+}; // namespace anatomist
+
+
+%ModuleCode
+#include <anatomist/reference/transfSet.h>
+%End
+
+list_TransformationPtr*
+shortestTransformationPath( anatomist::Referential* src,
+                            anatomist::Referential *dst ) /Factory/;
+%MethodCode
+  sipRes = new std::list<anatomist::Transformation*>(
+    anatomist::ATransformSet::instance()->shortestPath( a0, a1 ) );
+%End
 
