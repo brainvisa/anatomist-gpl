@@ -100,7 +100,7 @@ begin with.
     is here to perform this task.
 '''
 
-import os, sys, string, glob, operator
+import os, sys, string, glob, operator, types
 import numpy
 
 path = os.path.dirname( __file__ )
@@ -389,7 +389,7 @@ def newexecute( self, *args, **kwargs ):
         dic[k] = i
       elif operator.isMappingType( v ):
         replace_dict( v, cc )
-      elif not type(v) is str and operator.isSequenceType( v ):
+      elif not type(v) in types.StringTypes and operator.isSequenceType( v ):
         replace_list( v, cc )
 
   def replace_list( l, cc ):
@@ -404,7 +404,7 @@ def newexecute( self, *args, **kwargs ):
         l[k] = i
       elif operator.isMappingType( v ):
         replace_dict( v, cc )
-      elif not type(v) is str and operator.isSequenceType( v ):
+      elif not type(v) in types.StringTypes and operator.isSequenceType( v ):
         replace_list( v, cc )
       k += 1
 
