@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
 #      CEA/NeuroSpin, Batiment 145,
@@ -32,7 +33,7 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 from soma import aims
 import anatomist.direct.api as anatomist
-import time, numpy
+import time, numpy, sys
 
 
 a = anatomist.Anatomist()
@@ -100,13 +101,16 @@ a.addObjects([asphere], [aw])
 
 
 if __name__ == '__main__' :
-	import qt
-	angles = numpy.array([0., 0., 0.])
-	scaling = numpy.array([1., 1., 1., 0.])
-	translate = numpy.array([0, 0, 0, 1])
-	while 1:
-		transform(mesh, angles, scaling, translate)
-		asphere.setChanged()
-		asphere.notifyObservers()
-		qt.qApp.processEvents()
-		time.sleep(0.01)
+    if sys.modules.has_key( 'PyQt4' ):
+        import PyQt4.QtGui as qt
+    else:
+        import qt
+    angles = numpy.array([0., 0., 0.])
+    scaling = numpy.array([1., 1., 1., 0.])
+    translate = numpy.array([0, 0, 0, 1])
+    while 1:
+        transform(mesh, angles, scaling, translate)
+        asphere.setChanged()
+        asphere.notifyObservers()
+        qt.qApp.processEvents()
+        time.sleep(0.01)

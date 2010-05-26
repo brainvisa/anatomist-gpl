@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
 #      CEA/NeuroSpin, Batiment 145,
@@ -46,7 +47,7 @@ class MyAObjectKrakboumCallback( anatomist.cpp.ObjectMenuCallback ):
 class MyAObject(anatomist.cpp.AObject):
 	_type = anatomist.cpp.AObject.registerObjectType('MyAObject')
         _menus = None
-	icon = os.path.join( a.anatomistSharedPath().latin1(),
+	icon = os.path.join( str( a.anatomistSharedPath() ),
                              'icons', 'list_cutmesh.xpm' )
 	ot = anatomist.cpp.QObjectTree
 	ot.setObjectTypeName(_type, 'Example of a custom AObject')

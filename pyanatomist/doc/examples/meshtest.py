@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
 #      CEA/NeuroSpin, Batiment 145,
@@ -31,9 +32,13 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 from soma import aims
 import time
-from qt import *
 import os
 import anatomist.direct.api as anatomist
+import sys
+if sys.modules.has_key( 'PyQt4' ):
+  from PyQt4.QtGui import *
+else:
+  from qt import *
 
 # Load a sphere mesh
 r = aims.Reader()

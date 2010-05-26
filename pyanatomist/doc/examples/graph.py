@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
 #      CEA/NeuroSpin, Batiment 145,
@@ -31,6 +32,8 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 import anatomist.direct.api as anatomist
 from soma import aims
+import sys
+
 g = aims.read( 'Rbase.arg' )
 
 a = anatomist.Anatomist()
@@ -50,7 +53,11 @@ w = a.createWindow( '3D' )
 w.addObjects( ag, add_graph_nodes=True )
 
 def main():
-  import qt
-  qt.qApp.exec_loop()
+  if sys.modules.has_key( 'PyQt4' ):
+    import PyQt4.QtGui as qt
+  else:
+    import qt
+  if qt.qApp.startingUp():
+    qt.qApp.exec_loop()
 
 if __name__ == '__main__' : main()

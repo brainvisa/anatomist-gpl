@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
@@ -66,7 +67,7 @@ def testAnatomist(a):
   print "w5 : 3D window, not in the block, with no decoration."
   
   print "\n--- LoadObject ---"
-  o=a.loadObject("/neurospin/lnao/Panabase/demosII/data_for_anatomist/functional/Lhemi.mesh", "objetO")
+  o=a.loadObject("/neurospin/lnao/Panabase/demosII/data_for_anatomist/functional/Lwhite.mesh", "objetO")
   print "o : mesh Lhemi.mesh, renamed objecO, internalRep = ", o, ", o.__class__ = ", o.__class__
   o2=a.loadObject("/neurospin/lnao/Panabase/demosII/data_for_anatomist/functional/Lwhite_curv.tex", "objetO2")
   print "o2 : texture Lwhite_curv.tex, renamed objetO2, internalRep = ", o2
