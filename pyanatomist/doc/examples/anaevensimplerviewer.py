@@ -36,29 +36,16 @@ import anatomist.direct.api as ana
 from soma import aims
 from soma.aims import colormaphints
 import sys, os
+from PyQt4 import QtCore, QtGui, uic
+findChild = lambda x, y: QtCore.QObject.findChild( x, QtCore.QObject, y )
 
-# determine wheter we are using Qt4 or Qt3, and hack a little bit accordingly
-# the boolean qt4 gloabl variable will tell it for later usage
-qt4 = False
-if sys.modules.has_key( 'PyQt4'):
-  qt4 = True
-  from PyQt4 import QtCore, QtGui
-  qt = QtGui
-  from PyQt4.uic import loadUi
-  uifile = 'anasimpleviewer-qt4.ui'
-  findChild = lambda x, y: QtCore.QObject.findChild( x, QtCore.QObject, y )
-else:
-  import qt, qtui
-  loadUi = qtui.QWidgetFactory.create
-  uifile = 'anasimpleviewer.ui'
-  findChild = qt.QObject.child
-
-qapp = qt.QApplication( sys.argv )
+qapp = QtGui.QApplication( sys.argv )
 
 # start the Anatomist engine, in batch mode (no main window)
 a = ana.Anatomist( '-b' )
 
 # load the anasimpleviewer GUI
+uifile = 'anasimpleviewer-qt4.ui'
 anasimpleviewerdir = os.path.join( unicode( a.anatomistSharedPath() ),
   'anasimpleviewer' )
 cwd = os.getcwd()
@@ -66,12 +53,11 @@ cwd = os.getcwd()
 # icon files: we have no other choice than globally changing the working
 # directory
 os.chdir( anasimpleviewerdir )
-awin = loadUi( os.path.join( anasimpleviewerdir, uifile ) )
+awin = uic.loadUi( os.path.join( anasimpleviewerdir, uifile ) )
 os.chdir( cwd )
 
 # global variables: lists of windows, objects, a fusion2d with a number of
-# volumes in it, and a volume rendering object + clipping
-fdialog = qt.QFileDialog()
+# volumes in it
 awindows = []
 aobjects = []
 fusion2d = []
@@ -81,10 +67,11 @@ vieww = None
 
 # This class holds methods for menu/actions callbacks, and utility functions
 # like load/view objects, remove/delete, etc.
-class AnaSimpleViewer( qt.QObject ):
+class AnaSimpleViewer( QtGui.QObject ):
 
   def __init__( self ):
-    qt.QObject.__init__( self )
+    QtGui.QObject.__init__( self )
+    self.filedialogdir = '.'
 
   def createWindow( self, wintype = 'Axial' ):
     '''Opens a new window in the windows grid layout.
@@ -100,9 +87,7 @@ class AnaSimpleViewer( qt.QObject ):
       # handle windows block, insert it in the GUI
       vieww = w.parent()
       wwp = findChild( awin, 'windows' )
-      lay = qt.QVBoxLayout( wwp )
-      if not qt4:
-        vieww.reparent( wwp, qt.QPoint( 0, 0 ) )
+      lay = QtGui.QVBoxLayout( wwp )
       lay.addWidget( vieww )
       vieww.show()
     # make ref-counting work on python side
@@ -133,10 +118,7 @@ class AnaSimpleViewer( qt.QObject ):
   def registerObject( self, obj ):
     '''Register an object in anasimpleviewer objects list, and display it
     '''
-    if qt4:
-      findChild( awin, 'objectslist' ).addItem( obj.name )
-    else:
-      findChild( awin, 'objectslist' ).insertItem( obj.name )
+    findChild( awin, 'objectslist' ).addItem( obj.name )
     # keep it in the global list
     aobjects.append( obj )
     if obj.objectType == 'VOLUME':
@@ -258,35 +240,23 @@ class AnaSimpleViewer( qt.QObject ):
   def fileOpen( self ):
     '''File browser + load object(s)
     '''
-    if qt4:
-      fdialog.setFileMode( fdialog.ExistingFiles )
-      fdialog.show()
-      res = fdialog.exec_()
-    else:
-      fdialog.setMode( fdialog.ExistingFiles )
-      fdialog.show()
-      res = fdialog.exec_loop()
+    fdialog = QtGui.QFileDialog()
+    fdialog.setDirectory( self.filedialogdir )
+    fdialog.setFileMode( fdialog.ExistingFiles )
+    res = fdialog.exec_()
     if res:
       fnames = fdialog.selectedFiles()
-      if qt4:
-        for fname in fnames:
-          self.loadObject( unicode( fname ) )
-      else:
-        for fname in fnames:
-          self.loadObject( fname.utf8().data() )
+      self.filedialogdir = fdialog.directory()
+      for fname in fnames:
+        self.loadObject( unicode( fname ) )
 
   def selectedObjects( self ):
     '''list of objects selected in the list box on the upper left panel
     '''
     olist = findChild( awin, 'objectslist' )
     sobjs = []
-    if qt4:
-      for o in olist.selectedItems():
-        sobjs.append( unicode( o.text() ).strip('\0') )
-    else:
-      for i in xrange( olist.count() ):
-        if olist.isSelected( i ):
-          sobjs.append( olist.text( i ).utf8().data().strip('\0') )
+    for o in olist.selectedItems():
+      sobjs.append( unicode( o.text() ).strip('\0') )
     return [ o for o in aobjects if o.name in sobjs ]
 
   def editAdd( self ):
@@ -307,13 +277,9 @@ class AnaSimpleViewer( qt.QObject ):
     for o in objs:
       self.removeObject( o )
     olist = findChild( awin, 'objectslist' )
-    if qt4:
-      for o in objs:
-        olist.takeItem( olist.row( olist.findItems( o.name,
-          QtCore.Qt.MatchExactly )[ 0 ] ) )
-    else:
-      for o in objs:
-        olist.removeItem( olist.index( olist.findItem( o.name ) ) )
+    for o in objs:
+      olist.takeItem( olist.row( olist.findItems( o.name,
+        QtCore.Qt.MatchExactly )[ 0 ] ) )
     global aobjects
     aobjects = [ o for o in aobjects if o not in objs ]
     a.deleteObjects( objs )
@@ -333,19 +299,16 @@ class AnaSimpleViewer( qt.QObject ):
 # instantiate the machine
 anasimple = AnaSimpleViewer()
 # connect GUI actions callbacks
-awin.connect( findChild( awin, 'fileOpenAction' ), qt.SIGNAL( 'activated()' ),
-  anasimple.fileOpen )
-awin.connect( findChild( awin, 'fileExitAction' ), qt.SIGNAL( 'activated()' ),
-  anasimple.closeAll )
-awin.connect( findChild( awin, 'editAddAction' ), qt.SIGNAL( 'activated()' ),
-  anasimple.editAdd )
+awin.connect( findChild( awin, 'fileOpenAction' ),
+  QtGui.SIGNAL( 'activated()' ), anasimple.fileOpen )
+awin.connect( findChild( awin, 'fileExitAction' ),
+  QtGui.SIGNAL( 'activated()' ), anasimple.closeAll )
+awin.connect( findChild( awin, 'editAddAction' ),
+  QtGui.SIGNAL( 'activated()' ), anasimple.editAdd )
 awin.connect( findChild( awin, 'editRemoveAction' ),
-  qt.SIGNAL( 'activated()' ), anasimple.editRemove )
+  QtGui.SIGNAL( 'activated()' ), anasimple.editRemove )
 awin.connect( findChild( awin, 'editDeleteAction' ),
-  qt.SIGNAL( 'activated()' ), anasimple.editDelete )
-
-if not qt4:
-  qt.qApp.setMainWidget( awin )
+  QtGui.SIGNAL( 'activated()' ), anasimple.editDelete )
 
 # display on the whole screen
 awin.showMaximized()
@@ -355,7 +318,4 @@ a.config()[ 'setAutomaticReferential' ] = 1
 a.config()[ 'windowSizeFactor' ] = 1.
 
 # run Qt
-if qt4:
-  qapp.exec_()
-else:
-  qapp.exec_loop()
+qapp.exec_()
