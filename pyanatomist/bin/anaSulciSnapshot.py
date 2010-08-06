@@ -31,12 +31,20 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
-import os, sys, qt, sip, numpy, time
+import os, sys, sip, numpy, time
 from optparse import OptionParser
 import sigraph
 from soma import aims, aimsalgo
 import anatomist.direct.api as anatomist
-
+if sys.modules.has_key( 'PyQt4' ):
+  import PyQt4.QtCore as qt
+  import PyQt4.QtGui as qtgui
+  USE_QT4=True
+else:
+  USE_QT4=False
+  import qt
+  qtgui=qt
+  
 a = anatomist.Anatomist()
 p = a.theProcessor()
 
@@ -108,12 +116,15 @@ def display_graph(transfile, orientation, trm_name, graphname, meshname,
 	if am: am.setReferential(origin.internalRep)
 
 	# Windows
-        if win is None:
-            win = a.createWindow(wintype='3D', no_decoration=True,
-                    options= {'wflags' : qt.Qt.WStyle_Customize | \
-                            qt.Qt.WX11BypassWM | qt.Qt.WStyle_StaysOnTop})
-        else:
-            win.removeObjects( win.getObjects() )
+	if win is None:
+		if USE_QT4:
+			win = a.createWindow(wintype='3D', no_decoration=True,
+			options= {'wflags' : qt.Qt.X11BypassWindowManagerHint | qt.Qt.WindowStaysOnTopHint })
+		else:
+			win = a.createWindow(wintype='3D', no_decoration=True,
+			options= {'wflags' : qt.Qt.WStyle_Customize | qt.Qt.WX11ByPassWM | qt.Qt.WStyle_StaysOnTop })
+	else:
+		win.removeObjects( win.getObjects() )
 	if selected_sulci is None:
                 add_graph_nodes = True
         else:
@@ -162,14 +173,19 @@ def display_graph(transfile, orientation, trm_name, graphname, meshname,
             win.setWindowState(win.windowState() | qt.Qt.WindowFullScreen)
         else:
             fullscreen = False
-	desktop_geometry = qt.qApp.desktop().geometry()
+	desktop_geometry = qtgui.qApp.desktop().geometry()
         if not fullscreen:
             desktop_geometry.setWidth( wingeom[0] )
             desktop_geometry.setHeight( wingeom[1] )
 	win.setFocus()
-	win.raiseW()
+	if USE_QT4:
+		win.raise_()
+		coords=desktop_geometry.getCoords()
+	else:
+		win.raiseW()
+		coords=desktop_geometry.coords()
 	a.execute("WindowConfig", windows=[win],
-		geometry=desktop_geometry.coords(), snapshot=imagename)
+		geometry=coords, snapshot=imagename)
 
 	return [win, ag, am, ahie, bb]
 
