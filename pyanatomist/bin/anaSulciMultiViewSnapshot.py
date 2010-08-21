@@ -33,7 +33,14 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 from soma import aims
 import anatomist, sigraph
-import os, sys, qt, sip, numpy, time
+import os, sys, sip, numpy, time
+if sys.modules.has_key( 'PyQt4' ):
+  import PyQt4.QtCore as qt
+  import PyQt4.QtGui as qtgui
+  USE_QT4=True
+else:
+  import qt
+  USE_QT4=False
 
 context = anatomist.CommandContext.defaultContext()
 a = anatomist.Anatomist()
@@ -175,6 +182,9 @@ def main():
 		sys.exit(1)
 	graphname, meshname, imagename = sys.argv[1:]
 	display_graph_6_views(graphname, meshname, imagename)
-	qt.qApp.exec_loop()
+	if USE_QT4:
+		qtgui.qApp.exec_()
+	else:
+		qt.qApp.exec_loop()
 
 main()
