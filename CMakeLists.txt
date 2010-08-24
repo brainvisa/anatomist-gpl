@@ -37,8 +37,10 @@ endif()
 include_directories( ${ANATOMIST-GPL_INCLUDE_DIRS} )
 
 if( PYTHON_FOUND AND SIP_FOUND AND NUMPY_FOUND AND PYQT${DESIRED_QT_VERSION}_FOUND )
-  BRAINVISA_DEPENDENCY( RUN DEPENDS python Numpy PyQt SIP RUN )
-  BRAINVISA_DEPENDENCY( DEV DEPENDS python Numpy PyQt SIP DEV )
+  foreach( component python python-numpy python-qt4 python-sip4 )
+    BRAINVISA_DEPENDENCY( RUN DEPENDS ${component} RUN )
+    BRAINVISA_DEPENDENCY( DEV DEPENDS ${component} DEV )
+  endforeach()
   set( ANATOMIST_RELATIVE_SIP_DIRECTORY
        "share/anatomist-${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}/sip" )
   if( anatomist-free_FOUND AND aims-gpl_FOUND )
