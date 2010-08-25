@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
@@ -32,14 +33,32 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 import anatomist.direct.api as anatomist
 from soma import aims
-import sys, math, numpy
-if sys.modules.has_key( 'PyQt4' ):
-  qt4 = True
-  from PyQt4 import QtGui as qt
-  from PyQt4 import QtCore
-else:
-  import qt
+from soma.aims import colormaphints
+import sys, os, math
 sys.path.insert( 0, '.' )
+
+userLevel = 4
+# determine wheter we are using Qt4 or Qt3, and hack a little bit accordingly
+# the boolean qt4 gloabl variable will tell it for later usage
+qt4 = False
+if sys.modules.has_key( 'PyQt4'):
+  qt4 = True
+  from PyQt4 import QtCore, QtGui
+  qt = QtGui
+  from PyQt4.uic import loadUi
+else:
+  import qt, qtui
+  loadUi = qtui.QWidgetFactory.create
+
+# do we have to run QApplication ?
+if qt.qApp.startingUp():
+  qapp = qt.QApplication( sys.argv )
+  runqt = True
+else:
+  runqt = False
+
+import sphere
+import numpy
 
 selmesh = None
 selanamesh = None
@@ -52,6 +71,7 @@ class TexDrawAction( anatomist.cpp.Action ):
     #print 'takePolygon', x, y
     w = self.view().window()
     obj = w.objectAtCursorPosition( x, y )
+
     if obj is not None:
       print 'object:', obj, obj.name()
       surf = None
@@ -204,13 +224,13 @@ class TexDrawAction( anatomist.cpp.Action ):
     if poly == 0xffffff or poly < 0 or poly >= len( self._mesh.polygon() ):
       return
     ppoly = self._mesh.polygon()[poly]
-    #print 'poly:', poly, ppoly
+    print 'poly:', poly, ppoly
     vert = self._mesh.vertex()
     pos = aims.Point3df()
     pos = w.positionFromCursor( x, y )
-    #print 'pos:', pos
+    print 'pos:', pos
     v = ppoly[ numpy.argmin( [ (vert[p]-pos).norm() for p in ppoly ] ) ]
-    #print 'vertex:', v, vert[v]
+    print 'vertex:', v, vert[v]
     self._aimstex[0][v] = value
     self._tex.setChanged()
     self._tex.notifyObservers()
@@ -282,6 +302,21 @@ class TexDrawControl( anatomist.cpp.Control ):
       pool.action( "ContinuousTrackball" ).startOrStop )
 
 
+#a = anatomist.Anatomist()
+#pix = qt.QPixmap( 'control.xpm' )
+#anatomist.cpp.IconDictionary.instance().addIcon( 'MyControl',
+  #pix )
+#ad = anatomist.cpp.ActionDictionary.instance()
+#ad.addAction( 'MyAction', lambda: MyAction() )
+#cd = anatomist.cpp.ControlDictionary.instance()
+#cd.addControl( 'MyControl', lambda: MyControl(), 25 )
+#cm = anatomist.cpp.ControlManager.instance()
+#cm.addControl( 'QAGLWidget3D', '', 'MyControl' )
+
+#s = sphere.ASphere()
+#a.registerObject( s )
+#aw = a.createWindow( '3D' )
+#a.addObjects( [ s ], [ aw ] )
 
 a = anatomist.Anatomist()
 
@@ -302,3 +337,9 @@ a.execute( 'SetControl', windows=[aw], control='TexDrawControl' )
 
 qt.QMessageBox.information( None, 'texture drawing', '1. put a mesh in a 3D view\n2.select the "Mickey" control\n3. ctrl+right click on the mesh to create an empty texture or initiate the drawinf session\n4. draw on the mesh using the mouse left button\n   ctrl+left button erases', qt.QMessageBox.Ok )
 
+# run Qt
+if runqt:
+  if qt4:
+    qapp.exec_()
+  else:
+    qapp.exec_loop()
