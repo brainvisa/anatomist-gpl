@@ -2,7 +2,7 @@ BRAINVISA_GET_FILE_LIST_FROM_PRO( "${CMAKE_CURRENT_SOURCE_DIR}/sip.pro" "HEADERS
 BRAINVISA_COPY_AND_INSTALL_HEADERS( _headers pyanatomist headersTarget )
 
 file( GLOB _sipTemplates RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/*.tpl" )
-BRAINVISA_COPY_FILES( ${PROJECT_NAME}-devel
+BRAINVISA_COPY_FILES( ${PROJECT_NAME}-dev
                       anatypessub.py ${_sipTemplates}
                       SOURCE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
                       DESTINATION "${ANATOMIST_RELATIVE_SIP_DIRECTORY}"
