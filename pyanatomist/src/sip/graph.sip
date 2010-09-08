@@ -22,7 +22,7 @@ private:
 };
 
 
-class AGraphObject : anatomist::MObject, anatomist::GLComponent, 
+class AGraphObject : anatomist::MObject, anatomist::GLComponent,
   anatomist::PythonAObject
 {
 %TypeHeaderCode
@@ -40,7 +40,7 @@ public:
 };
 
 
-class AGraph : anatomist::MObject, anatomist::GLComponent, 
+class AGraph : anatomist::MObject, anatomist::GLComponent,
   anatomist::PythonAObject
 {
 %TypeHeaderCode
@@ -54,10 +54,10 @@ class AGraph : anatomist::MObject, anatomist::GLComponent,
 public:
   enum ColorMode
   {
-    Normal, PropertyMap, 
+    Normal, PropertyMap,
   };
 
-  AGraph( Graph * /Transfer/, const char *, bool=true, 
+  AGraph( Graph * /Transfer/, const char *, bool=true,
           const Point3d &=Point3d(64, 64, 64) );
   virtual ~AGraph();
 
@@ -71,6 +71,8 @@ public:
   void loadSubObjects( int mask );
   void updateAfterAimsChange();
   void setLabelsVolumeDimension( const Point3d & vd );
+  set_STRING mappableVertexProperties() const;
+  set_STRING mappableEdgeProperties() const;
 };
 
 };
