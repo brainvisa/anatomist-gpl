@@ -55,7 +55,8 @@ class PaletteContrastAction( anatomist.Action ):
 
   def moveContrast( self, x, y, globx, globy ):
     win = self.view().window()
-    objs = list( win.Objects() )
+    objs = [ o for o in win.Objects() \
+      if not isinstance( o, anatomist.AGraphObject ) ]
     diff = ( ( x - self._start[0] ) / 500., ( y - self._start[1] ) / 500. )
     a = anatomist.Anatomist()
     for o in objs:
