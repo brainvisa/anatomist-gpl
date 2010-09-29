@@ -314,7 +314,7 @@ class AnaSimpleViewer( qt.QObject ):
     the custom control, and have no menu/toolbars.
     '''
     c = ana.cpp.CreateWindowCommand( wintype, -1, None, [], 1, vieww, 2,
-      { '__syntax__' : 'dictionary', 'no_decoration' : 1 } )
+      { '__syntax__' : 'dictionary', 'no_decoration' : 1, 'hidden' : 1 } )
     a.execute( c )
     w = a.AWindow( a, c.createdWindow() )
     c.createdWindow().setAcceptDrops( False )
