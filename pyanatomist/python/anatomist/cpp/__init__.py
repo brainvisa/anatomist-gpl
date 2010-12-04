@@ -387,7 +387,7 @@ def newexecute( self, *args, **kwargs ):
         except:
           i = cc.makeID( v )
         dic[k] = i
-      elif operator.isMappingType( v ):
+      elif hasattr( v, 'iteritems' ): # operator.isMappingType( v ):
         replace_dict( v, cc )
       elif not type(v) in types.StringTypes and operator.isSequenceType( v ):
         replace_list( v, cc )
@@ -402,7 +402,7 @@ def newexecute( self, *args, **kwargs ):
         except:
           i = cc.makeID( v )
         l[k] = i
-      elif operator.isMappingType( v ):
+      elif hasattr( v, 'iteritems' ): # operator.isMappingType( v ):
         replace_dict( v, cc )
       elif not type(v) in types.StringTypes and operator.isSequenceType( v ):
         replace_list( v, cc )
