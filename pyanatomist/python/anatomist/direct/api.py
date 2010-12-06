@@ -359,7 +359,11 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       method=""
     bObjects=self.convertParamsToObjects(objects)
     c=cpp.FusionObjectsCommand(self.makeList(bObjects), method, -1, ask_order)
+    # force execution now
+    ah = self.theProcessor().execWhileIdle()
+    self.theProcessor().allowExecWhileIdle( True )
     self.execute(c)
+    self.theProcessor().allowExecWhileIdle( ah )
     o=self.AObject(self, c.createdObject())
     o.releaseAppRef()
     return o
