@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
 #      CEA/NeuroSpin, Batiment 145,
@@ -80,6 +81,12 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   
   def __singleton_init__(self, *args, **kwargs):
     super(Anatomist, self).__singleton_init__(*args, **kwargs)
+    if sys.modules.has_key( 'PyQt4' ):
+      from PyQt4 import QtGui
+      import threading
+      if QtGui.QApplication.instance() is None \
+        and isinstance( threading.currentThread(), threading._MainThread ):
+        qapp = QtGui.QApplication( [] )
     cpp.Anatomist.__init__(self, *args, **kwargs)
     self.log( "<H1>Anatomist launched</H1>" )
     self.context=cpp.CommandContext.defaultContext()
