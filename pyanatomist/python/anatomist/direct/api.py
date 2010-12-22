@@ -769,11 +769,12 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   ###############################################################################
   def execute( self, command, **kwargs ):
     """
-    Sends a command to anatomist application. Params are replaced by id before sending the command.
+    Executes a command in anatomist application. It should be a command that can be processed by Anatomist command processor. 
+    The list of available commands is in U{http://brainvisa.info/doc/anatomist/html/fr/programmation/commands.html}.
+    Parameters are converted before sending the request to anatomist application.
     
-    @type command: string or Command object
-    @param command: name of the command to execute. Any command that can be processed by anatomist command processor. 
-    Commands list is in http://merlin/~appli/doc/anatomist-3.1/doxygen/index.html.
+    @type command: string 
+    @param command: name of the command to execute. 
     @type kwargs: dictionary
     @param kwargs: parameters for the command
     """

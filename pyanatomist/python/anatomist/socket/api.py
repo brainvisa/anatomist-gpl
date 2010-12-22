@@ -884,7 +884,10 @@ class Anatomist(base.Anatomist):
               
   def executeAndWaitAnswer( self, command, timeout=100, **kwargs ):
     '''
-    Sends a command to anatomist and returns the result. 
+    Executes a command in anatomist application and returns the result.
+    It should be a command that can be processed by Anatomist command processor. 
+    The list of available commands is in U{http://brainvisa.info/doc/anatomist/html/fr/programmation/commands.html}.
+    Parameters are converted before sending the request to anatomist application.
     
     @type command: string 
     @param command: name of the command to execute. 
