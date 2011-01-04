@@ -80,7 +80,7 @@ class MyFusion(anatomist.cpp.FusionMethod):
 
 	def canFusion(self, objects):
 		print "MyFusion : canFusion"
-		return True
+		return 120
 
 	def fusion(self, objects):
 		print "MyFusion : fusion"

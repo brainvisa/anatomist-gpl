@@ -43,7 +43,7 @@ public:
 	FusionMethod();
 	virtual ~FusionMethod();
 
-	virtual bool canFusion(const set_AObjectPtr &) = 0;
+	virtual int canFusion(const set_AObjectPtr &) = 0;
 	virtual anatomist::AObject *fusion(const vector_AObjectPtr &) = 0 /Factory/;
 
 	virtual std::string ID() const = 0;
@@ -63,7 +63,7 @@ class Fusion2dMethod : anatomist::FusionMethod
 	public:
 	Fusion2dMethod();
 	virtual ~Fusion2dMethod();
-        virtual bool canFusion(const set_AObjectPtr &);
+        virtual int canFusion(const set_AObjectPtr &);
         virtual anatomist::AObject *fusion(const vector_AObjectPtr &) /Factory/;
         virtual std::string ID() const = 0;
 };
@@ -81,7 +81,7 @@ class Fusion3dMethod : anatomist::FusionMethod
 	public:
 	Fusion3dMethod();
 	virtual ~Fusion3dMethod();
-        virtual bool canFusion(const set_AObjectPtr &);
+        virtual int canFusion(const set_AObjectPtr &);
         virtual anatomist::AObject *fusion(const vector_AObjectPtr &) /Factory/;
         virtual std::string ID() const = 0;
 };
@@ -99,7 +99,7 @@ class FusionCutMeshMethod : anatomist::FusionMethod
 	public:
 	FusionCutMeshMethod();
 	virtual ~FusionCutMeshMethod();
-        virtual bool canFusion(const set_AObjectPtr &);
+        virtual int canFusion(const set_AObjectPtr &);
         virtual anatomist::AObject *fusion(const vector_AObjectPtr &) /Factory/;
         virtual std::string ID() const = 0;
 };
@@ -117,7 +117,7 @@ class FusionMultiTextureMethod : anatomist::FusionMethod
 	public:
 	FusionMultiTextureMethod();
 	virtual ~FusionMultiTextureMethod();
-        virtual bool canFusion(const set_AObjectPtr &);
+        virtual int canFusion(const set_AObjectPtr &);
         virtual anatomist::AObject *fusion(const vector_AObjectPtr &) /Factory/;
         virtual std::string ID() const = 0;
 };
@@ -135,7 +135,7 @@ class FusionSliceMethod : anatomist::FusionMethod
 	public:
 	FusionSliceMethod();
 	virtual ~FusionSliceMethod();
-        virtual bool canFusion(const set_AObjectPtr &);
+        virtual int canFusion(const set_AObjectPtr &);
         virtual anatomist::AObject *fusion(const vector_AObjectPtr &) /Factory/;
         virtual std::string ID() const = 0;
 };
@@ -153,7 +153,7 @@ class FusionTexSurfMethod : anatomist::FusionMethod
 	public:
 	FusionTexSurfMethod();
 	virtual ~FusionTexSurfMethod();
-        virtual bool canFusion(const set_AObjectPtr &);
+        virtual int canFusion(const set_AObjectPtr &);
         virtual anatomist::AObject *fusion(const vector_AObjectPtr &) /Factory/;
         virtual std::string ID() const = 0;
 };
@@ -171,7 +171,7 @@ class FusionTextureMethod : anatomist::FusionMethod
 	public:
 	FusionTextureMethod();
 	virtual ~FusionTextureMethod();
-        virtual bool canFusion(const set_AObjectPtr &);
+        virtual int canFusion(const set_AObjectPtr &);
         virtual anatomist::AObject *fusion(const vector_AObjectPtr &) /Factory/;
         virtual std::string ID() const = 0;
 };
@@ -189,7 +189,7 @@ class PlanarFusion3dMethod : anatomist::FusionMethod
 	public:
 	PlanarFusion3dMethod();
 	virtual ~PlanarFusion3dMethod();
-        virtual bool canFusion(const set_AObjectPtr &);
+        virtual int canFusion(const set_AObjectPtr &);
         virtual anatomist::AObject *fusion(const vector_AObjectPtr &) /Factory/;
         virtual std::string ID() const = 0;
 };
@@ -208,7 +208,7 @@ class AInterpolerMethod : anatomist::FusionMethod
 	public:
 	AInterpolerMethod();
 	virtual ~AInterpolerMethod();
-        virtual bool canFusion(const set_AObjectPtr &);
+        virtual int canFusion(const set_AObjectPtr &);
         virtual anatomist::AObject *fusion(const vector_AObjectPtr &) /Factory/;
         virtual std::string ID() const = 0;
 };
@@ -227,7 +227,7 @@ class PlaneFusionMethod : anatomist::FusionMethod
 	public:
 	PlaneFusionMethod();
 	virtual ~PlaneFusionMethod();
-        virtual bool canFusion(const set_AObjectPtr &);
+        virtual int canFusion(const set_AObjectPtr &);
         virtual anatomist::AObject *fusion(const vector_AObjectPtr &) /Factory/;
         virtual std::string ID() const = 0;
 };
@@ -245,7 +245,7 @@ class CylinderFusionMethod : anatomist::FusionMethod
 	public:
 	CylinderFusionMethod();
 	virtual ~CylinderFusionMethod();
-        virtual bool canFusion(const set_AObjectPtr &);
+        virtual int canFusion(const set_AObjectPtr &);
         virtual anatomist::AObject *fusion(const vector_AObjectPtr &) /Factory/;
         virtual std::string ID() const = 0;
 };
@@ -263,7 +263,7 @@ class ASurfMatchMethod : anatomist::FusionMethod
 	public:
 	ASurfMatchMethod();
 	virtual ~ASurfMatchMethod();
-        virtual bool canFusion(const set_AObjectPtr &);
+        virtual int canFusion(const set_AObjectPtr &);
         virtual anatomist::AObject *fusion(const vector_AObjectPtr &) /Factory/;
         virtual std::string ID() const = 0;
 };
@@ -284,7 +284,14 @@ public:
 
   virtual anatomist::FusionMethod *chooseMethod(vector_AObjectPtr &, bool=false);
   virtual anatomist::FusionMethod *method(const std::string&) const;
-  virtual set_STRING allowedMethods( const set_AObjectPtr & ) const;
+  list_STRING allowedMethods( const set_AObjectPtr & ) const;
+%MethodCode
+  std::multimap<int, std::string> am = sipCpp->allowedMethods( *a0 );
+  sipRes = new std::list<std::string>;
+  std::multimap<int, std::string>::const_reverse_iterator i, e = am.rend();
+  for( i=am.rbegin(); i!=e; ++i )
+    sipRes->push_back( i->second );
+%End
 
   static anatomist::FusionFactory *factory();
   static bool registerMethod(anatomist::FusionMethod * /Transfer/);
