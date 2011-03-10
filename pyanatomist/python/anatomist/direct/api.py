@@ -61,9 +61,14 @@ import operator
 from soma import aims
 import os, sys, types
 if sys.modules.has_key( 'PyQt4' ):
-  from PyQt4.QtCore import QString
+  try:
+    from PyQt4.QtCore import QString
+    _string_or_qstring = ( basestring, QString )
+  except ImportError:
+    _string_or_qstring = ( basestring, )
 else:
   from qt import QString
+  _string_or_qstring = ( basestring, QString )
 
 class Anatomist(base.Anatomist, cpp.Anatomist):
   """
@@ -911,7 +916,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
     @return: converted elements
     """
-    if isinstance( params, basestring ) or isinstance( params, QString ):
+    if isinstance( params, _string_or_qstring ):
       return params
     elif operator.isSequenceType( params ):
       conv = super( Anatomist, self ).__getattribute__( \
