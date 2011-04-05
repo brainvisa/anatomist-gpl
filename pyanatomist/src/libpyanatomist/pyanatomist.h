@@ -82,6 +82,7 @@ public:
   int userLevel() const;
   void setUserLevel( int );
   anatomist::GlobalConfiguration* config();
+  void quit();
 };
 
 

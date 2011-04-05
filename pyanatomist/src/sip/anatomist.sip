@@ -86,6 +86,7 @@ public:
   int userLevel() const;
   void setUserLevel( int );
   anatomist::GlobalConfiguration* config();
+  void quit();
 
   void registerObject( anatomist::AObject *, bool = true );
 %MethodCode

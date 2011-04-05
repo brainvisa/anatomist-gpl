@@ -122,6 +122,12 @@ AnatomistSip::AnatomistSip( const vector<string> & argv )
 }
 
 
+void AnatomistSip::quit()
+{
+  delete theAnatomist;
+}
+
+
 QWidget *AnatomistSip::createWindow( const QString &type, QWidget *parent )
 {
   anatomist::CreateWindowCommand *c 
