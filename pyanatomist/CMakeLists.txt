@@ -33,3 +33,8 @@ IF ( DOXYGEN_FOUND )
                                   COMPONENT pyanatomist )
   add_dependencies( pyanatomist-doxygen anatomist-doxygen aimsgui-doxygen aimsdata-doxygen graph-doxygen cartobase-doxygen cartodata-doxygen pyaims-doxygen )
 ENDIF ( DOXYGEN_FOUND )
+
+find_package( Sphinx )
+BRAINVISA_GENERATE_SPHINX_DOC( "doc/sphinx"
+  "share/doc/pyanatomist-${BRAINVISA_PACKAGE_VERSION_MAJOR}.${BRAINVISA_PACKAGE_VERSION_MINOR}/sphinx" )
+
