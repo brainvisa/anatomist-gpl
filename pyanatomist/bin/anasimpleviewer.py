@@ -593,11 +593,12 @@ class AnaSimpleViewer( qt.QObject ):
   def closeAll( self ):
     '''Exit'''
     print "Exiting"
-    global vieww, viewgridlay, awindows, fusion2d, aobjects, anasimple
+    global vieww, viewgridlay, awindows, fusion2d, aobjects, anasimple, volrender, awin
     del vieww, viewgridlay
     del anasimple
-    del awindows, fusion2d, aobjects
+    del awindows, fusion2d, volrender, aobjects
     awin.close()
+    del awin
     a = ana.Anatomist()
     a.close()
 
@@ -766,7 +767,7 @@ cm = ana.cpp.ControlManager.instance()
 cm.addControl( 'QAGLWidget3D', '', 'SimpleControl' )
 cm.addControl( 'QAGLWidget3D', '', 'Simple3DControl' )
 
-del cd, cm
+del cd, cm, ad
 
 # run Qt
 if runqt:
@@ -774,3 +775,7 @@ if runqt:
     qapp.exec_()
   else:
     qapp.exec_loop()
+
+# cleanup before exiting
+del pix, fdialog
+
