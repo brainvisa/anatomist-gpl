@@ -9,6 +9,7 @@ PyAnatomist programming documentation
 
 .. automodule:: anatomist
 
+
 Sub-modules
 -----------
 
@@ -23,5 +24,9 @@ Sub-modules
 :doc:`pyanatomist_cpp`
 
 :doc:`pyanatomist_wip`
+
+
+PyAnatomist examples
+--------------------
 
 :doc:`pyanatomist_examples`
