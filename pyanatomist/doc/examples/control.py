@@ -1,4 +1,5 @@
-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
 #      CEA/NeuroSpin, Batiment 145,
@@ -30,16 +31,33 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+# -*- coding: utf-8 -*-
 import anatomist.direct.api as anatomist
 from soma import aims
-import sys, math
-if sys.modules.has_key( 'PyQt4' ):
-  qt4 = True
-  from PyQt4 import QtGui as qt
-  from PyQt4 import QtCore
-else:
-  import qt
+from soma.aims import colormaphints
+import sys, os, math
 sys.path.insert( 0, '.' )
+
+
+# determine wheter we are using Qt4 or Qt3, and hack a little bit accordingly
+# the boolean qt4 gloabl variable will tell it for later usage
+qt4 = False
+if sys.modules.has_key( 'PyQt4'):
+  qt4 = True
+  from PyQt4 import QtCore, QtGui
+  qt = QtGui
+  from PyQt4.uic import loadUi
+else:
+  import qt, qtui
+  loadUi = qtui.QWidgetFactory.create
+
+# do we have to run QApplication ?
+if qt.qApp.startingUp():
+  qapp = qt.QApplication( sys.argv )
+  runqt = True
+else:
+  runqt = False
+
 import sphere
 
 selmesh = None
@@ -67,6 +85,9 @@ class MyAction( anatomist.cpp.Action ):
 
   def takePolygon( self, x, y, globx, globy ):
     #print 'takePolygon', x, y
+
+    print 'coucou', x,y
+
     w = self.view().window()
     obj = w.objectAtCursorPosition( x, y )
     #print 'object:', obj
@@ -98,6 +119,7 @@ class MyControl( anatomist.cpp.Control ):
     anatomist.cpp.Control.__init__( self, prio, 'MyControl' )
 
   def eventAutoSubscription( self, pool ):
+
     if qt4:
       key = QtCore.Qt
       NoModifier = key.NoModifier
@@ -110,20 +132,18 @@ class MyControl( anatomist.cpp.Control ):
       ShiftModifier = key.ShiftButton
       ControlModifier = key.ControlButton
       AltModifier = key.AltButton
-    self.keyPressEventSubscribe( key.Key_Escape, NoModifier,
+
+    self.keyPressEventSubscribe( key.Key_C, NoModifier, 
                                  pool.action( 'MyAction' ).resetRadius )
-    self.mouseLongEventSubscribe( \
-      key.LeftButton, NoModifier,
+    self.mouseLongEventSubscribe( key.LeftButton, NoModifier,
       pool.action( 'MyAction' ).startMoveRadius,
       pool.action( 'MyAction' ).moveRadius,
       pool.action( 'MyAction' ).endMoveRadius,
       False )
-    self.mousePressButtonEventSubscribe( key.RightButton, NoModifier,
+    self.mousePressButtonEventSubscribe(key.RightButton, NoModifier,
       pool.action( 'MyAction' ).takePolygon )
 
-
 a = anatomist.Anatomist()
-
 pix = qt.QPixmap( 'control.xpm' )
 anatomist.cpp.IconDictionary.instance().addIcon( 'MyControl',
   pix )
@@ -139,3 +159,9 @@ a.registerObject( s )
 aw = a.createWindow( '3D' )
 a.addObjects( [ s ], [ aw ] )
 
+# run Qt
+if runqt:
+  if qt4:
+    qapp.exec_()
+  else:
+    qapp.exec_loop()

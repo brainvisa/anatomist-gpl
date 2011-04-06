@@ -42,7 +42,7 @@ else:
 
 # Load a sphere mesh
 r = aims.Reader()
-mfile = 'test.mesh__'
+mfile = 'test.mesh'
 if os.path.exists( mfile ):
   m = r.read( mfile )
 else:

@@ -49,31 +49,32 @@ def initialization( self ):
 
 def execution( self, context ):
   # register a function that will be called when Anatomist application starts
-  pyanatomist.Anatomist.addCreateListener(afficherCreation)
+  pyanatomist.Anatomist.addCreateListener(displayCreation)
   # with attribute create is False, the constructor returns the existing instance of anatomist or None if there isn't one.
   a=pyanatomist.Anatomist(create=False)
   print "anatomist instance:", a
   a=pyanatomist.Anatomist(create=True)
   print "anatomist instance:", a
   # register a function to be called when an object is loaded in anatomist
-  a.onLoadNotifier.add(afficher)
-  #a.onLoadNotifier.remove(afficher)
-  #a.onCreateWindowNotifier.add(afficher)
-  #a.onDeleteNotifier.add(afficher)
-  #a.onFusionNotifier.add(afficher)
-  #a.onCloseWindowNotifier.add(afficher)
-  #a.onAddObjectNotifier.add(afficher)
-  #a.onRemoveObjectNotifier.add(afficher)
-  #a.onCursorNotifier.add(afficher)
+  a.onLoadNotifier.add(display)
+  #a.onLoadNotifier.remove(display)
+  #a.onCreateWindowNotifier.add(display)
+  #a.onDeleteNotifier.add(display)
+  #a.onFusionNotifier.add(display)
+  #a.onCloseWindowNotifier.add(display)
+  #a.onAddObjectNotifier.add(display)
+  #a.onRemoveObjectNotifier.add(display)
+  #a.onCursorNotifier.add(display)
   obj=a.loadObject(self.object_to_load)
   w=a.createWindow('Axial')
   a.addObjects([obj], [w])
   ref=obj.referential
-  context.write( "referentiel de l'objet :", ref.refUuid)
+  context.write( "referential of object :", ref.refUuid)
   return [obj, w, ref]
   
-def afficher(event, params):
+def display(event, params):
   print "** Event ** ",event, params
   
-def afficherCreation(instance):
-  print "** Creation d'une instance d'anatomist", instance
+def displayCreation(instance):
+  print "** Creation of an anatomist instance", instance
+  
