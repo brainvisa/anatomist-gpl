@@ -24,3 +24,4 @@ Sub-modules
 
 :doc:`pyanatomist_wip`
 
+:doc:`pyanatomist_examples`
