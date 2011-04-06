@@ -151,26 +151,30 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     handler=self.AEventHandler(notifier, self)
     self.handlers[event]=handler
     cpp.EventHandler.registerHandler(event, handler)
-  
+
   def disableListening(self, event):
     """
     Set listening of this event off.
-    
+
     @type event: string
     @param event: name of the event to disable.
     """
     self.context.evfilter.unfilter(event)
     cpp.EventHandler.unregisterHandler(event, self.handlers[event])
     del self.handlers[event]
-    
+
   ###############################################################################
   # Methods inherited from base.Anatomist
-   
+
+  def close( self ):
+    # in direct implementation cleanup the internal variables
+    self.quit()
+
   # objects creation
   def createWindowsBlock(self, nbCols=2):
     """
     An id is reserved for that block but the bound object isn't created. It will be created first time a window is added to the block with createWindow method.
-    
+
     @type nbCols: int
     @param nbCols: number of columns of the windows block
 
@@ -178,7 +182,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     @return: a window which can contain several AWindow
     """
     return self.AWindowsBlock(self, nbCols)
-    
+
   def createWindow(self, wintype, geometry=[], block=None, no_decoration=None, options=None):
     """
     Creates a new window and opens it.
