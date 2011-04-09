@@ -205,10 +205,13 @@ class Anatomist(ObservableSingleton, object):
     Set listening of this event on. So when the event occurs, the notifier's notify method is called.
     This method is automatically called when the first listener is added to a notifier. That is to say that notifiers are activated only if they have registered listeners.
 
-    @type event: string
-    @param event: name of the event to listen
-    @type notifier: Notifier
-    @param notifier: the notifier whose notify method must be called when this event occurs
+    * event: *string*
+
+      Name of the event to listen
+
+    * notifier: :py:class:`soma.notification.Notifier`
+
+      The notifier whose notify method must be called when this event occurs
     """
     pass
 
@@ -216,8 +219,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Set listening of this event off.
 
-    @type event: string
-    @param event: name of the event to disable.
+    * event: *string*
+
+      Name of the event to disable.
     """
     pass
 
@@ -226,28 +230,39 @@ class Anatomist(ObservableSingleton, object):
     """
     Creates a window containing other windows.
 
-    @type nbCols: int
-    @param nbCols: number of columns of the windows block
+    * nbCols: *int*
 
-    @rtype: AWindowBlock
-    @return: a window which can contain several AWindow
+      Number of columns of the windows block
+
+    * returns: :py:class:`anatomist.base.Anatomist.AWindowsBlock`
+
+      A window which can contain several AWindow
     """
     pass
 
   def createWindow(self, wintype, geometry=None, block=None, no_decoration=None):
     """
     Creates a new window and opens it.
-    @type wintype: string
-    @param wintype: type of window to open ("Axial", "Sagittal", "Coronal", "3D", "Browser", "Profile")
-    @type geometry: int vector
-    @param geometry: position on screen and size of the new window (x, y, w, h)
-    @type block: AWindowBlock
-    @param block: a block in which the new window must be added
-    @type no_decoration: bool
-    @param no_decoration: indicates if decorations (menus, buttons) can be painted around the view.
 
-    @rtype: AWindow
-    @return: the newly created window
+    * wintype: *string*
+
+      Type of window to open ("Axial", "Sagittal", "Coronal", "3D", "Browser", "Profile", ...)
+
+    * geometry: *int vector*
+
+      Position on screen and size of the new window (x, y, w, h)
+
+    * block: :py:class:`anatomist.base.Anatomist.AWindowsBlock`
+
+      A block in which the new window must be added
+
+    * no_decoration: *bool*
+
+      Indicates if decorations (menus, buttons) can be painted around the view.
+
+    * returns: :py:class:`anatomist.base.Anatomist.AWindow`
+
+      The newly created window
     """
     pass
 
@@ -255,21 +270,33 @@ class Anatomist(ObservableSingleton, object):
     """
     Loads an object from a file (volume, mesh, graph, texture...)
 
-    @type filename: string
-    @param filename: the file containing object data
-    @type objectName: string
-    @param objectName: object's name
-    @type restrict_object_types: dictionary
-    @param restrict_object_types: object -> accpepted types list. Ex: {'Volume' : ['S16', 'FLOAT']}
-    @type forceReload: boolean
-    @param forceReload: if True the object will be loaded even if it is already loaded in Anatomist. Otherwise, the already loaded one is returned.
-    @type duplicate: boolean
-    @param duplicate: if the object already exists, duplicate it. The original and the copy will share the same data but not display parameters as palette. If the object is not loaded yet, load it hidden and duplicate it (unable to keep the original object with default display parameters).
-    @type hidden: boolean
-    @param hidden: an idden object does not appear in Anatomist main control window.
+    * filename: *string*
 
-    @rtype: AObject
-    @return: the loaded object
+      The file containing object data
+
+    * objectName: *string*
+
+      Object name
+
+    * restrict_object_types: *dictionary*
+
+      object -> accpepted types list. Ex: ``{'Volume' : ['S16', 'FLOAT']}``
+
+    * forceReload: *boolean*
+
+      If *True* the object will be loaded even if it is already loaded in Anatomist. Otherwise, the already loaded one is returned.
+
+    * duplicate: *boolean*
+
+      If the object already exists, duplicate it. The original and the copy will share the same data but not display parameters as palette. If the object is not loaded yet, load it hidden and duplicate it (unable to keep the original object with default display parameters).
+
+    * hidden: *boolean*
+
+      a Hidden object does not appear in Anatomist main control window.
+
+    * returns: :py:class:`anatomist.base.Anatomist.AObject`
+
+      The loaded object
     """
     pass
 
@@ -277,11 +304,13 @@ class Anatomist(ObservableSingleton, object):
     """
     Creates a copy of source object.
 
-    @type source: AObject
-    @param source: the object to copy.
+    * source: :py:class:`anatomist.base.Anatomist.AObject`
 
-    @rtype: AObject
-    @return: the copy
+      The object to copy.
+
+    * returns: :py:class:`anatomist.base.Anatomist.AObject`
+
+      The copy
     """
     pass
 
@@ -289,17 +318,25 @@ class Anatomist(ObservableSingleton, object):
     """
     Creates a graph associated to a object (volume for example). This object initializes graph's dimensions (voxel size, extrema).
 
-    @type object: AObject
-    @param object: the new graph is based on this object
-    @type name: string
-    @param name: graph name. default is RoiArg.
-    @type syntax: string
-    @param syntax: graph syntax attribute. default is RoiArg.
-    @type filename: string
-    @param filename: filename used for saving. Default is None.
+    * object: :py:class:`anatomist.base.Anatomist.AObject`
 
-    @rtype: AGraph
-    @return: the new graph object
+      The new graph is based on this object
+
+    * name: *string*
+
+      Graph name. default is ``'RoiArg'``.
+
+    * syntax: *string*
+
+      Graph syntax attribute. default is ``'RoiArg'``.
+
+    * filename: *string*
+
+      Filename used for saving. Default is *None*.
+
+    * returns: :py:class:`anatomist.base.Anatomist.AGraph`
+
+      The new graph object
     """
     pass
 
@@ -307,11 +344,13 @@ class Anatomist(ObservableSingleton, object):
     """
     Loads a cursor for 3D windows from a file.
 
-    @type filename: string
-    @param filename: the file containing object data
+    * filename: *string*
 
-    @rtype: AObject
-    @return: the loaded object
+      The file containing object data
+
+    * returns: :py:class:`anatomist.base.Anatomist.AObject`
+
+      The loaded object
     """
     pass
 
@@ -319,15 +358,21 @@ class Anatomist(ObservableSingleton, object):
     """
     Creates a multi object that contains all given objects.
 
-    @type objects: list of AObject
-    @param objects: list of objects that must be fusionned
-    @type method: string
-    @param method: method to apply for the fusion (Fusion2DMethod...)
-    @type ask_order: boolean
-    @param ask_order: if True, asks user in what order the fusion must be processed.
+    * objects: *list of* :py:class:`anatomist.base.Anatomist.AObject`
 
-    @rtype: AObject
-    @return: the newly created fusion object.
+      List of objects that must be fusionned
+
+    * method: *string*
+
+      Method to apply for the fusion (``'Fusion2DMethod'``...)
+
+    * ask_order: *boolean*
+
+      If *True*, asks user in what order the fusion must be processed.
+
+    * returns: :py:class:`anatomist.base.Anatomist.AObject`
+
+      The newly created fusion object.
     """
     pass
 
@@ -335,8 +380,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets information about fusion methods. If objects is not specified, the global list of all fusion methods is returned. Otherwise the allowed fusions for those specific objects is returned.
 
-    @rtype: dictionary
-    @return: fusion methods
+    * returns: *dictionary*
+
+      Fusion methods
     """
     pass
 
@@ -347,11 +393,13 @@ class Anatomist(ObservableSingleton, object):
     so it seems to be better to encapsulate this step on another command. So referentials are treated the same as other objects.
     (LoadObject -> addAobject | createReferential -> assignReferential)
 
-    @type filename: string
-    @param filename: name of a file (minf file, extension .referential) containing  informations about the referential : its name and uuid
+    * filename: *string*
 
-    @rtype: Referential
-    @return: the newly created referential
+      Name of a file (minf file, extension .referential) containing  informations about the referential : its name and uuid
+
+    * returns: :py:class:`anatomist.base.Anatomist.Referential`
+
+      The newly created referential
     """
     pass
 
@@ -359,14 +407,21 @@ class Anatomist(ObservableSingleton, object):
     """
     Loads a transformation from a referential to another. The transformation informations are given in a file.
 
-    @type filename: string
-    @param filename: file containing transformation informations
-    @type origin: Referential
-    @param origin: origin of the transformation
-    @type destination: Referential
-    @param destination: coordinates' referential after applying transformation
-    @rtype: Transformation
-    @return: transformation to apply to convert coordinates from one referent
+    * filename: *string*
+
+      File containing transformation information
+
+    * origin: :py:class:`anatomist.base.Anatomist.Referential`
+
+      Origin of the transformation
+
+    * destination: :py:class:`anatomist.base.Anatomist.Referential`
+
+      Referential after applying transformation
+
+    * returns: :py:class:`anatomist.base.Anatomist.Transformation`
+
+      Transformation to apply to convert coordinates from one referent
     """
     pass
 
@@ -374,14 +429,21 @@ class Anatomist(ObservableSingleton, object):
     """
     Creates a transformation from a referential to another. The transformation informations are given in a matrix.
 
-    @type matrix: float vector, size 12
-    @param matrix: transformation matrix (4 lines, 3 colons ; 1st line: translation, others: rotation)
-    @type origin: Referential
-    @param origin: origin of the transformation
-    @type destination: Referential
-    @param destination: coordinates' referential after applying transformation
-    @rtype: Transformation
-    @return: transformation to apply to convert coordinates from one referent
+    * matrix: *float vector*, size 12
+
+      Transformation matrix (4 lines, 3 colons ; 1st line: translation, others: rotation)
+
+    * origin: :py:class:`anatomist.base.Anatomist.Referential`
+
+      Origin of the transformation
+
+    * destination: :py:class:`anatomist.base.Anatomist.Referential`
+
+      Referential after applying transformation
+
+    * returns: :py:class:`anatomist.base.Anatomist.Transformation`
+
+      New transformation
     """
     pass
 
@@ -389,11 +451,13 @@ class Anatomist(ObservableSingleton, object):
     """
     Creates an empty palette and adds it in the palettes list.
 
-    @type name: string
-    @param name: name of the new palette
+    * name: *string*
 
-    @rtype: APalette
-    @return: the newly created palette
+      Name of the new palette
+
+    * returns: :py:class:`anatomist.base.Anatomist.APalette`
+
+      The newly created palette
     """
     pass
 
@@ -401,11 +465,13 @@ class Anatomist(ObservableSingleton, object):
     """
     Creates a multi object containing objects in parameters.
 
-    @type objects: list of AObject
-    @param objects: object to put in a group
+    * objects: *list of* :py:class:`anatomist.base.Anatomist.AObject`
 
-    @rtype: AObject
-    @return: the newly created multi object
+      Objects to put in a group
+
+    * returns: :py:class:`anatomist.base.Anatomist.AObject`
+
+      The newly created multi object
     """
     pass
 
@@ -414,13 +480,15 @@ class Anatomist(ObservableSingleton, object):
     Links windows in a group. Moving cursor position in a window moves it in all linked windows.
     By default all windows are in the same group.
 
-    @type windows: list of AWindow
-    @param windows : the windows to link
-    @type group: AWindowsGroup
-    @param group: put the windows in this group. If it is None, a new group is created.
+    * windows: *list of* :py:class:`anatomist.base.Anatomist.AWindow`
 
-    @rtype: AWindowsGroup
-    @return: windows's group
+      The windows to link
+
+    * group: :py:class:`anatomist.base.Anatomist.AWindowsGroup`
+
+      Put the windows in this group. If it is *None*, a new group is created.
+
+    * returns: :py:class:`anatomist.base.Anatomist.AWindowsGroup`
     """
     if windows != []:
       windows = self.makeList( windows )
@@ -433,8 +501,9 @@ class Anatomist(ObservableSingleton, object):
   # objects access
   def getPalette(self, name):
     """
-    @rtype: APalette
-    @return: the named palette
+    * returns: :py:class:`anatomist.base.Anatomist.APalette`
+
+      The named palette
     """
     pass
 
@@ -443,19 +512,23 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets all objects referenced in current context.
 
-    @rtype:  list of AObject
-    @return: list of existing objects
+    * returns:  *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+      List of existing objects
     """
     pass
 
   def importObjects(self, top_level_only=False):
     """
     Gets objects importing those that are not referenced in current context.
-    @type top_level_only: bool
-    @param top_level_only: if True imports only top-level objects (that have no parents), else all objects are imported.
 
-    @rtype:  list of AObject
-    @return: list of existing objects
+    * top_level_only: *bool*
+
+      If *True*, imports only top-level objects (that have no parents), else all objects are imported.
+
+    * returns:  *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+      List of existing objects
     """
     pass
 
@@ -463,11 +536,13 @@ class Anatomist(ObservableSingleton, object):
     """
     Get the object corresponding to this filename if it is currently loaded.
 
-    @type filename: string
-    @param filename: filename of the requested object
+    * filename: *string*
 
-    @rtype: AObject
-    @return: the object if it is loaded, else returns None.
+      Filename of the requested object
+
+    * returns: :py:class:`anatomist.base.Anatomist.AObject`
+
+      The object if it is loaded, else returns *None*.
     """
     objects=self.getObjects()
     loadedObject=None
@@ -481,8 +556,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets all windows referenced in current context.
 
-    @rtype: list of AWindow
-    @return: list of opened windows
+    * returns: *list of* :py:class:`anatomist.base.Anatomist.AWindow`
+
+      List of opened windows
     """
     pass
 
@@ -490,8 +566,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets all windows importing those that are not referenced in current context.
 
-    @rtype: list of AWindow
-    @return: list of opened windows
+    * returns: *list of* :py:class:`anatomist.base.Anatomist.AWindow`
+
+      List of opened windows
     """
     pass
 
@@ -499,8 +576,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets all referentials in current context.
 
-    @rtype: list of Referential
-    @return: list of referentials
+    * returns: *list of* :py:class:`anatomist.base.Anatomist.Referential`
+
+      List of referentials
     """
     pass
 
@@ -508,8 +586,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets all referentials importing those that are not referenced in current context.
 
-    @rtype: list of Referential
-    @return: list of referentials
+    * returns: *list of* :py:class:`anatomist.base.Anatomist.Referential`
+
+      List of referentials
     """
     pass
 
@@ -517,8 +596,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets all transformations.
 
-    @rtype: list of Transformation
-    @return: list of transformations
+    * returns: *list of* :py:class:`anatomist.base.Anatomist.Transformation`
+
+      List of transformations
     """
     pass
 
@@ -526,75 +606,89 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets all transformations importing those that are not referenced in current context.
 
-    @rtype: list of Transformation
-    @return: list of transformations
+    * returns: *list of* :py:class:`anatomist.base.Anatomist.Transformation`
+
+      List of transformations
     """
     pass
 
   def getPalettes(self):
     """
-    @rtype: list of APalette
-    @return: list of palettes.
+    * returns: *list of* :py:class:`anatomist.base.Anatomist.APalette`
+
+      List of palettes.
     """
     pass
 
   def getSelection(self, group=None):
     """
-    @type group: AWindowsGroup
-    @param group: get the selection in this group. If None, returns the selection in default group.
+    * group: :py:class:`anatomist.base.Anatomist.AWindowsGroup`
 
-    @rtype:  list of AObject
-    @return: the list of selected objects in the group of windows
+      Get the selection in this group. If *None*, returns the selection in the default group.
+
+    * returns:  *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+      The list of selected objects in the group of windows
     """
     pass
 
   def getDefaultWindowsGroup(self):
+    '''
+    Normally returns 0
+    '''
     return self.AWindowsGroup(self, 0)
 
   def linkCursorLastClickedPosition(self, ref=None):
     """
     Gives the last clicked position of the cursor.
 
-    @type ref: Referential
-    @param ref: if given, cursor position value will be in this referential. Else, anatomist central referential is used.
+    * ref: :py:class:`anatomist.base.Anatomist.Referential`
 
-    @rtype: float vector, size 3
-    @return: last position of the cursor
+      If given, cursor position value will be in this referential. Else, anatomist central referential is used.
+
+    * returns: *float vector*, size 3
+
+      Last position of the cursor
     """
     pass
 
   def getAimsInfo(self):
     """
-    @rtype: string
-    @return: information about AIMS library.
+    * returns: *string*
+
+      Information about AIMS library.
     """
     pass
 
   def getCommandsList(self):
     """
-    @rtype: dict
-    @return: list of commands available in Anatomist with their parameters.
-    dict command name -> dict parameter name -> dict attribute -> value (needed, type)
+    * returns: *dict*
+
+      List of commands available in Anatomist with their parameters.
+      dict command name -> dict parameter name -> dict attribute -> value (needed, type)
     """
     pass
 
   def getModulesInfo(self):
     """
-    @rtype: dict
-    @return: list of modules and their description. dict module name -> dict attribute -> value (description)
+    * returns: *dict*
+
+      List of modules and their description. dict module name -> dict attribute -> value (description)
     """
     pass
 
   def getVersion(self):
     """
-    @rtype: string
-    @return: Anatomist version
+    * returns: *string*
+
+      Anatomist version
     """
     pass
 
   ###############################################################################
   # objects manipulation
   def showObject(self, object):
+    '''Displays the given object in a new window'''
     self.execute("ShowObject", object=object)
 
   def addObjects(self, objects, windows, add_children=False,
@@ -603,10 +697,13 @@ class Anatomist(ObservableSingleton, object):
     Adds objects in windows.
     The objects and windows must already exist.
 
-    @type objects : list of AObject
-    @param objects : list of objects to add
-    @type windows : list of AWindow
-    @param windows : list of windows in which the objects must be added
+    * objects : *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+      List of objects to add
+
+    * windows : *list of* :py:class:`anatomist.base.Anatomist.AWindow`
+
+      List of windows in which the objects must be added
     """
     self.execute("AddObject", objects=self.makeList(objects),
       windows=self.makeList(windows), add_children=int(add_children),
@@ -617,10 +714,13 @@ class Anatomist(ObservableSingleton, object):
     """
     Removes objects from windows.
 
-    @type objects : list of AObject
-    @param objects : list of objects to remove
-    @type windows : list of AWindow
-    @param windows : list of windows from which the objects must be removed
+    * objects : *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+      List of objects to remove
+
+    * windows : *list of* :py:class:`anatomist.base.Anatomist.AWindow`
+
+      List of windows from which the objects must be removed
     """
     self.execute("RemoveObject", objects=self.makeList(objects),
       windows=self.makeList(windows), remove_children=int(remove_children) )
@@ -628,8 +728,10 @@ class Anatomist(ObservableSingleton, object):
   def deleteObjects(self, objects):
     """
     Deletes objects
-    @type objects: list of AObject
-    @param objects: objects to delete
+
+    * objects: *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+      Objects to delete
     """
     objects=self.makeList(objects)
     for o in objects:
@@ -639,8 +741,10 @@ class Anatomist(ObservableSingleton, object):
   def deleteElements(self, elements):
     """
     Deletes objects, windows, referentials, anything that is referenced in anatomist application.
-    @type elements: list of AItem
-    @param elements: elements to delete
+
+    * elements: *list of* :py:class:`anatomist.base.Anatomist.AItem`
+
+      Elements to delete
     """
     self.execute("DeleteElement", elements=self.makeList(elements))
 
@@ -656,13 +760,16 @@ class Anatomist(ObservableSingleton, object):
     The referential must exist. To create a new Referential, execute createReferential,
     to assign the central referential, first get it with Anatomist.centralRef attribute.
 
-    @type referential: Referential
-    @param referential: The referential to assign to objects and/or windows
-    @type elements: list of AObject / AWindow
-    @param elements: objects or windows which referential must be changed
-    The corresponding command tree contains an attribute central_ref to indicate if the referential to assign is anatomist central ref,
-    because this referential isn't referenced by an id. In the socket implementation, Referential object must have an attribute central_ref,
-    in order to create the command message. In direct impl, it is possible to access directly to the central ref object.
+    * referential: :py:class:`anatomist.base.Anatomist.Referential`
+
+      The referential to assign to objects and/or windows
+
+    * elements: *list of* :py:class:`anatomist.base.Anatomist.AObject` / :py:class:`anatomist.base.Anatomist.AWindow`
+
+      Objects or windows which referential must be changed.
+      The corresponding command tree contains an attribute central_ref to indicate if the referential to assign is anatomist central ref,
+      because this referential isn't referenced by an id. In the socket implementation, Referential object must have an attribute central_ref,
+      in order to create the command message. In direct impl, it is possible to access directly to the central ref object.
     """
     objects=[]
     windows=[]
@@ -679,8 +786,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Extracts referentials / transformations from objects headers when they contain such information, and assign them.
 
-    @type objects: list of AObject
-    @param objects: objects which referential information must be loaded
+    * objects: *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+      Objects which referential information must be loaded
     """
     self.execute("ApplyBuiltinReferential", objects=self.makeList(objects) )
 
@@ -688,24 +796,41 @@ class Anatomist(ObservableSingleton, object):
     """
     Sets the point of view, zoom, cursor position for 3D windows.
 
-    @type windows: list of AWindow
-    @param windows: the windows which options must be changed
-    @type zoom: float
-    @param zoom: zoom factor, default is 1
-    @type observer_position: float vector, size 3
-    @param observer_position: camera position
-    @type view_quaternion: float vector, size 4, normed
-    @param view_quaternion: view rotation
-    @type slice_quaternion: float vector, size 4, normed
-    @param slice_quaternion: slice plan rotation
-    @type force_redraw: boolean
-    @param force_redraw: if true refresh printing immediatly, default is False
-    @type cursor_position: float vector
-    @param cursor_position: linked cursor position
-    @type boundingbox_min: float vector
-    @param boundingbox_min: bounding box min values
-    @type boundingbox_max: float vector
-    @param boundingbox_max: bounding box max values
+    * windows: *list of* :py:class:`AWindow`
+
+      Windows which options must be changed
+
+    * zoom: *float*
+
+      Zoom factor, default is 1
+
+    * observer_position: *float vector*, size 3
+
+      Camera position
+
+    * view_quaternion: *float vector*, size 4, normed
+
+      View rotation
+
+    * slice_quaternion: *float vector*, size 4, normed
+
+      Slice plan rotation
+
+    * force_redraw: *boolean*
+
+      If *True*, refresh printing immediatly, default is *False*
+
+    * cursor_position: *float vector*
+
+      Linked cursor position
+
+    * boundingbox_min: *float vector*
+
+      Bounding box min values
+
+    * boundingbox_max: *float vector*
+
+      Bounding box max values
     """
     if force_redraw:
       force_redraw = 1
@@ -722,8 +847,10 @@ class Anatomist(ObservableSingleton, object):
   def closeWindows(self, windows):
     """
     Closes windows.
-    @type windows: list of AWindow
-    @param windows: windows to be closed
+
+    * windows: *list of* :py:class:`AWindow`
+
+      Windows to be closed
     """
     windows=self.makeList(windows)
     for w in windows:
@@ -738,16 +865,21 @@ class Anatomist(ObservableSingleton, object):
     """
     Changes objects material properties.
 
-    @type objects: list of AObject
-    @param objects: objects whose material must be changed
-    @type material: Material
-    @param material: material characteristics, including render properties.
-    The material may be specified as a Material object, or as its various
-    properties (ambient, diffuse, etc.). If both a material parameter and
-    other properties are specified, the material is used as a base, and
-    properties are used to modify it
-    @type refresh: bool
-    @param refresh: if true, force windows refreshing
+    * objects: *list of* :py:class:`AObject`
+
+      Objects whose material must be changed
+
+    * material: :py:class:`Material`
+
+      Material characteristics, including render properties.
+      The material may be specified as a Material object, or as its various
+      properties (ambient, diffuse, etc.). If both a material parameter and
+      other properties are specified, the material is used as a base, and
+      properties are used to modify it
+
+    * refresh: *bool*
+
+      If *True*, force windows refreshing
     """
     if material is not None:
       if ambient is None:
@@ -783,27 +915,50 @@ class Anatomist(ObservableSingleton, object):
   def setObjectPalette(self, objects, palette=None, minVal=None, maxVal=None, palette2=None,  minVal2=None, maxVal2=None, mixMethod=None, linMixFactor=None, palette1Dmapping=None, absoluteMode=False):
     """
     Assign a palette to objects
-    @type objects: list of AObject
-    @param objects: affect palette parameters to these objects
-    @type palette: APalette
-    @param palette: principal palette to apply
-    @type minVal: float (0 - 1)
-    @param minVal: palette value to affect to objects texture min value (proportionally to palette's limits)
-    @type maxVal: float (0 - 1)
-    @param maxVal: palette value to affect to objects texture max value
-    @type palette2: APalette
-    @param palette2: second palette, for 2D textures
-    @type minVal2: float (0 - 1)
-    @param minVal2: second palette value to affect to object texture second component min value
-    @type maxVal2: float (0 - 1)
-    @param maxVal2: second palette value to affect to object texture second component max value
-    @type mixMethod: string
-    @param mixMethod: method to mix two palettes in a 2D palette : linear or geometric
-    @type linMixFactor: float
-    @param linMixFactor: mix factor for the linear method
-    @type palette1Dmapping: string
-    @param palette1Dmapping: way of using 2D palette for 1D texture : FirstLine or Diagonal
-    @param absoluteMode: if True, min/max values are supposed to be absolute values (in regard to objects texture) rather than proportions
+
+    * objects: *list of* :py:class:`AObject`
+
+      Assign palette parameters to these objects
+
+    * palette: :py:class:`APalette`
+
+      Principal palette to apply
+
+    * minVal: *float* (0 - 1)
+
+      Palette value to assign to objects texture min value (proportionally to palette's limits)
+
+    * maxVal: *float* (0 - 1)
+
+      Palette value to assign to objects texture max value
+
+    * palette2: :py:class:`APalette`
+
+      Second palette, for 2D textures
+
+    * minVal2: *float* (0 - 1)
+
+      Second palette value to affect to object texture second component min value
+
+    * maxVal2: *float* (0 - 1)
+
+      Second palette value to assign to object texture second component max value
+
+    * mixMethod: *string*
+
+      Method to mix two palettes in a 2D palette : linear or geometric
+
+    * linMixFactor: *float*
+
+      mix factor for the linear method
+
+    * palette1Dmapping: *string*
+
+      way of using 2D palette for 1D texture : FirstLine or Diagonal
+
+    * absoluteMode: *boolean*
+
+      if *True*, min/max values are supposed to be absolute values (in regard to objects texture) rather than proportions
     """
     self.execute('SetObjectPalette', objects = self.makeList(objects), palette = palette, palette2 = palette2, min=minVal, max=maxVal, min2=minVal2, max2=maxVal2, mixMethod=mixMethod, linMixFactor=linMixFactor, palette1Dmapping=palette1Dmapping, absoluteMode=int(absoluteMode))
 
@@ -831,24 +986,41 @@ class Anatomist(ObservableSingleton, object):
     """
     Modifies graphs and selections options.
 
-    @type display_mode: string
-    @param display_mode: paint mode of objects in graph nodes : mesh, bucket, all, first
-    @type label_attribute: string
-    @param label_attribute: selects the attribute used as selection filter: label or name
-    @type save_only_modified: int (0/1)
-    @param save_only_modified: if enable, graph's save saves not all sub objects but only those that have been modified.
-    @type saving_mode: string
-    @param saving_mode: graph'saving mode : unchanged (keep the reading format), global (1 file for all same category sub-objects), or local (1 file per sub-object)
-    @type selection_color: int vector
-    @param selection_color: selected objects' color : R G B [A [NA]] (A opacity, NA: 0/1 use object's opacity parameter)
-    @type selection_color_inverse: int (0/1)
-    @param selection_color_inverse: selection inverses color instead of using selection_color
-    @type set_base_directory: int (0/1)
-    @param set_base_directory: save subobjects in a directory <graph name>.data
-    @type show_tooltips: int (0/1)
-    @param show_tooltips: show graph nodes' names in tooltips
-    @type use_nomenclature: int (0/1)
-    @param use_nomenclature: enables graph colorisation with nomenclature
+    * display_mode: *string*
+
+      Paint mode of objects in graph nodes : mesh, bucket, all, first
+
+    * label_attribute: *string*
+
+      Selects the attribute used as selection filter: label or name
+
+    * save_only_modified: *int* (0/1)
+
+      If enabled, graph save saves not all sub objects but only those that have been modified.
+
+    * saving_mode: *string*
+
+      Graph saving mode : unchanged (keep the reading format), global (1 file for all same category sub-objects), or local (1 file per sub-object)
+
+    * selection_color: *int vector*
+
+      Selected objects color : R G B [A [NA]] (A opacity, NA: 0/1 use object's opacity parameter)
+
+    * selection_color_inverse: *int* (0/1)
+
+      Selection inverses color instead of using selection_color
+
+    * set_base_directory: *int* (0/1)
+
+      Save subobjects in a directory <graph name>.data
+
+    * show_tooltips: *int* (0/1)
+
+      Show graph nodes names in tooltips
+
+    * use_nomenclature: *int* (0/1)
+
+      Enable graph coloring with nomenclature
     """
     self.execute('GraphParams', display_mode=display_mode, label_attribute=label_attribute, save_only_modified=save_only_modified, saving_mode=saving_mode, selection_color=selection_color, selection_color_inverse=selection_color_inverse, set_base_directory=set_base_directory, show_tooltips=show_tooltips, use_nomenclature=use_nomenclature)
 
@@ -857,13 +1029,16 @@ class Anatomist(ObservableSingleton, object):
   def execute( self, command, **kwargs ):
     """
     Executes a command in anatomist application. It should be a command that can be processed by Anatomist command processor.
-    The list of available commands is in U{http://brainvisa.info/doc/anatomist/html/fr/programmation/commands.html}.
+    The list of available commands is in http://brainvisa.info/doc/anatomist/html/fr/programmation/commands.html.
     Parameters are converted before sending the request to anatomist application.
 
-    @type command: string
-    @param command: name of the command to execute.
-    @type kwargs: dictionary
-    @param kwargs: parameters for the command
+    * command: *string*
+
+      Name of the command to execute.
+
+    * kwargs: *dictionary*
+
+      Parameters for the command
     """
     def ununderscore(k):
       # this removes a trailing '_' from params names
@@ -903,11 +1078,13 @@ class Anatomist(ObservableSingleton, object):
     """
     Converts current api object to corresponding anatomist object representation.
 
-    @type params: Anatomist.AItem instance
-    @param params: element to convert
+    * params: :py:class:`AItem` instance
 
-    @rtype: dictionary or list
-    @return: converted elements
+      Element to convert
+
+    * returns: *dictionary* or *list*
+
+      Converted elements
     """
     if isinstance( item, Anatomist.AItem ) :
       return item.getInternalRep()
@@ -921,11 +1098,13 @@ class Anatomist(ObservableSingleton, object):
     Converts current api objects to corresponding anatomist object representation.
     This method must be called before sending a command to anatomist application on command parameters.
 
-    @type params: dictionary or list
-    @param params: elements to convert
+    * params: *dictionary* or *list*
 
-    @rtype: dictionary or list
-    @return: converted elements
+      Elements to convert
+
+    * returns: *dictionary* or *list*
+
+      Converted elements
     """
     if not isinstance( params, basestring ) \
       and operator.isSequenceType( params ):
@@ -938,11 +1117,14 @@ class Anatomist(ObservableSingleton, object):
       Sends a command to anatomist application. Call this method if there's no answer to get.
       This method depends on the mean of communication with anatomist. Must be redefined in implementation api.
 
-      @type command: string
-      @param command: name of the command to execute. Any command that can be processed by anatomist command processor.
-      Commands list is in http://merlin/~appli/doc/anatomist-3.1/doxygen/index.html.
-      @type kwargs: dictionary
-      @param kwargs: parameters for the command
+      * command: *string*
+
+        Name of the command to execute. Any command that can be processed by anatomist command processor.
+        The complete commands list is in http://brainvisa.info/doc/anatomist/html/fr/programmation/commands.html
+
+      * kwargs: *dictionary*
+
+        Parameters for the command
       """
       pass
 
@@ -980,25 +1162,24 @@ class Anatomist(ObservableSingleton, object):
     """
     Base class for representing an object in Anatomist application.
 
-    @type anatomistinstance: Anatomist
-    @ivar anatomistinstance: reference to Anatomist object which created this object.
-    Usefull because some methods defined in AItem objects will need to send a command to Anatomist application.
-    @type internalRep: object
-    @ivar internalRep: representation of this object in anatomist application.
-    @type ref: bool
-    @ivar ref: indicates if a reference has been taken on the corresponding anatomist object. If True, the reference is released on deleting this item.
-    @type refType: string
-    @ivar refType: type of reference taken on the object : Weak (reference counter not incremented), WeakShared (reference counter incremented but the object can be deleted even if it remains references) or Strong (reference counter is incremented, the object cannot be deleted since there is references on it)
+    * anatomistinstance: :py:class:`Anatomist`
+
+      Reference to Anatomist object which created this object.
+      Useful because some methods defined in AItem objects will need to send a command to the Anatomist application.
+
+    * internalRep: *object*
+
+      Representation of this object in anatomist application.
+
+    * ref: *bool*
+
+      Indicates if a reference has been taken on the corresponding anatomist object. If *True*, the reference is released on deleting this item.
+
+    * refType: *string*
+
+      Type of reference taken on the object : ``Weak`` (reference counter not incremented), ``WeakShared`` (reference counter incrementerd but the object can be deleted even if it remains references) or ``Strong`` (reference counter is incremented, the object cannot be deleted since there is references on it). If it is not specified, :py:data:`anatomist.base.Anatomist.defaultRefType` is used.
     """
     def __init__( self, anatomistinstance, internalRep=None, refType=None, *args, **kwargs ):
-      """
-      @type anatomistinstance: Anatomist
-      @param anatomistinstance: reference to Anatomist object which created this object.
-      @type internalRep: object
-      @param internalRep: representation of this object in anatomist application.
-      @type refType: string
-      @param refType: type of reference taken on the object : Weak (reference counter not incremented), WeakShared (reference counter incrementerd but the object can be deleted even if it remains references) or Strong (reference counter is incremented, the object cannot be deleted since there is references on it). If it is not specified, Anatomist.defaultRefType is used.
-      """
       super(Anatomist.AItem, self).__init__(*args, **kwargs)
       self.anatomistinstance = anatomistinstance
       self.refType=refType
@@ -1021,8 +1202,10 @@ class Anatomist(ObservableSingleton, object):
       """
       Called on comparison operations between self and other.
       Their internalRep is compared.
-      @rtype: int
-      @return: -1 if self < other, 0 if self == other, 1 if self > other
+
+      * returns: int
+
+        -1 if self < other, 0 if self == other, 1 if self > other
       """
       if not isinstance(other, Anatomist.AItem):
         return 1
@@ -1037,8 +1220,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Gets informations about this object.
 
-      @rtype: dictionary
-      @return: informations about the object (property -> value)
+      * returns: dictionary
+
+        information about the object (property -> value)
       """
       pass
 
@@ -1065,9 +1249,11 @@ class Anatomist(ObservableSingleton, object):
 
     def getRef(self, refType):
       """
-      Get a reference of type refType on this object.
-      @rtype: AItem
-      @return: a copy of current object with a reference of type refType on anatomist object.
+      Get a reference of type *refType* on this object.
+
+      * returns: :py:class:`anatomist.base.Anatomist.AItem`
+
+        A copy of current object with a reference of type refType on anatomist object.
       """
       #print "get ref ", self, self.__class__
       return self.__class__(self.anatomistinstance, self.getInternalRep(), refType)
@@ -1097,21 +1283,35 @@ class Anatomist(ObservableSingleton, object):
     """
     Represents an object in Anatomist application.
 
-    Following informations can be obtained using ObjectInfo command :
-    @type objectType: string
-    @ivar objectType: object type. For example : volume, bucket, graph, texture...
-    @type children: list of AObject
-    @ivar children: list of objects which are children of current object (for example: nodes in a graph). Can be empty.
-    @type filename: string
-    @ivar filename: name of the file from which the object has been loaded. May be None.
-    @type name: string
-    @ivar name: name of the object presented in Anatomist window.
-    @type copy: boolean
-    @param copy: True indicates that this object is a copy of another object, else it is the original object.
-    @type material: Material
-    @ivar material: object's material parameters
-    @type referential: Referential
-    @ivar referential: referential assigned to this object.
+    Following information can be obtained using ObjectInfo command :
+
+    * objectType: *string*
+
+      object type. For example : volume, bucket, graph, texture...
+
+    * children: *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+      List of objects which are children of current object (for example: nodes in a graph). Can be empty.
+
+    * filename: *string*
+
+      Name of the file from which the object has been loaded. May be *None*.
+
+    * name: *string*
+
+      Name of the object presented in Anatomist window.
+
+    * copy: *boolean*
+
+      *True* indicates that this object is a copy of another object, otherwise it is the original object.
+
+    * material: :py:class:`anatomist.base.Anatomist.Material`
+
+      Object's material parameters
+
+    * referential: :py:class:`anatomist.base.Anatomist.Referential`
+
+      Referential assigned to this object.
     """
     def __init__(self, anatomistinstance, internalRep=None, *args, **kwargs):
       """
@@ -1125,8 +1325,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Gets windows that contain this object.
 
-      @rtype: list of AWindow
-      @return: opened windows that contain this object.
+      * returns: *list of* :py:class:`anatomist.base.Anatomist.AWindow`
+
+        Opened windows that contain this object.
       """
       allWindows=self.anatomistinstance.importWindows()
       windows=[]
@@ -1142,8 +1343,9 @@ class Anatomist(ObservableSingleton, object):
       Adds the object in windows.
       Windows must already exist.
 
-      @type windows : list of AWindow
-      @param windows : list of windows in which the object must be added
+      * windows : *list of* :py:class:`anatomist.base.Anatomist.AWindow`
+
+        List of windows in which the object must be added
       """
       self.anatomistinstance.addObjects([self], windows)
 
@@ -1151,8 +1353,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Removes object from windows.
 
-      @type windows : list of AWindow
-      @param windows : list of windows from which the object must be removed
+      * windows : *list of* :py:class:`anatomist.base.Anatomist.AWindow`
+
+        List of windows from which the object must be removed
       """
       self.anatomistinstance.removeObjects([self], windows)
 
@@ -1168,8 +1371,9 @@ class Anatomist(ObservableSingleton, object):
       The referential must exist. To create a new Referential, execute createReferential,
       to assign the central referential, first get it with Anatomist.centralRef attribute.
 
-      @type referential: Referential
-      @param referential: The referential to assign to object
+      * referential: :py:class:`anatomist.base.Anatomist.Referential`
+
+      The referential to be assigned to the object
       """
       self.anatomistinstance.assignReferential(referential, [self])
 
@@ -1187,10 +1391,13 @@ class Anatomist(ObservableSingleton, object):
       """
       Changes object material properties.
 
-      @type material: Material
-      @param material: material characteristics, including render properties
-      @type refresh: bool
-      @param refresh: if true, force windows refreshing
+      * material: :py:class:`anatomist.base.Anatomist.Material`
+
+        Material characteristics, including render properties
+
+      * refresh: *bool*
+
+        If *True*, force windows refreshing
       """
       self.anatomistinstance.setMaterial([self], material, refresh,
       ambient, diffuse, emission, specular, shininess, lighting,
@@ -1201,24 +1408,41 @@ class Anatomist(ObservableSingleton, object):
       """
       Assign a palette to object
 
-      @type palette: APalette
-      @param palette: principal palette to apply
-      @type minVal: float
-      @param minVal: palette value to affect to objects texture min value
-      @type maxVal: float
-      @param maxVal: palette value to affect to objects texture max value
-      @type palette2: APalette
-      @param palette2: second palette, for 2D textures
-      @type minVal2: float
-      @param minVal2: second palette value to affect to object texture second component min value
-      @type maxVal2: float
-      @param maxVal2: second palette value to affect to object texture second component max value
-      @type mixMethod: string
-      @param mixMethod: method to mix two palettes in a 2D palette : linear or geometric
-      @type linMixFactor: float
-      @param linMixFactor: mix factor for the linear method
-      @type palette1Dmapping: string
-      @param palette1Dmapping: way of using 2D palette for 1D texture : FirstLine or Diagonal
+      * palette: :py:class:`anatomist.base.Anatomist.APalette`
+
+        Principal palette to apply
+
+      * minVal: *float*
+
+        Palette value to affect to objects texture min value
+
+      * maxVal: *float*
+
+        Palette value to affect to objects texture max value
+
+      * palette2: :py:class:`anatomist.base.Anatomist.APalette`
+
+        Second palette, for 2D textures
+
+      * minVal2: *float*
+
+        Second palette value to affect to object texture second component min value
+
+      * maxVal2: *float*
+
+        Second palette value to affect to object texture second component max value
+
+      * mixMethod: *string*
+
+        Method to mix two palettes in a 2D palette : ``'linear'`` or ``'geometric'``
+
+      * linMixFactor: *float*
+
+        Mix factor for the linear method
+
+      * palette1Dmapping: *string*
+
+        Way of using 2D palette for 1D texture : ``'FirstLine'`` or ``'Diagonal'``
       """
       self.anatomistinstance.setObjectPalette([self], palette, minVal, maxVal, palette2,  minVal2, maxVal2, mixMethod, linMixFactor, palette1Dmapping,
       absoluteMode=absoluteMode)
@@ -1227,13 +1451,15 @@ class Anatomist(ObservableSingleton, object):
       """
       Extract object's texture to create a new texture object.
 
-      @type time: float
-      @param time: for temporal objects, if this parameter is mentionned the texture will be extracted at this time. if not mentionned,
-      all times will be extracted and the texture will be a temporal object.
-      In socket implementation, it is necessary to get a new id for the texture object and to pass it to the command.
+      * time: *float*
 
-      @rtype: AObject
-      @return: the newly created texture object
+        For temporal objects, if this parameter is mentionned the texture will be extracted at this time. if not mentionned,
+        All times will be extracted and the texture will be a temporal object.
+        In socket implementation, it is necessary to get a new id for the texture object and to pass it to the command.
+
+      * returns: :py:class:`anatomist.base.Anatomist.AObject`
+
+        The newly created texture object
       """
       pass
 
@@ -1241,21 +1467,26 @@ class Anatomist(ObservableSingleton, object):
       """
       Generates an empty texture (value 0 everywhere) for a mesh object.
 
-      @type dimension: int
-      @param dimension: texture's dimension (1 or 2)
+      * dimension: *int*
 
-      @rtype: AObject
-      @return: the newly created texture object
+        Texture dimension (1 or 2)
+
+      * returns: :py:class:`anatomist.base.Anatomist.AObject`
+
+        The newly created texture object
       """
       pass
 
     def exportTexture(self, filename, time=None):
       """
-      @type filename: string
-      @param filename: file in which the texture must be written
-      @type time: float
-      @param time: for temporal objects, if this parameter is mentionned the texture will be extracted at this time. if not mentionned,
-      all times will be extracted and the texture will be a temporal object.
+      * filename: *string*
+
+        File in which the texture must be written
+
+      * time: *float*
+
+        For temporal objects, if this parameter is mentionned the texture will be extracted at this time. if not mentionned,
+        all times will be extracted and the texture will be a temporal object.
       """
       self.anatomistinstance.execute("ExportTexture", filename=filename, object=self, time=time)
 
@@ -1263,8 +1494,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Saves object in file.
 
-      @type filename: string
-      @param filename: file in which the object will be written. If not mentionned, the object is saved in the file from which it has been loaded.
+      * filename: *string*
+
+        File in which the object will be written. If not mentionned, the object is saved in the file from which it has been loaded.
       """
       self.anatomistinstance.execute("SaveObject", object=self, filename=filename)
 
@@ -1313,12 +1545,17 @@ class Anatomist(ObservableSingleton, object):
     """
     Represents an anatomist window.
 
-    @type windowType: string
-    @ivar windowType: windows's type (axial, sagittal, ...)
-    @type group: AWindowsGroup
-    @ivar group: the group which this window belongs to.
-    @type objects: list of AObject
-    @ivar objects: the window contains these objects.
+    * windowType: *string*
+
+      Windows type (``'axial'``, ``'sagittal'``, ...)
+
+    * group: :py:class:`anatomist.base.Anatomist.AWindowsGroup`
+
+      The group which this window belongs to.
+
+    * objects: *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+      The window contains these objects.
     """
     def __init__(self, anatomistinstance, internalRep=None, *args, **kwargs):
       """
@@ -1333,8 +1570,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Adds objects in window.
 
-      @type objects : list of AObject
-      @param objects : list of objects to add
+      * objects : *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+        List of objects to add
       """
       self.anatomistinstance.addObjects(objects, [self], add_children,
         add_graph_nodes, add_graph_relations)
@@ -1343,8 +1581,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Removes objects from window.
 
-      @type objects : list of AObject
-      @param objects : list of objects to remove
+      * objects : *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+        List of objects to remove
       """
       self.anatomistinstance.removeObjects(objects, [self])
 
@@ -1352,18 +1591,29 @@ class Anatomist(ObservableSingleton, object):
       """
       Sets the point of view, zoom, cursor position for a 3D window.
 
-      @type zoom: float
-      @param zoom: zoom factor, default is 1
-      @type observer_position: float vector, size 3
-      @param observer_position: camera position
-      @type view_quaternion: float vector, size 4, normed
-      @param view_quaternion: view rotation
-      @type slice_quaternion: float vector, size 4, normed
-      @param slice_quaternion: slice plan rotation
-      @type force_redraw: boolean
-      @param force_redraw: if true refresh printing immediatly, default is 0
-      @type cursor_position: float vector
-      @param cursor_position: linked cursor position
+      * zoom: *float*
+
+        Zoom factor,
+
+      * observer_position: *float vector*, size 3
+
+        Camera position
+
+      * view_quaternion: *float vector*, size 4, normed
+
+        View rotation
+
+      * slice_quaternion: *float vector*, size 4, normed
+
+        Slice plan rotation
+
+      * force_redraw: *boolean*
+
+        If *True* refresh printing immediatly, default is *False*
+
+      * cursor_position: *float vector*
+
+        Linked cursor position
       """
       self.anatomistinstance.camera([self], zoom, observer_position, view_quaternion, slice_quaternion, force_redraw, cursor_position)
 
@@ -1373,8 +1623,9 @@ class Anatomist(ObservableSingleton, object):
       The referential must exist. To create a new Referential, execute createReferential,
       to assign the central referential, first get it with Anatomist.centralRef attribute.
 
-      @type referential: Referential
-      @param referential: The referential to assign to objects and/or windows
+      * referential: :py:class:`anatomist.base.Anatomist.Referential`
+
+        The referential to assign to objects and/or windows
       """
       self.anatomistinstance.assignReferential(referential, [self])
 
@@ -1390,8 +1641,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Changes cursor position in this window and all linked windows (same group).
 
-      @type position: float vector, size 3
-      @param position: cursor's new position
+      * position: *float vector*, size 3
+
+        Cursor new position
       """
       self.anatomistinstance.execute("LinkedCursor", window=self, position=position)
 
@@ -1399,8 +1651,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Shows or hides the toolbox frame of a window.
 
-      @type show: boolean
-      @param show: if true, the window's toolbox frame is shown, else it is hidden.
+      * show: *boolean*
+
+        If *True*, the window's toolbox frame is shown, else it is hidden.
       """
       if show:
         show=1
@@ -1410,7 +1663,7 @@ class Anatomist(ObservableSingleton, object):
     def setControl(self, control):
       """
       Changes the selected button in windows menu.
-      Examples of controls : 'PaintControl', 'NodeSelectionControl', 'Default 3D Control', 'Selection 3D', 'Flight Control', 'ObliqueControl', 'TransformationControl', 'CutControl', 'Browser Selection', 'RoiControl'...
+      Examples of controls : ``'PaintControl'``, ``'NodeSelectionControl'``, ``'Default 3D Control'``, ``'Selection 3D'``, ``'Flight Control'``, ``'ObliqueControl'``, ``'TransformationControl'``, ``'CutControl'``, ``'Browser Selection'``, ``'RoiControl'``...
       """
       self.anatomistinstance.setWindowsControl(windows=[self], control=control)
 
@@ -1425,8 +1678,9 @@ class Anatomist(ObservableSingleton, object):
     """
     A window containing other windows.
 
-    @type nbCols: int
-    @ivar nbCols: number of columns of the windows block
+    * nbCols: *int*
+
+      Number of columns of the windows block
     """
     def __init__(self, anatomistinstance=None, internalRep=None, nbCols=2, *args, **kwargs):
       super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance, internalRep, *args, **kwargs)
@@ -1443,18 +1697,21 @@ class Anatomist(ObservableSingleton, object):
 
     def getSelection(self):
       """
-      @rtype: list of AObject
-      @return: objects that are selected in this windows group
+      * retutns: *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+        Objects that are selected in this windows group
       """
       return self.anatomistinstance.getSelection(self)
 
     def isSelected(self, object):
       """
-      @type object: AObject
-      @param object: an object in this windows group
+      * object: :py:class:`anatomist.base.Anatomist.AObject`
 
-      @rtype: bool
-      @return: True if the object is selected in this windows group
+        An object in this windows group
+
+      * returns: *bool*
+
+        *True* if the object is selected in this windows group
       """
       selectedObjects=self.getSelection()
       return (selectedObjects is not None) and (object in selectedObjects)
@@ -1463,8 +1720,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Initializes selection with given objects for this windows group.
 
-      @type objects: list of AObject
-      @param objects: objects to select
+      * objects: *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+        Objects to select
       """
       self.anatomistinstance.execute("Select", objects=self.makeList(objects), group=self, modifiers="set")
 
@@ -1472,8 +1730,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Adds objects to this windows group's current selection.
 
-      @type objects: list of AObject
-      @param objects: objects to add to selection
+      * objects: *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+        Objects to add to selection
       """
       self.anatomistinstance.execute("Select", objects=self.makeList(objects), group=self, modifiers="add")
 
@@ -1481,8 +1740,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Removes objects from this windows group's selection.
 
-      @type objects: list of AObject
-      @param objects: objects to unselect
+      * objects: *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+        Objects to unselect
       """
       self.anatomistinstance.execute("Select", unselect_objects=self.makeList(objects), group=self, modifiers="add")
 
@@ -1496,10 +1756,13 @@ class Anatomist(ObservableSingleton, object):
       """
       Selects objects giving their name in a nomenclature. In anatomist graphical interface, it is done by clicking on items of a nomenclature opened in a browser.
 
-      @type nomenclature: AObject
-      @param nomenclature: tree with names and labels associated to nodes.
-      @type names: list of string
-      @param names: names of elements to select.
+      * nomenclature: :py:class:`anatomist.base.Anatomist.AObject`
+
+        tree with names and labels associated to nodes.
+
+      * names: *list of string*
+
+        Names of elements to select.
       """
       if names is not None and names != []: # executing the command with names = [] make errors
         snames=string.join(names)
@@ -1509,10 +1772,13 @@ class Anatomist(ObservableSingleton, object):
       """
       Adds objects to this windows group's current selection, given their name in a nomenclature.
 
-      @type nomenclature: AObject
-      @param nomenclature: tree with names and labels associated to nodes.
-      @type names: list of string
-      @param names: names of elements to add to selection.
+      * nomenclature: :py:class:`anatomist.base.Anatomist.AObject`
+
+        Tree with names and labels associated to nodes.
+
+      * names: *list of string*
+
+        Names of elements to add to selection.
       """
       if names is not None and names != []:
         snames=string.join(names)
@@ -1523,10 +1789,13 @@ class Anatomist(ObservableSingleton, object):
       """
       Removes objects from this windows group's selection, given their name in a nomenclature.
 
-      @type nomenclature: AObject
-      @param nomenclature: tree with names and labels associated to nodes.
-      @type names: list of string
-      @param names: names of elements to unselect.
+      * nomenclature: :py:class:`anatomist.base.Anatomist.AObject`
+
+        Tree with names and labels associated to nodes.
+
+      * names: *list of string*
+
+        Names of elements to unselect.
       """
       if names is not None and names != []:
         snames=string.join(names)
@@ -1535,8 +1804,9 @@ class Anatomist(ObservableSingleton, object):
   ###############################################################################
   class Referential(AItem):
     """
-    @type refUuid: string
-    @ivar refUuid: a unique id representing this referential
+    * refUuid: *string*
+
+    A unique id representing this referential
     Two referential are equal if they have the same uuid.
     """
 
@@ -1549,8 +1819,10 @@ class Anatomist(ObservableSingleton, object):
       """
       Called on comparison operations between self and other.
       Their uuid is compared.
-      @rtype: int
-      @return: -1 if self < other, 0 if self == other, 1 if self > other
+
+      * returns: *int*
+
+        -1 if self < other, 0 if self == other, 1 if self > other
       """
       if self.refUuid == other.refUuid:
         return 0
@@ -1562,8 +1834,9 @@ class Anatomist(ObservableSingleton, object):
   ###############################################################################
   class APalette(AItem):
     """
-    @type name: string
-    @ivar name: palette's name. Must be unique, it is the palette identifier.
+    * name: *string*
+
+      Palette name. Must be unique, it is the palette identifier.
     """
     def __init__(self, name, anatomistinstance, internalRep=None, *args, **kwargs):
       super(Anatomist.APalette, self).__init__(anatomistinstance, internalRep, *args, **kwargs)
@@ -1573,12 +1846,17 @@ class Anatomist(ObservableSingleton, object):
       """
       Modifies a palette (colors).
 
-      @type palette: APalette
-      @param palette: the palette which colors must be changed
-      @type colors: int vector
-      @param colors: color vectors
-      @type colors_mode: string
-      @param colors_mode: RGB or RGBA
+      * palette: :py:class:`anatomist.base.Anatomist.APalette`
+
+        The palette which colors must be changed
+
+      * colors: *int vector*
+
+        Color vectors
+
+      * colors_mode: *string*
+
+        ``'RGB'`` or ``'RGBA'``
       """
       self.anatomistinstance.execute("ChangePalette", name=self.name, colors=colors, color_mode=color_mode)
 
@@ -1596,52 +1874,83 @@ class Anatomist(ObservableSingleton, object):
       """
       Saves transformation in file.
 
-      @type filename: string
-      @param filename: file in which the transformation will be written.
+      * filename: *string*
+
+        File in which the transformation will be written.
       """
       self.anatomistinstance.execute("SaveTransformation", filename=filename, transformation=self)
 
   ###############################################################################
   class Material(object):
     """
-    @type ambient: float vector (0-1), size 4
-    @ivar ambient: ambient light rgba color
-    @type diffuse: float vector (0-1), size 4
-    @ivar diffuse: diffuse light rgba color (object color)
-    @type emission: float vector (0-1), size 4
-    @ivar emission: rgba color of light issued from object
-    @type specular: float vector (0-1), size 4
-    @ivar specular: reflect light rgba color in front of the object
-    @type shininess: float (0-124)
-    @ivar shininess: reflect spreading value
+    * ambient: *float vector* (0-1), size 4
+
+      Qmbient light rgba color
+
+    * diffuse: *float vector* (0-1), size 4
+
+      Diffuse light rgba color (object color)
+
+    * emission: *float vector* (0-1), size 4
+
+      Rgba color of light issued from object
+
+    * specular: *float vector* (0-1), size 4
+
+      Reflect light rgba color in front of the object
+
+    * shininess: *float* (0-124)
+
+      Reflect spreading value
+
     Render properties :
-    @type lighting: int
-    @ivar lighting: activates or deactivates object lighting.
+
+    * lighting: *int*
+
+      activates or deactivates object lighting.
+
       - 0 : deactivates lighting
       - 1 : activate lighting
       - -1 : keep default parameter of the view
-    @type smooth_shading: int
-    @ivar smooth_shading: (0/1/-1) activates or not facets smoothing. if true polygons are not visibles on the surface, it seems to be smooth.
-    @type polygon_filtering: int
-    @ivar polygon_filtering: (0/1/-1) antialiasing
-    @type depth_buffer: int
-    @ivar depth_buffer: (0/1/-1) put or not object in z-buffer. if not, it is possible to click through the object.
-    @type face_culling: int
-    @ivar face_culling: (0/1/-1) do not show facets oriented at the opposite of the camera
-    @type polygon_mode: string
-    @ivar polygon_mode: polygon view mode
+
+    * smooth_shading: *int*
+
+      (0/1/-1) activates or not facets smoothing. if true polygons are not visibles on the surface, it seems to be smooth.
+
+    * polygon_filtering: *int*
+
+      (0/1/-1) antialiasing
+
+    * depth_buffer: *int*
+
+      (0/1/-1) put or not object in z-buffer. if not, it is possible to click through the object.
+
+    * face_culling: *int*
+
+      (0/1/-1) do not show facets oriented at the opposite of the camera
+
+    * polygon_mode: *string*
+
+      Polygon view mode
+
       - normal
       - wireframe
       - outline (normal + wireframe)
       - hiddenface_wireframe (wireframe only for hidden faces)
       - ext_outlined (normal + extenal outline)
       - default (default view parameter)
-    @type unlit_color: float vector (0-1), size 4
-    @ivar unlit_color: color of mesh when lighting is disabled
-    @type line_width: float
-    @ivar line_width: line width for segments mesh
-    @type ghost: int
-    @ivar ghost: in ghost mode, objects are not drawn in the depth buffer
+
+    * unlit_color: *float vector* (0-1), size 4
+
+      Color of mesh when lighting is disabled
+
+    * line_width: *float*
+
+      Line width for segments mesh
+
+    * ghost: *int*
+
+      In ghost mode, objects are not drawn in the depth buffer
     """
 
     def __init__(self, ambient=None, diffuse=None, emission=None, shininess=None, specular=None, lighting=None, smooth_shading=None, polygon_filtering=None, depth_buffer=None, face_culling=None, polygon_mode=None, unlit_color=None, line_width=None, ghost=None):
