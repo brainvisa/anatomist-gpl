@@ -32,7 +32,7 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
 """
-This module is an implementation of general interface L{anatomist.base}.
+This module is an implementation of the general interface :py:mod:`anatomist.base`.
 It uses Sip bindings of C++ Anatomist api to execute and drive Anatomist application.
 
 This is the default implementation. So, to use it you just have to import anatomist.api, it is automatically linked to this module.
@@ -46,8 +46,8 @@ This implementation provides additional features  to those in the general interf
 But Anatomist program is loaded in current process so if it fails, the current process also fails and possibly crashes, so it is more dangerous.
 
 This implementation needs to run qt application. 
-In an interactive python shell, this can be done using ipython -qthread for example.
-If the Anatomist object is created outside the main thread, you must get a thread safe version (See L{anatomist.threaded.api}). So you have to change the default implementation before importing anatomist api :
+In an interactive python shell, this can be done using ``ipython -q4thread`` for example.
+If the Anatomist object is created outside the main thread, you must get a thread safe version (See :py:mod:`anatomist.threaded.api`). So you have to change the default implementation before importing anatomist api :
 
   >>> import anatomist
   >>> anatomist.setDefaultImplementation(anatomist.THREADED)
@@ -73,15 +73,27 @@ else:
 class Anatomist(base.Anatomist, cpp.Anatomist):
   """
   Interface to communicate with an Anatomist Application using direct bindings to the C++ api.
-  It inherits from Anatomist class of L{anatomist.cpp} module (Sip bindings module).
+  It inherits from Anatomist class of :py:mod:`anatomist.cpp` module (Sip bindings module).
   
-  @type centralRef: Referential
-  @ivar centralRef: anatomist's central referential (talairach acpc ref)
-  @type mniTemplateRef : Referential
-  @ivar mniTempateRef: template mni referential (used by spm)
+  .. py:data:: centralRef
+    
+    type: :py:class:`Referential`
+  
+    Anatomist central referential (talairach acpc ref)
+  
+  .. py:data:: mniTemplateRef 
+    
+    type: :py:class:`Referential`
+  
+    Referential of the MNI template (used by spm and other software)
+  
   These two referentials and transformation between them are always loaded in anatomist.
-  @type handlers: dictionary
-  @ivar handlers: registered handlers for events. name of the event (string) -> event handler (rc_ptr_EventHandler). Handlers must be stored to enable unregistration.
+  
+  .. :py:data:: handlers:
+  
+    type: *dictionary*
+  
+    Registered handlers for events. name of the event (string) -> event handler (rc_ptr_EventHandler). Handlers must be stored to enable unregistration.
   """
   
   def __singleton_init__(self, *args, **kwargs):
@@ -99,14 +111,17 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
   class AEventHandler(cpp.EventHandler):
     """
-    Anatomist event handler class. When an event is received, corresponding notifier is notified and a message is logged.
-    
-    @type notifier: soma.notification.Notifier
-    @ivar notifier: the notifier to activate when the event occurs.
-    @type log: function
-    @ivar log: log function to print messages.
+    Anatomist event handler class. When an event is received, the corresponding notifier triggered and a message is logged.
     """
     def __init__(self, notifier, anatomistinstance):
+      """
+      * notifier: :py:class:`soma.notification.Notifier`
+      
+        The notifier to activate when the event occurs.
+        
+      * anatomistinstance: :py:class:`anatomist.direct.api.Anatomist`
+      """
+
       cpp.EventHandler.__init__(self)
       self.notifier=notifier
       self.anatomistinstance=anatomistinstance
@@ -141,11 +156,15 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   def enableListening(self, event, notifier):
     """
     Set listening of this event on. So when the event occurs, the notifier's notify method is called.
-    
-    @type event: string
-    @param event: name of the event to listen
-    @type notifier: Notifier
-    @param notifier: the notifier whose notify method must be called when this event occurs
+    This method is automatically called when the first listener is added to a notifier. That is to say that notifiers are activated only if they have registered listeners.
+
+    * event: *string*
+
+      Name of the event to listen
+
+    * notifier: :py:class:`soma.notification.Notifier`
+
+      The notifier whose notify method must be called when this event occurs
     """
     self.context.evfilter.filter(event)
     handler=self.AEventHandler(notifier, self)
@@ -156,8 +175,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     Set listening of this event off.
 
-    @type event: string
-    @param event: name of the event to disable.
+    * event: *string*
+    
+      Name of the event to disable.
     """
     self.context.evfilter.unfilter(event)
     cpp.EventHandler.unregisterHandler(event, self.handlers[event])
@@ -173,32 +193,48 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   # objects creation
   def createWindowsBlock(self, nbCols=2):
     """
+    Creates a window containing other windows.
+
     An id is reserved for that block but the bound object isn't created. It will be created first time a window is added to the block with createWindow method.
 
-    @type nbCols: int
-    @param nbCols: number of columns of the windows block
+    * nbCols: *int*
+    
+      Number of columns of the windows block
 
-    @rtype: AWindowBlock
-    @return: a window which can contain several AWindow
+    * returns: :py:class:`AWindowsBlock`
+    
+      A window which can contain several :py:class:`AWindow`
     """
     return self.AWindowsBlock(self, nbCols)
 
-  def createWindow(self, wintype, geometry=[], block=None, no_decoration=None, options=None):
+  def createWindow(self, wintype, geometry=[], block=None, 
+    no_decoration=None, options=None):
     """
     Creates a new window and opens it.
-    @type wintype: string
-    @param wintype: type of window to open ("Axial", "Sagittal", "Coronal", "3D", "Browser", "Profile")
-    @type geometry: int vector
-    @param geometry: position on screen and size of the new window (x, y, w, h)
-    @type block: AWindowBlock
-    @param block: a block in which the new window must be added
-    @type no_decoration: bool
-    @param no_decoration: indicates if decorations (menus, buttons) can be painted around the view.
-    @type options: dictionary
-    @param options: internal advanced options.
     
-    @rtype: AWindow
-    @return: the newly created window
+    * wintype: *string*
+    
+    Type of window to open (``"Axial"``, ``"Sagittal"``, ``"Coronal"``, ``"3D"``, ``"Browser"``, ``"Profile"``, ...)
+    
+    * geometry: *int vector*
+    
+      Position on screen and size of the new window (x, y, w, h)
+    
+    * block: :py:class:`AWindowsBlock`
+    
+      A block in which the new window must be added
+    
+    * no_decoration: *bool*
+    
+      Indicates if decorations (menus, buttons) can be painted around the view.
+    
+    * options: *dictionary*
+    
+      Internal advanced options.
+    
+    * returns: :py:class:`AWindow`
+    
+      The newly created window
     """
     if geometry is None:
       geometry=[]
@@ -227,17 +263,33 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     Loads an object from a file (volume, mesh, graph, texture...)
     
-    @type filename: string
-    @param filename: the file containing object data
-    @type objectName: string
-    @param objectName: object's name
-    @type restrict_object_types: dictionary
-    @param restrict_object_types: object -> accpepted types list. Ex: {'Volume' : ['S16', 'FLOAT']}
-    @type forceReload: boolean
-    @param forceReload: if True the object will be loaded even if it is already loaded in Anatomist. Otherwise, the already loaded one is returned.
+    * filename: *string*
     
-    @rtype: AObject
-    @return: the loaded object
+      The file containing object data
+    
+    * objectName: *string*
+    
+      Object name
+    
+    * restrict_object_types: *dictionary*
+    
+      object -> accpepted types list. Ex: ``{'Volume' : ['S16', 'FLOAT']}``
+    
+    * forceReload: *boolean*
+    
+      If *True*, the object will be loaded even if it is already loaded in Anatomist. Otherwise, the already loaded one is returned.
+    
+    * duplicate: *boolean*
+    
+      If the object already exists, duplicate it. The original and the copy will share the same data but not display parameters as palette. If the object is not loaded yet, load it hidden and duplicate it (unable to keep the original object with default display parameters).
+    
+    * hidden: *boolean*
+    
+      A hidden object does not appear in Anatomist main control window.
+
+    * returns: :py:class:`AObject`
+    
+      The loaded object
     """
     # LoadObjectCommand(filename, id, objname, ascursor, options, context)
     if not forceReload: # do not load the object if it is already loaded
@@ -282,11 +334,13 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     Creates a copy of source object.
     
-    @type source: AObject
-    @param source: the object to copy.
+    * source: :py:class:`AObject`
     
-    @rtype: AObject
-    @return: the copy. it has a reference to its source object, so original object will not be deleted since the copy exists.
+      The object to copy.
+    
+    * returns: :py:class:`AObject`
+    
+      The copy. it has a reference to its source object, so original object will not be deleted as long as the copy exists.
     """
     newObjectId=self.newId()
     if shallowCopy:
@@ -304,19 +358,27 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
   def createGraph(self, object, name=None, syntax=None, filename=None):
     """
-    Creates a graph associated to a object (volume for example). This object initializes graph's dimensions (voxel size, extrema).
+    Creates a graph associated to an object (volume for example). This object initializes the graph dimensions (voxel size, extrema).
     
-    @type object: AObject
-    @param object: the new graph is based on this object
-    @type name: string
-    @param name: graph name. default is RoiArg.
-    @type syntax: string
-    @param syntax: graph syntax attribute. default is RoiArg.
-    @type filename: string
-    @param filename: filename used for saving. Default is None.
+    * object: :py:class:`AObject`
+    
+      The new graph is based on this object
+    
+    * name: *string*
+    
+      Graph name. default is ``'RoiArg'``.
+    
+    * syntax: *string*
+    
+      Graph syntactic attribute. default is ``'RoiArg'``.
+    
+    * filename: *string*
+    
+      Filename used for saving. Default is *None*.
 
-    @rtype: AGraph
-    @return: the new graph object
+    * returns: :py:class:`AGraph`
+    
+      The new graph object
     """
     newGraphId=self.newId()
     self.execute("CreateGraph", object=object, res_pointer=newGraphId,
@@ -327,17 +389,20 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   
   def toAObject(self, object):
     """
-    Converts aims objects and numpy arrays to AObject.
-    @rtype: AObject
+    Converts an AIMS object or numpy array to AObject.
+    
+    * returns: :py:class:`AObject`
     """
     bobject=cpp.AObjectConverter.anatomist( object )
     return self.AObject(self, bobject)
     
   def toAimsObject(self, object):
     """
-    Converts AObject to aims object.
-    @type object: AObject
-    @param object: the object to convert
+    Converts an :py:class:`AObject` to an AIMS object.
+    
+    * object: :py:class:`AObject`
+    
+      The object to convert
     """
     return cpp.AObjectConverter.aims(object.getInternalRep())
     
@@ -345,11 +410,13 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     Loads a cursor for 3D windows from a file.
     
-    @type filename: string
-    @param filename: the file containing object data
+    * filename: *string*
     
-    @rtype: AObject
-    @return: the loaded object
+      The file containing object data
+    
+    * returns: :py:class:`AObject`
+    
+      The loaded object
     """
     c=cpp.LoadObjectCommand(filename, -1, "", True)
     self.execute(c)
@@ -359,17 +426,23 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     
   def fusionObjects(self, objects, method="", ask_order=False):
     """
-    Creates a multi object that contains all given objects.
+    Creates a fusionned multi object that contains all given objects.
     
-    @type objects: list of AObject
-    @param objects: list of objects that must be fusionned
-    @type method: string
-    @param method: method to apply for the fusion (Fusion2DMethod...)
-    @type ask_order: boolean
-    @param ask_order: if True, asks user in what order the fusion must be processed.
+    * objects: *list of* :py:class:`AObject`
     
-    @rtype: AObject
-    @return: the newly created fusion object.
+      List of objects that must be fusionned
+    
+    * method: *string*
+    
+      Method to apply for the fusion (``'Fusion2DMethod'``...)
+    
+    * ask_order: *boolean*
+    
+      If *True*, asks user in which order the fusion must be processed.
+    
+    * returns: :py:class:`AObject`
+    
+      The newly created fusion object.
     """
     if method is None:
       method=""
@@ -385,6 +458,13 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     return o
 
   def getFusionInfo( self, objects=None ):
+    """
+    Gets information about fusion methods. If objects is not specified, the global list of all fusion methods is returned. Otherwise the allowed fusions for those specific objects is returned.
+
+    * returns: *dictionary*
+
+      Fusion methods
+    """
     if objects is None:
       return { 'all_methods' : list( cpp.FusionFactory.methods() ) }
     else:
@@ -395,16 +475,18 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
   def createReferential(self, filename=""):
     """
-    This command does not exist in Anatomist because the command AssignReferential can create a new referential if needed. 
-    But the way of creating a new referential depends on the connection with Anatomist, 
+    This command does not exist in Anatomist because the command AssignReferential can create a new referential if needed.
+    But the way of creating a new referential depends on the connection with Anatomist,
     so it seems to be better to encapsulate this step on another command. So referentials are treated the same as other objects.
     (LoadObject -> addAobject | createReferential -> assignReferential)
-    
-    @type filename: string
-    @param filename: name of a file (minf file, extension .referential) containing  informations about the referential : its name and uuid
-    
-    @rtype: Referential
-    @return: the newly created referential
+
+    * filename: *string*
+
+      Name of a file (minf file, extension .referential) containing  informations about the referential : its name and uuid
+
+    * returns: :py:class:`Referential`
+
+      The newly created referential
     """
     if filename is None:
       filename=""
@@ -415,15 +497,22 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   def loadTransformation(self, filename, origin, destination):
     """
     Loads a transformation from a referential to another. The transformation informations are given in a file.
-    
-    @type filename: string
-    @param filename: file containing transformation informations 
-    @type origin: Referential
-    @param origin: origin of the transformation
-    @type destination: Referential
-    @param destination: coordinates' referential after applying transformation
-    @rtype: Transformation
-    @return: transformation to apply to convert coordinates from one referent
+
+    * filename: *string*
+
+      File containing transformation information
+
+    * origin: :py:class:`Referential`
+
+      Origin of the transformation
+
+    * destination: :py:class:`Referential`
+
+      Referential after applying transformation
+
+    * returns: :py:class:`Transformation`
+
+      Transformation to apply to convert coordinates from one referent
     """
     c=cpp.LoadTransformationCommand(filename, origin.getInternalRep() , destination.getInternalRep())
     self.execute(c)
@@ -431,16 +520,23 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   
   def createTransformation(self, matrix, origin, destination):
     """
-    Creates a transformation from a referential to another. The transformation informations are given in a matrix. 
-    
-    @type matrix: float vector, size 12
-    @param matrix: transformation matrix (4 lines, 3 colons ; 1st line: translation, others: rotation)
-    @type origin: Referential
-    @param origin: origin of the transformation
-    @type destination: Referential
-    @param destination: coordinates' referential after applying transformation
-    @rtype: Transformation
-    @return: transformation to apply to convert coordinates from one referent
+    Creates a transformation from a referential to another. The transformation informations are given in a matrix.
+
+    * matrix: *float vector*, size 12
+
+      Transformation matrix (4 lines, 3 colons ; 1st line: translation, others: rotation)
+
+    * origin: :py:class:`Referential`
+
+      Origin of the transformation
+
+    * destination: :py:class:`Referential`
+
+      Referential after applying transformation
+
+    * returns: :py:class:`Transformation`
+
+      New transformation
     """
     c=cpp.LoadTransformationCommand(matrix, origin.getInternalRep(), destination.getInternalRep())
     self.execute(c)
@@ -448,13 +544,15 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
   def createPalette(self, name):
     """
-    Creates an empty palette and adds it in the palettes list. 
-    
-    @type name: string
-    @param name: name of the new palette
-    
-    @rtype: APalette
-    @return: the newly created palette
+    Creates an empty palette and adds it in the palettes list.
+
+    * name: *string*
+
+      Name of the new palette
+
+    * returns: :py:class:`APalette`
+
+      The newly created palette
     """
     c=cpp.NewPaletteCommand(name)
     self.execute(c)
@@ -464,11 +562,13 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     Creates a multi object containing objects in parameters.
 
-    @type objects: list of AObject
-    @param objects: object to put in a group
+    * objects: *list of* :py:class:`AObject`
 
-    @rtype: AObject
-    @return: the newly created multi object
+      Objects to put in a group
+
+    * returns: :py:class:`AObject`
+
+      The newly created multi object
     """
     bObjects=self.convertParamsToObjects(objects)
     c=cpp.GroupObjectsCommand(self.makeList(bObjects))
@@ -531,8 +631,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
   def getPalette(self, name):
     """
-    @rtype: APalette
-    @return: the named palette
+    * returns: :py:class:`APalette`
+
+      The named palette
     """
     pal=self.palettes().find(name)
     if pal.isNull():
@@ -541,13 +642,14 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       pal = self.APalette(name, self, pal)
     return pal
   
-  # informations that can be obtained with GetInfo command
+  # information that can be obtained with GetInfo command
   def getObjects(self):
     """
     Gets all objects referenced in current context.
-    
-    @rtype:  list of AObject
-    @return: list of existing objects
+
+    * returns:  *list of* :py:class:`AObject`
+
+      List of existing objects
     """
     boundObjects=cpp.Anatomist.getObjects(self)
     objects=[]
@@ -557,23 +659,25 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
  
   def importObjects(self, top_level_only=False):
     """
-    Gets objects importing those that are not referenced in current context. 
-    In this implementation, it is equivalent to getObject because all objects are referenced.
-    
-    @type top_level_only: bool
-    @param top_level_only: if True imports only top-level objects (that have no parents), else all objects are imported. 
-    
-    @rtype:  list of AObject
-    @return: list of existing objects
+    Gets objects importing those that are not referenced in current context.
+
+    * top_level_only: *bool*
+
+      If *True*, imports only top-level objects (that have no parents), else all objects are imported.
+
+    * returns:  *list of* :py:class:`AObject`
+
+      List of existing objects
     """
     return self.getObjects()
 
   def getWindows(self):
     """
     Gets all windows referenced in current context.
-    
-    @rtype: list of AWindow
-    @return: list of opened windows
+
+    * returns: *list of* :py:class:`AWindow`
+
+      List of opened windows
     """
     boundWindows=cpp.Anatomist.getWindows(self)
     windows=[]
@@ -584,18 +688,20 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   def importWindows(self):
     """
     Gets all windows importing those that are not referenced in current context.
-    
-    @rtype: list of AWindow
-    @return: list of opened windows
+
+    * returns: *list of* :py:class:`AWindow`
+
+      List of opened windows
     """
     return self.getWindows()
 
   def getReferentials(self):
     """
     Gets all referentials in current context.
-    
-    @rtype: list of Referential
-    @return: list of referentials
+
+    * returns: *list of* :py:class:`Referential`
+
+      List of referentials
     """
     boundRefs=cpp.Anatomist.getReferentials(self)
     refs=[]
@@ -606,18 +712,20 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   def importReferentials(self):
     """
     Gets all referentials importing those that are not referenced in current context.
-    
-    @rtype: list of Referential
-    @return: list of referentials
+
+    * returns: *list of* :py:class:`Referential`
+
+      List of referentials
     """
     return self.getReferentials()
 
   def getTransformations(self):
     """
     Gets all transformations.
-    
-    @rtype: list of Transformation
-    @return: list of transformations
+
+    * returns: *list of* :py:class:`Transformation`
+
+      List of transformations
     """
     boundTrans=cpp.Anatomist.getTransformations(self)
     trans=[]
@@ -628,16 +736,18 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   def importTransformations(self):
     """
     Gets all transformations importing those that are not referenced in current context.
-    
-    @rtype: list of Transformation
-    @return: list of transformations
+
+    * returns: *list of* :py:class:`Transformation`
+
+      List of transformations
     """
     return self.getTransformations()
 
   def getPalettes(self):
     """
-    @rtype: list of APalette
-    @return: list of palettes. 
+    * returns: *list of* :py:class:`APalette`
+
+      List of palettes.
     """
     paletteList = self.palettes().palettes()
     palettes=[]
@@ -647,11 +757,13 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   
   def getSelection(self, group=None):
     """
-    @type group: AWindowsGroup
-    @param group: get the selection in this group. If None, returns the selection in default group.
-    
-    @rtype:  list of AObject
-    @return: the list of selected objects in the group of windows
+    * group: :py:class:`AWindowsGroup`
+
+      Get the selection in this group. If *None*, returns the selection in the default group.
+
+    * returns:  *list of* :py:class:`AObject`
+
+      The list of selected objects in the group of windows
     """
     selections=cpp.SelectFactory.factory().selected()
     if group is None:
@@ -669,13 +781,15 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   
   def linkCursorLastClickedPosition(self, ref=None):
     """
-    Gives the last clicked position of the cursor. 
-    
-    @type ref: Referential
-    @param ref: if given, cursor position value will be in this referential. Else, anatomist central referential is used.
+    Gives the last clicked position of the cursor.
 
-    @rtype: float vector, size 3
-    @return: last position of the cursor
+    * ref: :py:class:`Referential`
+
+      If given, cursor position value will be in this referential. Else, anatomist central referential is used.
+
+    * returns: *float vector*, size 3
+
+      Last position of the cursor
     """
     if ref is not None:
       return self.lastPosition(ref.internalRep)
@@ -683,8 +797,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   
   def getAimsInfo(self):
     """
-    @rtype: string
-    @return: information about AIMS library.
+    * returns: *string*
+
+      Information about AIMS library.
     """
     command=self.execute("GetInfo", aims_info = 1)
     result=command.result()
@@ -692,9 +807,10 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   
   def getCommandsList(self):
     """
-    @rtype: dict
-    @return: list of commands available in Anatomist with their parameters. 
-    dict command name -> dict parameter name -> dict attribute -> value (needed, type)
+    * returns: *dict*
+
+      List of commands available in Anatomist with their parameters.
+      dict command name -> dict parameter name -> dict attribute -> value (needed, type)
     """
     command=self.execute("GetInfo", list_commands = 1)
     result=command.result()
@@ -703,8 +819,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   
   def getModulesInfo(self):
     """
-    @rtype: dict
-    @return: list of modules and their description. dict module name -> dict attribute -> value (description)
+    * returns: *dict*
+
+      List of modules and their description. dict module name -> dict attribute -> value (description)
     """
     command=self.execute("GetInfo", modules_info = 1)
     result=command.result()
@@ -712,8 +829,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   
   def getVersion(self):
     """
-    @rtype: string
-    @return: Anatomist version
+    * returns: *string*
+
+      Anatomist version
     """
     command=self.execute("GetInfo", version = 1)
     result=command.result()
@@ -726,11 +844,14 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     Adds objects in windows.
     The objects and windows must already exist.
-    
-    @type objects : list of AObject
-    @param objects : list of objects to add
-    @type windows : list of AWindow
-    @param windows : list of windows in which the objects must be added
+
+    * objects : *list of* :py:class:`AObject`
+
+      List of objects to add
+
+    * windows : *list of* :py:class:`AWindow`
+
+      List of windows in which the objects must be added
     """
     bObjects=self.convertParamsToObjects(objects)
     bWindows=self.convertParamsToObjects(windows)
@@ -740,12 +861,15 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
   def removeObjects(self, objects, windows, remove_children=False):
     """
-    Removes objects from windows. 
-    
-    @type objects : list of AObject
-    @param objects : list of objects to remove
-    @type windows : list of AWindow
-    @param windows : list of windows from which the objects must be removed
+    Removes objects from windows.
+
+    * objects : *list of* :py:class:`AObject`
+
+      List of objects to remove
+
+    * windows : *list of* :py:class:`AWindow`
+
+      List of windows from which the objects must be removed
     """
     bObjects=self.convertParamsToObjects(objects)
     bWindows=self.convertParamsToObjects(windows)
@@ -756,13 +880,19 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   def assignReferential(self, referential, elements):
     """
     Assign a referential to objects and/or windows.
-    The referential must exist. To create a new Referential, execute createReferential, 
+    The referential must exist. To create a new Referential, execute createReferential,
     to assign the central referential, first get it with Anatomist.centralRef attribute.
-   
-    @type referential: Referential
-    @param referential: The referential to assign to objects and/or windows
-    @type elements: list of AObject / AWindow
-    @param elements: objects or windows which referential must be changed
+
+    * referential: :py:class:`Referential`
+
+      The referential to assign to objects and/or windows
+
+    * elements: *list of* :py:class:`AObject` / :py:class:`AWindow`
+
+      Objects or windows which referential must be changed.
+      The corresponding command tree contains an attribute central_ref to indicate if the referential to assign is anatomist central ref,
+      because this referential isn't referenced by an id. In the socket implementation, Referential object must have an attribute central_ref,
+      in order to create the command message. In direct impl, it is possible to access directly to the central ref object.
     """
     objects=[]
     windows=[]
@@ -778,14 +908,17 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   ###############################################################################
   def execute( self, command, **kwargs ):
     """
-    Executes a command in anatomist application. It should be a command that can be processed by Anatomist command processor. 
-    The list of available commands is in U{http://brainvisa.info/doc/anatomist/html/fr/programmation/commands.html}.
+    Executes a command in anatomist application. It should be a command that can be processed by Anatomist command processor.
+    The list of available commands is in http://brainvisa.info/doc/anatomist/html/fr/programmation/commands.html.
     Parameters are converted before sending the request to anatomist application.
-    
-    @type command: string 
-    @param command: name of the command to execute. 
-    @type kwargs: dictionary
-    @param kwargs: parameters for the command
+
+    * command: *string*
+
+      Name of the command to execute.
+
+    * kwargs: *dictionary*
+
+      Parameters for the command
     """
 
     def ununderscore(k):
@@ -804,11 +937,13 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     Converts current api object to corresponding anatomist object representation.
 
-    @type params: Anatomist.AItem instance
-    @param params: element to convert
+    * params: :py:class:`AItem` instance
 
-    @rtype: dictionary or list
-    @return: converted elements
+      Element to convert
+
+    * returns: *dictionary* or *list*
+
+      Converted elements
     """
     if isinstance( v,  base.Anatomist.AItem ) :
       v=v.getInternalRep()
@@ -829,11 +964,13 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     Converts current api object to corresponding anatomist C++ object representation.
 
-    @type params: Anatomist.AItem instance
-    @param params: element to convert
+    * params: :py:class:`AItem`
+    
+      Element to convert
 
-    @rtype: dictionary or list
-    @return: converted elements
+    * returns: *dictionary* or *list*
+    
+      Converted elements
     """
     if isinstance( v,  base.Anatomist.AItem ) :
       return v.getInternalRep()
@@ -842,14 +979,16 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
   def convertParamsToObjects( self, params ):
     """
-    Converts current api objects to corresponding anatomist C++ object representation.
-    This method must be called before instantiating a C++ command.
+    Converts current api objects to corresponding anatomist object representation.
+    This method must be called before sending a command to anatomist application on command parameters.
 
-    @type params: dictionary or list
-    @param params: elements to convert
+    * params: *dictionary* or *list*
 
-    @rtype: dictionary or list
-    @return: converted elements
+      Elements to convert
+
+    * returns: *dictionary* or *list*
+
+      Converted elements
     """
     if not isinstance( params, basestring ) \
       and operator.isSequenceType( params ):
@@ -862,19 +1001,23 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     Converts a C++ API objects or context IDs to a generic API object.
 
-    @param idorcpp: ID or C++ instance to be converted. If idorcpp is already
-    an AItem, it is returned as is
+    * idorcpp: *ID or C++ instance to be converted*.
+    
+      If idorcpp is already an :py:class:`AItem`, it is returned as is
 
-    @param convertIDs: if True, int numbers are treated as item IDs and
-    converted accordingly when possible.
-    @type convertIDs: boolean
+    * convertIDs: *boolean*
+    
+      If *True*, int numbers are treated as item IDs and
+      converted accordingly when possible.
+    
+    * allowother: *boolean*
+    
+      If *True*, *idorcpp* is returned unchanged if not recognized
 
-    @param allowother: if True, idorcpp is returned unchanged if not recognized
-    @type allowother: boolean
-
-    @rtype: AItem instance, or None (or the unchanged input if allowother is
-    True)
-    @return: converted element
+    * returns: :py:class:`AItem` instance, or *None* (or the unchanged 
+    input if allowother is *True*)
+    
+      Converted element
     """
     if isinstance( idorcpp, base.Anatomist.AItem ):
       return idorcpp
@@ -908,17 +1051,19 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     Recursively converts C++ API objects or context IDs to generic API objects.
 
-    @param params: dictionary or list or anything else
+    * params: *dictionary* or *list* or anything else
 
-    @param convertIDs: if True, int numbers are treated as item IDs and
-    converted accordingly when possible.
-    @type convertIDs: boolean
+    * convertIDs: *boolean*
+    
+      If *True*, int numbers are treated as item IDs and
+      converted accordingly when possible.
+    
+    * changed: *list*
+    
+      If anything has been changed from the input params, then
+      changed will be added a True value. It's actually an output parameter
 
-    @param changed: if anything has been changed from the input params, then
-    changed will be added a True value. It's actually an output parameter
-    @type changed: list
-
-    @return: converted elements
+    * returns: converted elements
     """
     if isinstance( params, _string_or_qstring ):
       return params
@@ -978,40 +1123,47 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     CreateWindowCommand blockid attribute, linkWindows group attribute...
     This method generates a unique id in current context. 
     
-    @rtype: int
-    @return: a new unused ID.
+    * returns: *int*
+
+      A new unused ID.
     """
     newId=self.context.makeID(None)
     if newId == 0:
       newId=self.context.makeID(None)
     return newId
       
-  ###############################################################################
+  #############################################################################
   class AItem(base.Anatomist.AItem):
     """
-    Base class for representing an object in Anatomist application. 
-    
-    @type anatomistinstance: Anatomist
-    @ivar anatomistinstance: reference to Anatomist object which created this object.
-    Usefull because some methods defined in AItem objects will need to send a command to Anatomist application.
-    @type internalRep: object
-    @ivar internalRep: representation of this object in anatomist application. 
+    Base class for representing an object in Anatomist application.
+
+    * anatomistinstance: :py:class:`Anatomist`
+
+      Reference to Anatomist object which created this object.
+      Useful because some methods defined in AItem objects will need to send a command to the Anatomist application.
+
+    * internalRep: *object*
+
+      Representation of this object in anatomist application.
+
+    * ref: *bool*
+
+      Indicates if a reference has been taken on the corresponding anatomist object. If *True*, the reference is released on deleting this item.
+
+    * refType: *string*
+
+      Type of reference taken on the object : ``Weak`` (reference counter not incremented), ``WeakShared`` (reference counter incrementerd but the object can be deleted even if it remains references) or ``Strong`` (reference counter is incremented, the object cannot be deleted since there is references on it). If it is not specified, :py:data:`anatomist.base.Anatomist.defaultRefType` is used.
     """
     def __init__( self, *args, **kwargs ):
-      """
-      @type anatomistinstance: Anatomist
-      @param anatomistinstance: reference to Anatomist object which created this object.
-      @type internalRep: object
-      @param internalRep: representation of this object in anatomist application. 
-      """
       super(Anatomist.AItem, self).__init__(*args, **kwargs)
     
     def getInfos(self):
       """
       Gets informations about this object.
-      
-      @rtype: dictionary
-      @return: informations about the object (property -> value)
+
+      * returns: dictionary
+
+        information about the object (property -> value)
       """
       # using ObjectInfoCommand class directly doesn't work, I don't know why...
       # command=cpp.ObjectInfoCommand("", self.anatomistinstance.context, self.anatomistinstance.convertToIds([self]), True, True)
@@ -1074,26 +1226,40 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       return m
 
 
-  ###############################################################################
+  #############################################################################
   class AObject(AItem, base.Anatomist.AObject):
     """
     Represents an object in Anatomist application.
-    
-    Following informations can be obtained using ObjectInfo command :
-    @type objectType: string
-    @ivar objectType: object type. For example : volume, bucket, graph, texture...
-    @type children: list of AObject
-    @ivar children: list of objects which are children of current object (for example: nodes in a graph). Can be empty.
-    @type filename: string
-    @ivar filename: name of the file from which the object has been loaded. May be None.
-    @type name: string 
-    @ivar name: name of the object presented in Anatomist window.
-    @type copy: boolean
-    @param copy: True indicates that this object is a copy of another object, else it is the original object.
-    @type material: Material
-    @ivar material: object's material parameters
-    @type referential: Referential
-    @ivar referential: referential assigned to this object.
+
+    Following information can be obtained using ObjectInfo command :
+
+    * objectType: *string*
+
+      object type. For example : volume, bucket, graph, texture...
+
+    * children: *list of* :py:class:`anatomist.direct.api.Anatomist.AObject`
+
+      List of objects which are children of current object (for example: nodes in a graph). Can be empty.
+
+    * filename: *string*
+
+      Name of the file from which the object has been loaded. May be *None*.
+
+    * name: *string*
+
+      Name of the object presented in Anatomist window.
+
+    * copy: *boolean*
+
+      *True* indicates that this object is a copy of another object, otherwise it is the original object.
+
+    * material: :py:class:`anatomist.direct.api.Anatomist.Material`
+
+      Object's material parameters
+
+    * referential: :py:class:`anatomist.direct.api.Anatomist.Referential`
+
+      Referential assigned to this object.
     """
     def __init__(self, *args, **kwargs):
       super(Anatomist.AObject, self).__init__(*args, **kwargs)
@@ -1153,15 +1319,17 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
     def extractTexture(self, time=-1):
       """
-      Extract object's texture to create a new texture object.
-      
-      @type time: float
-      @param time: for temporal objects, if this parameter is mentionned the texture will be extracted at this time. if not mentionned, 
-      all times will be extracted and the texture will be a temporal object.
-      In socket implementation, it is necessary to get a new id for the texture object and to pass it to the command.
-      
-      @rtype: AObject
-      @return: the newly created texture object
+      Extract the object texture to create a new texture object.
+
+      * time: *float*
+
+        For temporal objects, if this parameter is mentionned the texture will be extracted at this time. if not mentionned,
+        All times will be extracted and the texture will be a temporal object.
+        In socket implementation, it is necessary to get a new id for the texture object and to pass it to the command.
+
+      * returns: :py:class:`anatomist.base.Anatomist.AObject`
+
+        The newly created texture object
       """
       if time is None:
         time = -1
@@ -1171,22 +1339,30 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     
     def generateTexture(self, dimension=1):
       """
-      Generates an empty texture (value 0 everywhere) for a mesh object. 
-      
-      @type dimension: int 
-      @param dimension: texture's dimension (1 or 2)
-      
-      @rtype: AObject
-      @return: the newly created texture object
+      Generates an empty texture (value 0 everywhere) for a mesh object.
+
+      * dimension: *int*
+
+        Texture dimension (1 or 2)
+
+      * returns: :py:class:`anatomist.base.Anatomist.AObject`
+
+        The newly created texture object
       """
       c=cpp.GenerateTextureCommand( self.getInternalRep(), -1, dimension)
       self.anatomistinstance.execute(c)
       return self.anatomistinstance.AObject(self.anatomistinstance, c.createdObject())
     
     def setChanged(self):
+      """
+      Mark the current object as changed, so that a view update will take it into account.
+      """
       self.internalRep.setChanged()
       
     def notifyObservers(self):
+      """
+      Update the observers views on the object (windows, or fusion objects etc will be re-calculated as needed)
+      """
       self.internalRep.notifyObservers()
       
     def toAimsObject(self):
@@ -1229,18 +1405,26 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     def createNode(self, name=None, syntax=None, with_bucket=None, duplicate=True ):
       """
       Creates a new node with optionally an empty bucket inside and adds it in the graph.
-      
-      @type name: string
-      @param name: node's name. default is RoiArg.
-      @type syntax: string
-      @param syntax: node's syntax attribute. default is roi.
-      @type with_bucket: bool
-      @param with_bucket: if True, creates an empty bucket in the node and returns it with the node. default is None, so the bucket is created but not returned
-      @type duplicate: bool
-      @param duplicate: enables duplication of nodes with the same name attribute.
-      
-      @rtype: (AObject, AObject)
-      @return: (the created node, the created bucket) or only the created node if with_bucket is False
+
+      * name: *string*
+
+        node name. default is ``RoiArg``.
+
+      * syntax: *string*
+
+        node syntax attribute. default is ``roi``.
+
+      * with_bucket: *bool*
+
+        if *True*, creates an empty bucket in the node and returns it with the node. default is None, so the bucket is created but not returned
+
+      * duplicate: *bool*
+
+        enables duplication of nodes with the same name attribute.
+
+      * returns: (AObject, AObject)
+
+        (the created node, the created bucket) or only the created node if with_bucket is False
       """
       nodeId=self.anatomistinstance.newId()
       bucketId=None
@@ -1267,13 +1451,18 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   class AWindow(AItem, base.Anatomist.AWindow):
     """
     Represents an anatomist window.
-    
-    @type windowType: string
-    @ivar windowType: windows's type (axial, sagittal, ...)
-    @type group: AWindowsGroup
-    @ivar group: the group which this window belongs to.
-    @type objects: list of AObject
-    @ivar objects: the window contains these objects.
+
+    * windowType: *string*
+
+      Windows type (``'axial'``, ``'sagittal'``, ...)
+
+    * group: :py:class:`anatomist.base.Anatomist.AWindowsGroup`
+
+      The group which this window belongs to.
+
+    * objects: *list of* :py:class:`anatomist.base.Anatomist.AObject`
+
+      The window contains these objects.
     """
     def __init__(self, *args, **kwargs):
       super(Anatomist.AWindow, self).__init__(*args, **kwargs)
@@ -1337,6 +1526,10 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   class AWindowsBlock(AItem, base.Anatomist.AWindowsBlock):
     """
     A window containing other windows.
+
+    * nbCols: *int*
+
+      Number of columns of the windows block
     """
     def __init__(self, anatomistinstance=None, nbCols=2):
       super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance, nbCols=nbCols)
@@ -1353,9 +1546,6 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   class AWindowsGroup(AItem, base.Anatomist.AWindowsGroup):
     """
     A group containing several windows which are linked. Moving cursor in one window moves it in all linked windows.
-    
-    @type initialGroup: bool
-    @ivar initialGroup: True if current group is the initial group in which all windows are by default.
     """
     def __init__(self, anatomistinstance, groupid=None):
       if groupid is None:
@@ -1365,8 +1555,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   ###############################################################################
   class Referential(AItem, base.Anatomist.Referential):
     """
-    @type refUuid: string
-    @ivar refUuid: a unique id representing this referential
+    * refUuid: *string*
+
+    A unique id representing this referential
     Two referential are equal if they have the same uuid.
     """
     def __init__(self, anatomistinstance, internalRep=None, uuid=None):
@@ -1387,8 +1578,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   ###############################################################################
   class APalette(AItem, base.Anatomist.APalette):
     """
-    @type name: string
-    @ivar name: palette's name. Must be unique, it is the palette identifier.
+    * name: *string*
+
+      Palette name. Must be unique, it is the palette identifier.
     """
     def __init__(self, name, anatomistinstance, internalRep=None, *args, **kwargs):
       super(Anatomist.APalette, self).__init__(name, anatomistinstance, internalRep, *args, **kwargs)
