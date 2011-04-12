@@ -204,6 +204,8 @@ extlinks = {
     'aimsdox '),
   'aimsepy': ('../../pyaims-' + version + '/epydoc/%s',
     'aimsepy '),
+  'pyaims': ('../../pyaims-' + version + '/sphinx/%s',
+    'pyaims '),
   'cartobdox' : ('../../cartobase-' + version + '/doxygen/%s',
   'cartobdox '),
   'cartoddox' : ('../../cartodata-' + version + '/doxygen/%s',
