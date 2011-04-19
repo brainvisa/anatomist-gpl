@@ -1439,9 +1439,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       else:
         no_duplicate=1
       self.anatomistinstance.execute("AddNode", graph=self, res_pointer=nodeId, name=name, with_bucket=with_bucket, res_bucket=bucketId, no_duplicate=no_duplicate)
-      node=self.anatomistinstance.AObject(self.anatomistinstance, self.context.object(nodeId))
+      node=self.anatomistinstance.AObject(self.anatomistinstance, self.anatomistinstance.context.object(nodeId))
       if bucketId is not None:
-        bucket=self.anatomistinstance.AObject(self.anatomistinstance, self.context.object(bucketId))
+        bucket=self.anatomistinstance.AObject(self.anatomistinstance, self.anatomistinstance.context.object(bucketId))
         res=(node, bucket)
       else:
         res=node
