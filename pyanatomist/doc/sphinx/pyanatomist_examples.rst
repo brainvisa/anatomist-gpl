@@ -69,6 +69,16 @@ Download source: `graph.py <../examples/graph.py>`_
 .. literalinclude:: ../examples/graph.py
 
 
+Graph building
+--------------
+
+Creating a complete graph and nomenclature in Python
+
+Download source: `graph_building.py <../examples/graph_building.py>`_
+
+.. literalinclude:: ../examples/graph_building.py
+
+
 Events handling
 ---------------
 
