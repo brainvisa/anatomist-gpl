@@ -36,3 +36,18 @@ protected slots:
 };
 
 
+class ObjectParamSelectSip : ObjectParamSelect
+{
+%TypeHeaderCode
+#include <pyanatomist/objectparamselectsip.h>
+%End
+
+public:
+  ObjectParamSelectSip( const set_AObjectPtr &, QWidget* parent /TransferThis/ );
+  virtual ~ObjectParamSelectSip();
+
+signals:
+  void objectsSelectedSip( const set_AObjectPtr & );
+};
+
+

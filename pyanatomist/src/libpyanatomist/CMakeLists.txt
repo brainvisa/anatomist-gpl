@@ -1,5 +1,6 @@
 BRAINVISA_GET_FILE_LIST_FROM_PRO( pyanatomist.pro "HEADERS" _headers "SOURCES" _sources )
 BRAINVISA_COPY_AND_INSTALL_HEADERS( _headers pyanatomist headersTarget )
+BRAINVISA_ADD_MOC_FILES( _sources ${_headers} )
 set(LIBPYANATOMIST_HEADERS ${_headers} PARENT_SCOPE)
 add_library( pyanatomistexports SHARED ${_sources} )
 add_dependencies( pyanatomistexports ${headersTarget} )
