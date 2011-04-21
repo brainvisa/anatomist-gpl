@@ -13,22 +13,29 @@ PyAnatomist programming documentation
 Sub-modules
 -----------
 
-:doc:`pyanatomist_base`
+- :doc:`pyanatomist_base`
 
-:doc:`pyanatomist_direct`
+- :doc:`pyanatomist_direct`
 
-:doc:`pyanatomist_socket`
+- :doc:`pyanatomist_socket`
 
-:doc:`pyanatomist_threaded`
+- :doc:`pyanatomist_threaded`
 
-:doc:`pyanatomist_cpp`
+- :doc:`pyanatomist_cpp`
 
-The C++ bindings are built on top of :pyaims:`PyAims <index.html>`
+- The C++ bindings are built on top of :pyaims:`PyAims <index.html>`
 
-:doc:`pyanatomist_wip`
+- :doc:`pyanatomist_wip`
 
 
 PyAnatomist examples
 --------------------
 
 :doc:`pyanatomist_examples`
+
+
+Tutorial
+--------
+
+- The :anatomist:`tutorial is accessible here <ana_training/en/html/ch08.html>`.
+- You can also have a look at the :aimsdata:`PyAims tutorial <aims_training/en/html/ch10.html>`.

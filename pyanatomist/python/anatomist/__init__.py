@@ -36,6 +36,10 @@ Introduction
 ============
 This API enables to drive *Anatomist* application throught python scripts : running Anatomist, loading volumes, meshes, graphs, viewing them in windows, merging objects, changing colour palette...
 
+- organization: `NeuroSpin <http://www.neurospin.org>`_ and `IFR 49 <http://www.ifr49.org>`_
+
+- license: `CeCILL-v2 <http://www.cecill.info/licences/Licence_CeCILL_V2-en.html>`_ (GPL-compatible)
+
 The main entry point is one of the :py:class:`anatomist.base.Anatomist`-inhertied classes which must be instantiated before any operation can be performed.
 It represents Anatomist application. This class contains a number of nested classes: :py:class:`anatomist.base.Anatomist.AObject`, :py:class:`anatomist.base.Anatomist.AWindow`... that represents handling elements of Anatomist application.
 
