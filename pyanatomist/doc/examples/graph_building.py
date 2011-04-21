@@ -48,8 +48,6 @@ v = graph.addVertex( 'roi' )
 mesh = aims.SurfaceGenerator.sphere( [ 0, 0, 100 ], 10, 100 )
 aims.GraphManip.storeAims( graph, v, 'aims_mesh', mesh )
 v[ 'name' ] = 'sphere2'
-# remove reference to the mesh (avoid a bug when converting to anatomist...)
-del mesh
 
 # create a corresponding nomenclature
 hie = aims.Hierarchy()
