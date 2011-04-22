@@ -1,6 +1,8 @@
 .. toctree::
    :maxdepth: 3
 
+.. image:: anatomist.png
+
 
 PyAnatomist programming documentation
 -------------------------------------
