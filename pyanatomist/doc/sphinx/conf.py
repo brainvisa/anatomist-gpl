@@ -196,12 +196,15 @@ latex_documents = [
 autoclass_content = "both"
 
 extlinks = {
+  'anatomist': ('../../anatomist-' + version + '/%s',
+    'anatomist '),
   'anadox': ('../../anatomist-' + version + '/doxygen/%s',
     'anadox '),
   'anaepy': ('../../pyanatomist-' + version + '/epydoc/%s',
     'anaepy '),
   'aimsdox': ('../../aimsdata-' + version + '/doxygen/%s',
     'aimsdox '),
+  'aimsdata' : ('../../aimsdata-' + version + '/%s', 'aimsdata '),
   'aimsepy': ('../../pyaims-' + version + '/epydoc/%s',
     'aimsepy '),
   'pyaims': ('../../pyaims-' + version + '/sphinx/%s',
