@@ -17,12 +17,17 @@ import sys, os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.append(os.path.abspath('.'))
+try:
+  import matplotlib
+  sys.path.append( os.path.abspath( os.path.join( os.path.dirname( os.path.dirname( matplotlib.__file__ ) ), 'sphinx', 'ext' ) ) )
+except Exception, e:
+  print 'warning:', e
 
 # -- General configuration -----------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinx.ext.todo', 'sphinx.ext.coverage', 'sphinx.ext.ifconfig', 'sphinx.ext.viewcode', 'sphinx.ext.extlinks']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinx.ext.todo', 'sphinx.ext.coverage', 'sphinx.ext.ifconfig', 'sphinx.ext.viewcode', 'sphinx.ext.extlinks', 'inheritance_diagram']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -110,7 +115,7 @@ html_theme_options = {  }
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-#html_logo = '../../../../axon/trunk/share/icons/brainvisa.png'
+html_logo = 'anaicon.xpm'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -132,6 +137,7 @@ html_static_path = ['_static']
 
 # Custom sidebar templates, maps document names to template names.
 # html_sidebars = { '**' : [ 'relations.html' ], }
+html_sidebars = { '**' : ['download.html', 'localtoc.html', 'globaltoc.html', 'relations.html',  'sourcelink.html', 'searchbox.html' ], }
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
