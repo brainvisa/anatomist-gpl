@@ -17,9 +17,9 @@ BRAINVISA_COPY_DIRECTORY( "${CMAKE_CURRENT_SOURCE_DIR}/share"
                           ${PROJECT_NAME} )
 add_subdirectory( src )
 
-find_package( Epydoc )
-BRAINVISA_GENERATE_EPYDOC_DOC( "${CMAKE_BINARY_DIR}/python/anatomist"
-     "share/doc/pyanatomist-${BRAINVISA_PACKAGE_VERSION_MAJOR}.${BRAINVISA_PACKAGE_VERSION_MINOR}/epydoc" )
+# find_package( Epydoc )
+# BRAINVISA_GENERATE_EPYDOC_DOC( "${CMAKE_BINARY_DIR}/python/anatomist"
+#      "share/doc/pyanatomist-${BRAINVISA_PACKAGE_VERSION_MAJOR}.${BRAINVISA_PACKAGE_VERSION_MINOR}/epydoc" )
 
 find_package( Doxygen )
 IF ( DOXYGEN_FOUND )
