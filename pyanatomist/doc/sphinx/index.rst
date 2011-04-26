@@ -7,8 +7,6 @@
 PyAnatomist programming documentation
 -------------------------------------
 
-(The epydoc version of this doc is :anaepy:`here <index.html>`).
-
 .. automodule:: anatomist
 
 
