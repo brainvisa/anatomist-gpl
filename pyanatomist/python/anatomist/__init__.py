@@ -104,6 +104,7 @@ By default, brainvisa module uses socket implementation. This way, Brainvisa and
 
   Use this constant to load anatomist api threaded direct implementation. See :py:mod:`anatomist.threaded.api` module.
 """
+__docformat__ = 'restructuredtext en'
 
 SOCKET='socket'
 DIRECT='direct'
