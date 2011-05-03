@@ -1,8 +1,10 @@
 .. toctree::
    :maxdepth: 3
 
+
 .. image:: anatomist.png
 
+.. _pyanatomist_index:
 
 PyAnatomist programming documentation
 -------------------------------------
@@ -39,3 +41,4 @@ Tutorial
 
 - The :anatomist:`tutorial is accessible here <ana_training/en/html/ch08.html>`.
 - You can also have a look at the :aimsdata:`PyAims tutorial <aims_training/en/html/ch10.html>`.
+
