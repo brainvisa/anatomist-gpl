@@ -170,6 +170,7 @@ public:
   public:
     virtual ~MouseActionLink();
     virtual void execute( int, int, int, int ) = 0;
+    virtual anatomist::Action* action() = 0;
     virtual anatomist::Control::MouseActionLink* clone() const = 0 /Factory/;
   };
 
