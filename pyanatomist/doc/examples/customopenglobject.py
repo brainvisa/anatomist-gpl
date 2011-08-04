@@ -36,6 +36,16 @@ import anatomist.direct.api as anatomist
 from OpenGL import GL
 import types
 
+class VolRender( anatomist.cpp.ObjectVector, anatomist.cpp.GLComponent ):
+  def __init__( self, objects ):
+    self._objects = objects
+    for o in objects:
+      self.insert( o )
+
+  def renderingIsObserverDependent( self ):
+    return True
+
+
 class WinViewMesh ( anatomist.cpp.ASurface_3 ):
   def __init__( self, mesh, followorientation=True, followposition=False ):
     if mesh is not None:
@@ -57,6 +67,13 @@ class WinViewMesh ( anatomist.cpp.ASurface_3 ):
       self.setSurface( m )
     self._followorientation = followorientation
     self._followposition = followposition
+
+  def renderingIsObserverDependent( self ):
+    return True
+
+  def glMainGLL( self, state ):
+    self.glSetChanged( anatomist.cpp.GLComponent.glGENERAL )
+    return anatomist.cpp.GLComponent.glMainGLL( self, state )
 
   def glBeforeBodyGLL( self, state, prim ):
     if self._followorientation and self._followposition:
@@ -82,29 +99,40 @@ class WinViewMesh ( anatomist.cpp.ASurface_3 ):
       orthoMaxZ =   1.5;
       GL.glOrtho( orthoMinX, orthoMaxX, orthoMinY, orthoMaxY,
                   orthoMinZ, orthoMaxZ )
-      #GL.glMatrixMode( GL.GL_MODELVIEW )
-      #GL.glPushMatrix()
-      #GL.glLoadIdentity()
-      #GL.glScalef( 1, 1, -1 )
+
+    win = state.window
+    if win \
+      and isinstance( win, anatomist.cpp.ControlledWindow ):
+      view = win.view()
 
     if not self._followorientation:
-      win = state.window
-      if win \
-        and isinstance( win, anatomist.cpp.ControlledWindow ):
-        view = win.view()
-        #orient = view. # needs GLWidget...
-      # GL.glLoadIdentity()
-      #GL.glScalef( 0.8, 0.8, -0.8 )
       GL.glTranslate( 1, 1, 0 )
-      mat = GL.glGetFloatv( GL.GL_MODELVIEW_MATRIX )
-      scale = aims.Point3df( mat[0][0], mat[1][0], mat[2][0] ).norm()
-      print scale
+      #mat = GL.glGetFloatv( GL.GL_MODELVIEW_MATRIX )
+      #scale = aims.Point3df( mat[0][0], mat[1][0], mat[2][0] ).norm()
       GL.glMatrixMode( GL.GL_MODELVIEW )
-      GL.glPushMatrix()
       GL.glLoadIdentity()
-      GL.glScalef( scale, scale, -scale )
-      #GL.glTranslate( mat[0][3], mat[1][3], mat[2][3] )
+      # keep the translation part of the view orientation
+      # (mut apply the inverse rotation to it)
+      trans = view.rotationCenter()
+      r = aims.AffineTransformation3d( view.quaternion() ).inverse()
+      r = r * aims.AffineTransformation3d( [ 1, 0, 0, trans[0],
+        0, 1, 0, trans[1],  0, 0, 1, -trans[2],  0, 0, 0, 1 ] )
+      GL.glTranslate( -r.translation()[0], -r.translation()[1],
+        -r.translation()[2] )
+      GL.glScalef( 1., 1., -1. )
       GL.glMatrixMode( GL.GL_PROJECTION )
+    else:
+      GL.glMatrixMode( GL.GL_MODELVIEW )
+      # keep the rotation part of the view orientation, removing the
+      # translation part
+      trans = view.rotationCenter()
+      r = aims.AffineTransformation3d( view.quaternion() ).inverse()
+      r = aims.AffineTransformation3d( [ 1, 0, 0, trans[0],
+        0, 1, 0, trans[1],  0, 0, 1, trans[2],  0, 0, 0, 1 ] )
+      GL.glTranslate( r.translation()[0], r.translation()[1],
+        r.translation()[2] )
+      GL.glMatrixMode( GL.GL_PROJECTION )
+
     GL.glEndList()
 
   def glAfterBodyGLL( self, state, prim ):
