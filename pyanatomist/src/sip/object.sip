@@ -66,10 +66,12 @@ namespace anatomist
 
     virtual bool Is2DObject() = 0;
     virtual bool Is3DObject() = 0;
+    virtual bool isTransparent() const;
+    virtual bool renderingIsObserverDependent() const;
 
-    anatomist::GLComponent *glAPI() = 0;
+    virtual anatomist::GLComponent *glAPI() = 0;
 
-    anatomist::AObject* clone( bool shallow = 0 ) /Factory/;
+    virtual anatomist::AObject* clone( bool shallow = 0 ) /Factory/;
 
     void setChanged() const;
 %MethodCode

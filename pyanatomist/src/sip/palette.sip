@@ -14,6 +14,8 @@ public:
 
   std::string name() const;
   void setName( const std::string & );
+  bool isTransparent() const;
+  void update();
 };
 
 
@@ -43,6 +45,7 @@ public:
   void create( unsigned dimx, unsigned dimy = 1, unsigned dimz = 1,
                unsigned dimt = 1 );
   virtual void fill();
+  bool isTransparent() const;
 };
 
 
