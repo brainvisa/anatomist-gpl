@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
@@ -64,9 +65,11 @@ class WinViewMesh ( anatomist.cpp.ASurface_3 ):
     gll.generate()
     prim.append( gll )
     GL.glNewList( gll.item(), GL.GL_COMPILE )
+    GL.glMatrixMode( GL.GL_MODELVIEW )
+    GL.glPushMatrix()
+    GL.glMatrixMode( GL.GL_PROJECTION )
+    GL.glPushMatrix()
     if not self._followposition:
-      GL.glMatrixMode( GL.GL_PROJECTION )
-      GL.glPushMatrix()
       winDim = 70
       GL.glPushAttrib( GL.GL_VIEWPORT_BIT )
       GL.glViewport( 0, 0, winDim, winDim );
@@ -85,23 +88,23 @@ class WinViewMesh ( anatomist.cpp.ASurface_3 ):
       #GL.glScalef( 1, 1, -1 )
 
     if not self._followorientation:
-      if self._followposition:
-        GL.glMatrixMode( GL.GL_PROJECTION )
-        GL.glPushMatrix()
       win = state.window
       if win \
         and isinstance( win, anatomist.cpp.ControlledWindow ):
         view = win.view()
         #orient = view. # needs GLWidget...
-      #GL.glLoadIdentity()
+      # GL.glLoadIdentity()
       #GL.glScalef( 0.8, 0.8, -0.8 )
-      GL.glTranslate( 1, 1, 1 )
-      #mat = GL.glGetFloatv( GL.GL_PROJECTION_MATRIX )
-      #print mat
-      #mat[3][0] = 0
-      #mat[3][1] = 0
-      #mat[3][2] = 0
-      #GL.glLoadMatrixf( mat )
+      GL.glTranslate( 1, 1, 0 )
+      mat = GL.glGetFloatv( GL.GL_MODELVIEW_MATRIX )
+      scale = aims.Point3df( mat[0][0], mat[1][0], mat[2][0] ).norm()
+      print scale
+      GL.glMatrixMode( GL.GL_MODELVIEW )
+      GL.glPushMatrix()
+      GL.glLoadIdentity()
+      GL.glScalef( scale, scale, -scale )
+      #GL.glTranslate( mat[0][3], mat[1][3], mat[2][3] )
+      GL.glMatrixMode( GL.GL_PROJECTION )
     GL.glEndList()
 
   def glAfterBodyGLL( self, state, prim ):
@@ -111,27 +114,25 @@ class WinViewMesh ( anatomist.cpp.ASurface_3 ):
     gll.generate()
     prim.append( gll )
     GL.glNewList( gll.item(), GL.GL_COMPILE )
-    if not self._followorientation and self._followposition:
-      GL.glPopMatrix()
+    GL.glMatrixMode( GL.GL_PROJECTION )
     if not self._followposition:
-      GL.glMatrixMode( GL.GL_PROJECTION )
-      GL.glPopMatrix()
       GL.glPopAttrib( GL.GL_VIEWPORT_BIT )
-      #GL.glMatrixMode( GL.GL_MODELVIEW )
-      #GL.glPopMatrix()
+    GL.glPopMatrix()
+    GL.glMatrixMode( GL.GL_MODELVIEW )
+    GL.glPopMatrix()
     GL.glEndList()
 
 # ---
 if __name__ == '__main__':
   a = anatomist.Anatomist()
   r = aims.Reader()
-  mesh = r.read( 'test.mesh' )
+  mesh = aims.SurfaceGenerator.sphere( ( 0, 0, 0 ), 1., 200 )
   amesh = anatomist.cpp.AObjectConverter.anatomist( mesh )
-  cube1 = aims.SurfaceGenerator.cube( aims.Point3df( 0, 0, 0 ), 0.5, False )
+  cube1 = aims.SurfaceGenerator.cube( ( 0, 0, 0 ), 0.5, False )
   vcube1 = WinViewMesh( cube1 )
   a.registerObject( vcube1 )
-  cube2 = aims.SurfaceGenerator.cone( aims.Point3df( 0, 0, -0.5 ),
-    aims.Point3df( 0, 0, 0.5 ), 0.5, 50, True, False )
+  cube2 = aims.SurfaceGenerator.cone( ( 0, -0.5, 0 ), ( 0, 0.5, 0 ), 0.5, 50,
+    True, False )
   vcube2 = WinViewMesh( cube2, followorientation = False,
     followposition = True )
   a.registerObject( vcube2 )
