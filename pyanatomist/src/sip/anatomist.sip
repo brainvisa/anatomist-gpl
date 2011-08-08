@@ -54,6 +54,7 @@
 %Include globalconfig.sip
 %Include awindowfactory.sip
 %Include objectdrag.sip
+%Include transformedobject.sip
 
 
 class AnatomistSip

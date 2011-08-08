@@ -48,7 +48,7 @@ public:
     virtual void 	insert (anatomist::AObject *) = 0;
     virtual anatomist::AIterator begin() = 0;
     virtual anatomist::AIterator end() = 0;
-    void erase( anatomist::AObject *);
+    virtual void erase( anatomist::AObject *);
 
     virtual float MinT() const /AutoGen/;
     virtual float MaxT() const /AutoGen/;
@@ -72,6 +72,7 @@ public:
     bool hasContentChanged() const /AutoGen/;
     virtual void clearHasChangedFlags() const /AutoGen/;
     virtual void setPalette( const anatomist::AObjectPalette & ) /AutoGen/;
+    virtual anatomist::GLComponent* glAPI();
 
     anatomist::AObject * __getitem__(int) /AutoGen/;
 %MethodCode

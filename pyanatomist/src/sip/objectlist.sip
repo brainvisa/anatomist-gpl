@@ -23,6 +23,7 @@ public:
   virtual anatomist::AIterator begin();
   virtual anatomist::AIterator end();
   virtual void insert (anatomist::AObject * );
+  int type() const;
 };
 
 
@@ -47,6 +48,7 @@ public:
   // virtual anatomist::AIterator find( const shared_ptr_AObject & ) const;
   virtual void erase( anatomist::AIterator & );
   virtual bool CanRemove( anatomist::AObject *obj );
+  int type() const;
 };
 
 };
