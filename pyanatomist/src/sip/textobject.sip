@@ -14,6 +14,11 @@ namespace anatomist
     void setText( const std::string & );
     virtual int type() const;
     virtual anatomist::GLComponent* glAPI();
+    virtual bool isTransparent() const;
+    void setFont( QFont *font /Transfer/ );
+    QFont* font();
+    void setScale( float );
+    float scale() const;
   };
 
 };

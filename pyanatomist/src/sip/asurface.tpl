@@ -45,8 +45,8 @@ public:
   virtual void UpdateMinAndMax();
 
   // redeclaration of pure vitual methods of AObject
-  virtual anatomist::GLComponent* glAPI();
-  int type() const;
+  virtual anatomist::GLComponent* glAPI() /AutoGen/;
+  int type() const /AutoGen/;
 
 private:
   ASurface_%Template1typecode%( const anatomist::ASurface_%Template1typecode% & );
