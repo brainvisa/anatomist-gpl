@@ -85,8 +85,9 @@ typedef std::vector<float> vector_FLOAT;
   virtual const anatomist::GLComponent::TexExtrema &
     glTexExtrema(unsigned = 0) const /AutoGen/;
 
-  virtual void glSetChanged( anatomist::GLComponent::glPart, bool = true ) const;
-  virtual bool glHasChanged( anatomist::GLComponent::glPart ) const;
+  virtual void glSetChanged( anatomist::GLComponent::glPart,
+    bool = true ) const /AutoGen/;
+  virtual bool glHasChanged( anatomist::GLComponent::glPart ) const /AutoGen/;
 
   virtual anatomist::GLPrimitives glMainGLL( const anatomist::ViewState & )
     /AutoGen/;

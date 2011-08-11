@@ -2,7 +2,7 @@
 namespace anatomist
 {
 
-  class AObject : anatomist::Observer, anatomist::Observable
+  class AObject : anatomist::Observer, anatomist::Observable /Abstract/
   {
 %TypeHeaderCode
 #include <anatomist/graph/Graph.h>
@@ -95,6 +95,7 @@ namespace anatomist
 
     virtual void setInternalsChanged();
     virtual void internalUpdate();
+    virtual bool render( anatomist::GLPrimitives &, const anatomist::ViewState & ) /AutoGen/;
 
     void setType(int);
     void SetMaterial(const anatomist::Material &mat);
