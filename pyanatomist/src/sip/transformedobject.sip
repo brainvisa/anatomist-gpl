@@ -22,6 +22,10 @@ namespace anatomist
     Point3df position() const;
     void setOffset( const Point3df & );
     Point3df offset() const;
+    void setDynamicOffsetFromPoint( const Point3df & );
+    void removeDynamicOffset();
+    bool usesDynamicOffset() const;
+    Point3df dynamicOffsetFromPoint() const;
   };
 
 };
