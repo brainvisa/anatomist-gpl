@@ -150,7 +150,7 @@ Download source: `addMenuEntry.py <../examples/addMenuEntry.py>`_
 
 
 Custom fusion example
---------------------
+---------------------
 
 Registering new fusion types
 
