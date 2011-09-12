@@ -20,7 +20,6 @@ share = aims.carto.Paths.globalShared()
 nomenclname = os.path.join( aims.carto.Paths.shfjShared(), 'nomenclature',
   'hierarchy', 'sulcal_root_colors.hie' )
 graphname = os.path.join( share, 'doc', 'pyanatomist-' + '.'.join( [ str(x) for x in aims.version() ] ), 'examples', 'Rbase.arg' )
-#graphname = '/neurospin/lnao/Panabase/database_learnclean/nmr/sujet01/t1mri/t1/default_analysis/folds/3.1/base2011_manual/Lsujet01_base2011_manual.arg'
 labelatt = 'name'
 
 nomenclature = a.loadObject( nomenclname )
@@ -40,9 +39,13 @@ lines = aims.TimeSurface( 2 )
 lvert = []
 lpoly = []
 
+
+# This intermediate class is only here because I cannot (yet) make SIP
+# generate a non-abstract class for TextObject binding. One day, I'll find out!
 class TObj ( ana.cpp.TextObject ):
   def __init__( self, message='', pos=[0,0,0] ):
     ana.cpp.TextObject.__init__( self, message, pos )
+
 
 def makelabel( label, gc, pos, color ):
   global objects, lvert, lpoly, usespheres, colorlabels, center
