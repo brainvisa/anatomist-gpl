@@ -199,6 +199,18 @@ Download source: `volumeMeasures.py <../examples/volumeMeasures.py>`_
 .. literalinclude:: ../examples/volumeMeasures.py
 
 
+3D Text annotations on a graph
+------------------------------
+
+Display graph labels as 3D text annotations.
+
+.. image:: graphannotate.jpg
+
+Download source: `anagraphannotate.py <../examples/anagraphannotate.py>`_
+
+.. literalinclude:: ../examples/anagraphannotate.py
+
+
 Simple viewer
 -------------
 
