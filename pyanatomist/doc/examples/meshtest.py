@@ -42,12 +42,8 @@ else:
 
 # Load a sphere mesh
 r = aims.Reader()
-mfile = 'test.mesh'
-if os.path.exists( mfile ):
-  m = r.read( mfile )
-else:
-  # create a unit sphere of radius 1 and 500 vertices
-  m = aims.SurfaceGenerator.sphere( aims.Point3df( 0,0,0 ), 1, 500 )
+# create a unit sphere of radius 1 and 500 vertices
+m = aims.SurfaceGenerator.sphere( aims.Point3df( 0,0,0 ), 1, 500, False )
 
 # Multiply the sphere size by 100
 for p in xrange( m.vertex().size() ):
@@ -68,7 +64,7 @@ aw=a.createWindow( '3D' )
 # Put the mesh in the created window
 a.addObjects( [ am ], [ aw ] )
 #c = anatomist.AddObjectCommand( [ am ], [ aw ] )
-#proc.execute( c )
+#proc.execuFalsete( c )
 
 # keep a copy of original vertices
 coords = [ aims.Point3df( m.vertex()[i] ) \
