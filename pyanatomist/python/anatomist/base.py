@@ -787,7 +787,7 @@ class Anatomist(ObservableSingleton, object):
     self.execute("AssignReferential", ref_id = referential, objects=objects,
       windows=windows, central_ref=referential.centralRef)
 
-  def applyBuiltinReferential(self, objects):
+  def loadReferentialFromHeader(self, objects):
     """
     Extracts referentials / transformations from objects headers when they contain such information, and assign them.
 
@@ -795,7 +795,9 @@ class Anatomist(ObservableSingleton, object):
 
       Objects which referential information must be loaded
     """
-    self.execute("ApplyBuiltinReferential", objects=self.makeList(objects) )
+    self.execute("LoadReferentialFromHeader", objects=self.makeList(objects) )
+
+  applyBuiltinReferential = loadReferentialFromHeader
 
   def camera(self, windows, zoom=None, observer_position=None, view_quaternion=None, slice_quaternion=None, force_redraw=False, cursor_position=None, boundingbox_min=None, boundingbox_max=None):
     """
@@ -1382,11 +1384,13 @@ class Anatomist(ObservableSingleton, object):
       """
       self.anatomistinstance.assignReferential(referential, [self])
 
-    def applyBuiltinReferential(self):
+    def loadReferentialFromHeader(self):
       """
       Extract information about referential and transformations from the header of the object and assign the found referential.
       """
-      self.anatomistinstance.applyBuiltinReferential([self])
+      self.anatomistinstance.loadReferentialFromHeader([self])
+
+    applyBuiltinReferential = loadReferentialFromHeader
 
     def setMaterial(self, material=None, refresh=None, ambient=None,
       diffuse=None, emission=None, specular=None, shininess=None,
