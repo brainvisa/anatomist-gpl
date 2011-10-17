@@ -53,12 +53,8 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
       self.unregisterObservable( i.get() )
     del oldobj
     self._objects = [ anatomist.weak_ptr_AObject( i ) for i in obj ]
-    ref = None
     for i in obj:
       self.registerObservable( i )
-      if ref is None:
-        self.setReferentialInheritance( i )
-    #print 'setObserved:', len( self._objects )
     self.redraw()
 
   def update( self, obs, param ):
@@ -75,7 +71,7 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
       self.redraw()
 
   def boundingbox( self ):
-    print 'ObjectFollowerCube.boundingbox', len( self._objects )
+    #print 'ObjectFollowerCube.boundingbox', len( self._objects )
     bbox = []
     for obj in self._objects:
       bbox2 = obj.boundingbox()
@@ -87,12 +83,10 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
       if not bbox:
         bbox = bbox2
       else:
-        print 'bbox pre:', bbox
-        print 'bbox2:', bbox2
         bbox = [ aims.Point3df( numpy.min( [ bbox[0], bbox2[0] ],
           axis=0 ) ),
           aims.Point3df( numpy.max( [ bbox[1], bbox2[1] ], axis=0 ) ) ]
-        print 'bbox post:', bbox
+        #print 'bbox:', bbox
     if not bbox:
       return ()
     return ( bbox[0], bbox[1] )
@@ -103,20 +97,14 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
     self._redrawing = True
     #print 'ObjectFollowerCube.redraw'
     mesh = self.surface()
-    #print 'x1'
     if mesh.isNull():
-      #print 'x2'
       self.setSurface( aims.AimsTimeSurface_2() )
-      #print 'setSurface done'
       mesh = self.surface()
-      #print 'mesh:', mesh
     if len( self._objects ) == 0:
-      #print 'no objects'
       mesh.vertex().assign( [] )
       mesh.normal().assign( [] )
       mesh.polygon().assign( [] )
     else:
-      #print 'x3'
       bbox = self.boundingbox()
       vert = [ aims.Point3df( bbox[0] ),
         aims.Point3df( bbox[1][0], bbox[0][1], bbox[0][2] ),
@@ -127,7 +115,6 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
         aims.Point3df( bbox[0][0], bbox[1][1], bbox[1][2] ),
         aims.Point3df( bbox[1] )
       ]
-      print 'boundingbox:', bbox
       pol = [ [0,1], [0,2], [1,4], [2,4], [0,3], [1,5], [2,6], [4,7], [3,5],
         [3,6], [5,7], [6,7] ]
       mesh.vertex().assign( vert )
