@@ -39,7 +39,7 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
     anatomist.ASurface_2.__init__( self )
     self.GetMaterial().set( { 'ghost': 1 } )
     self._objects = []
-    print 'ObjectFollowerCube.__init__, objects:', len( obj )
+    # print 'ObjectFollowerCube.__init__, objects:', len( obj )
     self.setSurface( aims.AimsTimeSurface_2() )
     self.setObserved( obj )
 
@@ -47,7 +47,7 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
     return self._objects
 
   def setObserved( self, obj ):
-    print 'setObserved', len(obj)
+    #print 'setObserved', len(obj)
     oldobj = [ i for i in self._objects ]
     for i in oldobj:
       self.unregisterObservable( i.get() )
@@ -58,23 +58,24 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
       self.registerObservable( i )
       if ref is None:
         self.setReferentialInheritance( i )
-    print 'setObserved:', len( self._objects )
+    #print 'setObserved:', len( self._objects )
     self.redraw()
 
   def update( self, obs, param ):
-    print 'ObjectFollowerCube.update'
+    #print 'ObjectFollowerCube.update'
     if obs in self._objects:
       self.redraw()
       self.notifyObservers( obs )
 
   def unregisterObservable( self, obs ):
-    print 'ObjectFollowerCube.unregisterObservable', obs
-    if obs in self._objects:
-      self._objects = [ i for i in self._objects if i != obs ]
+    #print 'ObjectFollowerCube.unregisterObservable', obs
+    obss = anatomist.weak_ptr_AObject( obs )
+    if obss in self._objects:
+      self._objects = [ i for i in self._objects if i != obss ]
       self.redraw()
 
   def boundingbox( self ):
-    print 'ObjectFollowerCube.boundingbox'
+    print 'ObjectFollowerCube.boundingbox', len( self._objects )
     bbox = []
     for obj in self._objects:
       bbox2 = obj.boundingbox()
@@ -86,9 +87,12 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
       if not bbox:
         bbox = bbox2
       else:
+        print 'bbox pre:', bbox
+        print 'bbox2:', bbox2
         bbox = [ aims.Point3df( numpy.min( [ bbox[0], bbox2[0] ],
           axis=0 ) ),
           aims.Point3df( numpy.max( [ bbox[1], bbox2[1] ], axis=0 ) ) ]
+        print 'bbox post:', bbox
     if not bbox:
       return ()
     return ( bbox[0], bbox[1] )
@@ -97,22 +101,22 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
     if hasattr( self, '_redrawing' ):
       return
     self._redrawing = True
-    print 'ObjectFollowerCube.redraw'
+    #print 'ObjectFollowerCube.redraw'
     mesh = self.surface()
-    print 'x1'
+    #print 'x1'
     if mesh.isNull():
-      print 'x2'
+      #print 'x2'
       self.setSurface( aims.AimsTimeSurface_2() )
-      print 'setSurface done'
+      #print 'setSurface done'
       mesh = self.surface()
-      print 'mesh:', mesh
+      #print 'mesh:', mesh
     if len( self._objects ) == 0:
-      print 'no objects'
+      #print 'no objects'
       mesh.vertex().assign( [] )
       mesh.normal().assign( [] )
       mesh.polygon().assign( [] )
     else:
-      print 'x3'
+      #print 'x3'
       bbox = self.boundingbox()
       vert = [ aims.Point3df( bbox[0] ),
         aims.Point3df( bbox[1][0], bbox[0][1], bbox[0][2] ),
