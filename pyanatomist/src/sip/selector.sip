@@ -81,6 +81,11 @@ public:
   virtual void remove( anatomist::AWindow * );
   virtual void removeFromThisWindow( anatomist::AWindow * );
 
+  static void setSelectColor( const anatomist::SelectFactory::HColor & col );
+
+  static anatomist::SelectFactory::HColor & selectColor();
+  static bool selectColorInverse();
+
   static anatomist::SelectFactory * factory();
 };
 
