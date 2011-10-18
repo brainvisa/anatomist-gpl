@@ -13,8 +13,8 @@ public:
   virtual ~QAColorDialog();
 
   static QColor getColor( QColor, QWidget * parent = 0,
-                          const char * name = 0, int* alpha = 0,
-                          bool *neutraph = 0 );
+                          const char * name = 0, int* alpha /In, out/ = 0,
+                          bool *neutraph /In, Out/ = 0 );
   void relook( const QColor & col, int initalpha = 255,
                bool allowalpha = false, bool neutralpha = false,
                bool allownalph = false );
