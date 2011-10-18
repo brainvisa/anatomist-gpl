@@ -56,6 +56,7 @@
 %Include objectdrag.sip
 %Include transformedobject.sip
 %Include textobject.sip
+%Include colordialog.sip
 
 
 class AnatomistSip
