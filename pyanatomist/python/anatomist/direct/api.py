@@ -1122,7 +1122,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     In this implementation, anatomist objects are accessibles but some commands need an id associated to the object : 
     CreateWindowCommand blockid attribute, linkWindows group attribute...
     This method generates a unique id in current context. 
-    
+
     * returns: *int*
 
       A new unused ID.
@@ -1131,7 +1131,14 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     if newId == 0:
       newId=self.context.makeID(None)
     return newId
-      
+
+  def sync(self):
+    """
+    Wait for anatomist finishing current processing.
+    """
+    from PyQt4 import QtGui
+    QtGui.qApp.processEvents()
+
   #############################################################################
   class AItem(base.Anatomist.AItem):
     """
