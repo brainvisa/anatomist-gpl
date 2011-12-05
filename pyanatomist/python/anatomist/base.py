@@ -993,39 +993,39 @@ class Anatomist(ObservableSingleton, object):
     """
     Modifies graphs and selections options.
 
-    * display_mode: *string*
+    :param string display_mode:
 
       Paint mode of objects in graph nodes : mesh, bucket, all, first
 
-    * label_attribute: *string*
+    :param string label_attribute:
 
       Selects the attribute used as selection filter: label or name
 
-    * save_only_modified: *int* (0/1)
+    :param int_(0/1) save_only_modified:
 
       If enabled, graph save saves not all sub objects but only those that have been modified.
 
-    * saving_mode: *string*
+    :param string saving_mode:
 
       Graph saving mode : unchanged (keep the reading format), global (1 file for all same category sub-objects), or local (1 file per sub-object)
 
-    * selection_color: *int vector*
+    :param int_vector selection_color:
 
       Selected objects color : R G B [A [NA]] (A opacity, NA: 0/1 use object's opacity parameter)
 
-    * selection_color_inverse: *int* (0/1)
+    :param int_(0/1) selection_color_inverse:
 
       Selection inverses color instead of using selection_color
 
-    * set_base_directory: *int* (0/1)
+    :param int_(0/1) set_base_directory:
 
       Save subobjects in a directory <graph name>.data
 
-    * show_tooltips: *int* (0/1)
+    :param int_(0/1) show_tooltips:
 
       Show graph nodes names in tooltips
 
-    * use_nomenclature: *int* (0/1)
+    :param int_(0/1) use_nomenclature:
 
       Enable graph coloring with nomenclature
     """
@@ -1038,29 +1038,17 @@ class Anatomist(ObservableSingleton, object):
     Setup Paint contol parameters.
     All parameters are optional.
 
-    * brush_size: *float*
+    :param float brush_size: Radius of the paint brush, either in millimeters or in voxels, depending on the millimeter_mode.
 
-      Radius of the paint brush, either in millimeters or in voxels, depending on the millimeter_mode.
+    :param string brush_type: "point", "square", "disk", or "sphere". "ball" is an alias for sphere.
 
-    * brush_type: *string*
+    :param boolean follow_linked_cursor: Linked cursor moving with brush
 
-      "point", "square", "disk", or "sphere". "ball" is an alias for sphere.
+    :param boolean line_mode: line interpolation mode between brush strokes
 
-    * follow_linked_cursor: *boolean*
+    :param boolean millimeter_mode: brush size can be either in mm or in voxels. In voxels mode, the brush may be anisotropic.
 
-      Linked cursor moving with brush
-
-    * line_mode: *boolean*
-
-      line interpolation mode between brush strokes
-
-    * millimeter_mode: *boolean*
-
-      brush size can be either in mm or in voxels. In voxels mode, the brush may be anisotropic.
-
-    * replace_mode: *boolean*
-
-      region replacing mode (when drawing on a different region)
+    :param boolean replace_mode: region replacing mode (when drawing on a different region)
     """
     if follow_linked_cursor is not None:
       follow_linked_cursor = int( follow_linked_cursor )
