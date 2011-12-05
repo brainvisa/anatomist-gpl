@@ -1031,11 +1031,36 @@ class Anatomist(ObservableSingleton, object):
     """
     self.execute('GraphParams', display_mode=display_mode, label_attribute=label_attribute, save_only_modified=save_only_modified, saving_mode=saving_mode, selection_color=selection_color, selection_color_inverse=selection_color_inverse, set_base_directory=set_base_directory, show_tooltips=show_tooltips, use_nomenclature=use_nomenclature)
 
-  def paintParams( self, brush_size=None, brush_type=None,
+  def setPaintParams( self, brush_size=None, brush_type=None,
     follow_linked_cursor=None, line_mode=None, millimeter_mode=None,
     replace_mode=None ):
     """
-    Setup Paint contol parameters
+    Setup Paint contol parameters.
+    All parameters are optional.
+
+    * brush_size: *float*
+
+      Radius of the paint brush, either in millimeters or in voxels, depending on the millimeter_mode.
+
+    * brush_type: *string*
+
+      "point", "square", "disk", or "sphere". "ball" is an alias for sphere.
+
+    * follow_linked_cursor: *boolean*
+
+      Linked cursor moving with brush
+
+    * line_mode: *boolean*
+
+      line interpolation mode between brush strokes
+
+    * millimeter_mode: *boolean*
+
+      brush size can be either in mm or in voxels. In voxels mode, the brush may be anisotropic.
+
+    * replace_mode: *boolean*
+
+      region replacing mode (when drawing on a different region)
     """
     if follow_linked_cursor is not None:
       follow_linked_cursor = int( follow_linked_cursor )
