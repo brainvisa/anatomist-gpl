@@ -205,13 +205,12 @@ class Anatomist(ObservableSingleton, object):
     Set listening of this event on. So when the event occurs, the notifier's notify method is called.
     This method is automatically called when the first listener is added to a notifier. That is to say that notifiers are activated only if they have registered listeners.
 
-    * event: *string*
-
+    :param string event:
       Name of the event to listen
 
-    * notifier: :py:class:`soma.notification.Notifier`
-
+    :param notifier:
       The notifier whose notify method must be called when this event occurs
+    :type notifier: :py:class:`soma.notification.Notifier`
     """
     pass
 
@@ -219,8 +218,7 @@ class Anatomist(ObservableSingleton, object):
     """
     Set listening of this event off.
 
-    * event: *string*
-
+    :param string  event:
       Name of the event to disable.
     """
     pass
@@ -230,13 +228,12 @@ class Anatomist(ObservableSingleton, object):
     """
     Creates a window containing other windows.
 
-    * nbCols: *int*
-
+    :param int nbCols:
       Number of columns of the windows block
 
-    * returns: :py:class:`AWindowsBlock`
-
+    :returns:
       A window which can contain several :py:class:`AWindow`
+    :rtype: :py:class:`AWindowsBlock`
     """
     pass
 
@@ -245,29 +242,26 @@ class Anatomist(ObservableSingleton, object):
     """
     Creates a new window and opens it.
 
-    * wintype: *string*
-
+    :param string wintype:
       Type of window to open (``"Axial"``, ``"Sagittal"``, ``"Coronal"``, ``"3D"``, ``"Browser"``, ``"Profile"``, ...)
 
-    * geometry: *int vector*
-
+    :param geometry:
       Position on screen and size of the new window (x, y, w, h)
+    :type geometry: int vector
 
-    * block: :py:class:`AWindowsBlock`
-
+    :param block:
       A block in which the new window must be added
+    :type block: :py:class:`AWindowsBlock`
 
-    * no_decoration: *bool*
-
+    :param bool no_decoration:
       Indicates if decorations (menus, buttons) can be painted around the view.
 
-    * options: *dictionary*
-    
+    :param dictionary options:
       Internal advanced options.
-    
-    * returns: :py:class:`AWindow`
 
+    :returns:
       The newly created window
+    :rtype: :py:class:`AWindow`
     """
     pass
 
@@ -275,33 +269,27 @@ class Anatomist(ObservableSingleton, object):
     """
     Loads an object from a file (volume, mesh, graph, texture...)
 
-    * filename: *string*
-
+    :param string filename:
       The file containing object data
 
-    * objectName: *string*
-
+    :param string objectName:
       Object name
 
-    * restrict_object_types: *dictionary*
-
+    :param dictionary restrict_object_types:
       object -> accpepted types list. Ex: ``{'Volume' : ['S16', 'FLOAT']}``
 
-    * forceReload: *boolean*
-
+    :param boolean forceReload:
       If *True* the object will be loaded even if it is already loaded in Anatomist. Otherwise, the already loaded one is returned.
 
-    * duplicate: *boolean*
-
+    :param boolean duplicate:
       If the object already exists, duplicate it. The original and the copy will share the same data but not display parameters as palette. If the object is not loaded yet, load it hidden and duplicate it (unable to keep the original object with default display parameters).
 
-    * hidden: *boolean*
-
+    :param boolean hidden:
       a hidden object does not appear in Anatomist main control window.
 
-    * returns: :py:class:`AObject`
-
+    :returns:
       The loaded object
+    :rtype: :py:class:`AObject`
     """
     pass
 
@@ -994,40 +982,37 @@ class Anatomist(ObservableSingleton, object):
     Modifies graphs and selections options.
 
     :param string display_mode:
-
       Paint mode of objects in graph nodes : mesh, bucket, all, first
 
     :param string label_attribute:
-
       Selects the attribute used as selection filter: label or name
 
-    :param int_(0/1) save_only_modified:
-
+    :param save_only_modified:
       If enabled, graph save saves not all sub objects but only those that have been modified.
+    :type save_only_modified: boolean int (0/1)
 
     :param string saving_mode:
-
       Graph saving mode : unchanged (keep the reading format), global (1 file for all same category sub-objects), or local (1 file per sub-object)
 
-    :param int_vector selection_color:
-
+    :param selection_color:
       Selected objects color : R G B [A [NA]] (A opacity, NA: 0/1 use object's opacity parameter)
+    :type selection_color: int vector
 
-    :param int_(0/1) selection_color_inverse:
-
+    :param selection_color_inverse:
       Selection inverses color instead of using selection_color
+    :type selection_color_inverse: boolean int (0/1)
 
-    :param int_(0/1) set_base_directory:
-
+    :param set_base_directory:
       Save subobjects in a directory <graph name>.data
+    :type set_base_directory: boolean int (0/1)
 
-    :param int_(0/1) show_tooltips:
-
+    :param show_tooltips:
       Show graph nodes names in tooltips
+    :type show_tooltips: boolean int (0/1)
 
-    :param int_(0/1) use_nomenclature:
-
+    :param use_nomenclature:
       Enable graph coloring with nomenclature
+    :type use_nomenclature: boolean int (0/1)
     """
     self.execute('GraphParams', display_mode=display_mode, label_attribute=label_attribute, save_only_modified=save_only_modified, saving_mode=saving_mode, selection_color=selection_color, selection_color_inverse=selection_color_inverse, set_base_directory=set_base_directory, show_tooltips=show_tooltips, use_nomenclature=use_nomenclature)
 
@@ -1071,12 +1056,10 @@ class Anatomist(ObservableSingleton, object):
     The list of available commands is in http://brainvisa.info/doc/anatomist/html/fr/programmation/commands.html.
     Parameters are converted before sending the request to anatomist application.
 
-    * command: *string*
-
+    :param string command:
       Name of the command to execute.
 
-    * kwargs: *dictionary*
-
+    :param dictionary kwargs:
       Parameters for the command
     """
     def ununderscore(k):
@@ -1117,12 +1100,12 @@ class Anatomist(ObservableSingleton, object):
     """
     Converts current api object to corresponding anatomist object representation.
 
-    * params: :py:class:`AItem` instance
-
+    :param item:
       Element to convert
+    :type item: :py:class:`AItem`
 
-    * returns: *dictionary* or *list*
-
+    :rtype: *dictionary* or *list*
+    :returns:
       Converted elements
     """
     if isinstance( item, Anatomist.AItem ) :
