@@ -1031,6 +1031,25 @@ class Anatomist(ObservableSingleton, object):
     """
     self.execute('GraphParams', display_mode=display_mode, label_attribute=label_attribute, save_only_modified=save_only_modified, saving_mode=saving_mode, selection_color=selection_color, selection_color_inverse=selection_color_inverse, set_base_directory=set_base_directory, show_tooltips=show_tooltips, use_nomenclature=use_nomenclature)
 
+  def paintParams( self, brush_size=None, brush_type=None,
+    follow_linked_cursor=None, line_mode=None, millimeter_mode=None,
+    replace_mode=None ):
+    """
+    Setup Paint contol parameters
+    """
+    if follow_linked_cursor is not None:
+      follow_linked_cursor = int( follow_linked_cursor )
+    if line_mode is not None:
+      line_mode = int( line_mode )
+    if millimeter_mode is not None:
+      millimeter_mode = int( millimeter_mode )
+    if replace_mode is not None:
+      replace_mode = int( replace_mode )
+    self.execute( 'PaintParams', brush_size=brush_size,
+      brush_type=brush_type, follow_linked_cursor=follow_linked_cursor,
+      line_mode=line_mode, millimeter_mode=millimeter_mode,
+      replace_mode=replace_mode )
+
   ###############################################################################
   # commands sending
   def execute( self, command, **kwargs ):
