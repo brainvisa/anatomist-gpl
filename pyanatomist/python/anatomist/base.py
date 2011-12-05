@@ -297,39 +297,36 @@ class Anatomist(ObservableSingleton, object):
     """
     Creates a copy of source object.
 
-    * source: :py:class:`AObject`
-
+    :param source:
       The object to copy.
+    :type source: :py:class:`AObject`
 
-    * returns: :py:class:`AObject`
-
+    :returns:
       The copy
+    :rtype: :py:class:`AObject`
     """
     pass
 
   def createGraph(self, object, name=None, syntax=None, filename=None):
     """
     Creates a graph associated to an object (volume for example). This object initializes the graph dimensions (voxel size, extrema).
-    
-    * object: :py:class:`AObject`
-    
+
+    :param object:
       The new graph is based on this object
-    
-    * name: *string*
-    
+    :type object: :py:class:`AObject`
+
+    :param string name:
       Graph name. default is ``'RoiArg'``.
-    
-    * syntax: *string*
-    
+
+    :param string syntax:
       Graph syntactic attribute. default is ``'RoiArg'``.
-    
-    * filename: *string*
-    
+
+    :param string filename:
       Filename used for saving. Default is None.
 
-    * returns: :py:class:`AGraph`
-
+    :returns:
       The new graph object
+    :rtype: :py:class:`AGraph`
     """
     pass
 
@@ -337,13 +334,12 @@ class Anatomist(ObservableSingleton, object):
     """
     Loads a cursor for 3D windows from a file.
 
-    * filename: *string*
-
+    :param string filename:
       The file containing object data
 
-    * returns: :py:class:`AObject`
-
+    :returns:
       The loaded object
+    :rtype: :py:class:`AObject`
     """
     pass
 
@@ -351,21 +347,19 @@ class Anatomist(ObservableSingleton, object):
     """
     Creates a fusionned multi object that contains all given objects.
 
-    * objects: *list of* :py:class:`AObject`
-
+    :param objects:
       List of objects that must be fusionned
+    :type objects: list of :py:class:`AObject`
 
-    * method: *string*
-
+    :param string method:
       Method to apply for the fusion (``'Fusion2DMethod'``...)
 
-    * ask_order: *boolean*
-
+    :param boolean ask_order:
       If *True*, asks user in what order the fusion must be processed.
 
-    * returns: :py:class:`AObject`
-
+    :returns:
       The newly created fusion object.
+    :rtype: :py:class:`AObject`
     """
     pass
 
@@ -373,9 +367,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets information about fusion methods. If objects is not specified, the global list of all fusion methods is returned. Otherwise the allowed fusions for those specific objects is returned.
 
-    * returns: *dictionary*
-
+    :returns:
       Fusion methods
+    :rtype: dictionary
     """
     pass
 
@@ -386,13 +380,12 @@ class Anatomist(ObservableSingleton, object):
     so it seems to be better to encapsulate this step on another command. So referentials are treated the same as other objects.
     (LoadObject -> addAobject | createReferential -> assignReferential)
 
-    * filename: *string*
-
+    :param string filename:
       Name of a file (minf file, extension .referential) containing  informations about the referential : its name and uuid
 
-    * returns: :py:class:`Referential`
-
+    :returns:
       The newly created referential
+    :rtype: :py:class:`Referential`
     """
     pass
 
@@ -400,21 +393,20 @@ class Anatomist(ObservableSingleton, object):
     """
     Loads a transformation from a referential to another. The transformation informations are given in a file.
 
-    * filename: *string*
-
+    :param string filename:
       File containing transformation information
 
-    * origin: :py:class:`Referential`
-
+    :param origin:
       Origin of the transformation
+    :type origin: :py:class:`Referential`
 
-    * destination: :py:class:`Referential`
-
+    :param destination:
       Referential after applying transformation
+    :type destination: :py:class:`Referential`
 
-    * returns: :py:class:`Transformation`
-
+    :returns:
       Transformation to apply to convert coordinates from one referent
+    :rtype: :py:class:`Transformation`
     """
     pass
 
@@ -422,21 +414,21 @@ class Anatomist(ObservableSingleton, object):
     """
     Creates a transformation from a referential to another. The transformation informations are given in a matrix.
 
-    * matrix: *float vector*, size 12
+    :param matrix:
+      Transformation matrix (4 lines, 3 colons; 1st line: translation, others: rotation)
+    :type matrix: float vector, size 12
 
-      Transformation matrix (4 lines, 3 colons ; 1st line: translation, others: rotation)
-
-    * origin: :py:class:`Referential`
-
+    :param origin:
       Origin of the transformation
+    :type origin: :py:class:`Referential`
 
-    * destination: :py:class:`Referential`
-
+    :param destination:
       Referential after applying transformation
+    :type destination: :py:class:`Referential`
 
-    * returns: :py:class:`Transformation`
-
+    :returns:
       New transformation
+    :rtype: :py:class:`Transformation`
     """
     pass
 
@@ -444,13 +436,12 @@ class Anatomist(ObservableSingleton, object):
     """
     Creates an empty palette and adds it in the palettes list.
 
-    * name: *string*
-
+    :param string name:
       Name of the new palette
 
-    * returns: :py:class:`APalette`
-
+    :returns:
       The newly created palette
+    :rtype: :py:class:`APalette`
     """
     pass
 
@@ -458,13 +449,13 @@ class Anatomist(ObservableSingleton, object):
     """
     Creates a multi object containing objects in parameters.
 
-    * objects: *list of* :py:class:`AObject`
-
+    :param objects:
       Objects to put in a group
+    :type objects: list of :py:class:`AObject`
 
-    * returns: :py:class:`AObject`
-
+    :returns:
       The newly created multi object
+    :rtype: :py:class:`AObject`
     """
     pass
 
@@ -473,15 +464,15 @@ class Anatomist(ObservableSingleton, object):
     Links windows in a group. Moving cursor position in a window moves it in all linked windows.
     By default all windows are in the same group.
 
-    * windows: *list of* :py:class:`AWindow`
-
+    :param windows:
       The windows to link
+    :type windows: list of :py:class:`AWindow`
 
-    * group: :py:class:`AWindowsGroup`
-
+    :param group:
       Put the windows in this group. If it is *None*, a new group is created.
+    :type group: :py:class:`AWindowsGroup`
 
-    * returns: :py:class:`AWindowsGroup`
+    :rtype: :py:class:`AWindowsGroup`
     """
     if windows != []:
       windows = self.makeList( windows )
@@ -494,9 +485,9 @@ class Anatomist(ObservableSingleton, object):
   # objects access
   def getPalette(self, name):
     """
-    * returns: :py:class:`APalette`
-
+    :returns:
       The named palette
+    :rtype: :py:class:`APalette`
     """
     pass
 
@@ -505,9 +496,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets all objects referenced in current context.
 
-    * returns:  *list of* :py:class:`AObject`
-
+    :returns:
       List of existing objects
+    :rtype:  list of :py:class:`AObject`
     """
     pass
 
@@ -515,13 +506,12 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets objects importing those that are not referenced in current context.
 
-    * top_level_only: *bool*
-
+    :param bool top_level_only:
       If *True*, imports only top-level objects (that have no parents), else all objects are imported.
 
-    * returns:  *list of* :py:class:`AObject`
-
+    :returns:
       List of existing objects
+    :rtype:  list of :py:class:`AObject`
     """
     pass
 
@@ -529,13 +519,12 @@ class Anatomist(ObservableSingleton, object):
     """
     Get the object corresponding to this filename if it is currently loaded.
 
-    * filename: *string*
-
+    :param string filename:
       Filename of the requested object
 
-    * returns: :py:class:`AObject`
-
+    :returns:
       The object if it is loaded, else returns *None*.
+    :rtype: :py:class:`AObject` or *None*
     """
     objects=self.getObjects()
     loadedObject=None
@@ -549,9 +538,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets all windows referenced in current context.
 
-    * returns: *list of* :py:class:`AWindow`
-
+    :returns:
       List of opened windows
+    :rtype: list of :py:class:`AWindow`
     """
     pass
 
@@ -559,9 +548,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets all windows importing those that are not referenced in current context.
 
-    * returns: *list of* :py:class:`AWindow`
-
+    :returns:
       List of opened windows
+    :rtype: list of :py:class:`AWindow`
     """
     pass
 
@@ -569,9 +558,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets all referentials in current context.
 
-    * returns: *list of* :py:class:`Referential`
-
+    :returns:
       List of referentials
+    :type: list of :py:class:`Referential`
     """
     pass
 
@@ -579,9 +568,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets all referentials importing those that are not referenced in current context.
 
-    * returns: *list of* :py:class:`Referential`
-
+    :returns:
       List of referentials
+    :rtype: list of :py:class:`Referential`
     """
     pass
 
@@ -589,9 +578,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets all transformations.
 
-    * returns: *list of* :py:class:`Transformation`
-
+    :returns:
       List of transformations
+    :rtype: list of :py:class:`Transformation`
     """
     pass
 
@@ -599,29 +588,29 @@ class Anatomist(ObservableSingleton, object):
     """
     Gets all transformations importing those that are not referenced in current context.
 
-    * returns: *list of* :py:class:`Transformation`
-
+    :returns:
       List of transformations
+    :rtype: list of :py:class:`Transformation`
     """
     pass
 
   def getPalettes(self):
     """
-    * returns: *list of* :py:class:`APalette`
-
+    :returns:
       List of palettes.
+    :rtype: list of :py:class:`APalette`
     """
     pass
 
   def getSelection(self, group=None):
     """
-    * group: :py:class:`AWindowsGroup`
-
+    :param group:
       Get the selection in this group. If *None*, returns the selection in the default group.
+    :type group: :py:class:`AWindowsGroup`
 
-    * returns:  *list of* :py:class:`AObject`
-
+    :returns:
       The list of selected objects in the group of windows
+    :rtype: list of :py:class:`AObject`
     """
     pass
 
@@ -635,46 +624,46 @@ class Anatomist(ObservableSingleton, object):
     """
     Gives the last clicked position of the cursor.
 
-    * ref: :py:class:`Referential`
-
+    :param ref:
       If given, cursor position value will be in this referential. Else, anatomist central referential is used.
+    :type ref: :py:class:`Referential`
 
-    * returns: *float vector*, size 3
-
+    :returns:
       Last position of the cursor
+    :rtype: float vector, size 3
     """
     pass
 
   def getAimsInfo(self):
     """
-    * returns: *string*
-
+    :returns:
       Information about AIMS library.
+    :rtype: string
     """
     pass
 
   def getCommandsList(self):
     """
-    * returns: *dict*
-
+    :returns:
       List of commands available in Anatomist with their parameters.
       dict command name -> dict parameter name -> dict attribute -> value (needed, type)
+    :rtype: dictionary
     """
     pass
 
   def getModulesInfo(self):
     """
-    * returns: *dict*
-
+    :returns:
       List of modules and their description. dict module name -> dict attribute -> value (description)
+    :rtype: dictionary
     """
     pass
 
   def getVersion(self):
     """
-    * returns: *string*
-
+    :returns:
       Anatomist version
+    :rtype: string
     """
     pass
 
@@ -690,13 +679,13 @@ class Anatomist(ObservableSingleton, object):
     Adds objects in windows.
     The objects and windows must already exist.
 
-    * objects : *list of* :py:class:`AObject`
-
+    :param objects:
       List of objects to add
+    :type objects: list of :py:class:`AObject`
 
-    * windows : *list of* :py:class:`AWindow`
-
+    :param windows:
       List of windows in which the objects must be added
+    :type windows: list of :py:class:`AWindow`
     """
     self.execute("AddObject", objects=self.makeList(objects),
       windows=self.makeList(windows), add_children=int(add_children),
@@ -707,13 +696,13 @@ class Anatomist(ObservableSingleton, object):
     """
     Removes objects from windows.
 
-    * objects : *list of* :py:class:`AObject`
-
+    :param objects:
       List of objects to remove
+    :type objects: list of :py:class:`AObject`
 
-    * windows : *list of* :py:class:`AWindow`
-
+    :param windows:
       List of windows from which the objects must be removed
+    :type windows: list of :py:class:`AWindow`
     """
     self.execute("RemoveObject", objects=self.makeList(objects),
       windows=self.makeList(windows), remove_children=int(remove_children) )
@@ -722,9 +711,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Deletes objects
 
-    * objects: *list of* :py:class:`AObject`
-
+    :param objects:
       Objects to delete
+    :type objects: list of :py:class:`AObject`
     """
     objects=self.makeList(objects)
     for o in objects:
@@ -735,9 +724,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Deletes objects, windows, referentials, anything that is referenced in anatomist application.
 
-    * elements: *list of* :py:class:`AItem`
-
+    :param elements:
       Elements to delete
+    :type elements: list of :py:class:`AItem`
     """
     self.execute("DeleteElement", elements=self.makeList(elements))
 
@@ -753,16 +742,16 @@ class Anatomist(ObservableSingleton, object):
     The referential must exist. To create a new Referential, execute createReferential,
     to assign the central referential, first get it with Anatomist.centralRef attribute.
 
-    * referential: :py:class:`Referential`
-
+    :param referential:
       The referential to assign to objects and/or windows
+    :type referential: :py:class:`Referential`
 
-    * elements: *list of* :py:class:`AObject` / :py:class:`AWindow`
-
+    :param elements:
       Objects or windows which referential must be changed.
       The corresponding command tree contains an attribute central_ref to indicate if the referential to assign is anatomist central ref,
       because this referential isn't referenced by an id. In the socket implementation, Referential object must have an attribute central_ref,
       in order to create the command message. In direct impl, it is possible to access directly to the central ref object.
+    :type elements: list of :py:class:`AItem`
     """
     objects=[]
     windows=[]
@@ -779,9 +768,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Extracts referentials / transformations from objects headers when they contain such information, and assign them.
 
-    * objects: *list of* :py:class:`AObject`
-
+    :param objects:
       Objects which referential information must be loaded
+    :type objects: list of :py:class:`AObject`
     """
     self.execute("LoadReferentialFromHeader", objects=self.makeList(objects) )
 
@@ -791,41 +780,39 @@ class Anatomist(ObservableSingleton, object):
     """
     Sets the point of view, zoom, cursor position for 3D windows.
 
-    * windows: *list of* :py:class:`AWindow`
-
+    :param windows:
       Windows which options must be changed
+    :type windows: list of :py:class:`AWindow`
 
-    * zoom: *float*
-
+    :param float zoom:
       Zoom factor, default is 1
 
-    * observer_position: *float vector*, size 3
-
+    :param observer_position:
       Camera position
+    :type observer_position: float vector, size 3
 
-    * view_quaternion: *float vector*, size 4, normed
-
+    :param view_quaternion:
       View rotation
+    :type view_quaternion: float vector, size 4, normed
 
-    * slice_quaternion: *float vector*, size 4, normed
-
+    :param slice_quaternion:
       Slice plan rotation
+    :type slice_quaternion: float vector, size 4, normed
 
-    * force_redraw: *boolean*
-
+    :param boolean force_redraw:
       If *True*, refresh printing immediatly, default is *False*
 
-    * cursor_position: *float vector*
-
+    :param cursor_position:
       Linked cursor position
+    :type cursor_position: float vector
 
-    * boundingbox_min: *float vector*
-
+    :param boundingbox_min:
       Bounding box min values
+    :type boundingbox_min: float vector
 
-    * boundingbox_max: *float vector*
-
+    :param boundingbox_max:
       Bounding box max values
+    :type boundingbox_max: float vector
     """
     if force_redraw:
       force_redraw = 1
@@ -835,7 +822,13 @@ class Anatomist(ObservableSingleton, object):
   def setWindowsControl(self, windows, control):
     """
     Changes the selected button in windows menu.
-    Examples of controls : 'PaintControl', 'NodeSelectionControl', 'Default 3D Control', 'Selection 3D', 'Flight Control', 'ObliqueControl', 'TransformationControl', 'CutControl', 'Browser Selection', 'RoiControl'...
+
+    :param windows:
+      Windows to set control on
+    :type windows: list of :py:class:`AWindow`
+
+    :param string control:
+      Control to set. Examples of controls : 'PaintControl', 'NodeSelectionControl', 'Default 3D Control', 'Selection 3D', 'Flight Control', 'ObliqueControl', 'TransformationControl', 'CutControl', 'Browser Selection', 'RoiControl'...
     """
     self.execute("SetControl", windows=self.makeList(windows), control=control)
 
@@ -843,9 +836,9 @@ class Anatomist(ObservableSingleton, object):
     """
     Closes windows.
 
-    * windows: *list of* :py:class:`AWindow`
-
+    :param windows:
       Windows to be closed
+    :type windows: list of :py:class:`AWindow`
     """
     windows=self.makeList(windows)
     for w in windows:
@@ -860,21 +853,61 @@ class Anatomist(ObservableSingleton, object):
     """
     Changes objects material properties.
 
-    * objects: *list of* :py:class:`AObject`
-
+    :param objects:
       Objects whose material must be changed
+    :type objects: list of :py:class:`AObject`
 
-    * material: :py:class:`Material`
-
+    :param material:
       Material characteristics, including render properties.
       The material may be specified as a Material object, or as its various
       properties (ambient, diffuse, etc.). If both a material parameter and
       other properties are specified, the material is used as a base, and
       properties are used to modify it
+    :type material: :py:class:`Material`
 
-    * refresh: *bool*
-
+    :param bool refresh:
       If *True*, force windows refreshing
+
+    :param ambient:
+    :type ambient: RGB[A] vector: float values between 0 and 1.
+
+    :param list diffuse:
+      This parameter corresponds to the "standard" notion of color
+    :type diffuse: RGB[A] vector: float values between 0 and 1.
+
+    :param emission:
+    :type emission: RGB[A] vector: float values between 0 and 1.
+
+    :param specular:
+    :type specular: RGB[A] vector: float values between 0 and 1.
+
+    :param float shininess:
+      0-124
+
+    :param boolaen lighting:
+      enables (1) or disables (0) objects lighting/shading. Setting this value to -1 goes back to the default mode (globally set at the view/scene level).
+
+    :param int smooth_shading:
+      (tristate: 0/1/-1) smooth or flat polygons mode
+
+    :param int polygon_filtering:
+      (tristate: 0/1/-1) filtering (antialiasing) of lines/polygons
+
+    :param int depth_buffer:
+      (tristate: 0/1/-1) enables/disables writing in the Z-buffer. You can disable it if you want to click "through" an object (but it may have strange effects on the rendering)
+
+    :param int face_culling:
+      (tristate: 0/1/-1) don't draw polygons seen from the back side. The best is to enable it for transparent objects, and to disable it for "open" (on which both sides may be seen) and opaque meshes. For objects both open and transparent, there is no perfoect setting...
+
+    :param string polygon_mode:
+      polygons rendering mode: "normal", "wireframe", "outline" (normal + wireframe), "hiddenface_wireframe" (wireframe with hidden faces), "default" (use the global view settings), "ext_outlined" (thickened external boundaries + normal rendering).
+
+    :param unlit_color:
+      color used for lines when lighting is off. For now it only affects polygons boundaries in "outlined" or "ext_outlined" polygon modes.
+    :type unlit_color: RGB[A] vector: float values between 0 and 1.
+
+    :param float line_width:
+      Lines thickness (meshes, segments, wireframe rendering modes). A null or negative value fallsback to default (1 in principle).
     """
     if material is not None:
       if ambient is None:
@@ -911,48 +944,44 @@ class Anatomist(ObservableSingleton, object):
     """
     Assign a palette to objects
 
-    * objects: *list of* :py:class:`AObject`
-
+    :param objects:
       Assign palette parameters to these objects
+    :type objects: list of :py:class:`AObject`
 
-    * palette: :py:class:`APalette`
-
+    :param palette:
       Principal palette to apply
+    :type palette: :py:class:`APalette`
 
-    * minVal: *float* (0 - 1)
-
+    :param minVal:
       Palette value to assign to objects texture min value (proportionally to palette's limits)
+    :type minVal: float (0 - 1)
 
-    * maxVal: *float* (0 - 1)
-
+    :param maxVal:
       Palette value to assign to objects texture max value
+    :type maxVal: float (0 - 1)
 
-    * palette2: :py:class:`APalette`
-
+    :param palette2:
       Second palette, for 2D textures
+    :type palette2: :py:class:`APalette`
 
-    * minVal2: *float* (0 - 1)
-
+    :param minVal2:
       Second palette value to affect to object texture second component min value
+    :type minVal2: float (0 - 1)
 
-    * maxVal2: *float* (0 - 1)
-
+    :param maxVal2:
       Second palette value to assign to object texture second component max value
+    :type maxVal2: float (0 - 1)
 
-    * mixMethod: *string*
-
+    :param string mixMethod:
       Method to mix two palettes in a 2D palette : linear or geometric
 
-    * linMixFactor: *float*
-
+    :param float linMixFactor:
       mix factor for the linear method
 
-    * palette1Dmapping: *string*
-
+    :param string palette1Dmapping:
       way of using 2D palette for 1D texture : FirstLine or Diagonal
 
-    * absoluteMode: *boolean*
-
+    :param boolean absoluteMode:
       if *True*, min/max values are supposed to be absolute values (in regard to objects texture) rather than proportions
     """
     self.execute('SetObjectPalette', objects = self.makeList(objects), palette = palette, palette2 = palette2, min=minVal, max=maxVal, min2=minVal2, max2=maxVal2, mixMethod=mixMethod, linMixFactor=linMixFactor, palette1Dmapping=palette1Dmapping, absoluteMode=int(absoluteMode))
