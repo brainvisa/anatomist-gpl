@@ -1149,13 +1149,13 @@ class Anatomist(ObservableSingleton, object):
     Converts current api objects to corresponding anatomist object representation.
     This method must be called before sending a command to anatomist application on command parameters.
 
-    * params: *dictionary* or *list*
-
+    :param params:
       Elements to convert
+    :type params: dictionary or list
 
-    * returns: *dictionary* or *list*
-
+    :returns:
       Converted elements
+    :rtype: dictionary or list
     """
     if not isinstance( params, basestring ) \
       and operator.isSequenceType( params ):
@@ -1168,13 +1168,11 @@ class Anatomist(ObservableSingleton, object):
       Sends a command to anatomist application. Call this method if there's no answer to get.
       This method depends on the mean of communication with anatomist. Must be redefined in implementation api.
 
-      * command: *string*
-
+      :param string command:
         Name of the command to execute. Any command that can be processed by anatomist command processor.
         The complete commands list is in http://brainvisa.info/doc/anatomist/html/fr/programmation/commands.html
 
-      * kwargs: *dictionary*
-
+      :param dictionary kwargs:
         Parameters for the command
       """
       pass
@@ -1213,22 +1211,20 @@ class Anatomist(ObservableSingleton, object):
     """
     Base class for representing an object in Anatomist application.
 
-    * anatomistinstance: :py:class:`Anatomist`
-
+    :param anatomistinstance:
       Reference to Anatomist object which created this object.
       Useful because some methods defined in AItem objects will need to send a command to the Anatomist application.
+    :type anatomistinstance: :py:class:`Anatomist`
 
-    * internalRep: *object*
-
+    :param object internalRep:
       Representation of this object in anatomist application.
 
-    * ref: *bool*
-
+    :param bool ref:
       Indicates if a reference has been taken on the corresponding anatomist object. If *True*, the reference is released on deleting this item.
 
-    * refType: *string*
-
+    :param string refType:
       Type of reference taken on the object : ``Weak`` (reference counter not incremented), ``WeakShared`` (reference counter incrementerd but the object can be deleted even if it remains references) or ``Strong`` (reference counter is incremented, the object cannot be deleted since there is references on it). If it is not specified, :py:data:`anatomist.base.Anatomist.defaultRefType` is used.
+
     """
     def __init__( self, anatomistinstance, internalRep=None, refType=None, *args, **kwargs ):
       super(Anatomist.AItem, self).__init__(*args, **kwargs)
@@ -1254,9 +1250,9 @@ class Anatomist(ObservableSingleton, object):
       Called on comparison operations between self and other.
       Their internalRep is compared.
 
-      * returns: int
-
+      :returns:
         -1 if self < other, 0 if self == other, 1 if self > other
+      :rtype: int
       """
       if not isinstance(other, Anatomist.AItem):
         return 1
@@ -1271,9 +1267,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Gets informations about this object.
 
-      * returns: dictionary
-
+      :returns:
         information about the object (property -> value)
+      :rtype: dictionary
       """
       pass
 
@@ -1302,9 +1298,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Get a reference of type *refType* on this object.
 
-      * returns: :py:class:`anatomist.base.Anatomist.AItem`
-
+      :returns:
         A copy of current object with a reference of type refType on anatomist object.
+      :rtype: :py:class:`anatomist.base.Anatomist.AItem`
       """
       #print "get ref ", self, self.__class__
       return self.__class__(self.anatomistinstance, self.getInternalRep(), refType)
@@ -1336,33 +1332,29 @@ class Anatomist(ObservableSingleton, object):
 
     Following information can be obtained using ObjectInfo command :
 
-    * objectType: *string*
-
+    :param string objectType:
       object type. For example : volume, bucket, graph, texture...
 
-    * children: *list of* :py:class:`anatomist.base.Anatomist.AObject`
-
+    :param children:
       List of objects which are children of current object (for example: nodes in a graph). Can be empty.
+    :type children: list of :py:class:`anatomist.base.Anatomist.AObject`
 
-    * filename: *string*
-
+    :param string filename:
       Name of the file from which the object has been loaded. May be *None*.
 
-    * name: *string*
-
+    :param string name:
       Name of the object presented in Anatomist window.
 
-    * copy: *boolean*
-
+    :param boolean copy:
       *True* indicates that this object is a copy of another object, otherwise it is the original object.
 
-    * material: :py:class:`anatomist.base.Anatomist.Material`
-
+    :param material:
       Object's material parameters
+    :type material: :py:class:`anatomist.base.Anatomist.Material`
 
-    * referential: :py:class:`anatomist.base.Anatomist.Referential`
-
+    :param referential:
       Referential assigned to this object.
+    :type referential: :py:class:`anatomist.base.Anatomist.Referential`
     """
     def __init__(self, anatomistinstance, internalRep=None, *args, **kwargs):
       """
@@ -1376,9 +1368,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Gets windows that contain this object.
 
-      * returns: *list of* :py:class:`anatomist.base.Anatomist.AWindow`
-
+      :returns:
         Opened windows that contain this object.
+      :rtype: list of :py:class:`anatomist.base.Anatomist.AWindow`
       """
       allWindows=self.anatomistinstance.importWindows()
       windows=[]
@@ -1394,9 +1386,9 @@ class Anatomist(ObservableSingleton, object):
       Adds the object in windows.
       Windows must already exist.
 
-      * windows : *list of* :py:class:`anatomist.base.Anatomist.AWindow`
-
+      :param  windows:
         List of windows in which the object must be added
+      :type windows: list of :py:class:`anatomist.base.Anatomist.AWindow`
       """
       self.anatomistinstance.addObjects([self], windows)
 
@@ -1404,9 +1396,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Removes object from windows.
 
-      * windows : *list of* :py:class:`anatomist.base.Anatomist.AWindow`
-
+      :param windows:
         List of windows from which the object must be removed
+      :type windows: list of :py:class:`anatomist.base.Anatomist.AWindow`
       """
       self.anatomistinstance.removeObjects([self], windows)
 
@@ -1422,9 +1414,9 @@ class Anatomist(ObservableSingleton, object):
       The referential must exist. To create a new Referential, execute createReferential,
       to assign the central referential, first get it with Anatomist.centralRef attribute.
 
-      * referential: :py:class:`anatomist.base.Anatomist.Referential`
-
-      The referential to be assigned to the object
+      :param referential:
+        The referential to be assigned to the object
+      :type referential: :py:class:`anatomist.base.Anatomist.Referential`
       """
       self.anatomistinstance.assignReferential(referential, [self])
 
@@ -1444,13 +1436,57 @@ class Anatomist(ObservableSingleton, object):
       """
       Changes object material properties.
 
-      * material: :py:class:`anatomist.base.Anatomist.Material`
+      :param material:
+        Material characteristics, including render properties.
+        The material may be specified as a Material object, or as its various
+        properties (ambient, diffuse, etc.). If both a material parameter and
+        other properties are specified, the material is used as a base, and
+        properties are used to modify it
+      :type material: :py:class:`anatomist.base.Anatomist.Material`
 
-        Material characteristics, including render properties
-
-      * refresh: *bool*
-
+      :param bool refresh:
         If *True*, force windows refreshing
+
+      :param ambient:
+      :type ambient: RGB[A] vector: float values between 0 and 1.
+
+      :param list diffuse:
+        This parameter corresponds to the "standard" notion of color
+      :type diffuse: RGB[A] vector: float values between 0 and 1.
+
+      :param emission:
+      :type emission: RGB[A] vector: float values between 0 and 1.
+
+      :param specular:
+      :type specular: RGB[A] vector: float values between 0 and 1.
+
+      :param float shininess:
+        0-124
+
+      :param boolaen lighting:
+        enables (1) or disables (0) objects lighting/shading. Setting this value to -1 goes back to the default mode (globally set at the view/scene level).
+
+      :param int smooth_shading:
+        (tristate: 0/1/-1) smooth or flat polygons mode
+
+      :param int polygon_filtering:
+        (tristate: 0/1/-1) filtering (antialiasing) of lines/polygons
+
+      :param int depth_buffer:
+        (tristate: 0/1/-1) enables/disables writing in the Z-buffer. You can disable it if you want to click "through" an object (but it may have strange effects on the rendering)
+
+      :param int face_culling:
+        (tristate: 0/1/-1) don't draw polygons seen from the back side. The best is to enable it for transparent objects, and to disable it for "open" (on which both sides may be seen) and opaque meshes. For objects both open and transparent, there is no perfoect setting...
+
+      :param string polygon_mode:
+        polygons rendering mode: "normal", "wireframe", "outline" (normal + wireframe), "hiddenface_wireframe" (wireframe with hidden faces), "default" (use the global view settings), "ext_outlined" (thickened external boundaries + normal rendering).
+
+      :param unlit_color:
+        color used for lines when lighting is off. For now it only affects polygons boundaries in "outlined" or "ext_outlined" polygon modes.
+      :type unlit_color: RGB[A] vector: float values between 0 and 1.
+
+      :param float line_width:
+        Lines thickness (meshes, segments, wireframe rendering modes). A null or negative value fallsback to default (1 in principle).
       """
       self.anatomistinstance.setMaterial([self], material, refresh,
       ambient, diffuse, emission, specular, shininess, lighting,
@@ -1461,41 +1497,41 @@ class Anatomist(ObservableSingleton, object):
       """
       Assign a palette to object
 
-      * palette: :py:class:`anatomist.base.Anatomist.APalette`
-
+      :param palette:
         Principal palette to apply
+      :type palette: :py:class:`anatomist.base.Anatomist.APalette`
 
-      * minVal: *float*
+      :param minVal:
+        Palette value to assign to objects texture min value (proportionally to palette's limits)
+      :type minVal: float (0 - 1)
 
-        Palette value to affect to objects texture min value
+      :param maxVal:
+        Palette value to assign to objects texture max value
+      :type maxVal: float (0 - 1)
 
-      * maxVal: *float*
-
-        Palette value to affect to objects texture max value
-
-      * palette2: :py:class:`anatomist.base.Anatomist.APalette`
-
+      :param palette2:
         Second palette, for 2D textures
+      :type palette2: :py:class:`APalette`
 
-      * minVal2: *float*
-
+      :param minVal2:
         Second palette value to affect to object texture second component min value
+      :type minVal2: float (0 - 1)
 
-      * maxVal2: *float*
+      :param maxVal2:
+        Second palette value to assign to object texture second component max value
+      :type maxVal2: float (0 - 1)
 
-        Second palette value to affect to object texture second component max value
+      :param string mixMethod:
+        Method to mix two palettes in a 2D palette : linear or geometric
 
-      * mixMethod: *string*
+      :param float linMixFactor:
+        mix factor for the linear method
 
-        Method to mix two palettes in a 2D palette : ``'linear'`` or ``'geometric'``
+      :param string palette1Dmapping:
+        way of using 2D palette for 1D texture : FirstLine or Diagonal
 
-      * linMixFactor: *float*
-
-        Mix factor for the linear method
-
-      * palette1Dmapping: *string*
-
-        Way of using 2D palette for 1D texture : ``'FirstLine'`` or ``'Diagonal'``
+      :param boolean absoluteMode:
+        if *True*, min/max values are supposed to be absolute values (in regard to objects texture) rather than proportions
       """
       self.anatomistinstance.setObjectPalette([self], palette, minVal, maxVal, palette2,  minVal2, maxVal2, mixMethod, linMixFactor, palette1Dmapping,
       absoluteMode=absoluteMode)
@@ -1504,15 +1540,14 @@ class Anatomist(ObservableSingleton, object):
       """
       Extract the object texture to create a new texture object.
 
-      * time: *float*
-
+      :param float time:
         For temporal objects, if this parameter is mentionned the texture will be extracted at this time. if not mentionned,
         All times will be extracted and the texture will be a temporal object.
         In socket implementation, it is necessary to get a new id for the texture object and to pass it to the command.
 
-      * returns: :py:class:`anatomist.base.Anatomist.AObject`
-
+      :returns:
         The newly created texture object
+      :rtype: :py:class:`anatomist.base.Anatomist.AObject`
       """
       pass
 
@@ -1520,24 +1555,23 @@ class Anatomist(ObservableSingleton, object):
       """
       Generates an empty texture (value 0 everywhere) for a mesh object.
 
-      * dimension: *int*
-
+      :param int dimension:
         Texture dimension (1 or 2)
 
-      * returns: :py:class:`anatomist.base.Anatomist.AObject`
-
+      :returns:
         The newly created texture object
+      :rtype: :py:class:`anatomist.base.Anatomist.AObject`
       """
       pass
 
     def exportTexture(self, filename, time=None):
       """
-      * filename: *string*
+      Saves the texture of an object to a file
 
+      :param string filename:
         File in which the texture must be written
 
-      * time: *float*
-
+      :param float time:
         For temporal objects, if this parameter is mentionned the texture will be extracted at this time. if not mentionned,
         all times will be extracted and the texture will be a temporal object.
       """
@@ -1547,8 +1581,7 @@ class Anatomist(ObservableSingleton, object):
       """
       Saves object in file.
 
-      * filename: *string*
-
+      :param string filename:
         File in which the object will be written. If not mentionned, the object is saved in the file from which it has been loaded.
       """
       self.anatomistinstance.execute("SaveObject", object=self, filename=filename)
@@ -1562,7 +1595,7 @@ class Anatomist(ObservableSingleton, object):
   ###############################################################################
   class AGraph(AObject):
     """
-    Represents a graph.
+    Graph object in Anatomist.
     """
     def __init__(self, anatomistinstance, internalRep=None, *args, **kwargs):
       super(Anatomist.AGraph, self).__init__(anatomistinstance, internalRep, *args, **kwargs)
@@ -1571,24 +1604,19 @@ class Anatomist(ObservableSingleton, object):
       """
       Creates a new node with optionally an empty bucket inside and adds it in the graph.
 
-      * name: *string*
-
+      :param string name:
         node name. default is ``RoiArg``.
 
-      * syntax: *string*
-
+      :param string syntax:
         node syntax attribute. default is ``roi``.
 
-      * with_bucket: *bool*
-
+      :param bool with_bucket:
         if *True*, creates an empty bucket in the node and returns it with the node. default is None, so the bucket is created but not returned
 
-      * duplicate: *bool*
-
+      :param bool duplicate:
         enables duplication of nodes with the same name attribute.
 
-      * returns: (AObject, AObject)
-
+      :returns: 
         (the created node, the created bucket) or only the created node if with_bucket is False
       """
       pass
@@ -1598,17 +1626,16 @@ class Anatomist(ObservableSingleton, object):
     """
     Represents an anatomist window.
 
-    * windowType: *string*
-
+    :param string windowType:
       Windows type (``'axial'``, ``'sagittal'``, ...)
 
-    * group: :py:class:`anatomist.base.Anatomist.AWindowsGroup`
-
+    :param group:
       The group which this window belongs to.
+    :type group: :py:class:`anatomist.base.Anatomist.AWindowsGroup`
 
-    * objects: *list of* :py:class:`anatomist.base.Anatomist.AObject`
-
+    :param objects:
       The window contains these objects.
+    :type objects: list of :py:class:`anatomist.base.Anatomist.AObject`
     """
     def __init__(self, anatomistinstance, internalRep=None, *args, **kwargs):
       """
@@ -1623,9 +1650,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Adds objects in window.
 
-      * objects : *list of* :py:class:`anatomist.base.Anatomist.AObject`
-
+      :param objects:
         List of objects to add
+      :type objects: list of :py:class:`anatomist.base.Anatomist.AObject`
       """
       self.anatomistinstance.addObjects(objects, [self], add_children,
         add_graph_nodes, add_graph_relations)
@@ -1634,41 +1661,51 @@ class Anatomist(ObservableSingleton, object):
       """
       Removes objects from window.
 
-      * objects : *list of* :py:class:`anatomist.base.Anatomist.AObject`
-
+      :param objects:
         List of objects to remove
+      :type objects: list of :py:class:`anatomist.base.Anatomist.AObject`
       """
       self.anatomistinstance.removeObjects(objects, [self])
 
-    def camera(self, zoom=None, observer_position=None, view_quaternion=None, slice_quaternion=None, force_redraw=None, cursor_position=None):
+    def camera(self, zoom=None, observer_position=None, view_quaternion=None,
+      slice_quaternion=None, force_redraw=None, cursor_position=None,
+      boundingbox_min=None, boundingbox_max=None):
       """
       Sets the point of view, zoom, cursor position for a 3D window.
 
-      * zoom: *float*
+      :param float zoom:
+        Zoom factor, default is 1
 
-        Zoom factor,
-
-      * observer_position: *float vector*, size 3
-
+      :param observer_position:
         Camera position
+      :type observer_position: float vector, size 3
 
-      * view_quaternion: *float vector*, size 4, normed
-
+      :param view_quaternion:
         View rotation
+      :type view_quaternion: float vector, size 4, normed
 
-      * slice_quaternion: *float vector*, size 4, normed
-
+      :param slice_quaternion:
         Slice plan rotation
+      :type slice_quaternion: float vector, size 4, normed
 
-      * force_redraw: *boolean*
+      :param boolean force_redraw:
+        If *True*, refresh printing immediatly, default is *False*
 
-        If *True* refresh printing immediatly, default is *False*
-
-      * cursor_position: *float vector*
-
+      :param cursor_position:
         Linked cursor position
+      :type cursor_position: float vector
+
+      :param boundingbox_min:
+        Bounding box min values
+      :type boundingbox_min: float vector
+
+      :param boundingbox_max:
+        Bounding box max values
+      :type boundingbox_max: float vector
       """
-      self.anatomistinstance.camera([self], zoom, observer_position, view_quaternion, slice_quaternion, force_redraw, cursor_position)
+      self.anatomistinstance.camera([self], zoom, observer_position,
+        view_quaternion, slice_quaternion, force_redraw, cursor_position,
+        boundingbox_min, boundingbox_max)
 
     def assignReferential(self, referential):
       """
@@ -1676,9 +1713,9 @@ class Anatomist(ObservableSingleton, object):
       The referential must exist. To create a new Referential, execute createReferential,
       to assign the central referential, first get it with Anatomist.centralRef attribute.
 
-      * referential: :py:class:`anatomist.base.Anatomist.Referential`
-
+      :param referential:
         The referential to assign to objects and/or windows
+      :type referential: :py:class:`anatomist.base.Anatomist.Referential`
       """
       self.anatomistinstance.assignReferential(referential, [self])
 
@@ -1694,9 +1731,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Changes cursor position in this window and all linked windows (same group).
 
-      * position: *float vector*, size 3
-
+      :param position:
         Cursor new position
+      :type position: float vector, size 3
       """
       self.anatomistinstance.execute("LinkedCursor", window=self, position=position)
 
@@ -1704,8 +1741,7 @@ class Anatomist(ObservableSingleton, object):
       """
       Shows or hides the toolbox frame of a window.
 
-      * show: *boolean*
-
+      :param boolean show:
         If *True*, the window's toolbox frame is shown, else it is hidden.
       """
       if show:
@@ -1731,8 +1767,7 @@ class Anatomist(ObservableSingleton, object):
     """
     A window containing other windows.
 
-    * nbCols: *int*
-
+    :param int nbCols:
       Number of columns of the windows block
     """
     def __init__(self, anatomistinstance=None, internalRep=None, nbCols=2, *args, **kwargs):
@@ -1750,21 +1785,21 @@ class Anatomist(ObservableSingleton, object):
 
     def getSelection(self):
       """
-      * retutns: *list of* :py:class:`anatomist.base.Anatomist.AObject`
-
+      :retutns:
         Objects that are selected in this windows group
+      :rtype: list of :py:class:`anatomist.base.Anatomist.AObject`
       """
       return self.anatomistinstance.getSelection(self)
 
     def isSelected(self, object):
       """
-      * object: :py:class:`anatomist.base.Anatomist.AObject`
-
+      :param object:
         An object in this windows group
+      :type object: :py:class:`anatomist.base.Anatomist.AObject`
 
-      * returns: *bool*
-
+      :returns:
         *True* if the object is selected in this windows group
+      :rtype: bool
       """
       selectedObjects=self.getSelection()
       return (selectedObjects is not None) and (object in selectedObjects)
@@ -1773,9 +1808,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Initializes selection with given objects for this windows group.
 
-      * objects: *list of* :py:class:`anatomist.base.Anatomist.AObject`
-
+      :param objects:
         Objects to select
+      :type objects: list of :py:class:`anatomist.base.Anatomist.AObject`
       """
       self.anatomistinstance.execute("Select", objects=self.makeList(objects), group=self, modifiers="set")
 
@@ -1783,9 +1818,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Adds objects to this windows group's current selection.
 
-      * objects: *list of* :py:class:`anatomist.base.Anatomist.AObject`
-
+      :param objects:
         Objects to add to selection
+      :type objects: list of :py:class:`anatomist.base.Anatomist.AObject`
       """
       self.anatomistinstance.execute("Select", objects=self.makeList(objects), group=self, modifiers="add")
 
@@ -1793,9 +1828,9 @@ class Anatomist(ObservableSingleton, object):
       """
       Removes objects from this windows group's selection.
 
-      * objects: *list of* :py:class:`anatomist.base.Anatomist.AObject`
-
+      :param objects:
         Objects to unselect
+      :type objects: list of :py:class:`anatomist.base.Anatomist.AObject`
       """
       self.anatomistinstance.execute("Select", unselect_objects=self.makeList(objects), group=self, modifiers="add")
 
@@ -1809,13 +1844,13 @@ class Anatomist(ObservableSingleton, object):
       """
       Selects objects giving their name in a nomenclature. In anatomist graphical interface, it is done by clicking on items of a nomenclature opened in a browser.
 
-      * nomenclature: :py:class:`anatomist.base.Anatomist.AObject`
-
+      :param nomenclature:
         tree with names and labels associated to nodes.
+      :type nomenclature: :py:class:`anatomist.base.Anatomist.AObject`
 
-      * names: *list of string*
-
+      :param names:
         Names of elements to select.
+      :type names: list of string
       """
       if names is not None and names != []: # executing the command with names = [] make errors
         snames=string.join(names)
@@ -1825,13 +1860,13 @@ class Anatomist(ObservableSingleton, object):
       """
       Adds objects to this windows group's current selection, given their name in a nomenclature.
 
-      * nomenclature: :py:class:`anatomist.base.Anatomist.AObject`
-
+      :param nomenclature:
         Tree with names and labels associated to nodes.
+      :type nomenclature: :py:class:`anatomist.base.Anatomist.AObject`
 
-      * names: *list of string*
-
+      :param names:
         Names of elements to add to selection.
+      :type names: list of string
       """
       if names is not None and names != []:
         snames=string.join(names)
@@ -1842,13 +1877,13 @@ class Anatomist(ObservableSingleton, object):
       """
       Removes objects from this windows group's selection, given their name in a nomenclature.
 
-      * nomenclature: :py:class:`anatomist.base.Anatomist.AObject`
-
+      :param nomenclature:
         Tree with names and labels associated to nodes.
+      :type nomenclature: :py:class:`anatomist.base.Anatomist.AObject`
 
-      * names: *list of string*
-
+      :param names:
         Names of elements to unselect.
+      :type names: list of string
       """
       if names is not None and names != []:
         snames=string.join(names)
@@ -1857,10 +1892,9 @@ class Anatomist(ObservableSingleton, object):
   ###############################################################################
   class Referential(AItem):
     """
-    * refUuid: *string*
-
-    A unique id representing this referential
-    Two referential are equal if they have the same uuid.
+    :param string refUuid:
+      A unique id representing this referential
+      Two referential are equal if they have the same uuid.
     """
 
     def __init__(self, anatomistinstance, internalRep=None, uuid=None, *args, **kwargs):
@@ -1873,9 +1907,9 @@ class Anatomist(ObservableSingleton, object):
       Called on comparison operations between self and other.
       Their uuid is compared.
 
-      * returns: *int*
-
+      :returns:
         -1 if self < other, 0 if self == other, 1 if self > other
+      :rtype: int
       """
       if self.refUuid == other.refUuid:
         return 0
@@ -1887,8 +1921,7 @@ class Anatomist(ObservableSingleton, object):
   ###############################################################################
   class APalette(AItem):
     """
-    * name: *string*
-
+    :param string name:
       Palette name. Must be unique, it is the palette identifier.
     """
     def __init__(self, name, anatomistinstance, internalRep=None, *args, **kwargs):
@@ -1899,16 +1932,15 @@ class Anatomist(ObservableSingleton, object):
       """
       Modifies a palette (colors).
 
-      * palette: :py:class:`anatomist.base.Anatomist.APalette`
-
+      :param palette:
         The palette which colors must be changed
+      :type palette: :py:class:`anatomist.base.Anatomist.APalette`
 
-      * colors: *int vector*
-
+      :param colors:
         Color vectors
+      :type colors: int vector
 
-      * colors_mode: *string*
-
+      :param string colors_mode:
         ``'RGB'`` or ``'RGBA'``
       """
       self.anatomistinstance.execute("ChangePalette", name=self.name, colors=colors, color_mode=color_mode)
@@ -1927,8 +1959,7 @@ class Anatomist(ObservableSingleton, object):
       """
       Saves transformation in file.
 
-      * filename: *string*
-
+      :param string filename:
         File in which the transformation will be written.
       """
       self.anatomistinstance.execute("SaveTransformation", filename=filename, transformation=self)
@@ -1936,73 +1967,48 @@ class Anatomist(ObservableSingleton, object):
   ###############################################################################
   class Material(object):
     """
-    * ambient: *float vector* (0-1), size 4
+    :param ambient:
+    :type ambient: RGB[A] vector: float values between 0 and 1.
 
-      Qmbient light rgba color
+    :param list diffuse:
+      This parameter corresponds to the "standard" notion of color
+    :type diffuse: RGB[A] vector: float values between 0 and 1.
 
-    * diffuse: *float vector* (0-1), size 4
+    :param emission:
+    :type emission: RGB[A] vector: float values between 0 and 1.
 
-      Diffuse light rgba color (object color)
+    :param specular:
+    :type specular: RGB[A] vector: float values between 0 and 1.
 
-    * emission: *float vector* (0-1), size 4
+    :param float shininess:
+      0-124
 
-      Rgba color of light issued from object
+    :param boolaen lighting:
+      enables (1) or disables (0) objects lighting/shading. Setting this value to -1 goes back to the default mode (globally set at the view/scene level).
 
-    * specular: *float vector* (0-1), size 4
+    :param int smooth_shading:
+      (tristate: 0/1/-1) smooth or flat polygons mode
 
-      Reflect light rgba color in front of the object
+    :param int polygon_filtering:
+      (tristate: 0/1/-1) filtering (antialiasing) of lines/polygons
 
-    * shininess: *float* (0-124)
+    :param int depth_buffer:
+      (tristate: 0/1/-1) enables/disables writing in the Z-buffer. You can disable it if you want to click "through" an object (but it may have strange effects on the rendering)
 
-      Reflect spreading value
+    :param int face_culling:
+      (tristate: 0/1/-1) don't draw polygons seen from the back side. The best is to enable it for transparent objects, and to disable it for "open" (on which both sides may be seen) and opaque meshes. For objects both open and transparent, there is no perfoect setting...
 
-    Render properties :
+    :param string polygon_mode:
+      polygons rendering mode: "normal", "wireframe", "outline" (normal + wireframe), "hiddenface_wireframe" (wireframe with hidden faces), "default" (use the global view settings), "ext_outlined" (thickened external boundaries + normal rendering).
 
-    * lighting: *int*
+    :param unlit_color:
+      color used for lines when lighting is off. For now it only affects polygons boundaries in "outlined" or "ext_outlined" polygon modes.
+    :type unlit_color: RGB[A] vector: float values between 0 and 1.
 
-      activates or deactivates object lighting.
+    :param float line_width:
+      Lines thickness (meshes, segments, wireframe rendering modes). A null or negative value fallsback to default (1 in principle).
 
-      - 0 : deactivates lighting
-      - 1 : activate lighting
-      - -1 : keep default parameter of the view
-
-    * smooth_shading: *int*
-
-      (0/1/-1) activates or not facets smoothing. if true polygons are not visibles on the surface, it seems to be smooth.
-
-    * polygon_filtering: *int*
-
-      (0/1/-1) antialiasing
-
-    * depth_buffer: *int*
-
-      (0/1/-1) put or not object in z-buffer. if not, it is possible to click through the object.
-
-    * face_culling: *int*
-
-      (0/1/-1) do not show facets oriented at the opposite of the camera
-
-    * polygon_mode: *string*
-
-      Polygon view mode
-
-      - normal
-      - wireframe
-      - outline (normal + wireframe)
-      - hiddenface_wireframe (wireframe only for hidden faces)
-      - ext_outlined (normal + extenal outline)
-      - default (default view parameter)
-
-    * unlit_color: *float vector* (0-1), size 4
-
-      Color of mesh when lighting is disabled
-
-    * line_width: *float*
-
-      Line width for segments mesh
-
-    * ghost: *int*
-
+    :param int ghost:
       In ghost mode, objects are not drawn in the depth buffer
     """
 
