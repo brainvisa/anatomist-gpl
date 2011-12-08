@@ -63,19 +63,22 @@ import sys, os
 import distutils.spawn
 import atexit
 
-USE_QT4=False
-if sys.modules.has_key( 'PyQt4' ):
-  USE_QT4=True
-  
+USE_QT4=True
+if sys.modules.has_key( 'qt' ):
+  USE_QT4=False
+
+if not USE_QT4:
+  try:
+    from soma.qt3gui.io import Socket
+    from soma.qt3gui.qt3thread import QtThreadCall
+    from qt import QProcess, SIGNAL, qApp
+  except ImportError:
+    USE_QT4 = True
 if USE_QT4:
   from soma.qt4gui.io import Socket
   from soma.qt4gui.api import QtThreadCall
   from PyQt4.QtCore import QProcess, SIGNAL
   from PyQt4.QtGui import qApp
-else:
-  from soma.qt3gui.io import Socket
-  from soma.qt3gui.qt3thread import QtThreadCall
-  from qt import QProcess, SIGNAL, qApp  
 
 try:
   from soma import somaqt
@@ -876,6 +879,16 @@ class Anatomist(base.Anatomist):
           if value is not None:
               if type( value ) in ( types.TupleType, types.ListType ):
                   value = string.join( map( str, value ) )
+              elif hasattr( value, 'items' ) and hasattr( value, 'has_key' ):
+                # special case of dictionaries: they should convert to
+                # carto Trees, and have the __syntax__ property first
+                if value.has_key( '__syntax__' ):
+                  v2 = "{ '__syntax__' : " + repr( value[ '__syntax__' ] ) \
+                    + ', '
+                else:
+                  v2 = "{ '__syntax__' : 'dictionary', "
+                value = v2 + ', '.join( [ '%s: %s' % (repr(x),repr(y)) \
+                  for x,y in value.items() if x != '__syntax__' ] ) + ' }'
               else:
                   value = str( value )
               cmd += name + " " + value + "\n"
