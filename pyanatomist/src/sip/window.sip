@@ -176,7 +176,7 @@ public:
     carto::Object =carto::none(), Qt::WFlags=Qt::WType_TopLevel );
 %End
   virtual ~QAWindow();
-  virtual void refreshNow() /AutoGen/;
+  virtual void refreshNow();
   virtual bool close() /AutoGen/;
 %If ( - Qt_3_3_6)
   virtual bool close( int ) /AutoGen/;
@@ -332,6 +332,8 @@ public:
   void muteSagittal();
   void muteOblique();
   void mute3D();
+  virtual void Refresh();
+  virtual void refreshNow();
   virtual anatomist::AObject* objectAtCursorPosition( int x, int y );
 /*  virtual std::list<anatomist::AObject*> *objectsAtCursorPosition( int x,
       int y, int tolerenceRadius );
