@@ -63,22 +63,10 @@ import sys, os
 import distutils.spawn
 import atexit
 
-USE_QT4=True
-if sys.modules.has_key( 'qt' ):
-  USE_QT4=False
-
-if not USE_QT4:
-  try:
-    from soma.qt3gui.io import Socket
-    from soma.qt3gui.qt3thread import QtThreadCall
-    from qt import QProcess, SIGNAL, qApp
-  except ImportError:
-    USE_QT4 = True
-if USE_QT4:
-  from soma.qt4gui.io import Socket
-  from soma.qt4gui.api import QtThreadCall
-  from PyQt4.QtCore import QProcess, SIGNAL
-  from PyQt4.QtGui import qApp
+from soma.qt4gui.io import Socket
+from soma.qt4gui.api import QtThreadCall
+from PyQt4.QtCore import QProcess, SIGNAL
+from PyQt4.QtGui import qApp
 
 try:
   from soma import somaqt

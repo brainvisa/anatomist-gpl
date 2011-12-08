@@ -35,13 +35,7 @@ import anatomist.cpp as anatomist
 #from soma import aims
 import sys
 
-qt4 = False
-if sys.modules.has_key( 'PyQt4'):
-  qt4 = True
-  from PyQt4 import QtCore, QtGui
-  qt = QtGui
-else:
-  import qt, qtui
+from PyQt4 import QtCore, QtGui
 
 testControl = False
 
@@ -126,18 +120,11 @@ if testControl:
       anatomist.Control.__init__( self, prio, 'PaletteContrastControl' )
 
     def eventAutoSubscription( self, pool ):
-      if qt4:
-        key = QtCore.Qt
-        NoModifier = key.NoModifier
-        ShiftModifier = key.ShiftModifier
-        ControlModifier = key.ControlModifier
-        AltModifier = key.AltModifier
-      else:
-        key = qt.Qt
-        NoModifier = key.NoButton
-        ShiftModifier = key.ShiftButton
-        ControlModifier = key.ControlButton
-        AltModifier = key.AltButton
+      key = QtCore.Qt
+      NoModifier = key.NoModifier
+      ShiftModifier = key.ShiftModifier
+      ControlModifier = key.ControlModifier
+      AltModifier = key.AltModifier
       self.mouseLongEventSubscribe( key.LeftButton, NoModifier,
         pool.action( 'PaletteContrastAction' ).startContrast,
         pool.action( 'PaletteContrastAction' ).moveContrast,

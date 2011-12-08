@@ -60,15 +60,11 @@ from anatomist import base
 import operator
 from soma import aims
 import os, sys, types
-if sys.modules.has_key( 'PyQt4' ):
-  try:
-    from PyQt4.QtCore import QString
-    _string_or_qstring = ( basestring, QString )
-  except ImportError:
-    _string_or_qstring = ( basestring, )
-else:
-  from qt import QString
+try:
+  from PyQt4.QtCore import QString
   _string_or_qstring = ( basestring, QString )
+except ImportError:
+  _string_or_qstring = ( basestring, )
 
 class Anatomist(base.Anatomist, cpp.Anatomist):
   """
