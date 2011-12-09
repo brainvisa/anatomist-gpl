@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
 #      CEA/NeuroSpin, Batiment 145,
@@ -754,23 +755,12 @@ class Anatomist(base.Anatomist):
         port = self.comm.findFreePort()
         self.anaServerProcess = somaqt.makeQProcess()
 
-        if USE_QT4:
-          arguments = [ '-s', str( port ) ]
-          arguments += args
-          self.anaServerProcess.connect( self.anaServerProcess, SIGNAL( 'finished( int, QProcess::ExitStatus )' ), self.anaServerProcessExited )
-          self.anaServerProcess.start( Anatomist.anatomistExecutable, arguments )
-          self.log( "<H1>Anatomist launched</H1>")
-          self.log("Command : " +htmlEscape( Anatomist.anatomistExecutable+string.join( arguments ) ) )
-        else:
-          command = [ Anatomist.anatomistExecutable, '-s', str( port ) ]
-          command += args
-          for a in command:
-            self.anaServerProcess.addArgument( a )
-          self.anaServerProcess.connect( self.anaServerProcess, SIGNAL( 'processExited()' ), self.anaServerProcessExited )
-          if not self.anaServerProcess.launch( '' ):
-            raise RuntimeError(  'Anatomist could not run'  )
-          self.log( "<H1>Anatomist launched</H1>")
-          self.log("Command : " +htmlEscape( string.join( command ) ) )
+        arguments = [ '-s', str( port ) ]
+        arguments += args
+        self.anaServerProcess.connect( self.anaServerProcess, SIGNAL( 'finished( int, QProcess::ExitStatus )' ), self.anaServerProcessExited )
+        self.anaServerProcess.start( Anatomist.anatomistExecutable, arguments )
+        self.log( "<H1>Anatomist launched</H1>")
+        self.log("Command : " +htmlEscape( Anatomist.anatomistExecutable+string.join( arguments ) ) )
         ok = True
       elif not self.newanatomist:
         self.log( "<H1>Connecting to Anatomist</H1>" )
@@ -789,16 +779,10 @@ class Anatomist(base.Anatomist):
       This method is called when anatomist process exited.
       """
       logtxt = '<b>Anatomist process exited: '
-      if USE_QT4:
-        if exitStatus == QProcess.NormalExit:
-          logtxt += '(normal exit)'
-        else:
-          logtxt += 'abnormal exit, code:'+ str( exitCode )
+      if exitStatus == QProcess.NormalExit:
+        logtxt += '(normal exit)'
       else:
-        if self.anaServerProcess.normalExit():
-          logtxt += '(normal exit)'
-        else:
-          logtxt += 'abnormal exit, code:'+ str( self.anaServerProcess.exitStatus() )
+        logtxt += 'abnormal exit, code:'+ str( exitCode )
       logtxt += '</b>'
       self.log( logtxt )
       self.comm.close()
@@ -821,10 +805,7 @@ class Anatomist(base.Anatomist):
           atexit._exithandlers.remove( x )
       super(Anatomist, self).close()
       if self.newanatomist:
-        if USE_QT4:
-          isRunning=(self.anaServerProcess.state() == QProcess.Running)
-        else:
-          isRunning=self.anaServerProcess.isRunning( )
+        isRunning=(self.anaServerProcess.state() == QProcess.Running)
         if isRunning:
           self.log( 'Killing Anatomist' )
           self.anaServerProcess.kill( )

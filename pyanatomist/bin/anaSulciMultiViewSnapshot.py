@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
@@ -34,13 +35,8 @@
 from soma import aims
 import anatomist, sigraph
 import os, sys, sip, numpy, time
-if sys.modules.has_key( 'PyQt4' ):
-  import PyQt4.QtCore as qt
-  import PyQt4.QtGui as qtgui
-  USE_QT4=True
-else:
-  import qt
-  USE_QT4=False
+import PyQt4.QtCore as qt
+import PyQt4.QtGui as qtgui
 
 context = anatomist.CommandContext.defaultContext()
 a = anatomist.Anatomist()
@@ -168,23 +164,20 @@ def display_graph_6_views(graphname, meshname, imagename):
 	return wins
 
 def main():
-	if len(sys.argv) != 4:
-		g = '/home/Panabase/data/subjects/zeus/graphe/RzeusBase.arg'
-		t1 = '/home/Panabase/data/subjects/zeus/tri/zeus_Rhemi.tri'
-		t2 = '/home/Panabase/data/subjects/zeus/tri/Rzeus_white.tri'
-		img = 'plop.png'
-		cmd = os.path.basename(sys.argv[0])
-		print "Display one sulci graph + one mesh (grey/white) on"\
-			"6 standard views.\n"
-		print "Usage %s graphname meshname image" % cmd
-		print "  ex : %s %s %s %s" % (cmd, g, t1, img)
-		print "       %s %s %s %s" % (cmd, g, t2, img)
-		sys.exit(1)
-	graphname, meshname, imagename = sys.argv[1:]
-	display_graph_6_views(graphname, meshname, imagename)
-	if USE_QT4:
-		qtgui.qApp.exec_()
-	else:
-		qt.qApp.exec_loop()
+    if len(sys.argv) != 4:
+        g = '/home/Panabase/data/subjects/zeus/graphe/RzeusBase.arg'
+        t1 = '/home/Panabase/data/subjects/zeus/tri/zeus_Rhemi.tri'
+        t2 = '/home/Panabase/data/subjects/zeus/tri/Rzeus_white.tri'
+        img = 'plop.png'
+        cmd = os.path.basename(sys.argv[0])
+        print "Display one sulci graph + one mesh (grey/white) on"\
+                "6 standard views.\n"
+        print "Usage %s graphname meshname image" % cmd
+        print "  ex : %s %s %s %s" % (cmd, g, t1, img)
+        print "       %s %s %s %s" % (cmd, g, t2, img)
+        sys.exit(1)
+    graphname, meshname, imagename = sys.argv[1:]
+    display_graph_6_views(graphname, meshname, imagename)
+    qtgui.qApp.exec_()
 
 main()
