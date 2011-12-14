@@ -1423,22 +1423,26 @@ class ASocket(Socket):
 
     def executeCallbacks(self, event, params, callbacks, requestID):
       """
-      When an event is received, corresponding callbacks must be called. Event content is converted in order to contain Anatomist objects instead of simple identifiers.
+      When an event is received, corresponding callbacks must be called. 
+      Event content is converted in order to contain Anatomist objects instead of simple identifiers.
+      Only a weak reference is taken on objects and windows mentionned in the event because it can be a reference to a deleted object or window in case it is a DeleteObject or a CloseWindow event. So this reference doesn't prevent the object or window from being deleted.
       """
       paramsString=str(params)
+      # log received event.
+      self.anatomistinstance.logEvent( str(event), paramsString )
       if callbacks is not None:
         # convert params
         o=params.get('object')
         if o is not None: # get the object by identifier and create a AObject representing it
-          params['object']=self.anatomistinstance.AObject(self.anatomistinstance, o)
+          params['object']=self.anatomistinstance.AObject(self.anatomistinstance, o, refType="Weak")
         w=params.get('window')
         if w is not None:
-          params['window'] = self.anatomistinstance.AWindow(self.anatomistinstance, w )
+          params['window'] = self.anatomistinstance.AWindow(self.anatomistinstance, w, refType="Weak" )
         ch=params.get('children') # list of AObject
         if ch is not None:
           chObj = []
           for c in ch:
-            chObj.append(self.anatomistinstance.AObject(self.anatomistinstance, c ))
+            chObj.append(self.anatomistinstance.AObject(self.anatomistinstance, c, refType="Weak" ))
           params['children']=chObj
         # execute callbacks
         if requestID is None:
@@ -1449,8 +1453,6 @@ class ASocket(Socket):
             function( params, None )
             # if requestID is specified, the handler is temporary
             self.delCallbacks(event)
-      # log received event. Done at the end because execution of Anatomist method can be done in the main thread if it is the thread safe implementation and it may block if main thread is currently waiting for an answer from anatomist. So it is done after callbacks execution which may send the waited answer.
-      self.anatomistinstance.logEvent( str(event), paramsString )
   
     def addEventHandler( self, eventName, handlerFunction, requestID=None ):
       """
