@@ -1428,8 +1428,6 @@ class ASocket(Socket):
       Only a weak reference is taken on objects and windows mentionned in the event because it can be a reference to a deleted object or window in case it is a DeleteObject or a CloseWindow event. So this reference doesn't prevent the object or window from being deleted.
       """
       paramsString=str(params)
-      # log received event.
-      self.anatomistinstance.logEvent( str(event), paramsString )
       if callbacks is not None:
         # convert params
         o=params.get('object')
@@ -1453,6 +1451,10 @@ class ASocket(Socket):
             function( params, None )
             # if requestID is specified, the handler is temporary
             self.delCallbacks(event)
+        # log received event
+        # Done at the end because execution of Anatomist method can be done in the main thread if it is the thread safe implementation and it may block if main thread is currently waiting for an answer from anatomist. So it is done after callbacks execution which may send the waited answer.
+        self.anatomistinstance.logEvent( str(event), paramsString )
+
   
     def addEventHandler( self, eventName, handlerFunction, requestID=None ):
       """
