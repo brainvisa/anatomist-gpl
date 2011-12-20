@@ -165,25 +165,25 @@ public:
   static rc_ptr_Tree aimsTree( anatomist::AObject*,
       carto::Object options = carto::Object() );
 
-  static anatomist::AObject* anatomist( AimsData_U8* );
-  static anatomist::AObject* anatomist( AimsData_S16* );
-  static anatomist::AObject* anatomist( AimsData_U16* );
-  static anatomist::AObject* anatomist( AimsData_S32* );
-  static anatomist::AObject* anatomist( AimsData_U32* );
-  static anatomist::AObject* anatomist( AimsData_FLOAT* );
-  static anatomist::AObject* anatomist( AimsData_DOUBLE* );
-  static anatomist::AObject* anatomist( AimsData_RGB* );
-  static anatomist::AObject* anatomist( AimsData_RGBA* );
-  static anatomist::AObject* anatomist( AimsTimeSurface_2* );
-  static anatomist::AObject* anatomist( AimsTimeSurface_3* );
-  static anatomist::AObject* anatomist( AimsTimeSurface_4* );
-  static anatomist::AObject* anatomist( BucketMap_VOID * );
-  static anatomist::AObject* anatomist( Graph * /Transfer/ );
-  static anatomist::AObject* anatomist( TimeTexture_FLOAT * );
-  static anatomist::AObject* anatomist( TimeTexture_S16 * );
-  static anatomist::AObject* anatomist( TimeTexture_S32 * );
-  static anatomist::AObject* anatomist( TimeTexture_U32 * );
-  static anatomist::AObject* anatomist( TimeTexture_POINT2DF * );
-  static anatomist::AObject* anatomist( Tree * );
+  static anatomist::AObject* anatomist( rc_ptr_AimsData_U8 );
+  static anatomist::AObject* anatomist( rc_ptr_AimsData_S16 );
+  static anatomist::AObject* anatomist( rc_ptr_AimsData_U16 );
+  static anatomist::AObject* anatomist( rc_ptr_AimsData_S32 );
+  static anatomist::AObject* anatomist( rc_ptr_AimsData_U32 );
+  static anatomist::AObject* anatomist( rc_ptr_AimsData_FLOAT );
+  static anatomist::AObject* anatomist( rc_ptr_AimsData_DOUBLE );
+  static anatomist::AObject* anatomist( rc_ptr_AimsData_RGB );
+  static anatomist::AObject* anatomist( rc_ptr_AimsData_RGBA );
+  static anatomist::AObject* anatomist( rc_ptr_AimsTimeSurface_2 );
+  static anatomist::AObject* anatomist( rc_ptr_AimsTimeSurface_3 );
+  static anatomist::AObject* anatomist( rc_ptr_AimsTimeSurface_4 );
+  static anatomist::AObject* anatomist( rc_ptr_BucketMap_VOID );
+  static anatomist::AObject* anatomist( rc_ptr_Graph );
+  static anatomist::AObject* anatomist( rc_ptr_TimeTexture_FLOAT );
+  static anatomist::AObject* anatomist( rc_ptr_TimeTexture_S16 );
+  static anatomist::AObject* anatomist( rc_ptr_TimeTexture_S32 );
+  static anatomist::AObject* anatomist( rc_ptr_TimeTexture_U32 );
+  static anatomist::AObject* anatomist( rc_ptr_TimeTexture_POINT2DF );
+  static anatomist::AObject* anatomist( rc_ptr_Tree );
 };
 

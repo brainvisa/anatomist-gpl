@@ -390,9 +390,9 @@ carto::rc_ptr<Tree> AObjectConverter::aimsTree( anatomist::AObject * obj,
 }
 
 
-AObject* AObjectConverter::anatomist( AimsData_U8* aims )
+AObject* AObjectConverter::anatomist( rc_ptr<AimsData_U8> aims )
 {
-  AObject	*ao = new AVolume<uint8_t>( *aims );
+  AObject	*ao = new AVolume<uint8_t>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_U8" ) );
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
@@ -401,9 +401,9 @@ AObject* AObjectConverter::anatomist( AimsData_U8* aims )
 }
 
 
-AObject* AObjectConverter::anatomist( AimsData_S16* aims )
+AObject* AObjectConverter::anatomist( rc_ptr<AimsData_S16> aims )
 {
-  AObject	*ao = new AVolume<int16_t>( *aims );
+  AObject	*ao = new AVolume<int16_t>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_S16" ) );
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
@@ -412,9 +412,9 @@ AObject* AObjectConverter::anatomist( AimsData_S16* aims )
 }
 
 
-AObject* AObjectConverter::anatomist( AimsData_U16* aims )
+AObject* AObjectConverter::anatomist( rc_ptr<AimsData_U16> aims )
 {
-  AObject	*ao = new AVolume<uint16_t>( *aims );
+  AObject	*ao = new AVolume<uint16_t>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_U16" ) );
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
@@ -423,9 +423,9 @@ AObject* AObjectConverter::anatomist( AimsData_U16* aims )
 }
 
 
-AObject* AObjectConverter::anatomist( AimsData_S32* aims )
+AObject* AObjectConverter::anatomist( rc_ptr<AimsData_S32> aims )
 {
-  AObject	*ao = new AVolume<int32_t>( *aims );
+  AObject	*ao = new AVolume<int32_t>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_S32" ) );
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
@@ -434,9 +434,9 @@ AObject* AObjectConverter::anatomist( AimsData_S32* aims )
 }
 
 
-AObject* AObjectConverter::anatomist( AimsData_U32* aims )
+AObject* AObjectConverter::anatomist( rc_ptr<AimsData_U32> aims )
 {
-  AObject	*ao = new AVolume<uint32_t>( *aims );
+  AObject	*ao = new AVolume<uint32_t>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_U32" ) );
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
@@ -445,9 +445,9 @@ AObject* AObjectConverter::anatomist( AimsData_U32* aims )
 }
 
 
-AObject* AObjectConverter::anatomist( AimsData_FLOAT* aims )
+AObject* AObjectConverter::anatomist( rc_ptr<AimsData_FLOAT> aims )
 {
-  AObject	*ao = new AVolume<float>( *aims );
+  AObject	*ao = new AVolume<float>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_FLOAT" ) );
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
@@ -456,9 +456,9 @@ AObject* AObjectConverter::anatomist( AimsData_FLOAT* aims )
 }
 
 
-AObject* AObjectConverter::anatomist( AimsData_DOUBLE* aims )
+AObject* AObjectConverter::anatomist( rc_ptr<AimsData_DOUBLE> aims )
 {
-  AObject	*ao = new AVolume<double>( *aims );
+  AObject	*ao = new AVolume<double>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_DOUBLE" ) );
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
@@ -467,9 +467,9 @@ AObject* AObjectConverter::anatomist( AimsData_DOUBLE* aims )
 }
 
 
-AObject* AObjectConverter::anatomist( AimsData_RGB* aims )
+AObject* AObjectConverter::anatomist( rc_ptr<AimsData_RGB> aims )
 {
-  AObject	*ao = new AVolume<AimsRGB>( *aims );
+  AObject	*ao = new AVolume<AimsRGB>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_RGB" ) );
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
@@ -478,9 +478,9 @@ AObject* AObjectConverter::anatomist( AimsData_RGB* aims )
 }
 
 
-AObject* AObjectConverter::anatomist( AimsData_RGBA* aims )
+AObject* AObjectConverter::anatomist( rc_ptr<AimsData_RGBA> aims )
 {
-  AObject	*ao = new AVolume<AimsRGBA>( *aims );
+  AObject	*ao = new AVolume<AimsRGBA>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_RGBA" ) );
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
@@ -489,50 +489,40 @@ AObject* AObjectConverter::anatomist( AimsData_RGBA* aims )
 }
 
 
-AObject* AObjectConverter::anatomist( AimsSurfaceTriangle* aims )
+AObject* AObjectConverter::anatomist( rc_ptr<AimsSurfaceTriangle> aims )
 {
   ASurface<3>	*ao = new ASurface<3>;
-  rc_ptr<AimsSurfaceTriangle>	ref( aims );
-  // increment the counter so that Anatomist never destroys the surface
-  // WARNING: memory leak here: the ref counter will never be deleted
-  rc_ptr_trick::releaseOwnership( ref );
-  ao->setSurface( ref );
+  ao->setSurface( aims );
   ao->setName( theAnatomist->makeObjectName( "Mesh" ) );
   theAnatomist->registerObject( ao );
   return ao;
 }
 
 
-AObject* AObjectConverter::anatomist( AimsTimeSurface<2, Void>* aims )
+AObject* AObjectConverter::anatomist( rc_ptr<AimsTimeSurface<2, Void> > aims )
 {
   ASurface<2>	*ao = new ASurface<2>;
-  rc_ptr<AimsTimeSurface<2, Void> > 
-    *ref = new rc_ptr<AimsTimeSurface<2, Void> >( aims );
-  // WARNING memory leak: ref is never destroyed !
-  ao->setSurface( *ref );
+  ao->setSurface( aims );
   ao->setName( theAnatomist->makeObjectName( "Segments" ) );
   theAnatomist->registerObject( ao );
   return ao;
 }
 
 
-AObject* AObjectConverter::anatomist( AimsTimeSurface<4, Void>* aims )
+AObject* AObjectConverter::anatomist( rc_ptr<AimsTimeSurface<4, Void> > aims )
 {
   ASurface<4>	*ao = new ASurface<4>;
-  rc_ptr<AimsTimeSurface<4, Void> > 
-    *ref = new rc_ptr<AimsTimeSurface<4, Void> >( aims );
-  // WARNING memory leak: ref is never destroyed !
-  ao->setSurface( *ref );
+  ao->setSurface( aims );
   ao->setName( theAnatomist->makeObjectName( "Mesh4" ) );
   theAnatomist->registerObject( ao );
   return ao;
 }
 
 
-AObject* AObjectConverter::anatomist( BucketMap<Void> *aims )
+AObject* AObjectConverter::anatomist( rc_ptr<BucketMap<Void> > aims )
 {
   Bucket *bck = new Bucket;
-  bck->setBucket( *aims );
+  bck->setBucket( aims );
   AObject	*ao = bck;
   ao->setName( theAnatomist->makeObjectName( "Bucket" ) );
   theAnatomist->registerObject( ao );
@@ -541,7 +531,7 @@ AObject* AObjectConverter::anatomist( BucketMap<Void> *aims )
 }
 
 
-AObject* AObjectConverter::anatomist( Graph *aims )
+AObject* AObjectConverter::anatomist( rc_ptr<Graph> aims )
 {
   AGraph	*ao = new AGraph( aims, "" );
   ao->setName( theAnatomist->makeObjectName( "Graph" ) );
@@ -551,44 +541,44 @@ AObject* AObjectConverter::anatomist( Graph *aims )
 }
 
 
-AObject* AObjectConverter::anatomist( TimeTexture<float> *aims )
+AObject* AObjectConverter::anatomist( rc_ptr<TimeTexture<float> > aims )
 {
   ATexture        *ao = new ATexture;
   ao->setName( theAnatomist->makeObjectName( "Texture1d" ) );
-  ao->setTexture( rc_ptr<TimeTexture<float> >( aims ) );
+  ao->setTexture( aims );
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   return ao;
 }
 
 
-AObject* AObjectConverter::anatomist( TimeTexture<short> *aims )
+AObject* AObjectConverter::anatomist( rc_ptr<TimeTexture<short> > aims )
 {
   ATexture        *ao = new ATexture;
   ao->setName( theAnatomist->makeObjectName( "Texture_S16" ) );
-  ao->setTexture( rc_ptr<TimeTexture<short> >( aims ) );
+  ao->setTexture( aims );
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   return ao;
 }
 
 
-AObject* AObjectConverter::anatomist( TimeTexture<int> *aims )
+AObject* AObjectConverter::anatomist( rc_ptr<TimeTexture<int> > aims )
 {
   ATexture        *ao = new ATexture;
   ao->setName( theAnatomist->makeObjectName( "Texture_S32" ) );
-  ao->setTexture( rc_ptr<TimeTexture<int> >( aims ) );
+  ao->setTexture( aims );
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   return ao;
 }
 
 
-AObject* AObjectConverter::anatomist( TimeTexture<unsigned> *aims )
+AObject* AObjectConverter::anatomist( rc_ptr<TimeTexture<unsigned> > aims )
 {
   ATexture        *ao = new ATexture;
   ao->setName( theAnatomist->makeObjectName( "Texture_U32" ) );
-  ao->setTexture( rc_ptr<TimeTexture<unsigned> >( aims ) );
+  ao->setTexture( aims );
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   return ao;
@@ -608,18 +598,18 @@ AObject* AObjectConverter::anatomist( TimeTexture<Point2d> *aims )
 */
 
 
-AObject* AObjectConverter::anatomist( TimeTexture<Point2df> *aims )
+AObject* AObjectConverter::anatomist( rc_ptr<TimeTexture<Point2df> > aims )
 {
   ATexture        *ao = new ATexture;
   ao->setName( theAnatomist->makeObjectName( "Texture2d" ) );
-  ao->setTexture( rc_ptr<TimeTexture<Point2df> >( aims ) );
+  ao->setTexture( aims );
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   return ao;
 }
 
 
-AObject* AObjectConverter::anatomist( Tree *aims )
+AObject* AObjectConverter::anatomist( rc_ptr<Tree> aims )
 {
   anatomist::Hierarchy        *ao = new anatomist::Hierarchy( aims );
   ao->setName( theAnatomist->makeObjectName( "Nomenclature" ) );
