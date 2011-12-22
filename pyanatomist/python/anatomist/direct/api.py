@@ -244,12 +244,13 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
     if block is not None:
       # CreateWindowCommand(type, id, context, geometry, blockid, block, block_columns, options)
-      c=cpp.CreateWindowCommand(wintype, -1, None, geometry, block.internalID, block.getInternalRep(), block.nbCols, aims.Object(options))
+      c=cpp.CreateWindowCommand(wintype, -1, None, geometry, block.internalID, block.getInternalRep(), block.nbCols, block.nbRows, aims.Object(options))
       self.execute(c)
       if block.internalRep is None:
         block.internalRep=c.block()
     else:
-      c=cpp.CreateWindowCommand(wintype, -1, None, geometry, 0,  None, 0, aims.Object(options))
+      c=cpp.CreateWindowCommand(wintype, -1, None, geometry, 0,  None, 0, 0,
+        aims.Object(options))
       self.execute(c)
     w=self.AWindow(self, c.createdWindow())
     w.releaseAppRef()

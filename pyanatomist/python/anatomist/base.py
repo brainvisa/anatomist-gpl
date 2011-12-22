@@ -1770,9 +1770,27 @@ class Anatomist(ObservableSingleton, object):
     :param int nbCols:
       Number of columns of the windows block
     """
-    def __init__(self, anatomistinstance=None, internalRep=None, nbCols=2, *args, **kwargs):
+    def __init__(self, anatomistinstance=None, internalRep=None, nbCols=0,
+      nbRows=0, *args, **kwargs):
       super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance, internalRep, *args, **kwargs)
-      self.nbCols=nbCols
+      self.nbCols = nbCols
+      self.nbRows = nbRows
+
+    def setColums( self, nCol ):
+      self.nbCols = nCol
+      self.rnRows = 0
+      self.anatomistinstance.execute( 'WindowBlock', block=self.internalID,
+        block_columns=nCol )
+
+    def setRows( self, nRow ):
+      self.nbRows = nRow
+      self.nbCols = 0
+      self.anatomistinstance.execute( 'WindowBlock', block=self.internalID,
+        block_rows=nRow )
+
+    def arrangeInRect( self, widthHeightRatio=1. ):
+      self.anatomistinstance.execute( 'WindowBlock', block=self.internalID,
+        make_rectangle=1, rectangle_ratio=widthHeightRatio )
 
   ###############################################################################
   class AWindowsGroup(AItem):
