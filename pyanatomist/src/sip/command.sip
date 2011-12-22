@@ -440,7 +440,7 @@ namespace anatomist
     CreateWindowCommand( const std::string &, int = -1, 
                          anatomist::CommandContext * = 0,
                          const vector_S32& = vector_S32(),
-                         int = 0, QWidget * = 0, int = 2,
+                         int = 0, QWidget * = 0, int = 0, int = 0,
                          carto::Object = carto::none() );
 
     virtual ~CreateWindowCommand();
