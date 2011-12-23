@@ -7,8 +7,47 @@ import os, numpy, sys
 from PyQt4 import QtGui
 
 byvertex = False
-usespheres = True
-colorlabels = True
+
+# This intermediate class is only here because I cannot (yet) make SIP
+# generate a non-abstract class for TextObject binding. One day, I'll find out!
+class TObj ( ana.cpp.TextObject ):
+  def __init__( self, message='', pos=[0,0,0] ):
+    ana.cpp.TextObject.__init__( self, message, pos )
+
+class Props( object ):
+  def __init__( self ):
+    self.lvert = []
+    self.lpoly = []
+    self.usespheres = True
+    self.colorlabels = True
+    self.center = aims.Point3df()
+
+def makelabel( label, gc, pos, color, props ):
+  objects = []
+  to = TObj( label )
+  to.setScale( 0.1 )
+  to.setName( 'label: ' + label )
+  if colors.has_key( label ):
+    color = colors[ label ]
+    if props.usespheres:
+      sph = aims.SurfaceGenerator.icosphere( gc, 2, 50 )
+      asph = a.toAObject( sph )
+      asph.setMaterial( diffuse=color )
+      asph.setName( 'gc: ' + label )
+      a.registerObject( asph, False )
+      objects.append( asph )
+    if props.colorlabels:
+      to.GetMaterial().set( { 'diffuse': color } )
+  texto = ana.cpp.TransformedObject( [ to ], False, True, pos )
+  texto.setDynamicOffsetFromPoint( props.center )
+  texto.setName( 'annot: ' + label )
+  objects.append( texto )
+  props.lpoly.append( aims.AimsVector_U32_2( ( len( props.lvert ),
+    len( props.lvert ) + 1 ) ) )
+  props.lvert += [ gc, pos ]
+  a.registerObject( texto, False )
+  return objects
+
 
 runloop = False
 if QtGui.QApplication.startingUp():
@@ -29,47 +68,18 @@ if graph.has_key( 'label_property' ):
 agraph = a.toAObject( graph )
 w = a.createWindow( '3D' )
 w.addObjects( agraph , add_graph_nodes=True )
+#lgraphaims = aims.Graph( 'labelsGraph' )
+#lgraph = a.toAObject( lgraphaims )
 
 bbox = agraph.boundingbox()
-center = ( bbox[0] + bbox[1] ) / 2
+props = Props()
+props.center = ( bbox[0] + bbox[1] ) / 2
+
 size = ( bbox[1] - bbox[0] ).norm() * 0.2
 vs = graph[ 'voxel_size' ][:3]
 objects = []
 lines = aims.TimeSurface( 2 )
-lvert = []
-lpoly = []
 
-
-# This intermediate class is only here because I cannot (yet) make SIP
-# generate a non-abstract class for TextObject binding. One day, I'll find out!
-class TObj ( ana.cpp.TextObject ):
-  def __init__( self, message='', pos=[0,0,0] ):
-    ana.cpp.TextObject.__init__( self, message, pos )
-
-
-def makelabel( label, gc, pos, color ):
-  global objects, lvert, lpoly, usespheres, colorlabels, center
-  to = TObj( label )
-  to.setScale( 0.1 )
-  to.setName( 'label: ' + label )
-  if colors.has_key( label ):
-    color = colors[ label ]
-    if usespheres:
-      sph = aims.SurfaceGenerator.icosphere( gc, 2, 50 )
-      asph = a.toAObject( sph )
-      asph.setMaterial( diffuse=color )
-      asph.setName( 'gc: ' + label )
-      a.registerObject( asph )
-      objects.append( asph )
-    if colorlabels:
-      to.GetMaterial().set( { 'diffuse': color } )
-  texto = ana.cpp.TransformedObject( [ to ], False, True, pos )
-  texto.setDynamicOffsetFromPoint( center )
-  texto.setName( 'annot: ' + label )
-  objects.append( texto )
-  lpoly.append( aims.AimsVector_U32_2( ( len( lvert ), len( lvert ) + 1 ) ) )
-  lvert += [ gc, pos ]
-  a.registerObject( texto )
 
 elements = {}
 colors = {}
@@ -93,26 +103,27 @@ for v in graph.vertices():
         color = av.GetMaterial().genericDescription()[ 'diffuse' ]
         colors[ label ] = color
       if byvertex:
-        pos = gc + ( gc - center ).normalize() * size
-        makelabel( label, gc, pos, color )
+        pos = gc + ( gc - props.center ).normalize() * size
+        objects += makelabel( label, gc, pos, color, props )
 
 
 if not byvertex:
   for label, elem in elements.iteritems():
     gc = elem[0] / elem[1]
-    pos = gc + ( gc - center ).normalize() * size
+    pos = gc + ( gc - props.center ).normalize() * size
     if colors.has_key( label ):
       color = colors[ label ]
     else:
       color = [ 0, 0, 0, 1 ]
-    makelabel( label, gc, pos, color )
+    objects += makelabel( label, gc, pos, color, props )
 
-lines.vertex().assign( lvert )
-lines.polygon().assign( lpoly )
+lines.vertex().assign( props.lvert )
+lines.polygon().assign( props.lpoly )
 alines = a.toAObject( lines )
 alines.setMaterial( diffuse=[ 0, 0, 0, 1 ] )
-w.addObjects( alines )
-w.addObjects( objects )
+objects.append( alines )
+labels = a.groupObjects( objects )
+w.addObjects( labels, add_children=True )
 
 if runloop:
   qapp.exec_()
