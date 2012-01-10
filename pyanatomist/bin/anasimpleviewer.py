@@ -313,7 +313,7 @@ class AnaSimpleViewer( qt.QObject ):
     of a buf in volume rendering in direct referentials), will be assigned
     the custom control, and have no menu/toolbars.
     '''
-    c = ana.cpp.CreateWindowCommand( wintype, -1, None, [], 1, vieww, 2,
+    c = ana.cpp.CreateWindowCommand( wintype, -1, None, [], 1, vieww, 2, 0,
       { '__syntax__' : 'dictionary', 'no_decoration' : 1, 'hidden' : 1 } )
     a.execute( c )
     w = a.AWindow( a, c.createdWindow() )
@@ -768,6 +768,10 @@ cm.addControl( 'QAGLWidget3D', '', 'SimpleControl' )
 cm.addControl( 'QAGLWidget3D', '', 'Simple3DControl' )
 
 del cd, cm, ad
+
+for i in sys.argv[ 1: ]:
+  anasimple.loadObject( i )
+
 
 # run Qt
 if runqt:
