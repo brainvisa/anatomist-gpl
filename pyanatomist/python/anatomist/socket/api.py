@@ -200,6 +200,7 @@ class Anatomist(base.Anatomist):
                   options = options )
     newWindow.takeRef()
     newWindow.releaseAppRef()
+    newWindow.block=block
     return newWindow
         
   def loadObject(self, filename, objectName=None, restrict_object_types=None, forceReload=True, duplicate=False, hidden=False):

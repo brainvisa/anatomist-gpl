@@ -1223,7 +1223,7 @@ class Anatomist(ObservableSingleton, object):
       Indicates if a reference has been taken on the corresponding anatomist object. If *True*, the reference is released on deleting this item.
 
     :param string refType:
-      Type of reference taken on the object : ``Weak`` (reference counter not incremented), ``WeakShared`` (reference counter incrementerd but the object can be deleted even if it remains references) or ``Strong`` (reference counter is incremented, the object cannot be deleted since there is references on it). If it is not specified, :py:data:`anatomist.base.Anatomist.defaultRefType` is used.
+      Type of reference taken on the object : ``Weak`` (reference counter not incremented), ``WeakShared`` (reference counter incremented but the object can be deleted even if it remains references) or ``Strong`` (reference counter is incremented, the object cannot be deleted since there are references on it). If it is not specified, :py:data:`anatomist.base.Anatomist.defaultRefType` is used.
 
     """
     def __init__( self, anatomistinstance, internalRep=None, refType=None, *args, **kwargs ):
@@ -1626,16 +1626,22 @@ class Anatomist(ObservableSingleton, object):
     """
     Represents an anatomist window.
 
-    :param string windowType:
+    .. py:attribute:: windowType
+  
       Windows type (``'axial'``, ``'sagittal'``, ...)
+    
+    .. py:attribute:: group
+      
+      :py:class:`anatomist.base.Anatomist.AWindowsGroup`. The group which this window belongs to.
 
-    :param group:
-      The group which this window belongs to.
-    :type group: :py:class:`anatomist.base.Anatomist.AWindowsGroup`
-
-    :param objects:
-      The window contains these objects.
-    :type objects: list of :py:class:`anatomist.base.Anatomist.AObject`
+    .. py:attribute:: objects
+      
+      List of :py:class:`anatomist.base.Anatomist.AObject`. The window contains these objects.
+    
+    .. py:attribute:: block
+      
+      :py:class:`anatomist.base.Anatomist.AWindowsBlock`. The block in which the window is contained, None if it is not in a block.
+    
     """
     def __init__(self, anatomistinstance, internalRep=None, *args, **kwargs):
       """
@@ -1644,6 +1650,9 @@ class Anatomist(ObservableSingleton, object):
       super(Anatomist.AWindow, self).__init__(anatomistinstance, internalRep, *args, **kwargs)
       if internalRep is not None:
         self.takeRef()
+      # We need to keep a reference on the windows block in which the window is to prevent it to be deleted before the window.
+      # Indeed, there is no reference count for windows blocks, they are only classical QWidgets.
+      self.block=None
 
     def addObjects(self, objects, add_children=False, add_graph_nodes=False,
       add_graph_relations=False):

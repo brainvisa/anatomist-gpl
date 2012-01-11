@@ -254,6 +254,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       self.execute(c)
     w=self.AWindow(self, c.createdWindow())
     w.releaseAppRef()
+    w.block=block
     return w
     
   def loadObject(self, filename, objectName="", restrict_object_types=None, forceReload=True, duplicate=False, hidden=False):
