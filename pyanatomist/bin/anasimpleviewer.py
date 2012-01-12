@@ -530,8 +530,13 @@ class AnaSimpleViewer( qt.QObject ):
   def fileOpen( self ):
     '''File browser + load object(s)
     '''
+    global fdialog
     if qt4:
+      fd2 = fdialog
+      fdialog = qt.QFileDialog()
       fdialog.setFileMode( fdialog.ExistingFiles )
+      fdialog.setDirectory( fd2.directory() )
+      fdialog.setHistory( fd2.history() )
       fdialog.show()
       res = fdialog.exec_()
     else:
@@ -540,8 +545,10 @@ class AnaSimpleViewer( qt.QObject ):
       res = fdialog.exec_loop()
     if res:
       fnames = fdialog.selectedFiles()
+      print 'fnames:', fnames
       if qt4:
         for fname in fnames:
+          print unicode( fname )
           self.loadObject( unicode( fname ) )
       else:
         for fname in fnames:
