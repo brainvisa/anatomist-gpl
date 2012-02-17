@@ -40,22 +40,16 @@ public:
 
   unsigned size() const;
 
-  SIP_PYTUPLE modules() const;
+  SIP_PYTUPLE modules();
 %MethodCode
   unsigned	i;
   PyObject	*l = PyTuple_New( sipCpp->size() );
   anatomist::ModuleManager::const_iterator it, e = sipCpp->end();
 
   for( i=0, it=sipCpp->begin(); it!=e; ++i, ++it )
-#if SIP_VERSION >= 0x040400
-    PyTuple_SET_ITEM( l, i, 
+    PyTuple_SET_ITEM( l, i,
                       sipConvertFromInstance( *it, 
                                               sipClass_anatomist_Module, 0 ) );
-#else
-    PyTuple_SET_ITEM( l, i, 
-                      sipMapCppToSelfSubClass( *it, 
-                                               sipClass_anatomist_Module ) );
-#endif
   sipRes = l;
 %End
 
