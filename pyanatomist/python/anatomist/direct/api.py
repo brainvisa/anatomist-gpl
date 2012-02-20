@@ -205,6 +205,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
       A window which can contain several :py:class:`AWindow`
     """
+    if nbRows is not None:
+      nbCols = None
     return self.AWindowsBlock(self, nbCols=nbCols, nbRows=nbRows)
 
   def createWindow(self, wintype, geometry=[], block=None, 
@@ -1541,8 +1543,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
       Number of columns of the windows block
     """
-    def __init__(self, anatomistinstance=None, nbCols=2):
-      super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance, nbCols=nbCols)
+    def __init__(self, anatomistinstance=None, nbCols=2, nbRows=None):
+      super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance,
+        nbCols=nbCols, nbRows=nbRows)
       self.internalID=anatomistinstance.newId()
 
     def __del__( self ):

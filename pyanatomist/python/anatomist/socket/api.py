@@ -1226,9 +1226,11 @@ class Anatomist(base.Anatomist):
 
   ###############################################################################
   class AWindowsBlock(AItem):
-    def __init__(self, anatomistinstance=None, internalRep=None, nbCols=2, *args, **kwargs):
+    def __init__(self, anatomistinstance=None, internalRep=None, nbCols=2,
+      nbRows=None, *args, **kwargs):
       super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance, internalRep, *args, **kwargs)
       self.nbCols=nbCols
+      self.nbRows=nbRows
 
     def __del__( self ):
       if self.internalRep is not None:
