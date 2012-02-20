@@ -187,21 +187,25 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     self.quit()
 
   # objects creation
-  def createWindowsBlock(self, nbCols=2):
+  def createWindowsBlock(self, nbCols=2, nbRows=None):
     """
     Creates a window containing other windows.
 
     An id is reserved for that block but the bound object isn't created. It will be created first time a window is added to the block with createWindow method.
 
-    * nbCols: *int*
-    
+    :param int nbCols:
       Number of columns of the windows block
 
-    * returns: :py:class:`AWindowsBlock`
-    
+    :param int nbRows:
+      Number of rows of the windows block (exclusive with nbCols)
+
+    :returns:
+      A window which can contain several :py:class:`AWindow`
+    :rtype: :py:class:`AWindowsBlock`
+
       A window which can contain several :py:class:`AWindow`
     """
-    return self.AWindowsBlock(self, nbCols)
+    return self.AWindowsBlock(self, nbCols=nbCols, nbRows=nbRows)
 
   def createWindow(self, wintype, geometry=[], block=None, 
     no_decoration=None, options=None):

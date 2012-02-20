@@ -224,12 +224,15 @@ class Anatomist(ObservableSingleton, object):
     pass
 
   # objects creation
-  def createWindowsBlock(self, nbCols=None):
+  def createWindowsBlock(self, nbCols=None, nbRows=None):
     """
     Creates a window containing other windows.
 
     :param int nbCols:
       Number of columns of the windows block
+
+    :param int nbRows:
+      Number of rows of the windows block (exclusive with nbCols)
 
     :returns:
       A window which can contain several :py:class:`AWindow`
