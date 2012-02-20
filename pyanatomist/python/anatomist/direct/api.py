@@ -187,7 +187,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     self.quit()
 
   # objects creation
-  def createWindowsBlock(self, nbCols=2, nbRows=None):
+  def createWindowsBlock(self, nbCols=2, nbRows=0):
     """
     Creates a window containing other windows.
 
@@ -205,8 +205,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
       A window which can contain several :py:class:`AWindow`
     """
-    if nbRows is not None:
-      nbCols = None
+    if nbRows:
+      nbCols = 0
     return self.AWindowsBlock(self, nbCols=nbCols, nbRows=nbRows)
 
   def createWindow(self, wintype, geometry=[], block=None, 
@@ -250,10 +250,10 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
     if block is not None:
       # CreateWindowCommand(type, id, context, geometry, blockid, block, block_columns, options)
-      c=cpp.CreateWindowCommand(wintype, -1, None, geometry, block.internalID, block.getInternalRep(), block.nbCols, block.nbRows, aims.Object(options))
+      c=cpp.CreateWindowCommand(wintype, -1, None, geometry, block.getInternalRep(), block.internalWidget, block.nbCols, block.nbRows, aims.Object(options))
       self.execute(c)
-      if block.internalRep is None:
-        block.internalRep=c.block()
+      if block.internalWidget is None:
+        block.internalWidget=c.block()
     else:
       c=cpp.CreateWindowCommand(wintype, -1, None, geometry, 0,  None, 0, 0,
         aims.Object(options))
@@ -1543,15 +1543,16 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
       Number of columns of the windows block
     """
-    def __init__(self, anatomistinstance=None, nbCols=2, nbRows=None):
+    def __init__(self, anatomistinstance=None, nbCols=2, nbRows=0):
       super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance,
         nbCols=nbCols, nbRows=nbRows)
-      self.internalID=anatomistinstance.newId()
+      self.internalRep=anatomistinstance.newId()
+      self.internalWidget=None
 
     def __del__( self ):
       if self.internalRep is not None:
         self.anatomistinstance.execute( 'DeleteElement',
-          elements=[self.internalID] )
+          elements=[self.internalRep] )
       base.Anatomist.AWindowsBlock.__del__( self )
       Anatomist.AItem.__del__( self )
 
