@@ -1225,7 +1225,7 @@ class Anatomist(base.Anatomist):
       return self.anatomistinstance.Referential( self.anatomistinstance, ref )
 
   ###############################################################################
-  class AWindowsBlock(AItem):
+  class AWindowsBlock(AItem, base.Anatomist.AWindowsBlock):
     def __init__(self, anatomistinstance=None, internalRep=None, nbCols=2,
       nbRows=None, *args, **kwargs):
       super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance, internalRep, *args, **kwargs)
