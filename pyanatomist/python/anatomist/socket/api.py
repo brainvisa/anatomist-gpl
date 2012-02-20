@@ -162,12 +162,13 @@ class Anatomist(base.Anatomist):
   # Methods inherited from base.Anatomist
     
   # objects creation
-  def createWindowsBlock(self, nbCols=2):
+  def createWindowsBlock(self, nbCols=2, nbRows=None):
     """
-    @rtype: AWindowsBlock
-    @return: a window which can contain several AWindow
+    :type: AWindowsBlock
+    :return: a window which can contain several AWindow
     """
-    return self.AWindowsBlock(anatomistinstance=self, nbCols=nbCols)
+    return self.AWindowsBlock(anatomistinstance=self, nbCols=nbCols,
+      nbRows=nbRows)
   
   def createWindow(self, wintype, geometry=None, block=None, no_decoration=False):
     """
