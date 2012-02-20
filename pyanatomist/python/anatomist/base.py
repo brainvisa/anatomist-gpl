@@ -1788,20 +1788,20 @@ class Anatomist(ObservableSingleton, object):
       self.nbCols = nbCols
       self.nbRows = nbRows
 
-    def setColums( self, nCol ):
+    def setColumns( self, nCol ):
       self.nbCols = nCol
       self.rnRows = 0
-      self.anatomistinstance.execute( 'WindowBlock', block=self.internalID,
+      self.anatomistinstance.execute( 'WindowBlock', block=self.internalRep,
         block_columns=nCol )
 
     def setRows( self, nRow ):
       self.nbRows = nRow
       self.nbCols = 0
-      self.anatomistinstance.execute( 'WindowBlock', block=self.internalID,
+      self.anatomistinstance.execute( 'WindowBlock', block=self.internalRep,
         block_rows=nRow )
 
     def arrangeInRect( self, widthHeightRatio=1. ):
-      self.anatomistinstance.execute( 'WindowBlock', block=self.internalID,
+      self.anatomistinstance.execute( 'WindowBlock', block=self.internalRep,
         make_rectangle=1, rectangle_ratio=widthHeightRatio )
 
   ###############################################################################
