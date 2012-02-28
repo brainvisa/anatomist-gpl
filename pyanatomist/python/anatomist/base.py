@@ -1050,7 +1050,7 @@ class Anatomist(ObservableSingleton, object):
 
   def setPaintParams( self, brush_size=None, brush_type=None,
     follow_linked_cursor=None, line_mode=None, millimeter_mode=None,
-    replace_mode=None ):
+    replace_mode=None, region_transparency=None ):
     """
     Setup Paint contol parameters.
     All parameters are optional.
@@ -1066,6 +1066,8 @@ class Anatomist(ObservableSingleton, object):
     :param boolean millimeter_mode: brush size can be either in mm or in voxels. In voxels mode, the brush may be anisotropic.
 
     :param boolean replace_mode: region replacing mode (when drawing on a different region)
+    
+    :param float region_transparency: value of the region transparency
     """
     if follow_linked_cursor is not None:
       follow_linked_cursor = int( follow_linked_cursor )
@@ -1078,7 +1080,7 @@ class Anatomist(ObservableSingleton, object):
     self.execute( 'PaintParams', brush_size=brush_size,
       brush_type=brush_type, follow_linked_cursor=follow_linked_cursor,
       line_mode=line_mode, millimeter_mode=millimeter_mode,
-      replace_mode=replace_mode )
+      replace_mode=replace_mode, region_transparency=region_transparency )
 
   ###############################################################################
   # commands sending
