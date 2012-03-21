@@ -40,20 +40,12 @@ import sys, os
 
 # determine wheter we are using Qt4 or Qt3, and hack a little bit accordingly
 # the boolean qt4 gloabl variable will tell it for later usage
-qt4 = False
-if sys.modules.has_key( 'PyQt4'):
-  qt4 = True
-  from PyQt4 import QtCore, QtGui
-  qt = QtGui
-  from PyQt4 import uic
-  from PyQt4.uic import loadUi
-  uifile = 'anasimpleviewer-qt4.ui'
-  findChild = lambda x, y: QtCore.QObject.findChild( x, QtCore.QObject, y )
-else:
-  import qt, qtui
-  loadUi = qtui.QWidgetFactory.create
-  uifile = 'anasimpleviewer.ui'
-  findChild = qt.QObject.child
+from PyQt4 import QtCore, QtGui
+qt = QtGui
+from PyQt4 import uic
+from PyQt4.uic import loadUi
+uifile = 'anasimpleviewer-qt4.ui'
+findChild = lambda x, y: QtCore.QObject.findChild( x, QtCore.QObject, y )
 
 # do we have to run QApplication ?
 if qt.qApp.startingUp():
@@ -86,6 +78,7 @@ os.chdir( cwd )
 # global variables: lists of windows, objects, a fusion2d with a number of
 # volumes in it, and a volume rendering object + clipping
 fdialog = qt.QFileDialog()
+fdialog.setDirectory( os.getcwd() )
 awindows = []
 aobjects = []
 fusion2d = []
@@ -93,10 +86,7 @@ volrender = None
 
 # vieww: parent widget for anatomist windows
 vieww = findChild( awin, 'windows' )
-if qt4:
-  viewgridlay = qt.QGridLayout( vieww )
-else:
-  viewgridlay = qt.QGridLayout( vieww, 2, 2 )
+viewgridlay = qt.QGridLayout( vieww )
 
 
 # We redefine simplified controls to avoid complex interactions
@@ -112,18 +102,11 @@ class SimpleControl( ana.cpp.Control ):
     ana.cpp.Control.__init__( self, prio, name )
 
   def eventAutoSubscription( self, pool ):
-    if qt4:
-      key = QtCore.Qt
-      NoModifier = key.NoModifier
-      ShiftModifier = key.ShiftModifier
-      ControlModifier = key.ControlModifier
-      AltModifier = key.AltModifier
-    else:
-      key = qt.Qt
-      NoModifier = key.NoButton
-      ShiftModifier = key.ShiftButton
-      ControlModifier = key.ControlButton
-      AltModifier = key.AltButton
+    key = QtCore.Qt
+    NoModifier = key.NoModifier
+    ShiftModifier = key.ShiftModifier
+    ControlModifier = key.ControlModifier
+    AltModifier = key.AltModifier
     self.mouseLongEventSubscribe( key.LeftButton, NoModifier,
       pool.action( 'LinkAction' ).execLink,
       pool.action( 'LinkAction' ).execLink,
@@ -193,16 +176,10 @@ class Simple3DControl( SimpleControl ):
     SimpleControl.__init__( self, prio, name )
 
   def eventAutoSubscription( self, pool ):
-    if qt4:
-      key = QtCore.Qt
-      NoModifier = key.NoModifier
-      ShiftModifier = key.ShiftModifier
-      ControlModifier = key.ControlModifier
-    else:
-      key = qt.Qt
-      NoModifier = key.NoButton
-      ShiftModifier = key.ShiftButton
-      ControlModifier = key.ControlButton
+    key = QtCore.Qt
+    NoModifier = key.NoModifier
+    ShiftModifier = key.ShiftModifier
+    ControlModifier = key.ControlModifier
     SimpleControl.eventAutoSubscription( self, pool )
     self.mouseLongEventSubscribe ( \
       key.MidButton, NoModifier,
@@ -249,17 +226,12 @@ class AnaSimpleViewer( qt.QObject ):
     # display volumes values at the given position
     valbox = findChild( awin, 'volumesBox' )
     valbox.clear()
-    if qt4:
-      # (we don't use the same widget type in Qt3 and Qt4)
-      valbox.setColumnCount( 2 )
-      valbox.setHorizontalHeaderLabels( [ 'Volume:', 'Value:' ] )
-      if len( fusion2d ) > 1:
-        valbox.setRowCount( len(fusion2d)-1 )
-        valbox.setVerticalHeaderLabels( [ '' ] * (len(fusion2d)-1) )
-    else:
-      valbox.setColumnMode( 2 )
-      valbox.setRowMode( qt.QListBox.Variable )
-      col1 = []
+    # (we don't use the same widget type in Qt3 and Qt4)
+    valbox.setColumnCount( 2 )
+    valbox.setHorizontalHeaderLabels( [ 'Volume:', 'Value:' ] )
+    if len( fusion2d ) > 1:
+      valbox.setRowCount( len(fusion2d)-1 )
+      valbox.setVerticalHeaderLabels( [ '' ] * (len(fusion2d)-1) )
     i = 0
     for obj in fusion2d[1:]:
       # retreive volume value in its own coords system
@@ -273,11 +245,8 @@ class AnaSimpleViewer( qt.QObject ):
       vs = obj.VoxelSize()
       pos2 = [ int(round(x/y)) for x,y in zip(pos2,vs) ]
       # pos2 in in voxels, in obj coords system
-      if qt4:
-        newItem = qt.QTableWidgetItem( obj.name )
-        valbox.setItem( i, 0, newItem )
-      else:
-        valbox.insertItem( obj.name )
+      newItem = qt.QTableWidgetItem( obj.name )
+      valbox.setItem( i, 0, newItem )
       # check bounds
       if pos2[0]>=0 and pos2[1]>=0 and pos2[2]>=0 and pos[3]>=0 \
         and pos2[0]<aimsv.dimX() and pos2[1]<aimsv.dimY() \
@@ -285,18 +254,11 @@ class AnaSimpleViewer( qt.QObject ):
         txt = str( aimsv.value( *pos2 ) )
       else:
         txt = ''
-      if qt4:
-        newitem = qt.QTableWidgetItem( txt )
-        valbox.setItem( i, 1, newitem )
-        i += 1
-      else:
-        col1.append( txt )
-    if qt4:
-      valbox.resizeColumnsToContents()
-    else:
-      for x in col1:
-        valbox.insertItem( x )
-
+      newitem = qt.QTableWidgetItem( txt )
+      valbox.setItem( i, 1, newitem )
+      i += 1
+    valbox.resizeColumnsToContents()
+    
     # update volume rendering when it is enabled
     if self._vrenabled and len( volrender ) >= 1:
       clip = volrender[0]
@@ -332,10 +294,9 @@ class AnaSimpleViewer( qt.QObject ):
             break
         if freeslot:
           break
-    if qt4:
-      # in Qt4, the widget must not have a parent before calling
-      # layout.addWidget
-      w.setParent( None )
+    # in Qt4, the widget must not have a parent before calling
+    # layout.addWidget
+    w.setParent( None )
     viewgridlay.addWidget( w.getInternalRep(), x, y )
     self._winlayouts[x][y] = 1
     # make ref-counting work on python side
@@ -371,10 +332,7 @@ class AnaSimpleViewer( qt.QObject ):
   def registerObject( self, obj ):
     '''Register an object in anasimpleviewer objects list, and display it
     '''
-    if qt4:
-      findChild( awin, 'objectslist' ).addItem( obj.name )
-    else:
-      findChild( awin, 'objectslist' ).insertItem( obj.name )
+    findChild( awin, 'objectslist' ).addItem( obj.name )
     # keep it in the global list
     aobjects.append( obj )
     if obj.objectType == 'VOLUME':
@@ -531,41 +489,27 @@ class AnaSimpleViewer( qt.QObject ):
     '''File browser + load object(s)
     '''
     global fdialog
-    if qt4:
-      fd2 = fdialog
-      fdialog = qt.QFileDialog()
-      fdialog.setFileMode( fdialog.ExistingFiles )
-      fdialog.setDirectory( fd2.directory() )
-      fdialog.setHistory( fd2.history() )
-      fdialog.show()
-      res = fdialog.exec_()
-    else:
-      fdialog.setMode( fdialog.ExistingFiles )
-      fdialog.show()
-      res = fdialog.exec_loop()
+    fd2 = fdialog
+    fdialog = qt.QFileDialog()
+    fdialog.setFileMode( fdialog.ExistingFiles )
+    fdialog.setDirectory( fd2.directory() )
+    fdialog.setHistory( fd2.history() )
+    fdialog.show()
+    res = fdialog.exec_()
     if res:
       fnames = fdialog.selectedFiles()
       print 'fnames:', fnames
-      if qt4:
-        for fname in fnames:
-          print unicode( fname )
-          self.loadObject( unicode( fname ) )
-      else:
-        for fname in fnames:
-          self.loadObject( fname.utf8().data() )
+      for fname in fnames:
+        print unicode( fname )
+        self.loadObject( unicode( fname ) )
 
   def selectedObjects( self ):
     '''list of objects selected in the list box on the upper left panel
     '''
     olist = findChild( awin, 'objectslist' )
     sobjs = []
-    if qt4:
-      for o in olist.selectedItems():
-        sobjs.append( unicode( o.text() ).strip('\0') )
-    else:
-      for i in xrange( olist.count() ):
-        if olist.isSelected( i ):
-          sobjs.append( olist.text( i ).utf8().data().strip('\0') )
+    for o in olist.selectedItems():
+      sobjs.append( unicode( o.text() ).strip('\0') )
     return [ o for o in aobjects if o.name in sobjs ]
 
   def editAdd( self ):
@@ -586,13 +530,9 @@ class AnaSimpleViewer( qt.QObject ):
     for o in objs:
       self.removeObject( o )
     olist = findChild( awin, 'objectslist' )
-    if qt4:
-      for o in objs:
-        olist.takeItem( olist.row( olist.findItems( o.name,
-          QtCore.Qt.MatchExactly )[ 0 ] ) )
-    else:
-      for o in objs:
-        olist.removeItem( olist.index( olist.findItem( o.name ) ) )
+    for o in objs:
+      olist.takeItem( olist.row( olist.findItems( o.name,
+        QtCore.Qt.MatchExactly )[ 0 ] ) )
     global aobjects
     aobjects = [ o for o in aobjects if o not in objs ]
     a.deleteObjects( objs )
@@ -727,27 +667,14 @@ le.setValidator( qt.QDoubleValidator( le ) )
 le = findChild( awin, 'coordTEdit' )
 le.setValidator( qt.QDoubleValidator( le ) )
 del le
-if qt4:
-  awin.connect( findChild( awin, 'coordXEdit' ),
-    qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
-  awin.connect( findChild( awin, 'coordYEdit' ),
-    qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
-  awin.connect( findChild( awin, 'coordZEdit' ),
-    qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
-  awin.connect( findChild( awin, 'coordTEdit' ),
-    qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
-else:
-  awin.connect( findChild( awin, 'coordXEdit' ),
-    qt.SIGNAL( 'returnPressed()' ), anasimple.coordsChanged )
-  awin.connect( findChild( awin, 'coordYEdit' ),
-    qt.SIGNAL( 'returnPressed()' ), anasimple.coordsChanged )
-  awin.connect( findChild( awin, 'coordZEdit' ),
-    qt.SIGNAL( 'returnPressed()' ), anasimple.coordsChanged )
-  awin.connect( findChild( awin, 'coordTEdit' ),
-    qt.SIGNAL( 'returnPressed()' ), anasimple.coordsChanged )
-
-if not qt4:
-  qt.qApp.setMainWidget( awin )
+awin.connect( findChild( awin, 'coordXEdit' ),
+  qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
+awin.connect( findChild( awin, 'coordYEdit' ),
+  qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
+awin.connect( findChild( awin, 'coordZEdit' ),
+  qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
+awin.connect( findChild( awin, 'coordTEdit' ),
+  qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
 
 awin.dropEvent = lambda awin, event: anasimple.dropEvent( awin, event )
 awin.dragEnterEvent = lambda awin, event: anasimple.dragEnterEvent( awin, event )
@@ -782,10 +709,7 @@ for i in sys.argv[ 1: ]:
 
 # run Qt
 if runqt:
-  if qt4:
-    qapp.exec_()
-  else:
-    qapp.exec_loop()
+  qapp.exec_()
 
 # cleanup before exiting
 del pix, fdialog
