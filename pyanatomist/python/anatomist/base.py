@@ -852,7 +852,7 @@ class Anatomist(ObservableSingleton, object):
     diffuse=None, emission=None, specular=None, shininess=None, lighting=None,
     smooth_shading=None, polygon_filtering=None, depth_buffer=None,
     face_culling=None, polygon_mode=None, unlit_color=None, line_width=None,
-    ghost=None ):
+    ghost=None, front_face=None ):
     """
     Changes objects material properties.
 
@@ -911,6 +911,9 @@ class Anatomist(ObservableSingleton, object):
 
     :param float line_width:
       Lines thickness (meshes, segments, wireframe rendering modes). A null or negative value fallsback to default (1 in principle).
+
+    :param string front_face:
+      Specifies if the mesh(es) polygons external face is the clockwise or counterclockwise side. Normally in Aims/Anatomist indirect referentials, polygons are in clockwise orientation. Values are "clockwise", "counterclockwise", or "neutral" (the default).
     """
     if material is not None:
       if ambient is None:
@@ -941,7 +944,9 @@ class Anatomist(ObservableSingleton, object):
         line_width = material.line_width
       if ghost is None:
         ghost = material.ghost
-    self.execute("SetMaterial", objects=self.makeList(objects), ambient=ambient, diffuse=diffuse, emission=emission, specular=specular, shininess=shininess, refresh=refresh, lighting=lighting, smooth_shading=smooth_shading, polygon_filtering=polygon_filtering, depth_buffer=depth_buffer, face_culling=face_culling, polygon_mode=polygon_mode, unlit_color=unlit_color, line_width=line_width, ghost=ghost)
+      if front_face is None:
+        front_face = material.front_face
+    self.execute("SetMaterial", objects=self.makeList(objects), ambient=ambient, diffuse=diffuse, emission=emission, specular=specular, shininess=shininess, refresh=refresh, lighting=lighting, smooth_shading=smooth_shading, polygon_filtering=polygon_filtering, depth_buffer=depth_buffer, face_culling=face_culling, polygon_mode=polygon_mode, unlit_color=unlit_color, line_width=line_width, ghost=ghost, front_face=front_face)
 
   def setObjectPalette(self, objects, palette=None, minVal=None, maxVal=None, palette2=None,  minVal2=None, maxVal2=None, mixMethod=None, linMixFactor=None, palette1Dmapping=None, absoluteMode=False):
     """
@@ -1437,7 +1442,7 @@ class Anatomist(ObservableSingleton, object):
       diffuse=None, emission=None, specular=None, shininess=None,
       lighting=None, smooth_shading=None, polygon_filtering=None,
       depth_buffer=None, face_culling=None, polygon_mode=None,
-      unlit_color=None, line_width=None, ghost=None ):
+      unlit_color=None, line_width=None, ghost=None, front_face=None ):
       """
       Changes object material properties.
 
@@ -1492,11 +1497,14 @@ class Anatomist(ObservableSingleton, object):
 
       :param float line_width:
         Lines thickness (meshes, segments, wireframe rendering modes). A null or negative value fallsback to default (1 in principle).
+
+      :param string front_face:
+        Specifies if the mesh(es) polygons external face is the clockwise or counterclockwise side. Normally in Aims/Anatomist indirect referentials, polygons are in clockwise orientation. Values are "clockwise", "counterclockwise", or "neutral" (the default).
       """
       self.anatomistinstance.setMaterial([self], material, refresh,
       ambient, diffuse, emission, specular, shininess, lighting,
       smooth_shading, polygon_filtering, depth_buffer, face_culling,
-      polygon_mode, unlit_color, line_width, ghost)
+      polygon_mode, unlit_color, line_width, ghost, front_face)
 
     def setPalette(self, palette=None, minVal=None, maxVal=None, palette2=None,  minVal2=None, maxVal2=None, mixMethod=None, linMixFactor=None, palette1Dmapping=None, absoluteMode=False):
       """
@@ -2042,9 +2050,12 @@ class Anatomist(ObservableSingleton, object):
 
     :param int ghost:
       In ghost mode, objects are not drawn in the depth buffer
+
+    :param string front_face:
+      Specifies if the mesh(es) polygons external face is the clockwise or counterclockwise side. Normally in Aims/Anatomist indirect referentials, polygons are in clockwise orientation. Values are "clockwise", "counterclockwise", or "neutral" (the default).
     """
 
-    def __init__(self, ambient=None, diffuse=None, emission=None, shininess=None, specular=None, lighting=None, smooth_shading=None, polygon_filtering=None, depth_buffer=None, face_culling=None, polygon_mode=None, unlit_color=None, line_width=None, ghost=None):
+    def __init__(self, ambient=None, diffuse=None, emission=None, shininess=None, specular=None, lighting=None, smooth_shading=None, polygon_filtering=None, depth_buffer=None, face_culling=None, polygon_mode=None, unlit_color=None, line_width=None, ghost=None, front_face=None):
       self.ambient=ambient
       self.diffuse=diffuse
       self.emission=emission
@@ -2060,7 +2071,8 @@ class Anatomist(ObservableSingleton, object):
       self.unlit_color=unlit_color
       self.line_width=line_width
       self.ghost=ghost
+      self.front_face = front_face
 
     def __repr__(self):
-      return "{ambient :"+ str(self.ambient)+ ", diffuse :"+ str(self.diffuse)+ ", emission :"+ str(self.emission)+ ", shininess :"+ str(self.shininess)+ ", specular :"+ str(self.specular)+ ", lighting :"+str(self.lighting)+", smooth_shading:"+str(self.smooth_shading)+", polygon_filtering :"+str(self.polygon_filtering)+", depth_buffer :"+str(self.depth_buffer)+", face_culling :"+str(self.face_culling)+", polygon_mode :"+str(self.polygon_mode)+", unlit_color :"+str(self.unlit_color)+", line_width :"+str(self.line_width)+", ghost :"+str(self.ghost)+"}"
+      return "{ambient :"+ str(self.ambient)+ ", diffuse :"+ str(self.diffuse)+ ", emission :"+ str(self.emission)+ ", shininess :"+ str(self.shininess)+ ", specular :"+ str(self.specular)+ ", lighting :"+str(self.lighting)+", smooth_shading:"+str(self.smooth_shading)+", polygon_filtering :"+str(self.polygon_filtering)+", depth_buffer :"+str(self.depth_buffer)+", face_culling :"+str(self.face_culling)+", polygon_mode :"+str(self.polygon_mode)+", unlit_color :"+str(self.unlit_color)+", line_width :"+str(self.line_width)+", ghost :"+str(self.ghost)+", front_face:"+str(self.front_face)+"}"
 
