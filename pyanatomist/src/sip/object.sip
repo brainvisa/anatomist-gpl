@@ -73,7 +73,7 @@ namespace anatomist
 
     virtual anatomist::AObject* clone( bool shallow = 0 ) /Factory/;
 
-    void setChanged() const;
+    void setChanged();
 %MethodCode
     // make setChanged() more violent than in the C++ version
 
