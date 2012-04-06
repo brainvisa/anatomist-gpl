@@ -52,6 +52,10 @@ namespace anatomist
     int Group() const;
     bool hasObject(anatomist::AObject *) const;
     float GetTime() const;
+    virtual void SetTime( float time );
+    virtual Point3df GetPosition() const;
+    virtual void SetPosition( const Point3df &position,
+      const anatomist::Referential *refdep );
     void setHasCursor(int);
     virtual void showToolBars(int = 2 );
     void setFullScreen(int);
