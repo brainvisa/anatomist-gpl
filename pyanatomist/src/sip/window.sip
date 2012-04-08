@@ -1,5 +1,11 @@
+%ModuleHeaderCode
+#include <anatomist/window/colorstyle.h>
+%End
+
 namespace anatomist
 {
+
+  void setQtColorStyle( QWidget* );
 
   class AWindow : carto::SharedObject /Abstract/
   {

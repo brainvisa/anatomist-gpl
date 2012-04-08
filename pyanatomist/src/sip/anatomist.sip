@@ -57,6 +57,7 @@
 %Include transformedobject.sip
 %Include textobject.sip
 %Include colordialog.sip
+%Include choosereferential.sip
 
 
 class AnatomistSip

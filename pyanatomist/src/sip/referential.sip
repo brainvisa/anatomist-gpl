@@ -27,6 +27,10 @@ public:
 %End
 
   carto::GenericObject & header();
+  bool isDirect() const;
+  AimsRGB Color() const;
+  void setColor( const AimsRGB & col );
+  bool hidden() const;
 
   static anatomist::Referential *referentialOfUUID( const std::string &uuid );
   static anatomist::Referential *acPcReferential();
