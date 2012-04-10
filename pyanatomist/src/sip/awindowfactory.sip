@@ -46,3 +46,40 @@ namespace anatomist
 
 };
 
+
+class QAWindowFactory: QObject, anatomist::AWindowFactory
+{
+%TypeHeaderCode
+#include <anatomist/window/qWinFactory.h>
+%End
+
+public:
+  struct PixList
+  {
+    PixList();
+    PixList( const QPixmap & s, const QPixmap & l, const QPixmap & a );
+    QPixmap     psmall;
+    QPixmap     plarge;
+    QPixmap     pactive;
+  };
+
+  struct Descrip
+  {
+    Descrip();
+    Descrip( const QString & b, const QString & l );
+    QString     brief;
+    QString     longer;
+  };
+
+  static const QAWindowFactory::PixList & pixmaps( int type );
+  static const QAWindowFactory::PixList & pixmaps( const std::string & type );
+  static const QAWindowFactory::Descrip & description( int type );
+  static const QAWindowFactory::Descrip & description( const std::string & type );
+  static void setPixmaps( int type, const PixList & pix );
+  static void setPixmaps( const std::string & type, const PixList & pix );
+  static void loadDefaultPixmaps( int type );
+  static void loadDefaultPixmaps( const std::string & type );
+  static void setDescription( int type, const QAWindowFactory::Descrip & des );
+  static void setDescription( const std::string & type, const QAWindowFactory::Descrip & des );
+};
+
