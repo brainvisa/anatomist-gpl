@@ -78,6 +78,7 @@ public:
   QString anatomistSharedPath();
   QString anatomistHomePath();
   ControlWindow *getControlWindow();
+  QWidget* getQWidgetAncestor() const;
   set_AWindowPtr getWindowsInGroup( int = 0 );
   void setObjectName( anatomist::AObject*, const std::string & );
   anatomist::Processor *theProcessor();

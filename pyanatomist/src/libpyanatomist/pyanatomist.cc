@@ -171,6 +171,11 @@ ControlWindow* AnatomistSip::getControlWindow()
   return theAnatomist->getControlWindow();
 }
 
+QWidget* AnatomistSip::getQWidgetAncestor() const
+{
+  return theAnatomist->getQWidgetAncestor();
+}
+
 std::set<anatomist::AWindow*> AnatomistSip::getWindowsInGroup( int group )
 {
   return theAnatomist->getWindowsInGroup( group );
