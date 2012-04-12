@@ -38,8 +38,10 @@ namespace anatomist
     static bool exist( int type );
     static bool exist( const std::string & type );
     static int registerType( const std::string & type,
-      anatomist::AWindowCreator *creator /Transfer/ );
+      anatomist::AWindowCreator *creator /Transfer/, bool=false );
     static set_STRING types();
+    static bool hasControlWindowButton( int type );
+    static void setHasControlWindowButton( int type, bool visible );
     // static const std::map<std::string, int> & typeID();
     // static const map_S32_STRING & typeNames();
   };
