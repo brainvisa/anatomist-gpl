@@ -50,7 +50,7 @@ It uses methods of L{anatomist.threadedimpl}.
 Note that this thread-safe implementation is not actually multi-threaded: all calls to the Anatomist API are stacked for execution in the same thread, so it is actually a single-thread execution, but calls can be performed from various threads in a multi-threaded program, avoiding race conditions (provided the calling thread has not locked the main thread in any way).
 
 """
-
+from anatomist import cpp
 import anatomist.threadedimpl
 import anatomist.direct.api
 import sys
