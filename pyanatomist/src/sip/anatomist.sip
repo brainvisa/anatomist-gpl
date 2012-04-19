@@ -105,9 +105,17 @@ public:
 %MethodCode
   sipRes = theAnatomist->centralReferential();
 %End
-    int verbose();
+  int verbose();
 %MethodCode
     sipRes = carto::verbose;
+%End
+  void mapObject( anatomist::AObject * obj );
+%MethodCode
+  theAnatomist->mapObject( a0 );
+%End
+  void unmapObject( anatomist::AObject * obj );
+%MethodCode
+  theAnatomist->unmapObject( a0 );
 %End
 
   anatomist::Transformation*
