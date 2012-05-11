@@ -258,7 +258,10 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       c=cpp.CreateWindowCommand(wintype, -1, None, geometry, 0,  None, 0, 0,
         aims.Object(options))
       self.execute(c)
-    w=self.AWindow(self, c.createdWindow())
+    # use a WeakShared reference type because AWindows are also QWidgets,
+    # which can have parents, and can be destroyed by parent widgets within
+    # Qt mechanisms that we cannot prevent.
+    w=self.AWindow(self, c.createdWindow(), refType='WeakShared' )
     w.releaseAppRef()
     w.block=block
     return w
