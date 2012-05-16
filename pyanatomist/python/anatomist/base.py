@@ -36,19 +36,19 @@ General interface of pyanatomist API. It describes classes and methods that are 
 Several implementations exist depending on the mean of driving Anatomist (Sip bindings C++/Python or commands via socket).
 """
 from soma.notification import ObservableNotifier
-from soma.wip.singleton import ObservableSingleton
+from soma.singleton import Singleton
 from soma.functiontools import partial
 import operator
 import string
 import threading
 
 
-class Anatomist(ObservableSingleton, object):
+class Anatomist(Singleton, object):
   """
   Interface to communicate with an Anatomist Application. This class is virtual, some methods are not implemented. It is the base class of Anatomist classes in each implementation.
 
   This class is a Singleton, so there is only one global instance of this class. The first time the constructor is called, an instance is created. Each next time, the same instance is returned.
-  Anatomist inherits from a particular Singleton : ObservableSingleton. So it is possible to listen for anatomist instance creation event. It is also possible to ask for anatomist instance without creating an instance if it does not exit. To do this, use the constructor with create=False as parameter :
+  It is also possible to ask for anatomist instance without creating an instance if it does not exit. To do this, use the constructor with create=False as parameter :
 
   >>> a=anatomist.Anatomist(create=False)
 

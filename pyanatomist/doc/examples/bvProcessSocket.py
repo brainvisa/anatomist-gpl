@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
 #      CEA/NeuroSpin, Batiment 145,
@@ -48,8 +49,6 @@ def initialization( self ):
   pass
 
 def execution( self, context ):
-  # register a function that will be called when Anatomist application starts
-  pyanatomist.Anatomist.addCreateListener(displayCreation)
   # with attribute create is False, the constructor returns the existing instance of anatomist or None if there isn't one.
   a=pyanatomist.Anatomist(create=False)
   print "anatomist instance:", a
@@ -74,7 +73,4 @@ def execution( self, context ):
   
 def display(event, params):
   print "** Event ** ",event, params
-  
-def displayCreation(instance):
-  print "** Creation of an anatomist instance", instance
-  
+
