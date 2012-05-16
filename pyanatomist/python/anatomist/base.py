@@ -160,6 +160,21 @@ class Anatomist(Singleton, object):
   """
   defaultRefType="Strong"
   lock = threading.RLock()
+
+  def __new__( cls, *args, **kwargs ):
+    '''If the keyword arg create is set to False, then a new instance is
+    not created event if the singleton has not been instantiated yet.
+    '''
+    instance=None
+    create = kwargs.get( 'create', True )
+    if '_singleton_instance' not in cls.__dict__:
+      if create:
+        instance = super(Anatomist, cls).__new__( cls, *args,
+          **kwargs )
+    else:
+      instance = cls._singleton_instance
+    return instance
+
   def __singleton_init__(self, *args, **kwargs):
     object.__init__(self, *args, **kwargs)
 
