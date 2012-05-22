@@ -1,6 +1,5 @@
 
 %ModuleCode
-#if SIP_VERSION >= 0x040700
 #include <anatomist/surface/surface.h>
 #ifndef PYANA_ASURFACE_%Template1typecode%_DEFINED
 #define PYANA_ASURFACE_%Template1typecode%_DEFINED
@@ -8,7 +7,6 @@ namespace anatomist
 {
   typedef ASurface<%Template1%> ASurface_%Template1typecode%;
 }
-#endif
 #endif
 %End
 
