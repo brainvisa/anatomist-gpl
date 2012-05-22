@@ -14,7 +14,7 @@ public:
 
   static QColor getColor( QColor, QWidget * parent = 0,
                           const char * name = 0, int* alpha /In/ = 0,
-                          bool *neutraph /In/ = 0, int* alphaout /out/ =0,
+                          bool *neutraph /In/ = 0, int* alphaout /Out/ =0,
                           bool *neutraphout /Out/ = 0 );
 %MethodCode
   int alpha = 255;
