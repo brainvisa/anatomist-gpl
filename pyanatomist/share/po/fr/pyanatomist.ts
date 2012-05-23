@@ -10,11 +10,11 @@
 Découpe manuellement ou semi-manuellement des noeuds de graphe cortical.
 &lt;tabe&gt;&lt;tr&gt;
 &lt;td&gt;Left click:&lt;/td&gt;&lt;td&gt;prepare a cut with a single point on a fold node&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;Ctrl+Left click:&lt;/td&gt;&lt;td&gt;set a cut control point in a series for a dotted line cut&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;S :&lt;/td&gt;&lt;td&gt;show cut line, or confirm split if the cut line is already visible&lt;/td&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;ESC:&lt;/td&gt;&lt;td&gt;cancel spliit, erase control points and proposed split line&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;Ctrl+Right click:&lt;/td&gt;&lt;td&gt;automatically subdivize a node in several pieces&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;Shift+Right click:&lt;/td&gt;&lt;td&gt;automatically subdivize the entire graph by splitting large nodes&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl&amp;gt;+Left click :&lt;/td&gt;&lt;td&gt;set a cut control point in a series for a dotted line cut&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;S&amp;gt; :&lt;/td&gt;&lt;td&gt;show cut line, or confirm split if the cut line is already visible&lt;/td&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ESC&amp;gt; :&lt;/td&gt;&lt;td&gt;cancel spliit, erase control points and proposed split line&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl&amp;gt;+Right click :&lt;/td&gt;&lt;td&gt;automatically subdivize a node in several pieces&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;shift&amp;gt;+Right click :&lt;/td&gt;&lt;td&gt;automatically subdivize the entire graph by splitting large nodes&lt;/td&gt;&lt;/tr&gt;
 &lt;/table&gt;&lt;tr/&gt;
 Les contrôles classiques de rotation, translation et zoom fonctionnent aussi.
 &lt;/html&gt;</translation>
@@ -31,22 +31,24 @@ Les contrôles classiques de rotation, translation et zoom fonctionnent aussi.
 &lt;tr&gt;&lt;td&gt;+ &amp;lt;shift&amp;gt;/ molette :&lt;/td&gt;&lt;td&gt;zoom/distance&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td&gt;+ &amp;lt;ctrl&amp;gt; :&lt;/td&gt;&lt;td&gt;translation&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td&gt;Btn droit:&lt;/td&gt;&lt;td&gt;menu&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+w&amp;gt; :&lt;/td&gt;&lt;td&gt;fermer la fenêtre&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+W&amp;gt; :&lt;/td&gt;&lt;td&gt;fermer la fenêtre&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td&gt;&amp;lt;F9&amp;gt; :&lt;/td&gt;&lt;td&gt;plein écran&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td&gt;&amp;lt;F10&amp;gt; :&lt;/td&gt;&lt;td&gt;montre/cache les menus/boutons&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;s&amp;gt; :&lt;/td&gt;&lt;td&gt;synchro vues&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+c&amp;gt; :&lt;/td&gt;&lt;td&gt;fixe le centre de vue&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;alt+c&amp;gt; :&lt;/td&gt;&lt;td&gt;affiche la position du centre de vue&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+a&amp;gt; :&lt;/td&gt;&lt;td&gt;sélectionne/désélectionne tous les objets&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;del&amp;gt; :&lt;/td&gt;&lt;td&gt;enlève les objets sélectionnés de la vue&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+del&amp;gt; :&lt;/td&gt;&lt;td&gt;enlève les objets sélectionnés du groupe&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;S&amp;gt; :&lt;/td&gt;&lt;td&gt;synchro vues&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+C&amp;gt; :&lt;/td&gt;&lt;td&gt;fixe le centre de vue&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;alt+C&amp;gt; :&lt;/td&gt;&lt;td&gt;affiche la position du centre de vue&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+A&amp;gt; :&lt;/td&gt;&lt;td&gt;sélectionne/désélectionne tous les objets&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;DEL&amp;gt; :&lt;/td&gt;&lt;td&gt;enlève les objets sélectionnés de la vue&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+DEL&amp;gt; :&lt;/td&gt;&lt;td&gt;enlève les objets sélectionnés du groupe&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan=&quot;2&quot;&gt;Labels, graphes, et sillons:&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;SPACE&amp;gt; :&lt;/td&gt;&lt;td&gt;&quot;pipette&quot;, mémorise le label des objets sélectionnés&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl&amp;gt;+&amp;lt;RETURN&amp;gt; :&lt;/td&gt;&lt;td&gt;applique le label courant aux objets sélectionnés&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;A&amp;gt; :&lt;/td&gt;&lt;td&gt;affiche / cache les labels de graphes (annotations 3D)&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td colspan=&quot;2&quot;&gt;Défilement des coupes:&lt;/td&gt;&lt;/td&gt;&lt;td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td&gt;&amp;lt;PgUp&amp;gt; :&lt;/td&gt;&lt;td&gt;coupe précédente&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td&gt;&amp;lt;PgDown&amp;gt; :&lt;/td&gt;&lt;td&gt;coupe suivante&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td&gt;&amp;lt;shift+PgUp&amp;gt; :&lt;/td&gt;&lt;td&gt;temps précédent&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td&gt;&amp;lt;shift+PgDown&amp;gt; :&lt;/td&gt;&lt;td&gt;temps suivant&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;space&amp;gt; :&lt;/td&gt;&lt;td&gt;&quot;pipette&quot;, mémorise le label des objets sélectionnés&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl&amp;gt;+&amp;lt;return&amp;gt; :&lt;/td&gt;&lt;td&gt;applique le label courant aux objets sélectionnés&lt;/td&gt;&lt;/tr&gt;
 &lt;/table&gt;&lt;br/&gt;
 Des options supplémentaires sont disponibles dans l&apos;interface &quot;toolbox&quot; pour la sélection des relations.&lt;/html&gt;</translation>
     </message>
