@@ -15,6 +15,21 @@ BRAINVISA_COPY_DIRECTORY( "${CMAKE_CURRENT_SOURCE_DIR}/scripts"
 BRAINVISA_COPY_DIRECTORY( "${CMAKE_CURRENT_SOURCE_DIR}/share"
                           "share/anatomist-${BRAINVISA_PACKAGE_VERSION_MAJOR}.${BRAINVISA_PACKAGE_VERSION_MINOR}"
                           ${PROJECT_NAME} )
+# pyqt translation files
+if( anatomist-free_IS_BEING_COMPILED )
+  # use source files in anatomist-free/share sources
+  BRAINVISA_ADD_PYTRANSLATION( "share"
+    "share/anatomist-${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}"
+    ${PROJECT_NAME}
+    "${anatomist-free_SOURCE_DIR}/shared/python_plugins" )
+else()
+  # anatomist already installed, use the binary dir
+  BRAINVISA_ADD_PYTRANSLATION( "share"
+    "share/anatomist-${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}"
+    ${PROJECT_NAME}
+    "${CMAKE_BINARY_DIR}/share/anatomist-${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}/python_plugins" )
+endif()
+
 add_subdirectory( src )
 
 # find_package( Epydoc )
