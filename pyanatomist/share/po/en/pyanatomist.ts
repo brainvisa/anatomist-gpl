@@ -18,6 +18,37 @@ manually or semi-manually split cortical folds in a graph.
 &lt;/table&gt;&lt;tr/&gt;
 Classical rotation, translation and zoom controls also apply.&lt;/html&gt;</translation>
     </message>
+    <message>
+        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/trunk/shared/python_plugins/selection.py" line="518"/>
+        <source>SelectionControl</source>
+        <translation>&lt;html&gt;Selection
+&lt;table&gt;&lt;tr&gt;
+&lt;td&gt;Left btn:&lt;/td&gt;&lt;td&gt;selection&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;lt;shift&amp;gt;:&lt;/td&gt;&lt;td&gt;additive selection&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;lt;ctrl&amp;gt; :&lt;/td&gt;&lt;td&gt;toggle selection&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Mid btn:&lt;/td&gt;&lt;td&gt;rotation&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;lt;shift&amp;gt;/ wheel :&lt;/td&gt;&lt;td&gt;zoom/distance&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;lt;ctrl&amp;gt; :&lt;/td&gt;&lt;td&gt;translation&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Right btn:&lt;/td&gt;&lt;td&gt;menu&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+w&amp;gt; :&lt;/td&gt;&lt;td&gt;close window&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;F9&amp;gt; :&lt;/td&gt;&lt;td&gt;full screen&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;F10&amp;gt; :&lt;/td&gt;&lt;td&gt;show/hide menus/buttons&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;s&amp;gt; :&lt;/td&gt;&lt;td&gt;synchro views&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+c&amp;gt; :&lt;/td&gt;&lt;td&gt;set centre of view&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;alt+c&amp;gt; :&lt;/td&gt;&lt;td&gt;show position of the center of view&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+a&amp;gt; :&lt;/td&gt;&lt;td&gt;select/unselect all objects&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;del&amp;gt; :&lt;/td&gt;&lt;td&gt;remove selected object from this view&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+del&amp;gt; :&lt;/td&gt;&lt;td&gt;remove selected objects from group&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Slice movie:&lt;/td&gt;&lt;/td&gt;&lt;td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;PgUp&amp;gt; :&lt;/td&gt;&lt;td&gt;previous slice&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;PgDown&amp;gt; :&lt;/td&gt;&lt;td&gt;next slice&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;shift+PgUp&amp;gt; :&lt;/td&gt;&lt;td&gt;previous time&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;shift+PgDown&amp;gt; :&lt;/td&gt;&lt;td&gt;next time&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;space&amp;gt; :&lt;/td&gt;&lt;td&gt;pick selection label&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl&amp;gt;+&amp;lt;return&amp;gt; :&lt;/td&gt;&lt;td&gt;set current label to selected objects&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;&lt;br/&gt;
+Additional settings for edges selection in the toolbox GUI.&lt;/html&gt;</translation>
+    </message>
 </context>
 <context>
     <name>Form</name>

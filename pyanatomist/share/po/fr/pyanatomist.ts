@@ -19,6 +19,37 @@ Découpe manuellement ou semi-manuellement des noeuds de graphe cortical.
 Les contrôles classiques de rotation, translation et zoom fonctionnent aussi.
 &lt;/html&gt;</translation>
     </message>
+    <message>
+        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/trunk/shared/python_plugins/selection.py" line="518"/>
+        <source>SelectionControl</source>
+        <translation>&lt;html&gt;Sélection
+&lt;table&gt;&lt;tr&gt;
+&lt;td&gt;Btn gauche:&lt;/td&gt;&lt;td&gt;sélection&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;lt;shift&amp;gt;:&lt;/td&gt;&lt;td&gt;sélection additive&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;lt;ctrl&amp;gt; :&lt;/td&gt;&lt;td&gt;modif. sélection&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Btn milieu:&lt;/td&gt;&lt;td&gt;rotation&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;lt;shift&amp;gt;/ molette :&lt;/td&gt;&lt;td&gt;zoom/distance&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;lt;ctrl&amp;gt; :&lt;/td&gt;&lt;td&gt;translation&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Btn droit:&lt;/td&gt;&lt;td&gt;menu&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+w&amp;gt; :&lt;/td&gt;&lt;td&gt;fermer la fenêtre&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;F9&amp;gt; :&lt;/td&gt;&lt;td&gt;plein écran&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;F10&amp;gt; :&lt;/td&gt;&lt;td&gt;montre/cache les menus/boutons&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;s&amp;gt; :&lt;/td&gt;&lt;td&gt;synchro vues&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+c&amp;gt; :&lt;/td&gt;&lt;td&gt;fixe le centre de vue&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;alt+c&amp;gt; :&lt;/td&gt;&lt;td&gt;affiche la position du centre de vue&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+a&amp;gt; :&lt;/td&gt;&lt;td&gt;sélectionne/désélectionne tous les objets&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;del&amp;gt; :&lt;/td&gt;&lt;td&gt;enlève les objets sélectionnés de la vue&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+del&amp;gt; :&lt;/td&gt;&lt;td&gt;enlève les objets sélectionnés du groupe&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan=&quot;2&quot;&gt;Défilement des coupes:&lt;/td&gt;&lt;/td&gt;&lt;td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;PgUp&amp;gt; :&lt;/td&gt;&lt;td&gt;coupe précédente&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;PgDown&amp;gt; :&lt;/td&gt;&lt;td&gt;coupe suivante&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;shift+PgUp&amp;gt; :&lt;/td&gt;&lt;td&gt;temps précédent&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;shift+PgDown&amp;gt; :&lt;/td&gt;&lt;td&gt;temps suivant&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;space&amp;gt; :&lt;/td&gt;&lt;td&gt;&quot;pipette&quot;, mémorise le label des objets sélectionnés&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl&amp;gt;+&amp;lt;return&amp;gt; :&lt;/td&gt;&lt;td&gt;applique le label courant aux objets sélectionnés&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;&lt;br/&gt;
+Des options supplémentaires sont disponibles dans l&apos;interface &quot;toolbox&quot; pour la sélection des relations.&lt;/html&gt;</translation>
+    </message>
 </context>
 <context>
     <name>Form</name>
@@ -93,7 +124,7 @@ Les contrôles classiques de rotation, translation et zoom fonctionnent aussi.
     <message>
         <location filename="../../../../../../neurosvn/anatomist/anatomist-free/trunk/shared/python_plugins/gradientpalette.py" line="112"/>
         <source>Save palette image...</source>
-        <translation>Sauver la palette comme image</translation>
+        <translation>Sauver la palette comme image...</translation>
     </message>
     <message>
         <location filename="../../../../../../neurosvn/anatomist/anatomist-free/trunk/shared/python_plugins/gradientpalette.py" line="113"/>
