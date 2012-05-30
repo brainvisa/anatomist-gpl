@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
 #      CEA/NeuroSpin, Batiment 145,
@@ -462,6 +463,8 @@ class PyMouseActionLink( Control.MouseActionLink ):
     self._method( x, y, globalX, globalY )
   def clone( self ):
     return PyMouseActionLink( self._method )
+  def action( self ):
+    return self._method.im_self
 
 class PyWheelActionLink( Control.WheelActionLink ):
   def __init__( self, method ):
