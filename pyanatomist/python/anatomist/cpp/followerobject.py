@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
 #      CEA/NeuroSpin, Batiment 145,
@@ -106,17 +107,18 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
       mesh.polygon().assign( [] )
     else:
       bbox = self.boundingbox()
-      vert = [ aims.Point3df( bbox[0] ),
-        aims.Point3df( bbox[1][0], bbox[0][1], bbox[0][2] ),
-        aims.Point3df( bbox[0][0], bbox[1][1], bbox[0][2] ),
-        aims.Point3df( bbox[0][0], bbox[0][1], bbox[1][2] ),
-        aims.Point3df( bbox[1][0], bbox[1][1], bbox[0][2] ),
-        aims.Point3df( bbox[1][0], bbox[0][1], bbox[1][2] ),
-        aims.Point3df( bbox[0][0], bbox[1][1], bbox[1][2] ),
-        aims.Point3df( bbox[1] )
-      ]
-      pol = [ [0,1], [0,2], [1,4], [2,4], [0,3], [1,5], [2,6], [4,7], [3,5],
-        [3,6], [5,7], [6,7] ]
+      if len( bbox ) == 2:
+        vert = [ aims.Point3df( bbox[0] ),
+          aims.Point3df( bbox[1][0], bbox[0][1], bbox[0][2] ),
+          aims.Point3df( bbox[0][0], bbox[1][1], bbox[0][2] ),
+          aims.Point3df( bbox[0][0], bbox[0][1], bbox[1][2] ),
+          aims.Point3df( bbox[1][0], bbox[1][1], bbox[0][2] ),
+          aims.Point3df( bbox[1][0], bbox[0][1], bbox[1][2] ),
+          aims.Point3df( bbox[0][0], bbox[1][1], bbox[1][2] ),
+          aims.Point3df( bbox[1] )
+        ]
+        pol = [ [0,1], [0,2], [1,4], [2,4], [0,3], [1,5], [2,6], [4,7], [3,5],
+          [3,6], [5,7], [6,7] ]
       mesh.vertex().assign( vert )
       mesh.polygon().assign( [ aims.AimsVector_U32_2(i) for i in pol ] )
     self.setChanged()
