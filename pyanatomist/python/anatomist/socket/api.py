@@ -170,7 +170,8 @@ class Anatomist(base.Anatomist):
     return self.AWindowsBlock(anatomistinstance=self, nbCols=nbCols,
       nbRows=nbRows)
   
-  def createWindow(self, wintype, geometry=None, block=None, no_decoration=False):
+  def createWindow(self, wintype, geometry=None, block=None,
+    no_decoration=False, options=None):
     """
     Creates a new window and opens it.
     @type wintype: string
