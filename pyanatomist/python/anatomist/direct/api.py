@@ -1485,7 +1485,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     def __init__(self, *args, **kwargs):
       super(Anatomist.AWindow, self).__init__(*args, **kwargs)
-     
+      # needed to allow dynamic request in __getattr__
+      if self.block is None: del self.block
+
     def __getattr__(self, name):
       """
       The first time an attribute of this window is requested, it is asked to anatomist application with ObjectInfo command. It returns a dictionary containing informations about objects : 
@@ -1494,8 +1496,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       requestId -> id}
       """
       if name == "windowType":
-        self.windowType=self.internalRep.subtype()
-        return self.windowType
+        return cpp.AWindowFactory.typeString( self.internalRep.type() )
       elif name == "group": # window group can change so it is not saved in an attribute
         return self.anatomistinstance.AWindowsGroup(self.anatomistinstance, self.internalRep.Group())
       elif name == "objects":
@@ -1504,6 +1505,16 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         for obj in objs:
           aobjs.append(self.anatomistinstance.AObject(self.anatomistinstance, obj))
         return aobjs
+      elif name == 'block':
+        if not self.parent() or not self.parent().parent():
+          return None
+        else:
+          block = Anatomist.AWindowsBlock.findBlock( \
+            self.parent().parent() )
+          if block:
+            return Anatomist.AWindowsBlock( self.anatomistinstance,
+              widgetproxy=block )
+        return None
       else: # must raise AttributeError if it is not an existing attribute. else, error can occur on printing the object
         return Anatomist.AItem.__getattr__( self, name )
 
@@ -1564,15 +1575,19 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
           elements=[self.internalRep] )
       def __cmp__( self, y ):
         if isinstance( y, Anatomist.AWindowsBlock.WidgetProxy ):
-          return self.widget.__cmp__( y.widget )
+          return cmp( self.widget, y.widget )
         return cmp( self.widget, y )
 
-    def __init__(self, anatomistinstance=None, nbCols=2, nbRows=0):
+    def __init__(self, anatomistinstance=None, nbCols=2, nbRows=0,
+      widgetproxy=None):
       super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance,
         nbCols=nbCols, nbRows=nbRows)
-      self.internalRep=anatomistinstance.newId()
-      self.internalWidget=None
-      self.canDestroy = True # may be inhibited by specific implementations
+      if widgetproxy is not None:
+        self.internalRep = widgetproxy.internalRep
+        self.internalWidget = widgetproxy
+      else:
+        self.internalRep=anatomistinstance.newId()
+        self.internalWidget=None
 
     def __del__( self ):
       base.Anatomist.AWindowsBlock.__del__( self )
