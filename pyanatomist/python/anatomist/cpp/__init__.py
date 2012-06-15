@@ -554,6 +554,7 @@ aims.convertersObjectToPython.update( { \
   'AObject' : AObject.fromObject,
   'PN9anatomist7AObjectE' : AObject.fromObject,
   'N5carto10shared_ptrIN9anatomist7AObjectEEE' : AObject.fromObject,
+  'PN9anatomist7AWindowE' : AWindow.fromObject,
 } )
 
 

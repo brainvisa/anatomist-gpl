@@ -13,6 +13,23 @@ namespace anatomist
     Unserializer();
     virtual ~Unserializer ();
 
+    void registerPointer( void* ptr, int id, const std::string & type );
+
+    void registerPointer( QWidget* ptr, int id );
+%MethodCode
+    sipCpp->registerPointer( (void *) a0, a1, "Widget" );
+%End
+
+    void registerPointer( anatomist::AObject* ptr, int id );
+%MethodCode
+    sipCpp->registerPointer( (void *) a0, a1, "AObject" );
+%End
+
+    void registerPointer( anatomist::AWindow* ptr, int id );
+%MethodCode
+    sipCpp->registerPointer( (void *) a0, a1, "AWindow" );
+%End
+
     int makeID(void *, const std::string &="");
 
     int makeID(long, const std::string &="");
@@ -38,6 +55,11 @@ namespace anatomist
     int makeID(anatomist::Transformation *);
 %MethodCode
     sipCpp->makeID( a0, "Transformation" );
+%End
+
+    int makeID(QWidget *);
+%MethodCode
+    sipCpp->makeID( a0, "Widget" );
 %End
 
 
@@ -119,6 +141,20 @@ namespace anatomist
   try
   {
     sipRes = sipCpp->id(a0, "Transformation");
+  }
+  catch( std::exception & e )
+  {
+    sipIsErr = 1;
+    PyErr_SetString( PyExc_RuntimeError, e.what() );
+    sipRes = 0;
+  }
+%End
+
+    int id( QWidget * ) const;
+%MethodCode
+  try
+  {
+    sipRes = sipCpp->id(a0, "Widget");
   }
   catch( std::exception & e )
   {

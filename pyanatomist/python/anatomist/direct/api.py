@@ -60,6 +60,7 @@ from anatomist import base
 import operator
 from soma import aims
 import os, sys, types
+import weakref
 try:
   from PyQt4.QtCore import QString
   _string_or_qstring = ( basestring, QString )
@@ -250,10 +251,13 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
     if block is not None:
       # CreateWindowCommand(type, id, context, geometry, blockid, block, block_columns, options)
-      c=cpp.CreateWindowCommand(wintype, -1, None, geometry, block.getInternalRep(), block.internalWidget, block.nbCols, block.nbRows, aims.Object(options))
+      bid = None
+      if block.internalWidget is not None:
+        bid = block.internalWidget.widget
+      c=cpp.CreateWindowCommand(wintype, -1, None, geometry, block.getInternalRep(), bid, block.nbCols, block.nbRows, aims.Object(options))
       self.execute(c)
       if block.internalWidget is None:
-        block.internalWidget=c.block()
+        block.setWidget( c.block() )
     else:
       c=cpp.CreateWindowCommand(wintype, -1, None, geometry, 0,  None, 0, 0,
         aims.Object(options))
@@ -1546,18 +1550,52 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
       Number of columns of the windows block
     """
+    _widgets = weakref.WeakKeyDictionary()
+    class WidgetProxy( object ):
+      '''Contains a QWidget. This proxy class is only here to activate
+      reference counting on the widget'''
+      def __init__( self, anatomistinstance, internalRep, widget ):
+        self.anatomistinstance = anatomistinstance
+        self.widget = widget
+        self.internalRep = internalRep
+      def __del__( self ):
+        #print 'delete block', self, ', id:', self.internalRep, ', widget:', self.widget
+        self.anatomistinstance.execute( 'DeleteElement',
+          elements=[self.internalRep] )
+      def __cmp__( self, y ):
+        if isinstance( y, Anatomist.AWindowsBlock.WidgetProxy ):
+          return self.widget.__cmp__( y.widget )
+        return cmp( self.widget, y )
+
     def __init__(self, anatomistinstance=None, nbCols=2, nbRows=0):
       super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance,
         nbCols=nbCols, nbRows=nbRows)
       self.internalRep=anatomistinstance.newId()
       self.internalWidget=None
+      self.canDestroy = True # may be inhibited by specific implementations
 
     def __del__( self ):
-      if self.internalRep is not None:
-        self.anatomistinstance.execute( 'DeleteElement',
-          elements=[self.internalRep] )
       base.Anatomist.AWindowsBlock.__del__( self )
       Anatomist.AItem.__del__( self )
+
+    def setWidget( self, w ):
+      if isinstance( w, self.WidgetProxy ):
+        self.internalWidget = w
+      else:
+        wp = self.findBlock( w )
+        if wp is not None:
+          self.internalWidget = wp
+        else:
+          self.internalWidget = self.WidgetProxy( self.anatomistinstance,
+            self.internalRep, w )
+          self._widgets[ self.internalWidget ] = None
+
+    @staticmethod
+    def findBlock( widget ):
+      for x in Anatomist.AWindowsBlock._widgets:
+        if x.widget == widget:
+          return x
+      return None
 
   ###############################################################################
   class AWindowsGroup(AItem, base.Anatomist.AWindowsGroup):

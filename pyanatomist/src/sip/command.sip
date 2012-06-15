@@ -187,6 +187,11 @@ namespace anatomist
             sipConvertFromInstance( ptr, sipClass_anatomist_Transformation,
                                     0 );
         }
+        else if( t == "Widget" )
+        {
+          sipRes =
+            sipConvertFromInstance( ptr, sipClass_QWidget, 0 );
+        }
         else
         {
           sipIsErr = 1;
@@ -306,6 +311,33 @@ namespace anatomist
       }
 %End
 
+    int id( QWidget* ) const;
+%MethodCode
+    if( !sipCpp->unserial.get() )
+    {
+      sipIsErr = 1;
+      PyErr_SetString( PyExc_RuntimeError, "no ID map" );
+    }
+    else if( sipCpp->unserial->type( a0 ) != "Widget" )
+    {
+      sipIsErr = 1;
+      PyErr_SetString( PyExc_TypeError,
+                        ( std::string( "Pointer for Widget has been "
+                                      "registered as a different type: " )
+                          + sipCpp->unserial->type( a0 ) ).c_str() );
+    }
+    else
+      try
+      {
+        sipRes = sipCpp->unserial->id( a0, "Widget" );
+      }
+      catch( std::exception & e )
+      {
+        sipIsErr = 1;
+        PyErr_SetString( PyExc_RuntimeError, e.what() );
+      }
+%End
+
 
     int makeID( anatomist::AObject* );
 %MethodCode
@@ -357,6 +389,19 @@ namespace anatomist
       {
         sipRes = sipCpp->unserial->makeID( a0, "AWindow" );
       }    
+%End
+
+    int makeID( QWidget* );
+%MethodCode
+   if( !sipCpp->unserial.get() )
+      {
+        sipIsErr = 1;
+        PyErr_SetString( PyExc_RuntimeError, "no ID map" );
+      }
+    else
+      {
+        sipRes = sipCpp->unserial->makeID( a0, "Widget" );
+      }
 %End
 
     int freeID() const;
