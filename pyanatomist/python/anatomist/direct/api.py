@@ -812,8 +812,18 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
       Information about AIMS library.
     """
+    p = self.theProcessor()
+    resetProcExec = False
+    if not p.execWhileIdle():
+      # allow recursive commands execution, otherwise the execute()
+      # may not be done right now
+      p.allowExecWhileIdle( True )
+      resetProcExec = True
     command=self.execute("GetInfo", aims_info = 1)
     result=command.result()
+    if resetProcExec:
+      # set back recursive execution to its previous state
+      p.allowExecWhileIdle( False )
     return result['aims_info']
   
   def getCommandsList(self):
@@ -823,8 +833,18 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       List of commands available in Anatomist with their parameters.
       dict command name -> dict parameter name -> dict attribute -> value (needed, type)
     """
+    p = self.theProcessor()
+    resetProcExec = False
+    if not p.execWhileIdle():
+      # allow recursive commands execution, otherwise the execute()
+      # may not be done right now
+      p.allowExecWhileIdle( True )
+      resetProcExec = True
     command=self.execute("GetInfo", list_commands = 1)
     result=command.result()
+    if resetProcExec:
+      # set back recursive execution to its previous state
+      p.allowExecWhileIdle( False )
     return result['commands']
 
   
@@ -834,8 +854,18 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
       List of modules and their description. dict module name -> dict attribute -> value (description)
     """
+    p = self.theProcessor()
+    resetProcExec = False
+    if not p.execWhileIdle():
+      # allow recursive commands execution, otherwise the execute()
+      # may not be done right now
+      p.allowExecWhileIdle( True )
+      resetProcExec = True
     command=self.execute("GetInfo", modules_info = 1)
     result=command.result()
+    if resetProcExec:
+      # set back recursive execution to its previous state
+      p.allowExecWhileIdle( False )
     return result['modules']
   
   def getVersion(self):
@@ -844,8 +874,18 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
       Anatomist version
     """
+    p = self.theProcessor()
+    resetProcExec = False
+    if not p.execWhileIdle():
+      # allow recursive commands execution, otherwise the execute()
+      # may not be done right now
+      p.allowExecWhileIdle( True )
+      resetProcExec = True
     command=self.execute("GetInfo", version = 1)
     result=command.result()
+    if resetProcExec:
+      # set back recursive execution to its previous state
+      p.allowExecWhileIdle( False )
     return result['anatomist_version']
   
   ###############################################################################
