@@ -63,6 +63,7 @@ namespace anatomist
     virtual void SetPosition( const Point3df &position,
       const anatomist::Referential *refdep );
     void setHasCursor(int);
+    virtual bool toolBarsVisible() const;
     virtual void showToolBars(int = 2 );
     void setFullScreen(int);
     set_AObjectPtr Objects() const;
