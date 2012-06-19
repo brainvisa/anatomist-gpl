@@ -1185,8 +1185,18 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       """
       # using ObjectInfoCommand class directly doesn't work, I don't know why...
       # command=cpp.ObjectInfoCommand("", self.anatomistinstance.context, self.anatomistinstance.convertToIds([self]), True, True)
+      p = self.anatomistinstance.theProcessor()
+      resetProcExec = False
+      if not p.execWhileIdle():
+        # allow recursive commands execution, otherwise the execute()
+        # may not be done right now
+        p.allowExecWhileIdle( True )
+        resetProcExec = True
       command=self.anatomistinstance.execute("ObjectInfo", objects=[self], name_children=1, name_referentials=1)
       infosObj=command.result()
+      if resetProcExec:
+        # set back recursive execution to its previous state
+        p.allowExecWhileIdle( False )
       infos=eval(str(infosObj)) # aims.Object -> python dictionary
       if infos is not None:
         infos=infos.get(self.anatomistinstance.context.id( \
