@@ -31,18 +31,18 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
-import os
-import anatomist.api as ana
 from PyQt4 import QtCore, QtGui
+from soma import aims
 from soma.qt4gui.rangeSlider import QRangeSlider
 from tempfile import mkstemp
-from soma import aims
+import anatomist.api as ana
+import os
 
 class PaletteEditor( QtGui.QGroupBox ):
     def __init__( self, image,
                   default=None, title="", palette_filter=None,
                   real_min = 0, real_max = 100,
-                  parent=None, sliderPrecision = 100 ):
+                  parent=None, sliderPrecision = 100, zoom = 1):
         QtGui.QGroupBox.__init__( self, parent )
         
         self.real_min = real_min
@@ -56,36 +56,42 @@ class PaletteEditor( QtGui.QGroupBox ):
         vlay = QtGui.QVBoxLayout( self )
         vlay.setMargin( 0 )
         
+        font = QtGui.QFont()
+        font.setPixelSize(12 * zoom)
+        
         if palette_filter != []:
             hlay = QtGui.QHBoxLayout()
             vlay.addLayout( hlay )
-            hlay.addSpacerItem( QtGui.QSpacerItem( 20, 20, hPolicy = QtGui.QSizePolicy.Expanding ) )
+            hlay.addSpacerItem( QtGui.QSpacerItem( 20 , 20 , hPolicy = QtGui.QSizePolicy.Expanding ) )
             self.palettecb = QtGui.QComboBox( self )
-            self.palettecb.setFixedWidth( 256 )
+            self.palettecb.setFont(font)
+            self.palettecb.setFixedWidth( 256 * zoom * zoom )
             self.palettecb.setToolTip( "Change the palette" )
             hlay.addWidget( self.palettecb )
-            hlay.addSpacerItem( QtGui.QSpacerItem( 20, 20, hPolicy = QtGui.QSizePolicy.Expanding ) )
+            hlay.addSpacerItem( QtGui.QSpacerItem( 20 , 20 , hPolicy = QtGui.QSizePolicy.Expanding ) )
         
         hlay = QtGui.QHBoxLayout()
         hlay.setMargin( 0 )
         hlay.setSpacing( 0 )
         
         vlay.addLayout( hlay )
-        
+                
         if isinstance( self.real_min, float ) or isinstance( self.real_max, float ):
             self.minsb = QtGui.QDoubleSpinBox( self )
+            self.minsb.setFont(font)
             self.minsb.setSingleStep( 0.1 )
         else:
             self.minsb = QtGui.QSpinBox( self )
-        self.minsb.setFixedWidth( 62 )
+        self.minsb.setFixedWidth( 62 * zoom )
         self.minsb.setRange( self.real_min, self.real_max )
         self.minsb.setToolTip( "Change the palette minimum value" )
+        self.minsb.setFont(font)
         hlay.addWidget( self.minsb )
         
         self.rangeslider = QRangeSlider()
         self.rangeslider.show()
-        self.rangeslider.setFixedHeight(32)
-        self.rangeslider.setFixedWidth(256)
+        self.rangeslider.setFixedHeight(32 * zoom)
+        self.rangeslider.setFixedWidth(256 * zoom * zoom)
         self.rangeslider.setMin(0)
         self.rangeslider.setMax(sliderPrecision)
         self.rangeslider.setRange(0, sliderPrecision)
@@ -96,9 +102,10 @@ class PaletteEditor( QtGui.QGroupBox ):
             self.maxsb.setSingleStep( 0.1 )
         else:
             self.maxsb = QtGui.QSpinBox( self )
-        self.maxsb.setFixedWidth( 62 )
+        self.maxsb.setFixedWidth( 62 * zoom   )
         self.maxsb.setRange( self.real_min, self.real_max )
         self.maxsb.setToolTip( "Change the palette maximum value" )
+        self.maxsb.setFont(font)
         hlay.addWidget( self.maxsb )
         
         self.paletteDic = {}
