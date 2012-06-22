@@ -42,11 +42,12 @@ class PaletteEditor( QtGui.QGroupBox ):
     def __init__( self, image,
                   default=None, title="", palette_filter=None,
                   real_min = 0, real_max = 100,
-                  parent=None ):
+                  parent=None, sliderPrecision = 100 ):
         QtGui.QGroupBox.__init__( self, parent )
         
         self.real_min = real_min
         self.real_max = real_max
+        self.sliderPrecision = sliderPrecision
         
         a = ana.Anatomist('-b')
         self.image = image
@@ -86,10 +87,8 @@ class PaletteEditor( QtGui.QGroupBox ):
         self.rangeslider.setFixedHeight(32)
         self.rangeslider.setFixedWidth(256)
         self.rangeslider.setMin(0)
-        self.rangeslider.setMax(100)
-        self.rangeslider.setStart(0)
-        self.rangeslider.setEnd(100)
-        self.rangeslider.setRange(0, 100)
+        self.rangeslider.setMax(sliderPrecision)
+        self.rangeslider.setRange(0, sliderPrecision)
         hlay.addWidget( self.rangeslider )
         
         if isinstance( self.real_min, float ) or isinstance( self.real_max, float ):
@@ -105,6 +104,13 @@ class PaletteEditor( QtGui.QGroupBox ):
         self.paletteDic = {}
         
         self.loadPaletteList( palette_filter )
+        
+        if(default is None):
+          # set palette name using current object palette info
+            try:
+              default = ((image.palette()).refPalette()).name()         
+            except:
+              default = None
 
         if palette_filter != []:
             try:
@@ -130,7 +136,14 @@ class PaletteEditor( QtGui.QGroupBox ):
             self.connect( self.maxsb,
                           QtCore.SIGNAL( " valueChanged( int ) " ),
                           self.maxSbChanged )
-
+             
+        # set palette bound using current object palette info
+        paletteStart = image.palette().min1() * (real_max - real_min) + real_min
+        paletteStart = int(paletteStart)
+        paletteEnd = image.palette().max1() * (real_max - real_min) +  real_min
+        paletteEnd = int(paletteEnd)
+        self.rangeslider.setStart(int(image.palette().min1() * (real_max - real_min) + real_min))
+        self.rangeslider.setEnd(int(image.palette().max1() * (real_max - real_min) +  real_min))        
         self.paletteMinMaxChanged()
     
         self.connect( self.rangeslider,
@@ -141,6 +154,7 @@ class PaletteEditor( QtGui.QGroupBox ):
                  self.paletteMinMaxChanged)
         
 
+        
     def loadPaletteList( self, palette_filter ):
         if palette_filter == []:
             return
@@ -153,7 +167,7 @@ class PaletteEditor( QtGui.QGroupBox ):
             self.paletteDic.update( { p.name() : self.palettecb.count() } )
             self.palettecb.addItem( p.name() )
 
-    def paletteNameChanged( self, name ):
+    def paletteNameChanged( self):
         apal = self.image.getOrCreatePalette()
         self.image.setPalette( name,\
                                minVal=apal.min1(),\
@@ -165,8 +179,8 @@ class PaletteEditor( QtGui.QGroupBox ):
         max = self.rangeslider.end()
         refpal = self.image.getOrCreatePalette().refPalette()
         self.image.setPalette( refpal.name(),\
-                                minVal=min*0.01,\
-                                maxVal=max*0.01 )
+                                minVal=min*(1.0/self.sliderPrecision),\
+                                maxVal=max*(1.0/self.sliderPrecision) )
 
         if not self.rangeslider._movingHandle:
             paletteinfo = self.updatePaletteLabel()
@@ -183,8 +197,8 @@ class PaletteEditor( QtGui.QGroupBox ):
             os.remove(tempfile)
         
         
-        real_min = ( ( self.real_max - self.real_min ) * min /  100 ) + self.real_min
-        real_max = ( ( self.real_max - self.real_min ) * max /  100 ) + self.real_min
+        real_min = ( ( self.real_max - self.real_min ) * min /  self.sliderPrecision ) + self.real_min
+        real_max = ( ( self.real_max - self.real_min ) * max /  self.sliderPrecision ) + self.real_min
         
         self.minsb.blockSignals( True )
         self.minsb.setValue( real_min )
@@ -250,7 +264,7 @@ class PaletteEditor( QtGui.QGroupBox ):
         if value >= self.maxsb.value():
             value = self.maxsb.value()-1
         
-        slider_value = 100 * ( value - self.real_min ) / ( self.real_max - self.real_min )
+        slider_value = self.sliderPrecision * ( value - self.real_min ) / ( self.real_max - self.real_min )
         
         self.rangeslider.setStart( int( slider_value ) )
 
@@ -258,6 +272,6 @@ class PaletteEditor( QtGui.QGroupBox ):
         if value <= self.minsb.value():
             value = self.minsb.value()+1
         
-        slider_value = 100 * ( value - self.real_min ) / ( self.real_max - self.real_min )
+        slider_value = self.sliderPrecision * ( value - self.real_min ) / ( self.real_max - self.real_min )
         
         self.rangeslider.setEnd( int( slider_value ) )
