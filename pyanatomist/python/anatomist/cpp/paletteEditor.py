@@ -185,7 +185,6 @@ class PaletteEditor( QtGui.QGroupBox ):
         if not self.rangeslider._movingHandle:
             paletteinfo = self.updatePaletteLabel()
             tempfile = mkstemp()[1]
-            print tempfile
             paletteinfo[0].save(tempfile, "PNG")
             self.rangeslider.setStyleSheet("QRangeSlider * { border: 0px; padding: 0px; } \
                                             QRangeSlider #Head { background: " + paletteinfo[1] + " repeat-x; } \
