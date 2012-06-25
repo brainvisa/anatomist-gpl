@@ -65,7 +65,10 @@ class PaletteEditor( QtGui.QGroupBox ):
             hlay.addSpacerItem( QtGui.QSpacerItem( 20 , 20 , hPolicy = QtGui.QSizePolicy.Expanding ) )
             self.palettecb = QtGui.QComboBox( self )
             self.palettecb.setFont(font)
-            self.palettecb.setFixedWidth( 256 * zoom * zoom )
+            if(zoom > 1.0):
+              self.palettecb.setFixedWidth( 256 * zoom)
+            else:
+              self.palettecb.setFixedWidth( 256 * zoom * zoom )
             self.palettecb.setToolTip( "Change the palette" )
             hlay.addWidget( self.palettecb )
             hlay.addSpacerItem( QtGui.QSpacerItem( 20 , 20 , hPolicy = QtGui.QSizePolicy.Expanding ) )
@@ -174,8 +177,8 @@ class PaletteEditor( QtGui.QGroupBox ):
             self.paletteDic.update( { p.name() : self.palettecb.count() } )
             self.palettecb.addItem( p.name() )
 
-    def paletteNameChanged( self):
-        apal = self.image.getOrCreatePalette()
+    def paletteNameChanged( self, name):
+        apal = self.image.getOrCreatePalette()        
         self.image.setPalette( name,\
                                minVal=apal.min1(),\
                                maxVal=apal.max1() )
