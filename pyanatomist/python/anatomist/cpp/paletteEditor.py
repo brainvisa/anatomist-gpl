@@ -232,7 +232,7 @@ class PaletteEditor( QtGui.QGroupBox ):
             dimx = 1
         if dimy > 256:
             dimy = 256
-        if min == max:
+        if (int(max - min) < 1): 
             min = 0
             max = 1
         
@@ -255,6 +255,7 @@ class PaletteEditor( QtGui.QGroupBox ):
                 xpal = int(x*(maxx-minx)/dimx)
                 if xpal >= range:
                     xpal = range-1
+                
                 imbackground.setPixel( xpal, y, QtGui.qRgb( rgb.red(), rgb.green(), rgb.blue() ) )
                 
         if cmp( QtCore.QT_VERSION_STR , '4.7' ) == -1:
