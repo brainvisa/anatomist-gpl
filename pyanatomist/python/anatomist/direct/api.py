@@ -1546,7 +1546,10 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       requestId -> id}
       """
       if name == "windowType":
-        return cpp.AWindowFactory.typeString( self.internalRep.type() )
+        t = self.internalRep.subtype()
+        if t == 0:
+          t = self.internalRep.type()
+        return cpp.AWindowFactory.typeString( t )
       elif name == "group": # window group can change so it is not saved in an attribute
         return self.anatomistinstance.AWindowsGroup(self.anatomistinstance, self.internalRep.Group())
       elif name == "objects":
