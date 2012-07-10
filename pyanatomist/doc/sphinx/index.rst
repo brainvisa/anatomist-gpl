@@ -39,6 +39,6 @@ PyAnatomist examples
 Tutorial
 --------
 
-- The :anatomist:`tutorial is accessible here <ana_training/en/html/ch08.html>`.
+- The :anatomist:`tutorial is accessible here <ana_training/en/html/ch09.html>`.
 - You can also have a look at the :aimsdata:`PyAims tutorial <aims_training/en/html/ch10.html>`.
 
