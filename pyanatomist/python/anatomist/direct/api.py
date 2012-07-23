@@ -458,14 +458,17 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     if method is None:
       method=""
     bObjects=self.convertParamsToObjects(objects)
+    bObjects = [ x for x in bObjects if x is not None ]
     c=cpp.FusionObjectsCommand(self.makeList(bObjects), method, -1, ask_order)
     # force execution now
     ah = self.theProcessor().execWhileIdle()
     self.theProcessor().allowExecWhileIdle( True )
     self.execute(c)
     self.theProcessor().allowExecWhileIdle( ah )
-    o=self.AObject(self, c.createdObject())
-    o.releaseAppRef()
+    o = c.createdObject()
+    if o is not None:
+      o=self.AObject(self, c.createdObject())
+      o.releaseAppRef()
     return o
 
   def getFusionInfo( self, objects=None ):
