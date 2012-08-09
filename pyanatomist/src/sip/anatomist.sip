@@ -124,6 +124,21 @@ public:
 %MethodCode
   sipRes = theAnatomist->getTransformation( a0, a1 );
 %End
+
+  std::string objectsFileFilter() const;
+%MethodCode
+  sipRes = new std::string( theAnatomist->objectsFileFilter() );
+%End
+
+  void addObjectsFileFilter( const std::string & filter );
+%MethodCode
+  theAnatomist->addObjectsFileFilter( *a0 );
+%End
+
+  void updateFileDialogObjectsFilter();
+%MethodCode
+  theAnatomist->updateFileDialogObjectsFilter();
+%End
 };
 
 
