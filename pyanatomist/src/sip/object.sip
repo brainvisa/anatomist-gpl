@@ -2,7 +2,7 @@
 namespace anatomist
 {
 
-  class AObject : anatomist::Observer, anatomist::Observable /Abstract/
+  class AObject : anatomist::Observer, anatomist::Observable
   {
 %TypeHeaderCode
 #include <anatomist/graph/Graph.h>
@@ -50,7 +50,7 @@ namespace anatomist
 
     std::string name() const;
     std::string fileName() const;
-    int type() const = 0;
+    int type() const;
     int id() const;
 
     void setName( std::string );
@@ -132,6 +132,7 @@ namespace anatomist
     static int 	registerObjectType (const std::string &);
     static void addObjectMenuRegistration
     ( anatomist::ObjectMenuRegistrerClass * /Transfer/ );
+    virtual void setHeaderOptions();
 
     SIP_PYTUPLE boundingbox() const;
 %MethodCode
