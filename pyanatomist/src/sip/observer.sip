@@ -9,6 +9,7 @@ namespace anatomist
 #include <anatomist/observer/Observable.h>
 #include <anatomist/surface/textobject.h>
 #include <anatomist/surface/transformedobject.h>
+#include <anatomist/surface/texture.h>
 %End
 
 %TypeCode
@@ -26,6 +27,8 @@ namespace anatomist
       sipClass = sipClass_anatomist_ASurface_3;
     else if (dynamic_cast<anatomist::ASurface_2 *>(sipCpp))
       sipClass = sipClass_anatomist_ASurface_2;
+    else if (dynamic_cast<anatomist::ATexture *>(sipCpp))
+      sipClass = sipClass_anatomist_ATexture;
     else if (dynamic_cast<anatomist::MObject *>(sipCpp))
     {
       if (dynamic_cast<anatomist::AGraph *>(sipCpp))
