@@ -37,6 +37,7 @@ from anatomist.cpp.palettecontrastaction import PaletteContrastAction
 from soma import aims
 from soma.aims import colormaphints
 import sys, os
+from optparse import OptionParser
 
 # determine wheter we are using Qt4 or Qt3, and hack a little bit accordingly
 # the boolean qt4 gloabl variable will tell it for later usage
@@ -47,15 +48,24 @@ from PyQt4.uic import loadUi
 uifile = 'anasimpleviewer-qt4.ui'
 findChild = lambda x, y: QtCore.QObject.findChild( x, QtCore.QObject, y )
 
+parser = OptionParser( description = 'A simplified version of Anatomist for quick viewing' )
+parser.add_option( '-i', '--input', dest='input', metavar='FILE',
+  action='append', default=[], help='load given objects from files' )
+
+(options, args) = parser.parse_args()
+
 # do we have to run QApplication ?
 if qt.qApp.startingUp():
-  qapp = qt.QApplication( sys.argv )
+  qapp = qt.QApplication( args )
   runqt = True
 else:
   runqt = False
 
 # splash
-pix = qt.QPixmap( os.path.expandvars( '$BRAINVISA_SHARE/anatomist-4.0/icons/anatomist.png' ) )
+pix = qt.QPixmap( os.path.expandvars( os.path.join( \
+  aims.carto.Paths.globalShared(),
+  'anatomist-%s/icons/anatomist.png' % '.'.join( \
+    [ str(x) for x in aims.version() ] ) ) ) )
 spl = qt.QSplashScreen( pix )
 spl.show()
 qt.qApp.processEvents()
@@ -703,7 +713,7 @@ cm.addControl( 'QAGLWidget3D', '', 'Simple3DControl' )
 
 del cd, cm, ad
 
-for i in sys.argv[ 1: ]:
+for i in options.input + args:
   anasimple.loadObject( i )
 
 
