@@ -154,51 +154,51 @@ def aimsFromAnatomist( ao, options={ 'scale' : 1 } ):
         oc = getattr( AObjectConverter, 'aimsData_' + dt )
         aim = oc( ao, options )
         if not aim.isNull():
-          return aim.get()
+          return aim._get()
     except:
       pass
     # all this just in case data_type is not set in header
     aim = AObjectConverter.aimsData_U8( ao, options )
     if not aim.isNull():
-      return aim.get()
+      return aim._get()
     aim = AObjectConverter.aimsData_S16( ao, options )
     if not aim.isNull():
-      return aim.get()
+      return aim._get()
     aim = AObjectConverter.aimsData_U16( ao, options )
     if not aim.isNull():
-      return aim.get()
+      return aim._get()
     aim = AObjectConverter.aimsData_S32( ao, options )
     if not aim.isNull():
-      return aim.get()
+      return aim._get()
     aim = AObjectConverter.aimsData_U32( ao, options )
     if not aim.isNull():
-      return aim.get()
+      return aim._get()
     aim = AObjectConverter.aimsData_FLOAT( ao, options )
     if not aim.isNull():
-      return aim.get()
+      return aim._get()
     aim = AObjectConverter.aimsData_DOUBLE( ao, options )
     if not aim.isNull():
-      return aim.get()
+      return aim._get()
     aim = AObjectConverter.aimsData_RGB( ao, options )
     if not aim.isNull():
-      return aim.get()
+      return aim._get()
     aim = AObjectConverter.aimsData_RGBA( ao, options )
     if not aim.isNull():
-      return aim.get()
+      return aim._get()
   elif tn == 'SURFACE':
     aim = AObjectConverter.aimsSurface3( ao, options )
     if not aim.isNull():
-      return aim.get()
+      return aim._get()
     aim = AObjectConverter.aimsSurface4( ao, options )
     if not aim.isNull():
-      return aim.get()
+      return aim._get()
     aim = AObjectConverter.aimsSurface2( ao, options )
     if not aim.isNull():
-      return aim.get()
+      return aim._get()
   elif tn == 'BUCKET':
     aim = AObjectConverter.aimsBucketMap_VOID( ao, options )
     if not aim.isNull():
-      return aim.get()
+      return aim._get()
   elif tn == 'TEXTURE':
     at = ao.attributed()
     if not at:
@@ -210,33 +210,33 @@ def aimsFromAnatomist( ao, options={ 'scale' : 1 } ):
         dt = 'FLOAT'
     try:
       conv = getattr( AObjectConverter, 'aimsTexture_' + dt )
-      aim = conv( ao, options ).get()
+      aim = conv( ao, options )._get()
       return aim
     except:
       aim = AObjectConverter.aimsTexture_FLOAT( ao, options )
       if not aim.isNull():
-        return aim.get()
+        return aim._get()
       aim = AObjectConverter.aimsTexture_POINT2DF( ao, options )
       if not aim.isNull():
-        return aim.get()
+        return aim._get()
       aim = AObjectConverter.aimsTexture_S16( ao, options )
       if not aim.isNull():
-        return aim.get()
+        return aim._get()
       aim = AObjectConverter.aimsTexture_S32( ao, options )
       if not aim.isNull():
-        return aim.get()
+        return aim._get()
       aim = AObjectConverter.aimsTexture_U32( ao, options )
     if aim and not aim.isNull():
-      return aim.get()
+      return aim._get()
     return None
   elif tn == 'GRAPH':
     aim = AObjectConverter.aimsGraph( ao, options )
     if not aim.isNull():
-      return aim.get()
+      return aim._get()
   elif tn == 'NOMENCLATURE':
     aim = AObjectConverter.aimsTree( ao, options )
     if not aim.isNull():
-      return aim.get()
+      return aim._get()
   return None
 
 AObjectConverter.aims = staticmethod( aimsFromAnatomist )
