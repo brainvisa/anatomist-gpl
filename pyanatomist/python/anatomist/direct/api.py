@@ -100,7 +100,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       import threading
       if QtGui.QApplication.instance() is None \
         and isinstance( threading.currentThread(), threading._MainThread ):
-        qapp = QtGui.QApplication( [] )
+        Anatomist.qapp = QtGui.QApplication( [] )
     cpp.Anatomist.__init__(self, *args, **kwargs)
     self.log( "<H1>Anatomist launched</H1>" )
     self.context=cpp.CommandContext.defaultContext()
