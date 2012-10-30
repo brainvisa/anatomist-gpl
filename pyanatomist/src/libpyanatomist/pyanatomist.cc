@@ -68,48 +68,45 @@ AnatomistSip::AnatomistSip( const vector<string> & argv )
   try
     {
       if( !anatomist::theProcessor )
-        {
-          // cerr << "PyAnatomist: new anatomist::Processor;" << endl;
-          new anatomist::Processor;
-        }
+      {
+        // cerr << "PyAnatomist: new anatomist::Processor;" << endl;
+        new anatomist::Processor;
+      }
       if( !theAnatomist )
+      {
+        // cerr << "PyAnatomist: new anatomist::Anatomist" << endl;
+
+        static int   falseargc = argv.empty() ? 1 : argv.size();
+        static char **falseArgv = (char **) malloc( ( falseargc + 1 )
+          * sizeof( char * ) );
+
+        if( argv.empty() )
         {
-          // cerr << "PyAnatomist: new anatomist::Anatomist" << endl;
-
-          static vector<const char *>  falseArgv;
-          static const char anatv0[] = "anatomist";
-
-          if( falseArgv.empty() )
-          {
-            if( argv.empty() )
-            {
-              falseArgv.reserve( 2 );
-              falseArgv.push_back( anatv0 );
-            }
-            else
-              falseArgv.reserve( argv.size() + 1 );
-            unsigned i, n = argv.size();
-            for( i=0; i<n; ++i )
-            { cout << "arg: " << argv[i] << endl;
-              falseArgv.push_back( argv[i].c_str() );
-            }
-            falseArgv.push_back( 0 );
-          }
-
-          int	falseargc = falseArgv.size() - 1;
-          if( !qApp )
-          {
-            // cerr << "build a QApplication" << endl;
-            new QApplication( falseargc, (char **) &falseArgv[0] );
-          }
-          new anatomist::Anatomist( falseargc, &falseArgv[0],
-                                    "PyAnatomist GUI" );
-          // cerr << "PyAnatomist: _anatomist.initialize();" << endl;
-          theAnatomist->initialize();
-          // cerr << "PyAnatomist: new QSelectFactory" << endl;
-          new QSelectFactory;
+          falseArgv[0] = "anatomist";
+          falseArgv[1] = 0;
         }
-      // cerr << "PyAnatomist: all done" << endl;
+        else
+        {
+          unsigned i, n = argv.size();
+          // WARNING: all these duplicated strings will leak.
+          for( i=0; i<n; ++i )
+            falseArgv[i] = strdup( argv[i].c_str() );
+          falseArgv[n] = 0;
+        }
+
+        if( !qApp || !dynamic_cast<QApplication *>( qApp ) )
+        {
+          /* cerr << "build a QApplication" << endl;
+          cout << "argc: " << falseargc << endl; */
+          new QApplication( falseargc, falseArgv );
+        }
+        // else cout << "existing qApp\n";
+        new anatomist::Anatomist( falseargc, (const char **) falseArgv,
+                                  "PyAnatomist GUI" );
+
+        theAnatomist->initialize();
+        new QSelectFactory;
+      }
     }
   catch( exception &e )
     {
