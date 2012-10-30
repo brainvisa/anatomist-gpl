@@ -98,9 +98,6 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     if sys.modules.has_key( 'PyQt4' ):
       from PyQt4 import QtGui
       import threading
-      if QtGui.QApplication.instance() is None \
-        and isinstance( threading.currentThread(), threading._MainThread ):
-        Anatomist.qapp = QtGui.QApplication( [] )
     cpp.Anatomist.__init__(self, *args, **kwargs)
     self.log( "<H1>Anatomist launched</H1>" )
     self.context=cpp.CommandContext.defaultContext()
