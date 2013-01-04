@@ -39,14 +39,12 @@ typedef carto::rc_ptr<anatomist::EventHandler > rc_ptr_EventHandler;
     static void registerHandler( const std::string &,
                                  anatomist::EventHandler* /Transfer/ );
 %MethodCode
-    std::cout << "registerHandler: " << a1 << std::endl;
     rc_ptr_EventHandler	*rc = new rc_ptr_EventHandler( a1 );
     anatomist::EventHandler::registerHandler( *a0, *rc );
 %End
     static void unregisterHandler( const std::string &,
                                    anatomist::EventHandler* /Transfer/ );
 %MethodCode
-    std::cout << "unregisterHandler: " << a1 << std::endl;
     rc_ptr_EventHandler	*rc = new rc_ptr_EventHandler( a1 );
     anatomist::EventHandler::unregisterHandler( *a0, *rc );
 %End
