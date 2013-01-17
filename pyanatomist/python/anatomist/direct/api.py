@@ -891,7 +891,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   ###############################################################################
   # objects manipulation
   def addObjects(self, objects, windows, add_children=False,
-    add_graph_nodes=False, add_graph_relations=False):
+    add_graph_nodes=True, add_graph_relations=False):
     """
     Adds objects in windows.
     The objects and windows must already exist.

@@ -692,7 +692,7 @@ class Anatomist(Singleton, object):
     self.execute("ShowObject", object=object)
 
   def addObjects(self, objects, windows, add_children=False,
-    add_graph_nodes=False, add_graph_relations=False):
+    add_graph_nodes=True, add_graph_relations=False):
     """
     Adds objects in windows.
     The objects and windows must already exist.
@@ -1682,7 +1682,7 @@ class Anatomist(Singleton, object):
       # Indeed, there is no reference count for windows blocks, they are only classical QWidgets.
       self.block=None
 
-    def addObjects(self, objects, add_children=False, add_graph_nodes=False,
+    def addObjects(self, objects, add_children=False, add_graph_nodes=True,
       add_graph_relations=False):
       """
       Adds objects in window.
