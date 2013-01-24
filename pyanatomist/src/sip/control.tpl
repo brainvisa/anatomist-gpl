@@ -105,6 +105,7 @@ public:
   void addAction( const std::string &, 
                   anatomist::ActionDictionary::ActionCreatorBase* /Transfer/ ) 
     /PyName=_addAction/;
+  bool removeAction( const std::string & );
 
 private:
   ActionDictionary();
@@ -358,6 +359,7 @@ public:
                    anatomist::ControlDictionary::ControlCreatorBase *
                    /Transfer/,
                    int, bool allowreplace = false ) /PyName=_addControl/;
+  bool removeControl( const std::string & );
   int testPriorityUnicity( int );
 
 private:
