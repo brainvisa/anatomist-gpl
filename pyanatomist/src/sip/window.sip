@@ -331,6 +331,8 @@ class AWindow3D : ControlledWindow, anatomist::Observable
 #include <anatomist/window3D/window3D.h>
 %End
 public:
+  enum ViewType { Oblique, Axial, Sagittal, Coronal, ThreeD };
+
   virtual ~AWindow3D();
 
   void focusView();
@@ -351,6 +353,7 @@ public:
       */
   virtual int polygonAtCursorPosition( int x, int y,
                                        const anatomist::AObject* obj );
+  ViewType viewType() const;
 };
 
 
