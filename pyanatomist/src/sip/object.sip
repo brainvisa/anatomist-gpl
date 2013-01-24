@@ -106,6 +106,7 @@ namespace anatomist
     virtual bool boundingBox(Point3df & /TransferBack/,
       Point3df & /TransferBack/) const /AutoGen/;
     virtual Point3df VoxelSize() const /Factory/;
+    virtual void setVoxelSize( const Point3df & ) /Factory/;
     virtual anatomist::AObjectPalette *palette();
     virtual void setPalette( const anatomist::AObjectPalette & palette );
     virtual const anatomist::AObjectPalette *getOrCreatePalette() const;

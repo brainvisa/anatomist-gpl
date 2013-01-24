@@ -36,6 +36,8 @@ class FusionMethod
 		sipClass = sipClass_anatomist_FusionTextureMethod;
 	else if (dynamic_cast<anatomist::PlanarFusion3dMethod *>(sipCpp))
 		sipClass = sipClass_anatomist_PlanarFusion3dMethod;
+	else if (dynamic_cast<anatomist::Fusion2DMeshMethod *>(sipCpp))
+		sipClass = sipClass_anatomist_Fusion2DMeshMethod;
   	else	sipClass = 0;
 %End
 
@@ -189,6 +191,24 @@ class PlanarFusion3dMethod : anatomist::FusionMethod
 	public:
 	PlanarFusion3dMethod();
 	virtual ~PlanarFusion3dMethod();
+        virtual int canFusion(const set_AObjectPtr &);
+        virtual anatomist::AObject *fusion(const vector_AObjectPtr &) /Factory/;
+        virtual std::string ID() const = 0;
+};
+
+class Fusion2DMeshMethod : anatomist::FusionMethod
+{
+%TypeHeaderCode
+#include <anatomist/fusion/fusionFactory.h>
+#include <anatomist/fusion/defFusionMethods.h>
+#if SIP_VERSION < 0x040700
+#include "sipanatomistsipvector_AObjectPtr.h"
+#include "sipanatomistsipset_AObjectPtr.h"
+#endif
+%End
+	public:
+	Fusion2DMeshMethod();
+	virtual ~Fusion2DMeshMethod();
         virtual int canFusion(const set_AObjectPtr &);
         virtual anatomist::AObject *fusion(const vector_AObjectPtr &) /Factory/;
         virtual std::string ID() const = 0;
