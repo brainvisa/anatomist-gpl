@@ -131,15 +131,23 @@ class View
 {
 %TypeHeaderCode
 #include <anatomist/controler/view.h>
-#include <anatomist/window/glwidgetmanager.h>
+#include <anatomist/window/glwidget.h>
 
 %End
 
 %ConvertToSubClassCode
   if( dynamic_cast<anatomist::GLWidgetManager *>( sipCpp ) )
   {
-    *sipCppRet = static_cast<anatomist::GLWidgetManager *>( sipCpp );
-    sipClass = sipClass_anatomist_GLWidgetManager;
+    if( dynamic_cast<QAGLWidget *>( sipCpp ) )
+    {
+      *sipCppRet = dynamic_cast<QAGLWidget *>( sipCpp );
+      sipClass = sipClass_QAGLWidget;
+    }
+    else
+    {
+      *sipCppRet = static_cast<anatomist::GLWidgetManager *>( sipCpp );
+      sipClass = sipClass_anatomist_GLWidgetManager;
+    }
   }
   else
     sipClass = NULL;

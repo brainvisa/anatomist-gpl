@@ -66,6 +66,8 @@ try:
   _string_or_qstring = ( basestring, QString )
 except ImportError:
   _string_or_qstring = ( basestring, )
+from PyQt4 import QtCore
+Slot = QtCore.pyqtSlot
 
 class Anatomist(base.Anatomist, cpp.Anatomist):
   """
@@ -102,6 +104,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     self.log( "<H1>Anatomist launched</H1>" )
     self.context=cpp.CommandContext.defaultContext()
     self.handlers={}
+    self._loadCbks = set()
 
   class AEventHandler(cpp.EventHandler):
     """
@@ -267,7 +270,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     w.block=block
     return w
     
-  def loadObject(self, filename, objectName="", restrict_object_types=None, forceReload=True, duplicate=False, hidden=False):
+  def loadObject(self, filename, objectName="", restrict_object_types=None, forceReload=True, duplicate=False, hidden=False, asyncCallback=None):
     """
     Loads an object from a file (volume, mesh, graph, texture...)
     
@@ -321,23 +324,46 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     if objectName is None: # Command constructor doesn't support None value for this parameter
       objectName=""
     options=None
-    if restrict_object_types is not None or hidden:
+    if restrict_object_types is not None or hidden or asyncCallback:
       options={'__syntax__' : 'dictionary'}
       if restrict_object_types:
         restrict_object_types['__syntax__']='dictionary'
         options['restrict_object_types']=restrict_object_types
       if hidden:
         options['hidden']=1
+      if asyncCallback:
+        options['asynchronous']=True
     c=cpp.LoadObjectCommand(filename, -1, objectName, False, aims.Object(options))
+    if asyncCallback:
+      cbk = self._objectLoaded( self, duplicate, asyncCallback )
+      self._loadCbks.add( cbk )
+      c.objectLoaded.connect( cbk.loaded )
     self.execute(c)
-    o=self.AObject(self, c.loadedObject())
-    o.releaseAppRef()
-    if duplicate:
-      # the original object has been loaded hidden, duplicate it
-      copyObject=self.duplicateObject(o)
-      return copyObject
-    return o
-  
+    if not asyncCallback:
+      o=self.AObject(self, c.loadedObject())
+      o.releaseAppRef()
+      if duplicate:
+        # the original object has been loaded hidden, duplicate it
+        copyObject=self.duplicateObject(o)
+        return copyObject
+      return o
+
+  class _objectLoaded( object ):
+    '''internal.'''
+    def __init__( self, anatomistinstance, duplicate, callback ):
+      self.anatomistinstance = anatomistinstance
+      self.duplicate = duplicate
+      self.callback = callback
+    def loaded( self, obj ):
+      o=self.anatomistinstance.AObject(self.anatomistinstance, obj)
+      o.releaseAppRef()
+      if self.duplicate:
+        # the original object has been loaded hidden, duplicate it
+        o=self.anatomistinstance.duplicateObject(o)
+      self.anatomistinstance._loadCbks.remove( self )
+      self.callback( o )
+
+
   def duplicateObject(self, source, shallowCopy=True):
     """
     Creates a copy of source object.

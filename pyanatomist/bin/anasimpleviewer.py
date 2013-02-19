@@ -336,8 +336,28 @@ class AnaSimpleViewer( qt.QObject ):
   def loadObject( self, fname ):
     '''Load an object and display it in all anasimpleviewer windows
     '''
-    obj = a.loadObject( fname )
-    self.registerObject( obj )
+    #obj = a.loadObject( fname )
+    #self.registerObject( obj )
+    c = ana.cpp.LoadObjectCommand( fname, -1, "", False,
+      { 'asynchonous' : True } )
+    c.objectLoaded.connect( self.objectLoaded )
+    a.execute( c )
+
+  @QtCore.Slot( 'anatomist::AObject' )
+  def objectLoaded( self, obj ):
+    o=a.AObject( a, obj )
+    o.releaseAppRef()
+    p = a.theProcessor()
+    resetProcExec = False
+    if not p.execWhileIdle():
+      # allow recursive commands execution, otherwise the execute()
+      # may not be done right now
+      p.allowExecWhileIdle( True )
+      resetProcExec = True
+    self.registerObject( o )
+    if resetProcExec:
+      # set back recursive execution to its previous state
+      p.allowExecWhileIdle( False )
 
   def registerObject( self, obj ):
     '''Register an object in anasimpleviewer objects list, and display it

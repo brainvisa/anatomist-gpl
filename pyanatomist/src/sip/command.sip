@@ -501,7 +501,7 @@ namespace anatomist
   };
 
 
-  class LoadObjectCommand : anatomist::WaitCommand
+  class LoadObjectCommand : QObject, anatomist::WaitCommand
   {
 %TypeHeaderCode
 #include <anatomist/commands/cLoadObject.h>
@@ -515,6 +515,9 @@ namespace anatomist
     virtual ~LoadObjectCommand();
     virtual std::string name() const;
     anatomist::AObject *loadedObject();
+
+  signals:
+    void objectLoaded( anatomist::AObject* );
 
   protected:
     virtual void doit();
