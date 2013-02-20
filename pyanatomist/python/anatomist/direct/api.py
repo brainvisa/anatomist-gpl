@@ -335,7 +335,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         options['asynchronous']=True
     c=cpp.LoadObjectCommand(filename, -1, objectName, False, aims.Object(options))
     if asyncCallback:
-      cbk = self._objectLoaded( self, duplicate, asyncCallback )
+      cbk = self._ObjectLoaded( self, duplicate, asyncCallback, filename )
       self._loadCbks.add( cbk )
       c.objectLoaded.connect( cbk.loaded )
     self.execute(c)
@@ -348,20 +348,24 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         return copyObject
       return o
 
-  class _objectLoaded( object ):
+  class _ObjectLoaded( object ):
     '''internal.'''
-    def __init__( self, anatomistinstance, duplicate, callback ):
+    def __init__( self, anatomistinstance, duplicate, callback, filename ):
       self.anatomistinstance = anatomistinstance
       self.duplicate = duplicate
       self.callback = callback
-    def loaded( self, obj ):
-      o=self.anatomistinstance.AObject(self.anatomistinstance, obj)
-      o.releaseAppRef()
-      if self.duplicate:
-        # the original object has been loaded hidden, duplicate it
-        o=self.anatomistinstance.duplicateObject(o)
+      self.filename = filename
+    def loaded( self, obj, filename ):
       self.anatomistinstance._loadCbks.remove( self )
-      self.callback( o )
+      if obj is None:
+        self.callback( None, filename )
+      else:
+        o=self.anatomistinstance.AObject(self.anatomistinstance, obj)
+        o.releaseAppRef()
+        if self.duplicate:
+          # the original object has been loaded hidden, duplicate it
+          o=self.anatomistinstance.duplicateObject(o)
+        self.callback( o, filename )
 
 
   def duplicateObject(self, source, shallowCopy=True):

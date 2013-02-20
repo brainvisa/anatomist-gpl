@@ -343,8 +343,10 @@ class AnaSimpleViewer( qt.QObject ):
     c.objectLoaded.connect( self.objectLoaded )
     a.execute( c )
 
-  @QtCore.Slot( 'anatomist::AObject' )
-  def objectLoaded( self, obj ):
+  @QtCore.Slot( 'anatomist::AObject', 'std::string' )
+  def objectLoaded( self, obj, filename ):
+    if not obj:
+      return
     o=a.AObject( a, obj )
     o.releaseAppRef()
     p = a.theProcessor()

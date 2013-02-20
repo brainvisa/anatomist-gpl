@@ -517,7 +517,7 @@ namespace anatomist
     anatomist::AObject *loadedObject();
 
   signals:
-    void objectLoaded( anatomist::AObject* );
+    void objectLoaded( anatomist::AObject*, const std::string & );
 
   protected:
     virtual void doit();
