@@ -40,15 +40,10 @@ sys.path.insert( 0, '.' )
 userLevel = 4
 # determine wheter we are using Qt4 or Qt3, and hack a little bit accordingly
 # the boolean qt4 gloabl variable will tell it for later usage
-qt4 = False
-if sys.modules.has_key( 'PyQt4'):
-  qt4 = True
-  from PyQt4 import QtCore, QtGui
-  qt = QtGui
-  from PyQt4.uic import loadUi
-else:
-  import qt, qtui
-  loadUi = qtui.QWidgetFactory.create
+qt4 = True
+from PyQt4 import QtCore, QtGui
+qt = QtGui
+from PyQt4.uic import loadUi
 
 # do we have to run QApplication ?
 if qt.qApp.startingUp():
@@ -241,18 +236,11 @@ class TexDrawControl( anatomist.cpp.Control ):
     anatomist.cpp.Control.__init__( self, prio, 'TexDrawControl' )
 
   def eventAutoSubscription( self, pool ):
-    if qt4:
-      key = QtCore.Qt
-      NoModifier = key.NoModifier
-      ShiftModifier = key.ShiftModifier
-      ControlModifier = key.ControlModifier
-      AltModifier = key.AltModifier
-    else:
-      key = qt.Qt
-      NoModifier = key.NoButton
-      ShiftModifier = key.ShiftButton
-      ControlModifier = key.ControlButton
-      AltModifier = key.AltButton
+    key = QtCore.Qt
+    NoModifier = key.NoModifier
+    ShiftModifier = key.ShiftModifier
+    ControlModifier = key.ControlModifier
+    AltModifier = key.AltModifier
     self.mouseLongEventSubscribe( \
       key.LeftButton, NoModifier,
       pool.action( 'TexDrawAction' ).startDraw,
@@ -339,7 +327,4 @@ qt.QMessageBox.information( None, 'texture drawing', '1. put a mesh in a 3D view
 
 # run Qt
 if runqt:
-  if qt4:
-    qapp.exec_()
-  else:
-    qapp.exec_loop()
+  qapp.exec_()

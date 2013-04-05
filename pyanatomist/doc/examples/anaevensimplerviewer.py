@@ -61,8 +61,11 @@ os.chdir( cwd )
 awindows = []
 aobjects = []
 fusion2d = []
+
 # vieww: parent block widget for anatomist windows
-vieww = None
+vieww = findChild( awin, 'windows' )
+viewgridlay = QtGui.QGridLayout( vieww )
+nviews = 0
 
 
 # This class holds methods for menu/actions callbacks, and utility functions
@@ -77,19 +80,18 @@ class AnaSimpleViewer( QtGui.QObject ):
     '''Opens a new window in the windows grid layout.
     The new window will be set in MNI referential, and have no menu/toolbars.
     '''
-    global vieww
+    global vieww, nviews
     c = ana.cpp.CreateWindowCommand( wintype, -1, None, [], 1, vieww, 2, 0,
-      { '__syntax__' : 'dictionary', 'no_decoration' : 1 } )
+      { '__syntax__' : 'dictionary', 'no_decoration' : 1 , 'hidden': 1 } )
     a.execute( c )
     w = a.AWindow( a, c.createdWindow() )
     c.createdWindow().setAcceptDrops( False )
-    if vieww is None:
-      # handle windows block, insert it in the GUI
-      vieww = w.parent()
-      wwp = findChild( awin, 'windows' )
-      lay = QtGui.QVBoxLayout( wwp )
-      lay.addWidget( vieww )
-      vieww.show()
+    x = nviews % 2
+    y = nviews / 2
+    nviews += 1
+    # in Qt4, the widget must not have a parent before calling
+    w.setParent( None )
+    viewgridlay.addWidget( w.getInternalRep(), x, y )
     # make ref-counting work on python side
     w.releaseAppRef()
     # keep it in anasimpleviewer list of windows
