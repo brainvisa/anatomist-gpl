@@ -108,6 +108,24 @@ public:
       carto::Object options = carto::Object() );
   static carto::rc_ptr<AimsData_RGBA> aimsData_RGBA( anatomist::AObject*,
       carto::Object options = carto::Object() );
+  static carto::rc_ptr<Volume_U8> volume_U8( anatomist::AObject*,
+      carto::Object options = carto::Object() );
+  static carto::rc_ptr<Volume_S16> volume_S16( anatomist::AObject*,
+      carto::Object options = carto::Object() );
+  static carto::rc_ptr<Volume_U16> volume_U16( anatomist::AObject*,
+      carto::Object options = carto::Object() );
+  static carto::rc_ptr<Volume_S32> volume_S32( anatomist::AObject*,
+      carto::Object options = carto::Object() );
+  static carto::rc_ptr<Volume_U32> volume_U32( anatomist::AObject*,
+      carto::Object options = carto::Object() );
+  static carto::rc_ptr<Volume_FLOAT> volume_FLOAT( anatomist::AObject*,
+      carto::Object options = carto::Object() );
+  static carto::rc_ptr<Volume_DOUBLE> volume_DOUBLE( anatomist::AObject*,
+      carto::Object options = carto::Object() );
+  static carto::rc_ptr<Volume_RGB> volume_RGB( anatomist::AObject*,
+      carto::Object options = carto::Object() );
+  static carto::rc_ptr<Volume_RGBA> volume_RGBA( anatomist::AObject*,
+      carto::Object options = carto::Object() );
   static carto::rc_ptr<AimsSurfaceTriangle>
       aimsSurface3( anatomist::AObject*,
                     carto::Object options = carto::Object() );
@@ -152,6 +170,15 @@ public:
   static anatomist::AObject* anatomist( carto::rc_ptr<AimsData_DOUBLE> );
   static anatomist::AObject* anatomist( carto::rc_ptr<AimsData_RGB> );
   static anatomist::AObject* anatomist( carto::rc_ptr<AimsData_RGBA> );
+  static anatomist::AObject* anatomist( carto::rc_ptr<Volume_U8> );
+  static anatomist::AObject* anatomist( carto::rc_ptr<Volume_S16> );
+  static anatomist::AObject* anatomist( carto::rc_ptr<Volume_U16> );
+  static anatomist::AObject* anatomist( carto::rc_ptr<Volume_S32> );
+  static anatomist::AObject* anatomist( carto::rc_ptr<Volume_U32> );
+  static anatomist::AObject* anatomist( carto::rc_ptr<Volume_FLOAT> );
+  static anatomist::AObject* anatomist( carto::rc_ptr<Volume_DOUBLE> );
+  static anatomist::AObject* anatomist( carto::rc_ptr<Volume_RGB> );
+  static anatomist::AObject* anatomist( carto::rc_ptr<Volume_RGBA> );
   static anatomist::AObject* anatomist( carto::rc_ptr<AimsSurfaceTriangle> );
   static anatomist::AObject* anatomist( carto::rc_ptr<AimsTimeSurface<2,Void> > );
   static anatomist::AObject* anatomist( carto::rc_ptr<AimsTimeSurface<4,Void> > );

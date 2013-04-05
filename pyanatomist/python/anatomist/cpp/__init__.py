@@ -244,16 +244,7 @@ del aimsFromAnatomist
 
 def anatomistFromAims( obj ):
   ot = type( obj ).__name__
-  if ot.startswith( 'Volume_' ):
-    dt = ot[ 7: ]
-    return AObjectConverter._anatomist( eval( 'aims.AimsData_' + dt \
-                                              + '( aims.rc_ptr_Volume_' + dt \
-                                              + '( obj ) )' ) )
-  elif ot.startswith( 'rc_ptr_Volume_' ):
-    dt = ot[ 14: ]
-    return AObjectConverter._anatomist( eval( 'aims.AimsData_' + dt \
-                                              + '( obj )' ) )
-  elif isinstance( obj, AObject ):
+  if isinstance( obj, AObject ):
     return obj
   t = None
   if isinstance( obj, numpy.ndarray ):

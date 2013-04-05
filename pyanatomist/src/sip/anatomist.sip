@@ -168,6 +168,22 @@ public:
       carto::Object options = carto::Object() );
   static rc_ptr_AimsData_RGBA aimsData_RGBA( anatomist::AObject*,
       carto::Object options = carto::Object() );
+  static rc_ptr_Volume_U8 volume_U8( anatomist::AObject*,
+      carto::Object options = carto::Object() );
+  static rc_ptr_Volume_S16 volume_S16( anatomist::AObject*,
+      carto::Object options = carto::Object() );
+  static rc_ptr_Volume_U16 volume_U16( anatomist::AObject*,
+      carto::Object options = carto::Object() );
+  static rc_ptr_Volume_S32 volume_S32( anatomist::AObject*,
+      carto::Object options = carto::Object() );
+  static rc_ptr_Volume_FLOAT volume_FLOAT( anatomist::AObject*,
+      carto::Object options = carto::Object() );
+  static rc_ptr_Volume_DOUBLE volume_DOUBLE( anatomist::AObject*,
+      carto::Object options = carto::Object() );
+  static rc_ptr_Volume_RGB volume_RGB( anatomist::AObject*,
+      carto::Object options = carto::Object() );
+  static rc_ptr_Volume_RGBA volume_RGBA( anatomist::AObject*,
+      carto::Object options = carto::Object() );
   static rc_ptr_AimsTimeSurface_2 aimsSurface2( anatomist::AObject*,
       carto::Object options = carto::Object() );
   static rc_ptr_AimsTimeSurface_3 aimsSurface3( anatomist::AObject*,
@@ -191,6 +207,15 @@ public:
   static rc_ptr_Tree aimsTree( anatomist::AObject*,
       carto::Object options = carto::Object() );
 
+  static anatomist::AObject* anatomist( rc_ptr_Volume_U8 );
+  static anatomist::AObject* anatomist( rc_ptr_Volume_S16 );
+  static anatomist::AObject* anatomist( rc_ptr_Volume_U16 );
+  static anatomist::AObject* anatomist( rc_ptr_Volume_S32 );
+  static anatomist::AObject* anatomist( rc_ptr_Volume_U32 );
+  static anatomist::AObject* anatomist( rc_ptr_Volume_FLOAT );
+  static anatomist::AObject* anatomist( rc_ptr_Volume_DOUBLE );
+  static anatomist::AObject* anatomist( rc_ptr_Volume_RGB );
+  static anatomist::AObject* anatomist( rc_ptr_Volume_RGBA );
   static anatomist::AObject* anatomist( rc_ptr_AimsData_U8 );
   static anatomist::AObject* anatomist( rc_ptr_AimsData_S16 );
   static anatomist::AObject* anatomist( rc_ptr_AimsData_U16 );

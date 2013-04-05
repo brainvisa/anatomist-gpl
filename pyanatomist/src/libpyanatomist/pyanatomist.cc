@@ -305,6 +305,69 @@ AObjectConverter::aimsData_RGBA( anatomist::AObject* obj, Object options )
 }
 
 
+carto::rc_ptr<Volume_U8>
+AObjectConverter::volume_U8( anatomist::AObject* obj, Object options )
+{
+  return ObjectConverter<Volume_U8>::ana2aims( obj, options );
+}
+
+
+carto::rc_ptr<Volume_S16>
+AObjectConverter::volume_S16( anatomist::AObject* obj, Object options )
+{
+  return ObjectConverter<Volume_S16>::ana2aims( obj, options );
+}
+
+
+carto::rc_ptr<Volume_U16>
+AObjectConverter::volume_U16( anatomist::AObject* obj, Object options )
+{
+  return ObjectConverter<Volume_U16>::ana2aims( obj, options );
+}
+
+
+carto::rc_ptr<Volume_S32>
+AObjectConverter::volume_S32( anatomist::AObject* obj, Object options )
+{
+  return ObjectConverter<Volume_S32>::ana2aims( obj, options );
+}
+
+
+carto::rc_ptr<Volume_U32>
+AObjectConverter::volume_U32( anatomist::AObject* obj, Object options )
+{
+  return ObjectConverter<Volume_U32>::ana2aims( obj, options );
+}
+
+
+carto::rc_ptr<Volume_FLOAT>
+AObjectConverter::volume_FLOAT( anatomist::AObject* obj, Object options )
+{
+  return ObjectConverter<Volume_FLOAT>::ana2aims( obj, options );
+}
+
+
+carto::rc_ptr<Volume_DOUBLE>
+AObjectConverter::volume_DOUBLE( anatomist::AObject* obj, Object options )
+{
+  return ObjectConverter<Volume_DOUBLE>::ana2aims( obj, options );
+}
+
+
+carto::rc_ptr<Volume_RGB>
+AObjectConverter::volume_RGB( anatomist::AObject* obj, Object options )
+{
+  return ObjectConverter<Volume_RGB>::ana2aims( obj, options );
+}
+
+
+carto::rc_ptr<Volume_RGBA>
+AObjectConverter::volume_RGBA( anatomist::AObject* obj, Object options )
+{
+  return ObjectConverter<Volume_RGBA>::ana2aims( obj, options );
+}
+
+
 carto::rc_ptr<AimsTimeSurface<2,Void> >
 AObjectConverter::aimsSurface2( anatomist::AObject* obj, Object options )
 {
@@ -483,6 +546,105 @@ AObject* AObjectConverter::anatomist( rc_ptr<AimsData_RGB> aims )
 AObject* AObjectConverter::anatomist( rc_ptr<AimsData_RGBA> aims )
 {
   AObject	*ao = new AVolume<AimsRGBA>( aims );
+  ao->setName( theAnatomist->makeObjectName( "Volume_RGBA" ) );
+  theAnatomist->registerObject( ao );
+  ao->SetExtrema();
+  ao->adjustPalette();
+  return ao;
+}
+
+
+AObject* AObjectConverter::anatomist( rc_ptr<Volume_U8> aims )
+{
+  AObject       *ao = new AVolume<uint8_t>( aims );
+  ao->setName( theAnatomist->makeObjectName( "Volume_U8" ) );
+  theAnatomist->registerObject( ao );
+  ao->SetExtrema();
+  ao->adjustPalette();
+  return ao;
+}
+
+
+AObject* AObjectConverter::anatomist( rc_ptr<Volume_S16> aims )
+{
+  AObject       *ao = new AVolume<int16_t>( aims );
+  ao->setName( theAnatomist->makeObjectName( "Volume_S16" ) );
+  theAnatomist->registerObject( ao );
+  ao->SetExtrema();
+  ao->adjustPalette();
+  return ao;
+}
+
+
+AObject* AObjectConverter::anatomist( rc_ptr<Volume_U16> aims )
+{
+  AObject       *ao = new AVolume<uint16_t>( aims );
+  ao->setName( theAnatomist->makeObjectName( "Volume_U16" ) );
+  theAnatomist->registerObject( ao );
+  ao->SetExtrema();
+  ao->adjustPalette();
+  return ao;
+}
+
+
+AObject* AObjectConverter::anatomist( rc_ptr<Volume_S32> aims )
+{
+  AObject       *ao = new AVolume<int32_t>( aims );
+  ao->setName( theAnatomist->makeObjectName( "Volume_S32" ) );
+  theAnatomist->registerObject( ao );
+  ao->SetExtrema();
+  ao->adjustPalette();
+  return ao;
+}
+
+
+AObject* AObjectConverter::anatomist( rc_ptr<Volume_U32> aims )
+{
+  AObject       *ao = new AVolume<uint32_t>( aims );
+  ao->setName( theAnatomist->makeObjectName( "Volume_U32" ) );
+  theAnatomist->registerObject( ao );
+  ao->SetExtrema();
+  ao->adjustPalette();
+  return ao;
+}
+
+
+AObject* AObjectConverter::anatomist( rc_ptr<Volume_FLOAT> aims )
+{
+  AObject       *ao = new AVolume<float>( aims );
+  ao->setName( theAnatomist->makeObjectName( "Volume_FLOAT" ) );
+  theAnatomist->registerObject( ao );
+  ao->SetExtrema();
+  ao->adjustPalette();
+  return ao;
+}
+
+
+AObject* AObjectConverter::anatomist( rc_ptr<Volume_DOUBLE> aims )
+{
+  AObject       *ao = new AVolume<double>( aims );
+  ao->setName( theAnatomist->makeObjectName( "Volume_DOUBLE" ) );
+  theAnatomist->registerObject( ao );
+  ao->SetExtrema();
+  ao->adjustPalette();
+  return ao;
+}
+
+
+AObject* AObjectConverter::anatomist( rc_ptr<Volume_RGB> aims )
+{
+  AObject       *ao = new AVolume<AimsRGB>( aims );
+  ao->setName( theAnatomist->makeObjectName( "Volume_RGB" ) );
+  theAnatomist->registerObject( ao );
+  ao->SetExtrema();
+  ao->adjustPalette();
+  return ao;
+}
+
+
+AObject* AObjectConverter::anatomist( rc_ptr<Volume_RGBA> aims )
+{
+  AObject       *ao = new AVolume<AimsRGBA>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_RGBA" ) );
   theAnatomist->registerObject( ao );
   ao->SetExtrema();

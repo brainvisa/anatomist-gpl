@@ -78,7 +78,7 @@ class AnaSimpleViewer( QtGui.QObject ):
     The new window will be set in MNI referential, and have no menu/toolbars.
     '''
     global vieww
-    c = ana.cpp.CreateWindowCommand( wintype, -1, None, [], 1, vieww, 2,
+    c = ana.cpp.CreateWindowCommand( wintype, -1, None, [], 1, vieww, 2, 0,
       { '__syntax__' : 'dictionary', 'no_decoration' : 1 } )
     a.execute( c )
     w = a.AWindow( a, c.createdWindow() )
