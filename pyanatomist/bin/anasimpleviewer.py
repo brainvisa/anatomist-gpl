@@ -33,6 +33,7 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
 import anatomist.direct.api as ana
+from anatomist.cpp.simplecontrols import Simple2DControl, Simple3DControl
 from anatomist.cpp.palettecontrastaction import PaletteContrastAction
 from soma import aims
 from soma.aims import colormaphints
@@ -97,107 +98,6 @@ volrender = None
 # vieww: parent widget for anatomist windows
 vieww = findChild( awin, 'windows' )
 viewgridlay = qt.QGridLayout( vieww )
-
-
-# We redefine simplified controls to avoid complex interactions
-class SimpleActions( ana.cpp.Action ):
-  def name( self ):
-    return 'SimpleActions'
-
-  def resetFOV( self ):
-    self.view().aWindow().focusView()
-
-class SimpleControl( ana.cpp.Control ):
-  def __init__( self, prio = 25, name='SimpleControl' ):
-    ana.cpp.Control.__init__( self, prio, name )
-
-  def eventAutoSubscription( self, pool ):
-    key = QtCore.Qt
-    NoModifier = key.NoModifier
-    ShiftModifier = key.ShiftModifier
-    ControlModifier = key.ControlModifier
-    AltModifier = key.AltModifier
-    self.mouseLongEventSubscribe( key.LeftButton, NoModifier,
-      pool.action( 'LinkAction' ).execLink,
-      pool.action( 'LinkAction' ).execLink,
-      pool.action( 'LinkAction' ).endLink, True )
-    self.mouseLongEventSubscribe( key.MidButton, ShiftModifier,
-      pool.action( "Zoom3DAction" ).beginZoom,
-      pool.action( "Zoom3DAction" ).moveZoom,
-      pool.action( "Zoom3DAction" ).endZoom, True )
-    self.wheelEventSubscribe( pool.action( "Zoom3DAction" ).zoomWheel )
-    self.keyPressEventSubscribe( key.Key_C, ControlModifier,
-      pool.action( "Trackball" ).setCenter )
-    self.keyPressEventSubscribe( key.Key_C, AltModifier,
-      pool.action( "Trackball" ).showRotationCenter )
-    self.mouseLongEventSubscribe( key.MidButton, ControlModifier,
-      pool.action( "Translate3DAction" ).beginTranslate,
-      pool.action( "Translate3DAction" ).moveTranslate,
-      pool.action( "Translate3DAction" ).endTranslate, True )
-    self.keyPressEventSubscribe( key.Key_PageUp, NoModifier,
-      pool.action( "SliceAction" ).previousSlice )
-    self.keyPressEventSubscribe( key.Key_PageDown, NoModifier,
-      pool.action( "SliceAction" ).nextSlice )
-    self.keyPressEventSubscribe( key.Key_PageUp, ShiftModifier,
-      pool.action( "SliceAction" ).previousTime )
-    self.keyPressEventSubscribe( key.Key_PageDown, ShiftModifier,
-      pool.action( "SliceAction" ).nextTime )
-    self.keyPressEventSubscribe( key.Key_L, ControlModifier,
-      pool.action( "SliceAction" ).toggleLinkedOnSlider )
-    self.keyPressEventSubscribe( key.Key_Space, NoModifier,
-      pool.action( "MovieAction" ).startOrStop )
-    self.keyPressEventSubscribe( key.Key_S, ControlModifier,
-      pool.action( "MovieAction" ).sliceOn )
-    self.keyPressEventSubscribe( key.Key_T, ControlModifier,
-      pool.action( "MovieAction" ).timeOn )
-    self.keyPressEventSubscribe( key.Key_M, ControlModifier,
-      pool.action( "MovieAction" ).nextMode )
-    self.keyPressEventSubscribe( key.Key_Plus, NoModifier,
-      pool.action( "MovieAction" ).increaseSpeed )
-    self.keyPressEventSubscribe( key.Key_Plus, ShiftModifier,
-      pool.action( "MovieAction" ).increaseSpeed )
-    self.keyPressEventSubscribe( key.Key_Minus, NoModifier,
-      pool.action( "MovieAction" ).decreaseSpeed )
-    self.myActions = { "MovieAction" : pool.action( "MovieAction" ),
-      "ContinuousTrackball" : pool.action( "ContinuousTrackball" ) }
-    self.mouseLongEventSubscribe( key.RightButton, NoModifier,
-      pool.action( 'PaletteContrastAction' ).startContrast,
-      pool.action( 'PaletteContrastAction' ).moveContrast,
-      pool.action( 'PaletteContrastAction' ).stopContrast, True )
-    #self.mouseLongEventSubscribe( key.RightButton, ControlModifier,
-      #pool.action( 'PaletteContrastAction' ).startContrast,
-      #pool.action( 'PaletteContrastAction' ).moveContrastMin,
-      #pool.action( 'PaletteContrastAction' ).stopContrast, True )
-    self.keyPressEventSubscribe( key.Key_C, NoModifier,
-      pool.action( "PaletteContrastAction" ).resetPalette )
-    self.keyPressEventSubscribe( key.Key_Home, NoModifier,
-      pool.action( "SimpleActions" ).resetFOV )
-
-  def doAlsoOnDeselect( self, pool ):
-    for k,ac in self.myActions.iteritems():
-      if isinstance( a, ana.cpp.MovieAction ) and a.isRunning():
-        a.startOrStop()
-      if isinstance( a, ana.cpp.ContinuousTrackball ):
-        a.stop()
-
-# in 3D views we still allow rotation using mouse mid button
-class Simple3DControl( SimpleControl ):
-  def __init__( self, prio = 26, name='Simple3DControl' ):
-    SimpleControl.__init__( self, prio, name )
-
-  def eventAutoSubscription( self, pool ):
-    key = QtCore.Qt
-    NoModifier = key.NoModifier
-    ShiftModifier = key.ShiftModifier
-    ControlModifier = key.ControlModifier
-    SimpleControl.eventAutoSubscription( self, pool )
-    self.mouseLongEventSubscribe ( \
-      key.MidButton, NoModifier,
-      pool.action( 'ContinuousTrackball' ).beginTrackball,
-      pool.action( 'ContinuousTrackball' ).moveTrackball,
-      pool.action( 'ContinuousTrackball' ).endTrackball, True )
-    self.keyPressEventSubscribe( key.Key_Space, ControlModifier,
-      pool.action( "ContinuousTrackball" ).startOrStop )
 
 
 # This class holds methods for menu/actions callbacks, and utility functions
@@ -317,7 +217,7 @@ class AnaSimpleViewer( qt.QObject ):
     if wintype == '3D':
       a.execute( 'SetControl', windows=[w], control='Simple3DControl' )
     else:
-      a.execute( 'SetControl', windows=[w], control='SimpleControl' )
+      a.execute( 'SetControl', windows=[w], control='Simple2DControl' )
       a.assignReferential( a.mniTemplateRef, w )
       # force redrawing in MNI orientation
       # (there should be a better way to do so...)
@@ -723,17 +623,12 @@ del spl
 a.config()[ 'setAutomaticReferential' ] = 1
 a.config()[ 'windowSizeFactor' ] = 1.
 
-# register actions and controls
-ad = ana.cpp.ActionDictionary.instance()
-ad.addAction( 'SimpleActions', SimpleActions )
-cd = ana.cpp.ControlDictionary.instance()
-cd.addControl( 'SimpleControl', SimpleControl, 25 )
-cd.addControl( 'Simple3DControl', Simple3DControl, 26 )
+# register controls
 cm = ana.cpp.ControlManager.instance()
-cm.addControl( 'QAGLWidget3D', '', 'SimpleControl' )
+cm.addControl( 'QAGLWidget3D', '', 'Simple2DControl' )
 cm.addControl( 'QAGLWidget3D', '', 'Simple3DControl' )
 
-del cd, cm, ad
+del cm
 
 for i in options.input + args:
   anasimple.loadObject( i )
