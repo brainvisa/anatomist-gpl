@@ -105,7 +105,7 @@ class SimpleActions( ana.cpp.Action ):
     return 'SimpleActions'
 
   def resetFOV( self ):
-    self.view().window().focusView()
+    self.view().aWindow().focusView()
 
 class SimpleControl( ana.cpp.Control ):
   def __init__( self, prio = 25, name='SimpleControl' ):

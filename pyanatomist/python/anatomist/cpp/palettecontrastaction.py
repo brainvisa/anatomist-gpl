@@ -48,7 +48,7 @@ class PaletteContrastAction( anatomist.Action ):
     self._palettes = {}
 
   def moveContrast( self, x, y, globx, globy ):
-    win = self.view().window()
+    win = self.view().aWindow()
     objs = [ o for o in win.Objects() \
       if not isinstance( o, anatomist.AGraphObject ) ]
     diff = ( ( x - self._start[0] ) / 500., ( y - self._start[1] ) / 500. )
@@ -75,7 +75,7 @@ class PaletteContrastAction( anatomist.Action ):
         objs += [ mo for mo in o if mo not in objs ]
 
   def moveContrastMin( self, x, y, globx, globy ):
-    win = self.view().window()
+    win = self.view().aWindow()
     objs = list( win.Objects() )
     diff = ( ( x - self._start[0] ) / 500., ( y - self._start[1] ) / 500. )
     a = anatomist.Anatomist()
@@ -97,7 +97,7 @@ class PaletteContrastAction( anatomist.Action ):
     del self._palettes
 
   def resetPalette( self ):
-    win = self.view().window()
+    win = self.view().aWindow()
     objs = win.Objects()
     a = anatomist.Anatomist()
     for o in objs:

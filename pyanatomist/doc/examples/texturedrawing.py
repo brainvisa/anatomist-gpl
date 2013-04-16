@@ -64,7 +64,7 @@ class TexDrawAction( anatomist.cpp.Action ):
 
   def takePolygon( self, x, y, globx, globy ):
     #print 'takePolygon', x, y
-    w = self.view().window()
+    w = self.view().aWindow()
     obj = w.objectAtCursorPosition( x, y )
 
     if obj is not None:
@@ -110,7 +110,7 @@ class TexDrawAction( anatomist.cpp.Action ):
 
   def newtexture( self, x, y, globx, globy ):
     print 'new texture'
-    w = self.view().window()
+    w = self.view().aWindow()
     aw = a.AWindow( a, w )
     obj = w.objectAtCursorPosition( x, y )
     #print 'object:', obj
@@ -159,7 +159,7 @@ class TexDrawAction( anatomist.cpp.Action ):
     self._startDraw( x, y, 0. )
 
   def _startDraw( self, x, y, value ):
-    w = self.view().window()
+    w = self.view().aWindow()
     obj = w.objectAtCursorPosition( x, y )
     #print 'object:', obj
     if obj is not None:
@@ -213,7 +213,7 @@ class TexDrawAction( anatomist.cpp.Action ):
   def draw( self, x, y, value ):
     if not hasattr( self, '_aimstex' ):
       return
-    w = self.view().window()
+    w = self.view().aWindow()
     obj = self._texsurf
     poly = w.polygonAtCursorPosition( x, y, obj )
     if poly == 0xffffff or poly < 0 or poly >= len( self._mesh.polygon() ):

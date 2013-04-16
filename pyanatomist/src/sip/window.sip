@@ -164,8 +164,8 @@ class View
 
   ControlSwitch * controlSwitch();
   virtual std::string name() const =0;
-  anatomist::AWindow * window();
-  // const anatomist::AWindow * window() const;
+  anatomist::AWindow * aWindow();
+  // const anatomist::AWindow * aWindow() const;
 };
 
 };
@@ -291,7 +291,7 @@ class GLWidgetManager : anatomist::View
     unsigned depthPeelingPasses() const;
     void setDepthPeelingPasses( unsigned );
     unsigned numTextureUnits() const;
-    anatomist::AWindow *window();
+    anatomist::AWindow *aWindow();
     virtual int width() = 0;
     virtual int height() = 0;
 

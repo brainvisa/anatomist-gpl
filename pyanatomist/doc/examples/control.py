@@ -88,7 +88,7 @@ class MyAction( anatomist.cpp.Action ):
 
     print 'coucou', x,y
 
-    w = self.view().window()
+    w = self.view().aWindow()
     obj = w.objectAtCursorPosition( x, y )
     #print 'object:', obj
     if obj is not None:
