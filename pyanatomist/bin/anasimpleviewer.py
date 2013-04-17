@@ -238,14 +238,14 @@ class AnaSimpleViewer( qt.QObject ):
   def loadObject( self, fname ):
     '''Load an object and display it in all anasimpleviewer windows
     '''
-    #obj = a.loadObject( fname )
-    #self.registerObject( obj )
-    c = ana.cpp.LoadObjectCommand( fname, -1, "", False,
-      { 'asynchonous' : True } )
-    c.objectLoaded.connect( self.objectLoaded )
-    a.execute( c )
+    obj = a.loadObject( fname )
+    self.registerObject( obj )
+    #c = ana.cpp.LoadObjectCommand( fname, -1, "", False,
+      #{ 'asynchonous' : True } )
+    #c.objectLoaded.connect( self.objectLoaded )
+    #a.execute( c )
 
-  @QtCore.Slot( 'anatomist::AObject', 'std::string' )
+  @QtCore.Slot( 'anatomist::AObject *', 'const std::string &' )
   def objectLoaded( self, obj, filename ):
     if not obj:
       return
