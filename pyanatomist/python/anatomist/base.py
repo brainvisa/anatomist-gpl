@@ -794,7 +794,7 @@ class Anatomist(Singleton, object):
 
   applyBuiltinReferential = loadReferentialFromHeader
 
-  def camera(self, windows, zoom=None, observer_position=None, view_quaternion=None, slice_quaternion=None, force_redraw=False, cursor_position=None, boundingbox_min=None, boundingbox_max=None):
+  def camera(self, windows, zoom=None, observer_position=None, view_quaternion=None, slice_quaternion=None, force_redraw=False, cursor_position=None, boundingbox_min=None, boundingbox_max=None, slice_orientation=None):
     """
     Sets the point of view, zoom, cursor position for 3D windows.
 
@@ -814,7 +814,7 @@ class Anatomist(Singleton, object):
     :type view_quaternion: float vector, size 4, normed
 
     :param slice_quaternion:
-      Slice plan rotation
+      Slice plane rotation
     :type slice_quaternion: float vector, size 4, normed
 
     :param boolean force_redraw:
@@ -831,11 +831,15 @@ class Anatomist(Singleton, object):
     :param boundingbox_max:
       Bounding box max values
     :type boundingbox_max: float vector
+
+    :param slice_orientation:
+      Slice plane orientation, normal to the plane
+    :type slice_orientation: float vector, size 3
     """
     if force_redraw:
       force_redraw = 1
     else: force_redraw = 0
-    self.execute("Camera", windows=self.makeList(windows), zoom = zoom, observer_position = observer_position, view_quaternion = view_quaternion, slice_quaternion = slice_quaternion, force_redraw = force_redraw, cursor_position = cursor_position, boundingbox_min = boundingbox_min, boundingbox_max = boundingbox_max)
+    self.execute("Camera", windows=self.makeList(windows), zoom = zoom, observer_position = observer_position, view_quaternion = view_quaternion, slice_quaternion = slice_quaternion, force_redraw = force_redraw, cursor_position = cursor_position, boundingbox_min = boundingbox_min, boundingbox_max = boundingbox_max, slice_orientation = slice_orientation )
 
   def setWindowsControl(self, windows, control):
     """
@@ -1706,7 +1710,7 @@ class Anatomist(Singleton, object):
 
     def camera(self, zoom=None, observer_position=None, view_quaternion=None,
       slice_quaternion=None, force_redraw=None, cursor_position=None,
-      boundingbox_min=None, boundingbox_max=None):
+      boundingbox_min=None, boundingbox_max=None, slice_orientation=None):
       """
       Sets the point of view, zoom, cursor position for a 3D window.
 
@@ -1739,10 +1743,14 @@ class Anatomist(Singleton, object):
       :param boundingbox_max:
         Bounding box max values
       :type boundingbox_max: float vector
+
+      :param slice_orientation:
+        Slice plane orientation, normal to the plane
+      :type slice_orientation: float vector, size 3
       """
       self.anatomistinstance.camera([self], zoom, observer_position,
         view_quaternion, slice_quaternion, force_redraw, cursor_position,
-        boundingbox_min, boundingbox_max)
+        boundingbox_min, boundingbox_max, slice_orientation=slice_orientation)
 
     def assignReferential(self, referential):
       """
