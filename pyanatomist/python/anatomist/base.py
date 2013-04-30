@@ -1897,7 +1897,7 @@ class Anatomist(Singleton, object):
       """
       self.anatomistinstance.execute("Select", unselect_objects=self.makeList(objects), group=self, modifiers="add")
 
-    def toggleSelection(self):
+    def toggleSelection(self, objects):
       """
       Inverses selection in this windows group. Selected objects becomes unselected, unselected objects become selected.
       """
