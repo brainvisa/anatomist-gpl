@@ -32,7 +32,8 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
 import anatomist.cpp as anatomist
-from PyQt4 import QtCore
+from PyQt4 import QtCore, QtGui
+import os
 
 '''Simplified controls useful to avoid complex interactions.
 When you need them in a custom application, you need to register them first in the ControlManager. They are already registered in the action/control dictionaries.
@@ -139,6 +140,15 @@ class Simple3DControl( Simple2DControl ):
       pool.action( "ContinuousTrackball" ).startOrStop )
 
 # register actions and controls
+a = anatomist.Anatomist( '-b' )
+iconpath = os.path.join( str( a.anatomistSharedPath() ), 'icons' )
+pix = QtGui.QPixmap( os.path.join( iconpath, 'simple2Dcontrol.png' ) )
+anatomist.IconDictionary.instance().addIcon( 'Simple2DControl', pix )
+pix = QtGui.QPixmap( os.path.join( iconpath, 'simple3Dcontrol.png' ) )
+anatomist.IconDictionary.instance().addIcon( 'Simple3DControl', pix )
+
+del pix, iconpath, a, os, QtGui
+
 ad = anatomist.ActionDictionary.instance()
 ad.addAction( 'ResetFOVAction', ResetFOVAction )
 cd = anatomist.ControlDictionary.instance()
