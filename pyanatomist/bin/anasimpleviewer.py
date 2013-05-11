@@ -432,7 +432,6 @@ class AnaSimpleViewer( qt.QObject ):
     res = fdialog.exec_()
     if res:
       fnames = fdialog.selectedFiles()
-      print 'fnames:', fnames
       for fname in fnames:
         print unicode( fname )
         self.loadObject( unicode( fname ) )
@@ -629,6 +628,7 @@ a.config()[ 'windowSizeFactor' ] = 1.
 cm = ana.cpp.ControlManager.instance()
 cm.addControl( 'QAGLWidget3D', '', 'Simple2DControl' )
 cm.addControl( 'QAGLWidget3D', '', 'Simple3DControl' )
+print 'controls registered.'
 
 del cm
 

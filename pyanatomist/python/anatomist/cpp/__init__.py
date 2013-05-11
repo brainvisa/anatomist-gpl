@@ -237,6 +237,10 @@ def aimsFromAnatomist( ao, options={ 'scale' : 1 } ):
     aim = AObjectConverter.aimsTree( ao, options )
     if not aim.isNull():
       return aim._get()
+  elif tn == 'SparseMatrix':
+    aim = AObjectConverter.aimsSparseMatrix( ao, options )
+    if not aim.isNull():
+      return aim._get()
   return None
 
 AObjectConverter.aims = staticmethod( aimsFromAnatomist )

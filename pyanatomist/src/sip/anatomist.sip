@@ -206,6 +206,8 @@ public:
       carto::Object options = carto::Object() );
   static rc_ptr_Tree aimsTree( anatomist::AObject*,
       carto::Object options = carto::Object() );
+  static rc_ptr_SparseMatrix aimsSparseMatrix( anatomist::AObject*,
+      carto::Object options = carto::Object() );
 
   static anatomist::AObject* anatomist( rc_ptr_Volume_U8 );
   static anatomist::AObject* anatomist( rc_ptr_Volume_S16 );
@@ -236,5 +238,6 @@ public:
   static anatomist::AObject* anatomist( rc_ptr_TimeTexture_U32 );
   static anatomist::AObject* anatomist( rc_ptr_TimeTexture_POINT2DF );
   static anatomist::AObject* anatomist( rc_ptr_Tree );
+  static anatomist::AObject* anatomist( rc_ptr_SparseMatrix );
 };
 

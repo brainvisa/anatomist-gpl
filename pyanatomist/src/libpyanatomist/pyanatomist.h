@@ -46,6 +46,11 @@
 
 class ControlWindow;
 
+namespace aims
+{
+  class SparseMatrix;
+}
+
 namespace anatomist
 {
   class Processor;
@@ -53,7 +58,7 @@ namespace anatomist
 }
 
 /** I had to rename this class from Anatomist to AnatimistSip 
-    because SIP generated two files only differing byt the case (one 
+    because SIP generated two files only differing by the case (one 
     for the namespace anatomist, and one for this class Anatomist), and 
     some systems (Mac, Windows) don't support case-sensitive filesystems.
 */
@@ -160,6 +165,9 @@ public:
   static carto::rc_ptr<Tree>
       aimsTree( anatomist::AObject* obj,
                 carto::Object options = carto::Object() );
+  static carto::rc_ptr<aims::SparseMatrix>
+      aimsSparseMatrix( anatomist::AObject* obj,
+                carto::Object options = carto::Object() );
 
   static anatomist::AObject* anatomist( carto::rc_ptr<AimsData_U8> );
   static anatomist::AObject* anatomist( carto::rc_ptr<AimsData_S16> );
@@ -191,6 +199,7 @@ public:
   // static anatomist::AObject* anatomist( TimeTexture<Point2d> * );
   static anatomist::AObject* anatomist( carto::rc_ptr<TimeTexture<Point2df> > );
   static anatomist::AObject* anatomist( carto::rc_ptr<Tree> );
+  static anatomist::AObject* anatomist( carto::rc_ptr<aims::SparseMatrix> );
 };
 
 #endif

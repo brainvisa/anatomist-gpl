@@ -47,6 +47,8 @@
 #include <anatomist/reference/transfSet.h>
 #include <anatomist/surface/texture.h>
 #include <anatomist/hierarchy/hierarchy.h>
+#include <anatomist/sparsematrix/sparsematrix.h>
+#include <aims/sparsematrix/sparseMatrix.h>
 #include <aims/def/path.h>
 #include <cartobase/smart/rcptrtrick.h>
 #include <qapplication.h>
@@ -82,7 +84,7 @@ AnatomistSip::AnatomistSip( const vector<string> & argv )
 
         if( argv.empty() )
         {
-          falseArgv[0] = "anatomist";
+          falseArgv[0] = const_cast<char *>( "anatomist" );
           falseArgv[1] = 0;
         }
         else
@@ -455,6 +457,13 @@ carto::rc_ptr<Tree> AObjectConverter::aimsTree( anatomist::AObject * obj,
 }
 
 
+rc_ptr<SparseMatrix>
+AObjectConverter::aimsSparseMatrix( AObject* obj, Object options )
+{
+  return ObjectConverter<SparseMatrix>::ana2aims( obj, options );
+}
+
+
 AObject* AObjectConverter::anatomist( rc_ptr<AimsData_U8> aims )
 {
   AObject	*ao = new AVolume<uint8_t>( aims );
@@ -777,6 +786,16 @@ AObject* AObjectConverter::anatomist( rc_ptr<Tree> aims )
 {
   anatomist::Hierarchy        *ao = new anatomist::Hierarchy( aims );
   ao->setName( theAnatomist->makeObjectName( "Nomenclature" ) );
+  theAnatomist->registerObject( ao );
+  return ao;
+}
+
+
+AObject* AObjectConverter::anatomist( rc_ptr<SparseMatrix> aims )
+{
+  ASparseMatrix *ao = new ASparseMatrix;
+  ao->setMatrix( aims );
+  ao->setName( theAnatomist->makeObjectName( "SparseMatrix" ) );
   theAnatomist->registerObject( ao );
   return ao;
 }
