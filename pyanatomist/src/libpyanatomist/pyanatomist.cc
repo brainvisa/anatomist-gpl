@@ -48,7 +48,7 @@
 #include <anatomist/surface/texture.h>
 #include <anatomist/hierarchy/hierarchy.h>
 #include <anatomist/sparsematrix/sparsematrix.h>
-#include <aims/sparsematrix/sparseMatrix.h>
+#include <aims/sparsematrix/sparseordensematrix.h>
 #include <aims/def/path.h>
 #include <cartobase/smart/rcptrtrick.h>
 #include <qapplication.h>
@@ -457,10 +457,10 @@ carto::rc_ptr<Tree> AObjectConverter::aimsTree( anatomist::AObject * obj,
 }
 
 
-rc_ptr<SparseMatrix>
-AObjectConverter::aimsSparseMatrix( AObject* obj, Object options )
+rc_ptr<SparseOrDenseMatrix>
+AObjectConverter::aimsSparseOrDenseMatrix( AObject* obj, Object options )
 {
-  return ObjectConverter<SparseMatrix>::ana2aims( obj, options );
+  return ObjectConverter<SparseOrDenseMatrix>::ana2aims( obj, options );
 }
 
 
@@ -791,11 +791,11 @@ AObject* AObjectConverter::anatomist( rc_ptr<Tree> aims )
 }
 
 
-AObject* AObjectConverter::anatomist( rc_ptr<SparseMatrix> aims )
+AObject* AObjectConverter::anatomist( rc_ptr<SparseOrDenseMatrix> aims )
 {
   ASparseMatrix *ao = new ASparseMatrix;
   ao->setMatrix( aims );
-  ao->setName( theAnatomist->makeObjectName( "SparseMatrix" ) );
+  ao->setName( theAnatomist->makeObjectName( "SparseOrDenseMatrix" ) );
   theAnatomist->registerObject( ao );
   return ao;
 }
