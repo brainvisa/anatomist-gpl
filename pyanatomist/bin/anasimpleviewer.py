@@ -33,8 +33,6 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
 import anatomist.direct.api as ana
-from anatomist.cpp.simplecontrols import Simple2DControl, Simple3DControl
-from anatomist.cpp.palettecontrastaction import PaletteContrastAction
 from soma import aims
 from soma.aims import colormaphints
 import sys, os
@@ -63,6 +61,11 @@ if qt.qApp.startingUp():
   runqt = True
 else:
   runqt = False
+
+# the following imports have to be made after the qApp.startingUp() test
+# since they do instantiate Anatomist for registry to work.
+from anatomist.cpp.simplecontrols import Simple2DControl, Simple3DControl
+from anatomist.cpp.palettecontrastaction import PaletteContrastAction
 
 # splash
 pix = qt.QPixmap( os.path.expandvars( os.path.join( \
@@ -634,7 +637,6 @@ del cm
 
 for i in options.input + args:
   anasimple.loadObject( i )
-
 
 # run Qt
 if runqt:
