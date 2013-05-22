@@ -46,6 +46,8 @@ public:
                unsigned dimt = 1 );
   virtual void fill();
   bool isTransparent() const;
+  AimsData_RGBA* colors ();
+  QImage* toQImage( int w = 0, int h = 0 );
 };
 
 
