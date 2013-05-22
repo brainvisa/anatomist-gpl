@@ -226,7 +226,7 @@ typessub.update( { 'anatomist::EventHandler' : \
                'NumType' : 'PyArray_OBJECT',
                'PyType' : 'anatomist::APalette',
                'sipClass' : 'anatomist_APalette',
-               'typeinclude' : '#include <anatomist/color/palette.h>',
+               'typeinclude' : '#include <pyanatomist/palette.h>',
                'sipinclude' : '#include <pyanatomist/palette.h>',
                'module' : 'anatomist',
                'testPyType' : 'pyanatomistAPalette_Check',

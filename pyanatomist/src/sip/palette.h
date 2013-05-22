@@ -34,6 +34,10 @@
 #define PYANATOMIST_PALETTE_H
 
 #include <anatomist/color/palette.h>
+#include <cartobase/smart/rcptr.h>
+
+typedef carto::rc_ptr<anatomist::APalette> rc_ptr_APalette;
+
 
 inline PyObject* pyanatomistConvertFrom_anatomist_APalette( void * a )
 {

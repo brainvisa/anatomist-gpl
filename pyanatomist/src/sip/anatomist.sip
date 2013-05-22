@@ -59,6 +59,7 @@
 %Include colordialog.sip
 %Include choosereferential.sip
 %Include texture.sip
+%Include qapalettewin.sip
 
 
 class AnatomistSip
