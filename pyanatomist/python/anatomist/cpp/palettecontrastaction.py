@@ -157,7 +157,7 @@ class PaletteContrastAction( anatomist.Action ):
     img = pal.toQImage( w, baseh2 - baseh - 1 )
     pix = QtGui.QPixmap.fromImage( img )
     scene = gv.scene()
-    paintpen = QtGui.QPen( QtGui.QColor( 120, 120, 120 ) )
+    paintpen = QtGui.QPen( QtGui.QColor( 150, 150, 100 ) )
     if scene is None:
       scene = QtGui.QGraphicsScene( gv )
       gv.setScene( scene )
@@ -191,20 +191,26 @@ class PaletteContrastAction( anatomist.Action ):
       del extr, glc
     palmin = valmin + (valmax - valmin) * pal.min1()
     palmax = valmin + (valmax - valmin) * pal.max1()
+    textpen = QtGui.QPen( QtGui.QColor( 160, 100, 40 ) )
     text = self._textGraphicsItem( '%.2f' % palmin, xmin, baseh2 + 3,
       xmax, gv.width() - 5 )
+    text.setPen( textpen )
     scene.addItem( text )
     self._tmpitems.append( text )
     text = self._textGraphicsItem( '%.2f' % palmax, xmax, baseh2 + 3,
       xmin, gv.width() - 5 )
+    text.setPen( textpen )
     scene.addItem( text )
     self._tmpitems.append( text )
+    textpen = QtGui.QPen( QtGui.QColor( 120, 120, 40 ) )
     text = self._textGraphicsItem( '%.2f' % valmin, 8, 5, gv.width() - 5,
       gv.width() - 5 )
+    text.setPen( textpen )
     scene.addItem( text )
     self._tmpitems.append( text )
     text = self._textGraphicsItem( '%.2f' % valmax, gv.width() - 10, 5,
       gv.width() - 5, gv.width() - 5 )
+    text.setPen( textpen )
     scene.addItem( text )
     self._tmpitems.append( text )
 
