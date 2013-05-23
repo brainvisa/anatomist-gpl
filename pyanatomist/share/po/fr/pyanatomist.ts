@@ -6,51 +6,58 @@
     <message>
         <location filename="../../../../../../neurosvn/anatomist/anatomist-free/trunk/shared/python_plugins/foldsplit.py" line="416"/>
         <source>SplitFoldControl</source>
-        <translation>&lt;html&gt;Contrôle de découpe de sillons:
-Découpe manuellement ou semi-manuellement des noeuds de graphe cortical.
+        <translation>&lt;html&gt;&lt;div align=&quot;center&quot;&gt;&lt;b&gt;Contrôle de découpe de sillons:&lt;/b&gt;&lt;/div&gt;
+&lt;p&gt;Découpe manuellement ou semi-manuellement des noeuds de graphe cortical.&lt;/p&gt;
+&lt;p&gt;
 &lt;tabe&gt;&lt;tr&gt;
 &lt;td&gt;Left click:&lt;/td&gt;&lt;td&gt;prepare a cut with a single point on a fold node&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl&amp;gt;+Left click :&lt;/td&gt;&lt;td&gt;set a cut control point in a series for a dotted line cut&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;S&amp;gt; :&lt;/td&gt;&lt;td&gt;show cut line, or confirm split if the cut line is already visible&lt;/td&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;ESC&amp;gt; :&lt;/td&gt;&lt;td&gt;cancel spliit, erase control points and proposed split line&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl&amp;gt;+Right click :&lt;/td&gt;&lt;td&gt;automatically subdivize a node in several pieces&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;shift&amp;gt;+Right click :&lt;/td&gt;&lt;td&gt;automatically subdivize the entire graph by splitting large nodes&lt;/td&gt;&lt;/tr&gt;
-&lt;/table&gt;&lt;tr/&gt;
-Les contrôles classiques de rotation, translation et zoom fonctionnent aussi.
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl&amp;&amp;gt;+Left click :&lt;/td&gt;&lt;td&gt;set a cut control point in a series for a dotted line cut&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;S&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;show cut line, or confirm split if the cut line is already visible&lt;/td&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ESC&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;cancel spliit, erase control points and proposed split line&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl&amp;&amp;gt;+Right click :&lt;/td&gt;&lt;td&gt;automatically subdivize a node in several pieces&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;shift&amp;&amp;gt;+Right click :&lt;/td&gt;&lt;td&gt;automatically subdivize the entire graph by splitting large nodes&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/p&gt;
+&lt;p&gt;Les contrôles classiques de rotation, translation et zoom fonctionnent aussi.&lt;/p&gt;
 &lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../../../../../neurosvn/anatomist/anatomist-free/trunk/shared/python_plugins/selection.py" line="518"/>
         <source>SelectionControl</source>
-        <translation>&lt;html&gt;Sélection
+        <translation>&lt;html&gt;&lt;div align=&quot;center&quot;&gt;&lt;b&gt;Sélection&lt;/b&gt;&lt;/div&gt;
+&lt;p&gt;
 &lt;table&gt;&lt;tr&gt;
 &lt;td&gt;Btn gauche:&lt;/td&gt;&lt;td&gt;sélection&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;+ &amp;lt;shift&amp;gt;:&lt;/td&gt;&lt;td&gt;sélection additive&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;+ &amp;lt;ctrl&amp;gt; :&lt;/td&gt;&lt;td&gt;modif. sélection&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;&amp;lt;shift&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;sélection additive&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;&amp;lt;ctrl&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;modif. sélection&lt;/tr&gt;
 &lt;tr&gt;&lt;td&gt;Btn milieu:&lt;/td&gt;&lt;td&gt;rotation&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;+ &amp;lt;shift&amp;gt;/ molette :&lt;/td&gt;&lt;td&gt;zoom/distance&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;+ &amp;lt;ctrl&amp;gt; :&lt;/td&gt;&lt;td&gt;translation&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;&amp;lt;shift&amp;&amp;gt;/ molette :&lt;/td&gt;&lt;td&gt;zoom/distance&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;&amp;lt;ctrl&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;translation&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td&gt;Btn droit:&lt;/td&gt;&lt;td&gt;menu&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+W&amp;gt; :&lt;/td&gt;&lt;td&gt;fermer la fenêtre&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;F9&amp;gt; :&lt;/td&gt;&lt;td&gt;plein écran&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;F10&amp;gt; :&lt;/td&gt;&lt;td&gt;montre/cache les menus/boutons&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;S&amp;gt; :&lt;/td&gt;&lt;td&gt;synchro vues&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+C&amp;gt; :&lt;/td&gt;&lt;td&gt;fixe le centre de vue&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;alt+C&amp;gt; :&lt;/td&gt;&lt;td&gt;affiche la position du centre de vue&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+A&amp;gt; :&lt;/td&gt;&lt;td&gt;sélectionne/désélectionne tous les objets&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;DEL&amp;gt; :&lt;/td&gt;&lt;td&gt;enlève les objets sélectionnés de la vue&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl+DEL&amp;gt; :&lt;/td&gt;&lt;td&gt;enlève les objets sélectionnés du groupe&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td colspan=&quot;2&quot;&gt;Labels, graphes, et sillons:&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;SPACE&amp;gt; :&lt;/td&gt;&lt;td&gt;&quot;pipette&quot;, mémorise le label des objets sélectionnés&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;ctrl&amp;gt;+&amp;lt;RETURN&amp;gt; :&lt;/td&gt;&lt;td&gt;applique le label courant aux objets sélectionnés&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;A&amp;gt; :&lt;/td&gt;&lt;td&gt;affiche / cache les labels de graphes (annotations 3D)&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td colspan=&quot;2&quot;&gt;Défilement des coupes:&lt;/td&gt;&lt;/td&gt;&lt;td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;PgUp&amp;gt; :&lt;/td&gt;&lt;td&gt;coupe précédente&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;PgDown&amp;gt; :&lt;/td&gt;&lt;td&gt;coupe suivante&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;shift+PgUp&amp;gt; :&lt;/td&gt;&lt;td&gt;temps précédent&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&amp;lt;shift+PgDown&amp;gt; :&lt;/td&gt;&lt;td&gt;temps suivant&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl+W&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;fermer la fenêtre&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;F9&amp;&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;plein écran&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;F10&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;montre/cache les menus/boutons&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;S&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;synchro vues&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl+C&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;fixe le centre de vue&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;alt+C&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;affiche la position du centre de vue&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl+A&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;sélectionne/désélectionne tous les objets&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;DEL&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;enlève les objets sélectionnés de la vue&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl+DEL&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;enlève les objets sélectionnés du groupe&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;b&gt;Labels, graphes, et sillons:&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;SPACE&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;&quot;pipette&quot;, mémorise le label des objets sélectionnés&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl+RETURN&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;applique le label courant aux objets sélectionnés&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;A&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;affiche / cache les labels de graphes (annotations 3D)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;b&gt;Défilement des coupes:&lt;/b&gt;&lt;/td&gt;&lt;/td&gt;&lt;td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;PgUp&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;coupe précédente&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;PgDown&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;coupe suivante&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;shift+PgUp&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;temps précédent&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;shift+PgDown&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;temps suivant&lt;/td&gt;&lt;/tr&gt;
 &lt;/table&gt;&lt;br/&gt;
-Des options supplémentaires sont disponibles dans l&apos;interface &quot;toolbox&quot; pour la sélection des relations.&lt;/html&gt;</translation>
+&lt;/p&gt;
+&lt;p&gt;
+Des options supplémentaires sont disponibles dans l&apos;interface &quot;toolbox&quot; pour la sélection des relations.
+&lt;/p&gt;
+&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -58,7 +65,7 @@ Des options supplémentaires sont disponibles dans l&apos;interface &quot;toolbo
     <message>
         <location filename="../../../../../../neurosvn/anatomist/anatomist-free/trunk/shared/python_plugins/modelGraphs.ui" line="25"/>
         <source>Configuration</source>
-        <translation type="unfinished">Configuration</translation>
+        <translation>Configuration</translation>
     </message>
     <message>
         <location filename="../../../../../../neurosvn/anatomist/anatomist-free/trunk/shared/python_plugins/modelGraphs.ui" line="31"/>
