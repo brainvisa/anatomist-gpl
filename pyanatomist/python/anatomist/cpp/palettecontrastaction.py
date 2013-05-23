@@ -192,27 +192,45 @@ class PaletteContrastAction( anatomist.Action ):
     palmin = valmin + (valmax - valmin) * pal.min1()
     palmax = valmin + (valmax - valmin) * pal.max1()
     textpen = QtGui.QPen( QtGui.QColor( 160, 100, 40 ) )
-    text = self._textGraphicsItem( '%.2f' % palmin, xmin, baseh2 + 3,
+    text = self._textGraphicsItem( self._format( palmin ), xmin, baseh2 + 3,
       xmax, gv.width() - 5 )
     text.setPen( textpen )
     scene.addItem( text )
     self._tmpitems.append( text )
-    text = self._textGraphicsItem( '%.2f' % palmax, xmax, baseh2 + 3,
+    text = self._textGraphicsItem( self._format( palmax ), xmax, baseh2 + 3,
       xmin, gv.width() - 5 )
     text.setPen( textpen )
     scene.addItem( text )
     self._tmpitems.append( text )
     textpen = QtGui.QPen( QtGui.QColor( 120, 120, 40 ) )
-    text = self._textGraphicsItem( '%.2f' % valmin, 8, 5, gv.width() - 5,
-      gv.width() - 5 )
-    text.setPen( textpen )
-    scene.addItem( text )
-    self._tmpitems.append( text )
-    text = self._textGraphicsItem( '%.2f' % valmax, gv.width() - 10, 5,
+    text = self._textGraphicsItem( self._format( valmin ), 8, 5, 
       gv.width() - 5, gv.width() - 5 )
     text.setPen( textpen )
     scene.addItem( text )
     self._tmpitems.append( text )
+    text = self._textGraphicsItem( self._format( valmax ), gv.width() - 10, 5,
+      gv.width() - 5, gv.width() - 5 )
+    text.setPen( textpen )
+    scene.addItem( text )
+    self._tmpitems.append( text )
+
+  @staticmethod
+  def _format( num ):
+    x = abs( num )
+    if x < 0.1 or x > 100000:
+      if x == 0.:
+        return '0'
+      return '%.3e' % num
+    if x < 1:
+      return '%.4f' % num
+    if x < 10:
+      return '%.3f' % num
+    elif x < 100:
+      return '%.2f' % num
+    elif x < 1000:
+      return '%.1f' % num
+    else:
+      return '%.0f' % num
 
   def _textGraphicsItem( self, text, xpos, ypos, xmax, hardmax=None ):
     text = QtGui.QGraphicsSimpleTextItem( text )
@@ -225,7 +243,7 @@ class PaletteContrastAction( anatomist.Action ):
     if x < xmax and x + w >= xmax - 3:
       x = xmax - 3 - w
     if x < 4:
-      x = 4
+      x = 4 
     if hardmax is not None and x + w >= hardmax:
       x = hardmax - w - 3
     tr.translate( x, ypos )
