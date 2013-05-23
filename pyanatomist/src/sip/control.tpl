@@ -223,23 +223,23 @@ public:
                                const anatomist::Control::KeyActionLink & )
     /PyName=_keyPressEventSubscribe/;
   bool mousePressButtonEventSubscribe
-    ( Qt::MouseButton, Qt::KeyboardModifiers,
+    ( Qt::MouseButtons, Qt::KeyboardModifiers,
       const anatomist::Control::MouseActionLink & ) 
     /PyName=_mousePressButtonEventSubscribe/;
   bool mouseReleaseButtonEventSubscribe
-    ( Qt::MouseButton, Qt::KeyboardModifiers,
+    ( Qt::MouseButtons, Qt::KeyboardModifiers,
       const anatomist::Control::MouseActionLink & )
     /PyName=_mouseReleaseButtonEventSubscribe/;
   bool mouseDoubleClickEventSubscribe
-    ( Qt::MouseButton, Qt::KeyboardModifiers,
+    ( Qt::MouseButtons, Qt::KeyboardModifiers,
       const anatomist::Control::MouseActionLink & )
     /PyName=_mouseDoubleClickEventSubscribe/;
   bool mouseMoveEventSubscribe
-    ( Qt::MouseButton, Qt::KeyboardModifiers,
+    ( Qt::MouseButtons, Qt::KeyboardModifiers,
       const anatomist::Control::MouseActionLink & )
     /PyName=_mouseMoveEventSubscribe/;
   bool mouseLongEventSubscribe
-    ( Qt::MouseButton, Qt::KeyboardModifiers,
+    ( Qt::MouseButtons, Qt::KeyboardModifiers,
       const anatomist::Control::MouseActionLink &, 
       const anatomist::Control::MouseActionLink &, 
       const anatomist::Control::MouseActionLink &, 
@@ -250,22 +250,22 @@ public:
                                  const anatomist::Control::KeyActionLink & )
     /PyName=_keyPressEventUnsubscribe/;
   bool mousePressButtonEventUnsubscribe
-    ( Qt::MouseButton, Qt::KeyboardModifiers,
+    ( Qt::MouseButtons, Qt::KeyboardModifiers,
       const anatomist::Control::MouseActionLink & ) 
     /PyName=_mousePressButtonEventUnsubscribe/;
   bool mouseReleaseButtonEventUnsubscribe
-    ( Qt::MouseButton, Qt::KeyboardModifiers,
+    ( Qt::MouseButtons, Qt::KeyboardModifiers,
       const anatomist::Control::MouseActionLink & )
     /PyName=_mouseReleaseButtonEventUnsubscribe/;
   bool mouseDoubleClickEventUnsubscribe
-    ( Qt::MouseButton, Qt::KeyboardModifiers,
+    ( Qt::MouseButtons, Qt::KeyboardModifiers,
       const anatomist::Control::MouseActionLink & )
     /PyName=_mouseDoubleClickEventUnsubscribe/;
   bool mouseMoveEventUnsubscribe
-    ( Qt::MouseButton, Qt::KeyboardModifiers,
+    ( Qt::MouseButtons, Qt::KeyboardModifiers,
       const anatomist::Control::MouseActionLink & )
     /PyName=_mouseMoveEventUnsubscribe/;
-  bool mouseLongEventUnsubscribe( Qt::MouseButton, Qt::KeyboardModifiers );
+  bool mouseLongEventUnsubscribe( Qt::MouseButtons, Qt::KeyboardModifiers );
 
 %#else%
 
