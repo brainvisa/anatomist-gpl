@@ -139,8 +139,7 @@ class PaletteContrastAction( anatomist.Action ):
     scene = gv.scene()
     if scene:
       for item in self._tmpitems:
-        if item.parentItem() is None:
-          scene.removeItem( item )
+        scene.removeItem( item )
     self._tmpitems = []
     if view.qglWidget().parent() is not gv:
       gv.hide()
@@ -169,8 +168,7 @@ class PaletteContrastAction( anatomist.Action ):
       scene = QtGui.QGraphicsScene( gv )
       gv.setScene( scene )
     for item in self._tmpitems:
-      if item.parentItem() is None:
-        scene.removeItem( item )
+      scene.removeItem( item )
     self._tmpitems = []
     item0 = QtGui.QGraphicsRectItem( 0, 0, gwidth, gheight )
     item0.setPen( QtGui.QPen( QtGui.QColor( 80, 80, 30 ) ) )
@@ -179,13 +177,10 @@ class PaletteContrastAction( anatomist.Action ):
     item = QtGui.QGraphicsRectItem( 5, baseh, gwidth - 10, baseh2 - baseh,
       item0 )
     item.setPen( paintpen )
-    #self._tmpitems.append( item )
     item = QtGui.QGraphicsLineItem( 5, baseh, 5, 5, item0 )
     item.setPen( paintpen )
-    #self._tmpitems.append( item )
     item = QtGui.QGraphicsLineItem( gwidth - 5, baseh, gwidth - 5, 5, item0 )
     item.setPen( paintpen )
-    #self._tmpitems.append( item )
     pixitem = QtGui.QGraphicsPixmapItem( pix, item0 )
     tr = pixitem.transform()
     tr.translate( 6, baseh + 1 )
@@ -195,13 +190,9 @@ class PaletteContrastAction( anatomist.Action ):
     if xmin >= 0 and xmin < w:
       line = QtGui.QGraphicsLineItem( xmin, baseh2, xmin, gheight-5, item0 )
       line.setPen( paintpen )
-      #self._tmpitems.append( line )
     if xmax >= 0 and xmax < w:
       line = QtGui.QGraphicsLineItem( xmax, baseh2, xmax, gheight-5, item0 )
       line.setPen( paintpen )
-      #self._tmpitems.append( line )
-    #self._tmpitems.append( pixitem )
-    #scene.addItem( pixitem )
     valmin = 0.
     valmax = 1.
     glc = obj.glAPI()
@@ -216,24 +207,16 @@ class PaletteContrastAction( anatomist.Action ):
     text = self._textGraphicsItem( self._format( palmin ), xmin, baseh2 + 3,
       xmax, gwidth - 5, parentitem=item0 )
     text.setPen( textpen )
-    #scene.addItem( text )
-    #self._tmpitems.append( text )
     text = self._textGraphicsItem( self._format( palmax ), xmax, baseh2 + 3,
       xmin, gwidth - 5, parentitem=item0 )
     text.setPen( textpen )
-    #scene.addItem( text )
-    #self._tmpitems.append( text )
     textpen = QtGui.QPen( QtGui.QColor( 120, 120, 40 ) )
     text = self._textGraphicsItem( self._format( valmin ), 8, 5, 
       gwidth - 5, gwidth - 5, parentitem=item0 )
     text.setPen( textpen )
-    #scene.addItem( text )
-    #self._tmpitems.append( text )
     text = self._textGraphicsItem( self._format( valmax ), gwidth - 10, 5,
       gwidth - 5, gwidth - 5, parentitem=item0 )
     text.setPen( textpen )
-    #scene.addItem( text )
-    #self._tmpitems.append( text )
     tr = item0.transform()
     tr.translate( ( gv.width() - gwidth ) / 2, gv.height() - gheight - 5 )
     item0.setTransform( tr )
