@@ -294,6 +294,7 @@ class GLWidgetManager : anatomist::View
     anatomist::AWindow *aWindow();
     virtual int width() = 0;
     virtual int height() = 0;
+    virtual void paintScene();
 
   private :
     GLWidgetManager( const anatomist::GLWidgetManager& );

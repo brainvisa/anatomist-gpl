@@ -430,6 +430,28 @@ public:
   virtual ~ControlSwitch();
   anatomist::Action* getAction( const std::string& actionName );
 
+  void keyPressEvent( QKeyEvent *) ;
+  void keyReleaseEvent( QKeyEvent *) ;
+  void mousePressEvent ( QMouseEvent * ) ;
+  void mouseReleaseEvent ( QMouseEvent * ) ;
+  void mouseDoubleClickEvent ( QMouseEvent * ) ;
+  void mouseMoveEvent ( QMouseEvent * ) ;
+  void wheelEvent ( QWheelEvent * ) ;
+  void focusInEvent ( QFocusEvent * ) ;
+  void focusOutEvent ( QFocusEvent * ) ;
+  void enterEvent ( QEvent * ) ;
+  void leaveEvent ( QEvent * ) ;
+  void paintEvent ( QPaintEvent * ) ;
+  void moveEvent ( QMoveEvent * ) ;
+  void resizeEvent ( QResizeEvent * ) ;
+  void dragEnterEvent ( QDragEnterEvent * ) ;
+  void dragMoveEvent ( QDragMoveEvent * ) ;
+  void dragLeaveEvent ( QDragLeaveEvent * ) ;
+  void dropEvent ( QDropEvent * ) ;
+  void showEvent ( QShowEvent * ) ;
+  void hideEvent ( QHideEvent * ) ;
+  void selectionChangedEvent();
+
 protected:
   ControlSwitch( anatomist::View * view ) ;
 };
