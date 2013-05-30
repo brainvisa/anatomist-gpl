@@ -57,25 +57,26 @@ class PaletteContrastAction( anatomist.Action ):
     diff = ( ( x - self._start[0] ) / 500., ( y - self._start[1] ) / 500. )
     a = anatomist.Anatomist()
     for o in objs:
-      pal = o.palette()
-      if pal:
-        if self._palettes.has_key( o ):
-          initpal = self._palettes[ o ]
-        else:
-          initpal = [ pal.min1(), pal.max1() ]
-          self._palettes[ o ] = initpal
-        val = initpal[1] + diff[1]
-        minval = initpal[0] + diff[0]
-        threshold = 0.5
-        if val < initpal[0] and initpal[1] > initpal[0]:
-          if diff[1] < -threshold:
-            val = initpal[0] + diff[1] + threshold
+      if not win.isTemporary( o ):
+        pal = o.palette()
+        if pal:
+          if self._palettes.has_key( o ):
+            initpal = self._palettes[ o ]
           else:
-            val = initpal[0]
-        a.theProcessor().execute( 'SetObjectPalette', objects=[o], min=minval,
-          max=val )
-      elif isinstance( o, anatomist.MObject ):
-        objs += [ mo for mo in o if mo not in objs ]
+            initpal = [ pal.min1(), pal.max1() ]
+            self._palettes[ o ] = initpal
+          val = initpal[1] + diff[1]
+          minval = initpal[0] + diff[0]
+          threshold = 0.5
+          if val < initpal[0] and initpal[1] > initpal[0]:
+            if diff[1] < -threshold:
+              val = initpal[0] + diff[1] + threshold
+            else:
+              val = initpal[0]
+          a.theProcessor().execute( 'SetObjectPalette', objects=[o],
+            min=minval, max=val )
+        elif isinstance( o, anatomist.MObject ):
+          objs += [ mo for mo in o if mo not in objs ]
     self._drawPaletteInGraphicsView( self.view() )
 
   def moveContrastMin( self, x, y, globx, globy ):
@@ -84,17 +85,18 @@ class PaletteContrastAction( anatomist.Action ):
     diff = ( ( x - self._start[0] ) / 500., ( y - self._start[1] ) / 500. )
     a = anatomist.Anatomist()
     for o in objs:
-      pal = o.palette()
-      if pal:
-        if self._palettes.has_key( o ):
-          initpal = self._palettes[ o ]
-        else:
-          initpal = [ pal.min1(), pal.max1() ]
-          self._palettes[ o ] = initpal
-        a.theProcessor().execute( 'SetObjectPalette', objects=[o],
-          min=initpal[0] + diff[1] )
-      elif isinstance( o, anatomist.MObject ):
-        objs += [ mo for mo in o if mo not in objs ]
+      if not win.isTemporary( o ):
+        pal = o.palette()
+        if pal:
+          if self._palettes.has_key( o ):
+            initpal = self._palettes[ o ]
+          else:
+            initpal = [ pal.min1(), pal.max1() ]
+            self._palettes[ o ] = initpal
+          a.theProcessor().execute( 'SetObjectPalette', objects=[o],
+            min=initpal[0] + diff[1] )
+        elif isinstance( o, anatomist.MObject ):
+          objs += [ mo for mo in o if mo not in objs ]
 
   def stopContrast( self, x, y, globx, globy ):
     del self._start
@@ -146,13 +148,17 @@ class PaletteContrastAction( anatomist.Action ):
 
   def _drawPaletteInGraphicsView( self, view ):
     gv = self._graphicsViewOnWindow( view )
-    objs = view.aWindow().Objects()
+    win = view.aWindow()
+    objs = list( win.Objects() )
     obj = None
     for o in objs:
-      pal = o.palette()
-      if pal:
-        obj = o
-        break
+      if not win.isTemporary( o ):
+        pal = o.palette()
+        if pal:
+          obj = o
+          break
+        elif isinstance( o, anatomist.MObject ):
+          objs += [ mo for mo in o if mo not in objs ]
     if obj is None:
       return
     gwidth = 150
