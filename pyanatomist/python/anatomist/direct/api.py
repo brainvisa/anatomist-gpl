@@ -1688,6 +1688,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             self.internalRep, w )
           self._widgets[ self.internalWidget ] = None
 
+    def widgetProxy( self ):
+      return self.internalWidget
+
     @staticmethod
     def findBlock( widget ):
       for x in Anatomist.AWindowsBlock._widgets:
