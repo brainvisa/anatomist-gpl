@@ -23,7 +23,18 @@ public:
     anatomist::AObject * next();
 %MethodCode
     sipRes = **sipCpp;
-    ++(*sipCpp);
+    if( !sipRes )
+    {
+      PyErr_SetString( PyExc_StopIteration, "iterator outside bounds" );
+      sipIsErr = 1;
+    }
+    else
+      ++(*sipCpp);
+%End
+
+   anatomist::AIterator* __iter__() /Factory/;
+%MethodCode
+   sipRes = new anatomist::AIterator( *sipCpp );
 %End
 };
 
@@ -88,7 +99,14 @@ public:
     else
     {
       sipRes = 0;
+      sipIsErr = 1;
+      PyErr_SetString( PyExc_IndexError, "index out of range" );
     }
+%End
+
+    anatomist::AIterator *__iter__() /Factory/;
+%MethodCode
+    sipRes = new anatomist::AIterator( sipCpp->begin() );
 %End
 };
 

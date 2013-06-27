@@ -40,21 +40,24 @@ del sys
 # Iterator (doesn't work when implemented in SIP so far)
 
 class MIterator:
-	def __init__( self, object ):
-		if ( object is not None ) :
-			self._object = object
-			self._iterator = object.begin()
-	def next( self ):
-		iterator = getattr( self, '_iterator', None )
-		object = getattr( self, '_object', None )
-		
-		if ( ( iterator is not None ) and ( object is not None ) and ( iterator != object.end() ) )  :
-			return iterator.next()
-		else :
-			raise StopIteration( 'iterator outside bounds' )
+    def __init__( self, object ):
+        if ( object is not None ) :
+            self._object = object
+            self._iterator = object.begin()
+
+    def __iter__( self ):
+        return self
+
+    def next( self ):
+        iterator = getattr( self, '_iterator', None )
+        object = getattr( self, '_object', None )
+        if ( iterator is not None ) and ( object is not None ):
+            return iterator.next()
+        else :
+            raise StopIteration( 'iterator outside bounds' )
 
 def newiter( self ):
-	return MIterator( self )
+    return MIterator( self )
 
 anatomist.MObject.__iter__ = newiter
 
