@@ -51,7 +51,7 @@ class MIterator:
     def next( self ):
         iterator = getattr( self, '_iterator', None )
         object = getattr( self, '_object', None )
-        if ( iterator is not None ) and ( object is not None ):
+        if ( iterator is not None ) and ( object is not None ) and iterator != object.end():
             return iterator.next()
         else :
             raise StopIteration( 'iterator outside bounds' )
