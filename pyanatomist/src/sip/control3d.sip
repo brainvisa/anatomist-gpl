@@ -289,7 +289,7 @@ class ObliqueControl : anatomist::Control
 %End
 
 public:
-  ObliqueControl();
+  ObliqueControl( const std::string & name = "ObliqueControl" );
   ObliqueControl( const anatomist::ObliqueControl & c );
   virtual ~ObliqueControl();
 
