@@ -59,6 +59,25 @@ public:
 };
 
 
+class TrackObliqueSlice : anatomist::TrackOblique
+{
+%TypeHeaderCode
+#include <anatomist/window3D/trackObliqueSlice.h>
+%End
+
+public:
+  TrackObliqueSlice();
+  TrackObliqueSlice( const anatomist::TrackObliqueSlice & a );
+  virtual ~TrackObliqueSlice();
+
+  virtual std::string name() const;
+
+  virtual void beginTrackball( int x, int y, int globalX, int globalY );
+  virtual void moveTrackball( int x, int y, int globalX, int globalY );
+
+};
+
+
 class WindowActions : anatomist::Action
 {
 %TypeHeaderCode
