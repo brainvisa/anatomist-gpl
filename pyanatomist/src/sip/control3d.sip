@@ -328,6 +328,8 @@ public:
   virtual ~TransformControl();
 
   virtual void eventAutoSubscription( anatomist::ActionPool * actionPool );
+  virtual void doAlsoOnSelect( anatomist::ActionPool * actionPool );
+  virtual void doAlsoOnDeselect( anatomist::ActionPool * actionPool );
 };
 
 
