@@ -254,6 +254,7 @@ class GLWidgetManager : anatomist::View
     void setPreferredSize( int, int );
     void setMinimumSizeHint( const QSize & );
     virtual bool positionFromCursor( int, int, Point3df & );
+    virtual bool cursorFromPosition( const Point3df &, Point3df & );
     virtual bool translateCursorPosition( float, float, Point3df & );
 
     virtual std::string name() const;
@@ -363,7 +364,7 @@ public:
   virtual int polygonAtCursorPosition( int x, int y,
                                        const anatomist::AObject* obj );
   ViewType viewType() const;
-  const aims::Quaternion & sliceQuaternion() const;
+  QSlider * getSliceSlider() const;
 };
 
 
