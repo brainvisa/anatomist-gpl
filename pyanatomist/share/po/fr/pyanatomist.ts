@@ -5,94 +5,94 @@
     <name>ALandmarkPicker</name>
     <message>
         <source>Pick landmark</source>
-        <translation>Choisir un point de repère</translation>
+        <translation type="obsolete">Choisir un point de repère</translation>
     </message>
     <message>
         <source>Nearest</source>
-        <translation>Plus proche</translation>
+        <translation type="obsolete">Plus proche</translation>
     </message>
     <message>
         <source>Landmark picker : </source>
-        <translation>Prise de points de repère : </translation>
+        <translation type="obsolete">Prise de points de repère : </translation>
     </message>
 </context>
 <context>
     <name>AWindow3D</name>
     <message>
         <source>3D</source>
-        <translation>3D</translation>
+        <translation type="obsolete">3D</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
         <source>Axial</source>
-        <translation>Axiale</translation>
+        <translation type="obsolete">Axiale</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="obsolete">Fermer</translation>
     </message>
     <message>
         <source>Mute into axial view</source>
-        <translation>Changer en vue axiale</translation>
+        <translation type="obsolete">Changer en vue axiale</translation>
     </message>
     <message>
         <source>Scene</source>
-        <translation>Scène</translation>
+        <translation type="obsolete">Scène</translation>
     </message>
     <message>
         <source>Tools</source>
-        <translation>Outils</translation>
+        <translation type="obsolete">Outils</translation>
     </message>
     <message>
         <source>Fixed points of view</source>
-        <translation>Points de vue standard</translation>
+        <translation type="obsolete">Points de vue standard</translation>
     </message>
     <message>
         <source>Zoom...</source>
-        <translation>Zoom...</translation>
+        <translation type="obsolete">Zoom...</translation>
     </message>
     <message>
         <source>Auto-set rotation center in middle of scene</source>
-        <translation>Fixer automatiquement le centre de rotation</translation>
+        <translation type="obsolete">Fixer automatiquement le centre de rotation</translation>
     </message>
     <message>
         <source>Mute into 3D view</source>
-        <translation>Changer en vue 3D</translation>
+        <translation type="obsolete">Changer en vue 3D</translation>
     </message>
     <message>
         <source>Stop recording</source>
-        <translation>Arrêter l&apos;enregistrement</translation>
+        <translation type="obsolete">Arrêter l&apos;enregistrement</translation>
     </message>
     <message>
         <source>Focus view on objects</source>
-        <translation>Focaliser la vue sur ses objets</translation>
+        <translation type="obsolete">Focaliser la vue sur ses objets</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
     <message>
         <source>Oblique</source>
-        <translation>Oblique</translation>
+        <translation type="obsolete">Oblique</translation>
     </message>
     <message>
         <source>Window</source>
-        <translation>Fenêtre</translation>
+        <translation type="obsolete">Fenêtre</translation>
     </message>
     <message>
         <source>Mute into coronal view</source>
-        <translation>Changer en vue coronale</translation>
+        <translation type="obsolete">Changer en vue coronale</translation>
     </message>
     <message>
         <source>Sagittal</source>
-        <translation>Sagittale</translation>
+        <translation type="obsolete">Sagittale</translation>
     </message>
     <message>
         <source>Mute into sagittal view</source>
-        <translation>Changer en vue sagittale</translation>
+        <translation type="obsolete">Changer en vue sagittale</translation>
     </message>
     <message>
         <source>Mute into free orientation view</source>
@@ -100,75 +100,75 @@
     </message>
     <message>
         <source>Start recording...</source>
-        <translation>Enregistrer un film...</translation>
+        <translation type="obsolete">Enregistrer un film...</translation>
     </message>
     <message>
         <source>Save...</source>
-        <translation>Sauver l&apos;image...</translation>
+        <translation type="obsolete">Sauver l&apos;image...</translation>
     </message>
     <message>
         <source>Resize...</source>
-        <translation>Redimensionner...</translation>
+        <translation type="obsolete">Redimensionner...</translation>
     </message>
     <message>
         <source>New window size :</source>
-        <translation>Nouvelle taille de fenêtre :</translation>
+        <translation type="obsolete">Nouvelle taille de fenêtre :</translation>
     </message>
     <message>
         <source>Coronal</source>
-        <translation>Coronale</translation>
+        <translation type="obsolete">Coronale</translation>
     </message>
     <message>
         <source>Sync 3D views in same group</source>
-        <translation>Synchroniser les autres vues 3D</translation>
+        <translation type="obsolete">Synchroniser les autres vues 3D</translation>
     </message>
     <message>
         <source>Lighting</source>
-        <translation>Éclairage</translation>
+        <translation type="obsolete">Éclairage</translation>
     </message>
     <message>
         <source>Show/hide toolbox (ROI etc)</source>
-        <translation>Afficher/cacher la boîte à outils (ROI etc)</translation>
+        <translation type="obsolete">Afficher/cacher la boîte à outils (ROI etc)</translation>
     </message>
     <message>
         <source>Detach view</source>
-        <translation>Détacher la vue</translation>
+        <translation type="obsolete">Détacher la vue</translation>
     </message>
     <message>
         <source>Manually specify linked cursor position</source>
-        <translation>Spécifier manuellement la position du curseur lié</translation>
+        <translation type="obsolete">Spécifier manuellement la position du curseur lié</translation>
     </message>
     <message>
         <source>controls</source>
-        <translation>contrôles</translation>
+        <translation type="obsolete">contrôles</translation>
     </message>
     <message>
         <source>mutations</source>
-        <translation>mutations</translation>
+        <translation type="obsolete">mutations</translation>
     </message>
     <message>
         <source>Show/hide menus and toolbars</source>
-        <translation>Afficher/cacher les menus et barres d&apos;outils</translation>
+        <translation type="obsolete">Afficher/cacher les menus et barres d&apos;outils</translation>
     </message>
     <message>
         <source>Show/hide cursor position</source>
-        <translation>Afficher/cacher la position du curseur</translation>
+        <translation type="obsolete">Afficher/cacher la position du curseur</translation>
     </message>
     <message>
         <source>Open stereoscopic right eye view</source>
-        <translation>Ouvrir une vue stéréoscopique &quot;oeil droit&quot;</translation>
+        <translation type="obsolete">Ouvrir une vue stéréoscopique &quot;oeil droit&quot;</translation>
     </message>
     <message>
         <source>cursor position: </source>
-        <translation>position du curseur: </translation>
+        <translation type="obsolete">position du curseur: </translation>
     </message>
     <message>
         <source>ROI toolbox</source>
-        <translation>Boîte à outils ROI</translation>
+        <translation type="obsolete">Boîte à outils ROI</translation>
     </message>
     <message>
         <source>Open the ROI toolbox</source>
-        <translation>Ouvrir la boîte à outils de ROI</translation>
+        <translation type="obsolete">Ouvrir la boîte à outils de ROI</translation>
     </message>
     <message>
         <source>surfPaint</source>
@@ -176,119 +176,119 @@
     </message>
     <message>
         <source>Free orientation view</source>
-        <translation>Vue d&apos;orientation libre</translation>
+        <translation type="obsolete">Vue d&apos;orientation libre</translation>
     </message>
     <message>
         <source>Resize window</source>
-        <translation>Redimensionner la fenêtre</translation>
+        <translation type="obsolete">Redimensionner la fenêtre</translation>
     </message>
 </context>
 <context>
     <name>AttributedChooser</name>
     <message>
         <source>Name :</source>
-        <translation>Nom :</translation>
+        <translation type="obsolete">Nom :</translation>
     </message>
     <message>
         <source>Type :</source>
-        <translation>Type :</translation>
+        <translation type="obsolete">Type :</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
 </context>
 <context>
     <name>ChooseReferentialWindow</name>
     <message>
         <source>New</source>
-        <translation>Nouveau</translation>
+        <translation type="obsolete">Nouveau</translation>
     </message>
     <message>
         <source>None</source>
-        <translation>Aucun</translation>
+        <translation type="obsolete">Aucun</translation>
     </message>
     <message>
         <source>Existing one</source>
-        <translation>Réf. existant</translation>
+        <translation type="obsolete">Réf. existant</translation>
     </message>
     <message>
         <source>Referential:</source>
-        <translation>Référentiel :</translation>
+        <translation type="obsolete">Référentiel :</translation>
     </message>
 </context>
 <context>
     <name>ConstraintEditorWindow</name>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
         <source>Mesh : </source>
-        <translation>Maillage : </translation>
+        <translation type="obsolete">Maillage : </translation>
     </message>
     <message>
         <source>no mesh selected</source>
-        <translation>pas de maillage sélectionné</translation>
+        <translation type="obsolete">pas de maillage sélectionné</translation>
     </message>
     <message>
         <source>Texture : </source>
-        <translation>Texture : </translation>
+        <translation type="obsolete">Texture : </translation>
     </message>
     <message>
         <source>TexConstraint</source>
-        <translation>Contraintes de texture</translation>
+        <translation type="obsolete">Contraintes de texture</translation>
     </message>
     <message>
         <source>Type : </source>
-        <translation>Type : </translation>
+        <translation type="obsolete">Type : </translation>
     </message>
     <message>
         <source>predefined constraints</source>
-        <translation>contraintes prédéfinies</translation>
+        <translation type="obsolete">contraintes prédéfinies</translation>
     </message>
     <message>
         <source>user defined</source>
-        <translation>définies par l&apos;utilisateur</translation>
+        <translation type="obsolete">définies par l&apos;utilisateur</translation>
     </message>
     <message>
         <source>weight map : </source>
-        <translation>carte de poids : </translation>
+        <translation type="obsolete">carte de poids : </translation>
     </message>
     <message>
         <source>Open map of constrained path</source>
-        <translation>Charger une carte de contraintes pour les chemins</translation>
+        <translation type="obsolete">Charger une carte de contraintes pour les chemins</translation>
     </message>
     <message>
         <source>curvature (default)</source>
-        <translation>courbure (défaut)</translation>
+        <translation type="obsolete">courbure (défaut)</translation>
     </message>
     <message>
         <source>constraint list : </source>
-        <translation>liste de contraintes : </translation>
+        <translation type="obsolete">liste de contraintes : </translation>
     </message>
     <message>
         <source>Open list of constrained value</source>
-        <translation>Charger une liste de valeurs de contraintes</translation>
+        <translation type="obsolete">Charger une liste de valeurs de contraintes</translation>
     </message>
 </context>
 <context>
     <name>ControlSwitch</name>
     <message>
         <source>PaintAction</source>
-        <translation>Dessin ROI</translation>
+        <translation type="obsolete">Dessin ROI</translation>
     </message>
     <message>
         <source>RoiManagementAction</source>
-        <translation>Contrôle ROI</translation>
+        <translation type="obsolete">Contrôle ROI</translation>
     </message>
     <message>
         <source>LevelSetAction</source>
@@ -296,42 +296,42 @@
     </message>
     <message>
         <source>DynSegmentAction</source>
-        <translation>Segmentation Dynamique</translation>
+        <translation type="obsolete">Segmentation Dynamique</translation>
     </message>
     <message>
         <source>MorphoMathAction</source>
-        <translation>Morphologie mathématique</translation>
+        <translation type="obsolete">Morphologie mathématique</translation>
     </message>
     <message>
         <source>LabelNamingAction</source>
-        <translation>Identification de labels</translation>
+        <translation type="obsolete">Identification de labels</translation>
     </message>
     <message>
         <source>NodeSelectionAction</source>
-        <translation>Sélection de noeuds</translation>
+        <translation type="obsolete">Sélection de noeuds</translation>
     </message>
     <message>
         <source>ConnectivityThresholdAction</source>
-        <translation>Seuillage avec connexité</translation>
+        <translation type="obsolete">Seuillage avec connexité</translation>
     </message>
     <message>
         <source>SurfpaintToolsAction</source>
-        <translation>Outils de dessin sur les surfaces</translation>
+        <translation type="obsolete">Outils de dessin sur les surfaces</translation>
     </message>
 </context>
 <context>
     <name>ControlWindow</name>
     <message>
         <source>File</source>
-        <translation>Fichier</translation>
+        <translation type="obsolete">Fichier</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation>Aide</translation>
+        <translation type="obsolete">Aide</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation>Ouvrir</translation>
+        <translation type="obsolete">Ouvrir</translation>
     </message>
     <message>
         <source>ROIs</source>
@@ -339,27 +339,27 @@
     </message>
     <message>
         <source>Quit</source>
-        <translation>Quitter</translation>
+        <translation type="obsolete">Quitter</translation>
     </message>
     <message>
         <source>DICOM</source>
-        <translation>DICOM</translation>
+        <translation type="obsolete">DICOM</translation>
     </message>
     <message>
         <source>Axial</source>
-        <translation>Axiale</translation>
+        <translation type="obsolete">Axiale</translation>
     </message>
     <message>
         <source>Index :</source>
-        <translation>Indice :</translation>
+        <translation type="obsolete">Indice :</translation>
     </message>
     <message>
         <source>Icons</source>
-        <translation>Icônes</translation>
+        <translation type="obsolete">Icônes</translation>
     </message>
     <message>
         <source>Load Anatomist objects</source>
-        <translation>Charger des objets Anatomist</translation>
+        <translation type="obsolete">Charger des objets Anatomist</translation>
     </message>
     <message>
         <source>Removes selected objects from selected windows</source>
@@ -375,15 +375,15 @@
     </message>
     <message>
         <source>Add objects in windows</source>
-        <translation>Mettre les objets dans les fenêtres</translation>
+        <translation type="obsolete">Mettre les objets dans les fenêtres</translation>
     </message>
     <message>
         <source>Graph parameters</source>
-        <translation>Paramètres des graphes</translation>
+        <translation type="obsolete">Paramètres des graphes</translation>
     </message>
     <message>
         <source>Perfusion processing</source>
-        <translation>Traitements pour la perfusion</translation>
+        <translation type="obsolete">Traitements pour la perfusion</translation>
     </message>
     <message>
         <source>Triangular meshes</source>
@@ -391,31 +391,31 @@
     </message>
     <message>
         <source>Surface matching, texture interpolation, landmarks, ERPs reader</source>
-        <translation>Mise en correspondance de surfaces, interpolation de textures, points de repère, chargeur d&apos;ERPs</translation>
+        <translation type="obsolete">Mise en correspondance de surfaces, interpolation de textures, points de repère, chargeur d&apos;ERPs</translation>
     </message>
     <message>
         <source>Surface matching</source>
-        <translation>Déformation de surfaces</translation>
+        <translation type="obsolete">Déformation de surfaces</translation>
     </message>
     <message>
         <source>Graphs</source>
-        <translation>Graphes</translation>
+        <translation type="obsolete">Graphes</translation>
     </message>
     <message>
         <source>Removes objects from windows</source>
-        <translation>Enlève les objets des fenêtres</translation>
+        <translation type="obsolete">Enlève les objets des fenêtres</translation>
     </message>
     <message>
         <source>Name :</source>
-        <translation>Nom :</translation>
+        <translation type="obsolete">Nom :</translation>
     </message>
     <message>
         <source>Reload palettes</source>
-        <translation>Recharger les palettes</translation>
+        <translation type="obsolete">Recharger les palettes</translation>
     </message>
     <message>
         <source>Objects</source>
-        <translation>Objets</translation>
+        <translation type="obsolete">Objets</translation>
     </message>
     <message>
         <source>Puts selected objects in selected windows</source>
@@ -423,15 +423,15 @@
     </message>
     <message>
         <source>Object-specific</source>
-        <translation>Objet-spécifique</translation>
+        <translation type="obsolete">Objet-spécifique</translation>
     </message>
     <message>
         <source>Remove objects from windows</source>
-        <translation>Enlever les objets des fenêtres</translation>
+        <translation type="obsolete">Enlever les objets des fenêtres</translation>
     </message>
     <message>
         <source>View Reference colors</source>
-        <translation>Afficher les couleurs des référentiels</translation>
+        <translation type="obsolete">Afficher les couleurs des référentiels</translation>
     </message>
     <message>
         <source>Reads a new object from a file</source>
@@ -439,27 +439,27 @@
     </message>
     <message>
         <source>Load object</source>
-        <translation>Charger un objet</translation>
+        <translation type="obsolete">Charger un objet</translation>
     </message>
     <message>
         <source>Restore windows</source>
-        <translation>Désicônifier les fenêtres</translation>
+        <translation type="obsolete">Désicônifier les fenêtres</translation>
     </message>
     <message>
         <source>Core module</source>
-        <translation>Module de base</translation>
+        <translation type="obsolete">Module de base</translation>
     </message>
     <message>
         <source>Profile</source>
-        <translation>Profil</translation>
+        <translation type="obsolete">Profil</translation>
     </message>
     <message>
         <source>Close windows</source>
-        <translation>Fermer les fenêtres</translation>
+        <translation type="obsolete">Fermer les fenêtres</translation>
     </message>
     <message>
         <source>Sagittal</source>
-        <translation>Sagittale</translation>
+        <translation type="obsolete">Sagittale</translation>
     </message>
     <message>
         <source>Creates a new object combining the selected ones</source>
@@ -467,235 +467,235 @@
     </message>
     <message>
         <source>Referential window</source>
-        <translation>Référentiels et transformations</translation>
+        <translation type="obsolete">Référentiels et transformations</translation>
     </message>
     <message>
         <source>Hierarchies</source>
-        <translation>Hiérarchies</translation>
+        <translation type="obsolete">Hiérarchies</translation>
     </message>
     <message>
         <source>Link windows</source>
-        <translation>Lier les fenêtres</translation>
+        <translation type="obsolete">Lier les fenêtres</translation>
     </message>
     <message>
         <source>Unlink windows</source>
-        <translation>Défaire le groupe de fenêtres</translation>
+        <translation type="obsolete">Défaire le groupe de fenêtres</translation>
     </message>
     <message>
         <source>Perfusion</source>
-        <translation>Perfusion</translation>
+        <translation type="obsolete">Perfusion</translation>
     </message>
     <message>
         <source>Referential</source>
-        <translation>Référentiel</translation>
+        <translation type="obsolete">Référentiel</translation>
     </message>
     <message>
         <source>Modules list</source>
-        <translation>Liste des modules</translation>
+        <translation type="obsolete">Liste des modules</translation>
     </message>
     <message>
         <source>All Anatomist objects</source>
-        <translation>Tous les objets Anatomist</translation>
+        <translation type="obsolete">Tous les objets Anatomist</translation>
     </message>
     <message>
         <source>Fusion objects</source>
-        <translation>Fusionner les objets</translation>
+        <translation type="obsolete">Fusionner les objets</translation>
     </message>
     <message>
         <source>ConstraintEditor</source>
-        <translation>Editeur de contraintes</translation>
+        <translation type="obsolete">Editeur de contraintes</translation>
     </message>
     <message>
         <source>Scripts</source>
-        <translation>Scripts</translation>
+        <translation type="obsolete">Scripts</translation>
     </message>
     <message>
         <source>Delete objects</source>
-        <translation>Détruire les objets</translation>
+        <translation type="obsolete">Détruire les objets</translation>
     </message>
     <message>
         <source>Scenario</source>
-        <translation>Scénario</translation>
+        <translation type="obsolete">Scénario</translation>
     </message>
     <message>
         <source>Reload objects</source>
-        <translation>Recharger les objets</translation>
+        <translation type="obsolete">Recharger les objets</translation>
     </message>
     <message>
         <source>Coronal</source>
-        <translation>Coronale</translation>
+        <translation type="obsolete">Coronale</translation>
     </message>
     <message>
         <source>Save windows configuration</source>
-        <translation>Sauver la configuration des fenêtres</translation>
+        <translation type="obsolete">Sauver la configuration des fenêtres</translation>
     </message>
     <message>
         <source>Ungroup objects</source>
-        <translation>Défaire le groupe d&apos;objets</translation>
+        <translation type="obsolete">Défaire le groupe d&apos;objets</translation>
     </message>
     <message>
         <source>Group objects</source>
-        <translation>Grouper les objets</translation>
+        <translation type="obsolete">Grouper les objets</translation>
     </message>
     <message>
         <source>Iconify windows</source>
-        <translation>Icônifier les fenêtres</translation>
+        <translation type="obsolete">Icônifier les fenêtres</translation>
     </message>
     <message>
         <source>Modules...</source>
-        <translation>Modules...</translation>
+        <translation type="obsolete">Modules...</translation>
     </message>
     <message>
         <source>Assign referential</source>
-        <translation>Assigner un référentiel</translation>
+        <translation type="obsolete">Assigner un référentiel</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Réglages</translation>
+        <translation type="obsolete">Réglages</translation>
     </message>
     <message>
         <source>Preferences</source>
-        <translation>Préférences</translation>
+        <translation type="obsolete">Préférences</translation>
     </message>
     <message>
         <source>Textures</source>
-        <translation>Textures</translation>
+        <translation type="obsolete">Textures</translation>
     </message>
     <message>
         <source>Volumes</source>
-        <translation>Volumes</translation>
+        <translation type="obsolete">Volumes</translation>
     </message>
     <message>
         <source>Description :</source>
-        <translation>Description :</translation>
+        <translation type="obsolete">Description :</translation>
     </message>
     <message>
         <source>Windows</source>
-        <translation>Fenêtres</translation>
+        <translation type="obsolete">Fenêtres</translation>
     </message>
     <message>
         <source>All files</source>
-        <translation>Tous les fichiers</translation>
+        <translation type="obsolete">Tous les fichiers</translation>
     </message>
     <message>
         <source>About Anatomist</source>
-        <translation>À propos d&apos;Anatomist</translation>
+        <translation type="obsolete">À propos d&apos;Anatomist</translation>
     </message>
     <message>
         <source>Profile window</source>
-        <translation>Fenêtres profils (courbes d&apos;intensité selon une direction)</translation>
+        <translation type="obsolete">Fenêtres profils (courbes d&apos;intensité selon une direction)</translation>
     </message>
     <message>
         <source>Replay scenario</source>
-        <translation>Rejouer un scénario</translation>
+        <translation type="obsolete">Rejouer un scénario</translation>
     </message>
     <message>
         <source>Anatomist scripts</source>
-        <translation>Scripts Anatomist</translation>
+        <translation type="obsolete">Scripts Anatomist</translation>
     </message>
     <message>
         <source>Open scenario</source>
-        <translation>Jouer un scénario</translation>
+        <translation type="obsolete">Jouer un scénario</translation>
     </message>
     <message>
         <source>3D</source>
-        <translation>3D</translation>
+        <translation type="obsolete">3D</translation>
     </message>
     <message>
         <source>Internal to the core Anatomist distribution - always present</source>
-        <translation>Interne à la distribution Anatomist de base - toujours présent</translation>
+        <translation type="obsolete">Interne à la distribution Anatomist de base - toujours présent</translation>
     </message>
     <message>
         <source>VolRender</source>
-        <translation>Rendu volumique</translation>
+        <translation type="obsolete">Rendu volumique</translation>
     </message>
     <message>
         <source>Volume rendering package</source>
-        <translation>Module de rendu volumique</translation>
+        <translation type="obsolete">Module de rendu volumique</translation>
     </message>
     <message>
         <source>Save preferences</source>
-        <translation>Sauver les préférences</translation>
+        <translation type="obsolete">Sauver les préférences</translation>
     </message>
     <message>
         <source>Regions of Interest Algos</source>
-        <translation>Algorithmes pour les régions d&apos;intérêt</translation>
+        <translation type="obsolete">Algorithmes pour les régions d&apos;intérêt</translation>
     </message>
     <message>
         <source>Segmentation and manipulation of regions of interest : Algorithms module</source>
-        <translation>Segmentation et manipulation de régions d&apos;intérêt: module algorithmes</translation>
+        <translation type="obsolete">Segmentation et manipulation de régions d&apos;intérêt: module algorithmes</translation>
     </message>
     <message>
         <source>Anatomist Histograms</source>
-        <translation>Histogrammes</translation>
+        <translation type="obsolete">Histogrammes</translation>
     </message>
     <message>
         <source>Regions of Interest Base</source>
-        <translation>Base des régions d&apos;intérêt</translation>
+        <translation type="obsolete">Base des régions d&apos;intérêt</translation>
     </message>
     <message>
         <source>Segmentation and manipulation of regions of interest : Base module</source>
-        <translation>Segmentation et manipulation de régions d&apos;intérêt: module de base</translation>
+        <translation type="obsolete">Segmentation et manipulation de régions d&apos;intérêt: module de base</translation>
     </message>
     <message>
         <source>Open 3 standard views</source>
-        <translation>Ouvrir 3 vues standard</translation>
+        <translation type="obsolete">Ouvrir 3 vues standard</translation>
     </message>
     <message>
         <source>Open a 4 views block</source>
-        <translation>Ouvrir un bloc de 4 vues</translation>
+        <translation type="obsolete">Ouvrir un bloc de 4 vues</translation>
     </message>
     <message>
         <source>Graph Editor</source>
-        <translation>Editeur de graphe</translation>
+        <translation type="obsolete">Editeur de graphe</translation>
     </message>
     <message>
         <source>Save object</source>
-        <translation>Sauvegarde d&apos;objet</translation>
+        <translation type="obsolete">Sauvegarde d&apos;objet</translation>
     </message>
     <message>
         <source>Save one object at a time !</source>
-        <translation>Sauvez un seul objet à la fois !</translation>
+        <translation type="obsolete">Sauvez un seul objet à la fois !</translation>
     </message>
     <message>
         <source>Overwrite File ?</source>
-        <translation>Écraser le fichier ?</translation>
+        <translation type="obsolete">Écraser le fichier ?</translation>
     </message>
     <message>
         <source>A file called %1 already exists.Do you want to overwrite it?</source>
-        <translation>Un fichier nommé %1 existe déjà. Voulez-vous l&apos;écraser ?</translation>
+        <translation type="obsolete">Un fichier nommé %1 existe déjà. Voulez-vous l&apos;écraser ?</translation>
     </message>
     <message>
         <source>&amp;Yes</source>
-        <translation>&amp;Oui</translation>
+        <translation type="obsolete">&amp;Oui</translation>
     </message>
     <message>
         <source>&amp;No</source>
-        <translation>&amp;Non</translation>
+        <translation type="obsolete">&amp;Non</translation>
     </message>
     <message>
         <source>Nomenclatures</source>
-        <translation>Nomenclatures</translation>
+        <translation type="obsolete">Nomenclatures</translation>
     </message>
     <message>
         <source>Label volumes</source>
-        <translation>Volumes de labels</translation>
+        <translation type="obsolete">Volumes de labels</translation>
     </message>
     <message>
         <source>Anatomist / AIMS libraries information</source>
-        <translation>Informations sur les librairies Anatomist / AIMS</translation>
+        <translation type="obsolete">Informations sur les librairies Anatomist / AIMS</translation>
     </message>
     <message>
         <source>Anatomist/AIMS information</source>
-        <translation>Informations sur Anatomist/AIMS</translation>
+        <translation type="obsolete">Informations sur Anatomist/AIMS</translation>
     </message>
     <message>
         <source>Histogram</source>
-        <translation>Histogramme</translation>
+        <translation type="obsolete">Histogramme</translation>
     </message>
     <message>
         <source>Histogram window</source>
-        <translation>Fenêtre Histogramme</translation>
+        <translation type="obsolete">Fenêtre Histogramme</translation>
     </message>
     <message>
         <source>Closing forbidden</source>
@@ -707,31 +707,31 @@
     </message>
     <message>
         <source>VtkModule</source>
-        <translation>Module VTK</translation>
+        <translation type="obsolete">Module VTK</translation>
     </message>
     <message>
         <source>Vtk bindings module: allows to use Vtk object in Anatomist windows</source>
-        <translation>Module de liens avec VTK: permet de visualiser des objets VTK dans les fenêtres Anatomist</translation>
+        <translation type="obsolete">Module de liens avec VTK: permet de visualiser des objets VTK dans les fenêtres Anatomist</translation>
     </message>
     <message>
         <source>Surfacic meshes</source>
-        <translation>Maillages surfaciques</translation>
+        <translation type="obsolete">Maillages surfaciques</translation>
     </message>
     <message>
         <source>Graphs/ROIs sets</source>
-        <translation>Graphes/Jeux de ROIs</translation>
+        <translation type="obsolete">Graphes/Jeux de ROIs</translation>
     </message>
     <message>
         <source>Voxels lists</source>
-        <translation>Listes de voxels</translation>
+        <translation type="obsolete">Listes de voxels</translation>
     </message>
     <message>
         <source>Other object files</source>
-        <translation>Autres fichiers d&apos;objets</translation>
+        <translation type="obsolete">Autres fichiers d&apos;objets</translation>
     </message>
     <message>
         <source>Clear everything</source>
-        <translation>Tout effacer</translation>
+        <translation type="obsolete">Tout effacer</translation>
     </message>
     <message>
         <source>Delete all objects / windows /referentials ?</source>
@@ -743,27 +743,27 @@
     </message>
     <message>
         <source>Surfpaint</source>
-        <translation>SurfPaint</translation>
+        <translation type="obsolete">SurfPaint</translation>
     </message>
     <message>
         <source>picking and painting a texture value on the mesh</source>
-        <translation>sélectionner et dessiner une valeur de texture sur le maillage</translation>
+        <translation type="obsolete">sélectionner et dessiner une valeur de texture sur le maillage</translation>
     </message>
     <message>
         <source>Do you really want to quit Anatomist ?</source>
-        <translation>Voulez-vous vraiment quitter Anatomist ?</translation>
+        <translation type="obsolete">Voulez-vous vraiment quitter Anatomist ?</translation>
     </message>
     <message>
         <source>Close all objects / windows /referentials ?</source>
-        <translation>Fermer tous les objets / fenêtres / référentiels ?</translation>
+        <translation type="obsolete">Fermer tous les objets / fenêtres / référentiels ?</translation>
     </message>
     <message>
         <source>All objects, windows, referentials and transformations will be closed</source>
-        <translation>Tous les objets, fenêtres, référentiels et transformations vont être détruits</translation>
+        <translation type="obsolete">Tous les objets, fenêtres, référentiels et transformations vont être détruits</translation>
     </message>
     <message>
         <source>Sparse matrices</source>
-        <translation>Matrices lacunaires</translation>
+        <translation type="obsolete">Matrices lacunaires</translation>
     </message>
 </context>
 <context>
@@ -790,7 +790,7 @@ Défilement des coupes:
     </message>
     <message>
         <source>Flight control</source>
-        <translation>Simulateur de vol
+        <translation type="obsolete">Simulateur de vol
 Ce contrôle n&apos;est pas encore complètement opérationnel...
 Il permet de changer le point de vue avec les touches du clavier
 Bt gauche: curseur lié
@@ -814,7 +814,7 @@ Bt droit :  menu
     </message>
     <message>
         <source>PaintControl</source>
-        <translation>Tracé au pinceau de régions d&apos;intérêt
+        <translation type="obsolete">Tracé au pinceau de régions d&apos;intérêt
 D&apos;autres fonctionnalités seront rajoutées ultérieurement
 Utilisation de divers types de pinceaux, mode suivi de curseur lié, undo, redo
 Bt gauche  :  Dessin
@@ -877,7 +877,7 @@ Défilement des coupes:
     </message>
     <message>
         <source>Default 3D control</source>
-        <translation>&lt;html&gt;&lt;div align=&quot;center&quot;&gt;&lt;b&gt;Contrôle par défaut 3D / Curseur lié:&lt;/b&gt;&lt;/div&gt;
+        <translation type="obsolete">&lt;html&gt;&lt;div align=&quot;center&quot;&gt;&lt;b&gt;Contrôle par défaut 3D / Curseur lié:&lt;/b&gt;&lt;/div&gt;
 &lt;p&gt;
 &lt;table&gt;
 &lt;tr&gt;&lt;td&gt;Bt gauche&amp;&amp;nbsp;:&lt;/td&gt;&lt;td&gt;curseur lié&lt;/td&gt;&lt;/tr&gt;
@@ -917,7 +917,7 @@ Défilement des coupes:
     </message>
     <message>
         <source>TransformControl</source>
-        <translation>Contrôle de transformation:
+        <translation type="obsolete">Contrôle de transformation:
 joue sur la transformation entre les objets sélectionnés et
 la vue
 Il s&apos;utilise comme le contrôle des vues obliques, sauf qu&apos;il
@@ -954,7 +954,7 @@ Bt droit   :  menu
     </message>
     <message>
         <source>DynSegmentControl</source>
-        <translation>Obtention de régions d&apos;intérêt par analyse discriminante (séries dynamiques seulement)
+        <translation type="obsolete">Obtention de régions d&apos;intérêt par analyse discriminante (séries dynamiques seulement)
 Définissez une ROI sur l&apos;image dynamique, puis cliquez sur la série dynamique au sein de l&apos;organe à segmenter.
 (Cette fonctionalité a été testée sur les images de ligands oligonucléotidiques)
 
@@ -980,7 +980,7 @@ Bt droit   :  menu
     </message>
     <message>
         <source>CutControl</source>
-        <translation>Coupe sur maillage
+        <translation type="obsolete">Coupe sur maillage
 Bouge le plan de coupe des maillages coupés
 Bt gauche: curseur lié
 Bt milieu: rotation
@@ -1003,7 +1003,7 @@ Bt droit    :  menu
     </message>
     <message>
         <source>LabelNamingControl</source>
-        <translation>Mode de dessin de ROI par selection de label
+        <translation type="obsolete">Mode de dessin de ROI par selection de label
 Définissez une ROI sur une image de labels et clicked sur un label de l&apos;image
 pour dessiner votre région
 
@@ -1041,7 +1041,7 @@ Right Button   :  menu
     </message>
     <message>
         <source>Browser Selection</source>
-        <translation>Contrôle du browser
+        <translation type="obsolete">Contrôle du browser
 &lt;ctrl+w&gt;  :  fermer la fenêtre
 &lt;F9&gt;       :  plein écran
 &lt;F10&gt;     :  montre/cache les menus/boutons
@@ -1079,7 +1079,7 @@ BRUSH
     </message>
     <message>
         <source>ConnectivityThresholdControl</source>
-        <translation>Obtention de régions d&apos;intérêt par seuillage avec une contrainte de connexité
+        <translation type="obsolete">Obtention de régions d&apos;intérêt par seuillage avec une contrainte de connexité
 Définissez une ROI, activez la prévisualisation du seuillage dans la boite à outil, choisissez vos bornes 
 inférieure et supérieure, puis cliquez dans l&apos;image sur la région colorée à segmenter.
 
@@ -1104,41 +1104,41 @@ Bt droit   :  menu
     </message>
     <message>
         <source>controls</source>
-        <translation>contrôles</translation>
+        <translation type="obsolete">contrôles</translation>
     </message>
     <message>
         <source>NodeSelectionControl</source>
-        <translation>Contrôle de sélection de noeuds</translation>
+        <translation type="obsolete">Contrôle de sélection de noeuds</translation>
     </message>
     <message>
         <source>Selected label: </source>
-        <translation>Label sélectionné: </translation>
+        <translation type="obsolete">Label sélectionné: </translation>
     </message>
     <message>
         <source>&lt;none&gt;</source>
-        <translation>&lt;aucun&gt;</translation>
+        <translation type="obsolete">&lt;aucun&gt;</translation>
     </message>
     <message>
         <source>Label picker: &lt;space&gt; to pick the label from currently selected objects
   &lt;ctrl&gt;+&lt;return&gt; to change the label of currently selected objects to this label</source>
-        <translation>Pipette à label: &lt;espace&gt; pour récupérer l&apos;étiquette des objets sélectionnés
+        <translation type="obsolete">Pipette à label: &lt;espace&gt; pour récupérer l&apos;étiquette des objets sélectionnés
   &lt;ctrl&gt;+&lt;entrée&gt; pour changer pour ce label l&apos;étiquette des objets sélectionnés</translation>
     </message>
     <message>
         <source>Selection tools</source>
-        <translation>Outils de sélection</translation>
+        <translation type="obsolete">Outils de sélection</translation>
     </message>
     <message>
         <source>Selection label</source>
-        <translation>Label de sélection</translation>
+        <translation type="obsolete">Label de sélection</translation>
     </message>
     <message>
         <source>SurfpaintToolsControl</source>
-        <translation>Contrôle des outils SurfPaint</translation>
+        <translation type="obsolete">Contrôle des outils SurfPaint</translation>
     </message>
     <message>
         <source>Texture</source>
-        <translation>Texture</translation>
+        <translation type="obsolete">Texture</translation>
     </message>
     <message>
         <source>not object selected</source>
@@ -1146,79 +1146,79 @@ Bt droit   :  menu
     </message>
     <message>
         <source>Cannot open surfpaint Toolbox</source>
-        <translation>La boîte à outils SurfPaint ne peut pas être ouverte</translation>
+        <translation type="obsolete">La boîte à outils SurfPaint ne peut pas être ouverte</translation>
     </message>
     <message>
         <source>not texture associated</source>
-        <translation>Pas de texture associée</translation>
+        <translation type="obsolete">Pas de texture associée</translation>
     </message>
     <message>
         <source>surfpainttoolbarControls</source>
-        <translation>Actions (surfpaint)</translation>
+        <translation type="obsolete">Actions (surfpaint)</translation>
     </message>
     <message>
         <source>Area magic selection</source>
-        <translation>Sélection magique de région</translation>
+        <translation type="obsolete">Sélection magique de région</translation>
     </message>
     <message>
         <source>GeodesicPath</source>
-        <translation>Chemin géodésique</translation>
+        <translation type="obsolete">Chemin géodésique</translation>
     </message>
     <message>
         <source>Unconstrained</source>
-        <translation>Non-contraint</translation>
+        <translation type="obsolete">Non-contraint</translation>
     </message>
     <message>
         <source>sulci</source>
-        <translation>sillons</translation>
+        <translation type="obsolete">sillons</translation>
     </message>
     <message>
         <source>gyri</source>
-        <translation>gyri</translation>
+        <translation type="obsolete">gyri</translation>
     </message>
     <message>
         <source>Delete all selected objects</source>
-        <translation>Effacer tous les objets sélectionnés</translation>
+        <translation type="obsolete">Effacer tous les objets sélectionnés</translation>
     </message>
     <message>
         <source>Brush</source>
-        <translation>Pinceau</translation>
+        <translation type="obsolete">Pinceau</translation>
     </message>
     <message>
         <source>Fill area or path selected</source>
-        <translation>Remplir une région ou un chemin sélectionné</translation>
+        <translation type="obsolete">Remplir une région ou un chemin sélectionné</translation>
     </message>
     <message>
         <source>Eraser</source>
-        <translation>Gomme</translation>
+        <translation type="obsolete">Gomme</translation>
     </message>
     <message>
         <source>Save texture</source>
-        <translation>Sauver la texture</translation>
+        <translation type="obsolete">Sauver la texture</translation>
     </message>
     <message>
         <source>surfpainttoolbarTex</source>
-        <translation>Infos texture (surfpaint)</translation>
+        <translation type="obsolete">Infos texture (surfpaint)</translation>
     </message>
     <message>
         <source>TextureValue</source>
-        <translation>Texture :</translation>
+        <translation type="obsolete">Texture :</translation>
     </message>
     <message>
         <source>surfpainttoolbar3D</source>
-        <translation>Infos 3D (surfpaint)</translation>
+        <translation type="obsolete">Infos 3D (surfpaint)</translation>
     </message>
     <message>
         <source>IDPolygon</source>
-        <translation>Triangle :</translation>
+        <translation type="obsolete">Triangle :</translation>
     </message>
     <message>
         <source>IDVertex</source>
-        <translation>Sommet :</translation>
+        <translation type="obsolete">Sommet :</translation>
     </message>
     <message>
         <source>constraint</source>
-        <translation>Tension :</translation>
+        <translation type="obsolete">Tension :</translation>
     </message>
     <message>
         <source>Open map of constrained path</source>
@@ -1230,237 +1230,322 @@ Bt droit   :  menu
     </message>
     <message>
         <source>MagicBrush</source>
-        <translation>Chemin continu à main levée</translation>
+        <translation type="obsolete">Chemin continu à main levée</translation>
     </message>
     <message>
         <source>No object selected</source>
-        <translation>Aucun objet sélecionné</translation>
+        <translation type="obsolete">Aucun objet sélecionné</translation>
     </message>
     <message>
-        <source>slice plane:</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/branches/4.4/shared/python_plugins/foldsplit.py" line="+442"/>
+        <source>SplitFoldControl</source>
+        <translation>&lt;html&gt;&lt;div align=&quot;center&quot;&gt;&lt;b&gt;Contrôle de découpe de plis:&lt;/b&gt;&lt;/div&gt;
+&lt;p&gt;
+Découpe manuellement ou semi-manuellement des plis corticaux dans un graphe de sillons.
+&lt;tabe&gt;&lt;tr&gt;
+&lt;td&gt;Btn gauche:&lt;/td&gt;&lt;td&gt;prépare une découpe avec un seul point sur un pli (noeud de graphe)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl&amp;&amp;gt;+btn gauche:&lt;/td&gt;&lt;td&gt;pose un point de contrôle pour une découpe le long d&apos;une ligne définie par une série de points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;S&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;montre la découpe possible, ou confirme la découpe si la ligne est déjà visible&lt;/td&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ESC&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;annule la découpe, efface les points de contrôle et la ligne de découpe proposée&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl&amp;&amp;gt;+btn droit:&lt;/td&gt;&lt;td&gt;subdivise automatiquement un noeud en plusieurs morceaux de taille &quot;raisonnable&quot;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;shift&amp;&amp;gt;+btn droit:&lt;/td&gt;&lt;td&gt;subdivise automatioquement le graphe de sillons entier en découpant les trop grands noeuds&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;&lt;tr/&gt;
+Les contrôles classiques de rotation, translation et zoom s&apos;appliquent également.&lt;/p&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>normal: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>center: </source>
-        <translation type="unfinished"></translation>
+        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/branches/4.4/shared/python_plugins/selection.py" line="+519"/>
+        <source>SelectionControl</source>
+        <translation>&lt;html&gt;&lt;div align=&quot;center&quot;&gt;&lt;b&gt;Sélection&lt;/b&gt;&lt;/div&gt;
+&lt;p&gt;&lt;table&gt;
+&lt;tr&gt;&lt;td&gt;Bt gauche:&lt;/td&gt;&lt;td&gt;sélection&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;&amp;lt;shift&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;sélection additive&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;&amp;lt;ctrl&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;modif. sélection&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Bt milieu:&lt;/td&gt;&lt;td&gt;rotation&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;&amp;lt;shift&amp;&amp;gt; / molette :&lt;/td&gt;&lt;td&gt;zoom/distance&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;+ &amp;&amp;lt;ctrl&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;translation&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Bt droit:&lt;/td&gt;&lt;td&gt;menu&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl+W&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;fermer la frnêtre&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;F9&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;plein écran&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;F10&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;montre/cache les menus/boutons&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;S&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;synchro vues&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl+C&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;fixe le centre de vue&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;alt+C&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;affiche la position du centre de vue&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl+A&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;sélectionne/désélectionne tous les objets&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;DEL&amp;&amp;gt;&lt;/td&gt;&lt;td&gt;enlève les objets sélectionnés de la vue&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl+DEL&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;enlève les objets sélectionnés du groupe&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;b&gt;Défilement des coupes:&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;PgUp&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;coupe précédente&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;PgDown&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;coupe suivante&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;shift+PgUp&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;temps précédent&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;shift+PgDown&gt;:&lt;/td&gt;&lt;td&gt;temps suivant&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;espace&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;&quot;pipette&quot;, mémorise le label des objets sélectionnés&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl&amp;&amp;gt;+&amp;&amp;lt;ENTRÉE&amp;&amp;gt;:&lt;/td&gt;&lt;td&gt;applique le label courant aux objets sélectionnés&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;&lt;/p&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
     <name>ErpWraper</name>
     <message>
+        <location line="+6356055"/>
         <source>Cell:</source>
-        <translation>Cellule :</translation>
+        <translation type="obsolete">Cellule :</translation>
     </message>
     <message>
+        <location line="-6356574"/>
         <source>Observation:</source>
-        <translation>Observation :</translation>
+        <translation type="obsolete">Observation :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>ERP loader : </source>
-        <translation>Chargeur d&apos;ERP : </translation>
+        <translation type="obsolete">Chargeur d&apos;ERP : </translation>
     </message>
 </context>
 <context>
     <name>ErrorMessage</name>
     <message>
+        <location line="+0"/>
         <source>Save failed: object </source>
-        <translation>Echec de la sauvegarde: l&apos;objet </translation>
+        <translation type="obsolete">Echec de la sauvegarde: l&apos;objet </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source> could not be saved to </source>
-        <translation> n&apos;a pas pu être sauvé sous </translation>
+        <translation type="obsolete"> n&apos;a pas pu être sauvé sous </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Warning</source>
-        <translation>Attention</translation>
+        <translation type="obsolete">Attention</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Error</source>
-        <translation>Erreur</translation>
+        <translation type="obsolete">Erreur</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Message</source>
-        <translation>Message</translation>
+        <translation type="obsolete">Message</translation>
     </message>
 </context>
 <context>
     <name>FixedPointOfViewWindow</name>
     <message>
+        <location line="+0"/>
         <source>Top</source>
-        <translation>Haut</translation>
+        <translation type="obsolete">Haut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Back</source>
-        <translation>Arrière</translation>
+        <translation type="obsolete">Arrière</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Left</source>
-        <translation>Gauche</translation>
+        <translation type="obsolete">Gauche</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Front</source>
-        <translation>Avant</translation>
+        <translation type="obsolete">Avant</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Right</source>
-        <translation>Droite</translation>
+        <translation type="obsolete">Droite</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Front bottom</source>
-        <translation>Avant bas</translation>
+        <translation type="obsolete">Avant bas</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Right bottom</source>
-        <translation>Droite bas</translation>
+        <translation type="obsolete">Droite bas</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Front bottom left</source>
-        <translation>Avant bas gauche</translation>
+        <translation type="obsolete">Avant bas gauche</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Front top right</source>
-        <translation>Avant haut droite</translation>
+        <translation type="obsolete">Avant haut droite</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Bottom</source>
-        <translation>Bas</translation>
+        <translation type="obsolete">Bas</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Front left</source>
-        <translation>Avant gauche</translation>
+        <translation type="obsolete">Avant gauche</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Back top right</source>
-        <translation>Arrière haut droite</translation>
+        <translation type="obsolete">Arrière haut droite</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Front right</source>
-        <translation>Avant droite</translation>
+        <translation type="obsolete">Avant droite</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Front top</source>
-        <translation>Avant haut</translation>
+        <translation type="obsolete">Avant haut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Standard point of view</source>
-        <translation>Points de vue standards</translation>
+        <translation type="obsolete">Points de vue standards</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Back bottom</source>
-        <translation>Arrière bas</translation>
+        <translation type="obsolete">Arrière bas</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Left bottom</source>
-        <translation>Gauche bas</translation>
+        <translation type="obsolete">Gauche bas</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Edge view :</source>
-        <translation>Vue d&apos;une arête :</translation>
+        <translation type="obsolete">Vue d&apos;une arête :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Back top</source>
-        <translation>Arrière haut</translation>
+        <translation type="obsolete">Arrière haut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Back bottom left</source>
-        <translation>Arrière bas gauche</translation>
+        <translation type="obsolete">Arrière bas gauche</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Back bottom right</source>
-        <translation>Arrière bas droite</translation>
+        <translation type="obsolete">Arrière bas droite</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Back left</source>
-        <translation>Arrière gauche</translation>
+        <translation type="obsolete">Arrière gauche</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Left top</source>
-        <translation>Gauche haut</translation>
+        <translation type="obsolete">Gauche haut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Front bottom right</source>
-        <translation>Avant bas droite</translation>
+        <translation type="obsolete">Avant bas droite</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Back right</source>
-        <translation>Arrière droite</translation>
+        <translation type="obsolete">Arrière droite</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Corner view :</source>
-        <translation>Vue d&apos;un coin :</translation>
+        <translation type="obsolete">Vue d&apos;un coin :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Right top</source>
-        <translation>Droite haut</translation>
+        <translation type="obsolete">Droite haut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Back top left</source>
-        <translation>Arrière haut gauche</translation>
+        <translation type="obsolete">Arrière haut gauche</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Front top left</source>
-        <translation>Avant haut gauche</translation>
+        <translation type="obsolete">Avant haut gauche</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Straight view :</source>
-        <translation>Vue directe :</translation>
+        <translation type="obsolete">Vue directe :</translation>
     </message>
 </context>
 <context>
     <name>Form</name>
     <message>
+        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/branches/4.4/shared/python_plugins/modelGraphs.ui" line="+25"/>
         <source>Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>Affichage</source>
         <translation type="unfinished"></translation>
     </message>
     <message utf8="true">
+        <location line="+10"/>
         <source>Données :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+10"/>
         <source>Type :</source>
         <translation>Type :</translation>
     </message>
     <message>
+        <location line="+15"/>
         <source>raw</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>mean</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>bad</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>good</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>sillons seulements</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>sillons + relations</source>
         <translation type="unfinished"></translation>
     </message>
     <message utf8="true">
+        <location line="+14"/>
         <source>Différences absolues</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+75"/>
         <source>Fermer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Appliquer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1468,1300 +1553,1650 @@ Bt droit   :  menu
 <context>
     <name>Fusion2DWindow</name>
     <message>
+        <location line="+6356711"/>
         <source>Fusion 2D control</source>
-        <translation>Contrôle de fusion 2D</translation>
+        <translation type="obsolete">Contrôle de fusion 2D</translation>
     </message>
     <message>
+        <location line="-6356902"/>
         <source>Objects :</source>
-        <translation>Objets :</translation>
+        <translation type="obsolete">Objets :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Up</source>
-        <translation>Monter</translation>
+        <translation type="obsolete">Monter</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Down</source>
-        <translation>Descendre</translation>
+        <translation type="obsolete">Descendre</translation>
     </message>
 </context>
 <context>
     <name>Fusion3DWindow</name>
     <message>
+        <location line="+0"/>
         <source>Max</source>
-        <translation>Max</translation>
+        <translation type="obsolete">Max</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Min</source>
-        <translation>Min</translation>
+        <translation type="obsolete">Min</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Mean</source>
-        <translation>Moyenne</translation>
+        <translation type="obsolete">Moyenne</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Rate</source>
-        <translation>Proportion</translation>
+        <translation type="obsolete">Proportion</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Apply</source>
-        <translation>Appliquer</translation>
+        <translation type="obsolete">Appliquer</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Line to point</source>
-        <translation>Ligne</translation>
+        <translation type="obsolete">Ligne</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear</source>
-        <translation>Linéaire</translation>
+        <translation type="obsolete">Linéaire</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Inside line to point</source>
-        <translation>Ligne à l&apos;intérieur</translation>
+        <translation type="obsolete">Ligne à l&apos;intérieur</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Enhanced mean</source>
-        <translation>Moyenne rehaussée</translation>
+        <translation type="obsolete">Moyenne rehaussée</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Point to point</source>
-        <translation>Point</translation>
+        <translation type="obsolete">Point</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Outside line to point</source>
-        <translation>Ligne à l&apos;extérieur</translation>
+        <translation type="obsolete">Ligne à l&apos;extérieur</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Parameters :</source>
-        <translation>Paramètres :</translation>
+        <translation type="obsolete">Paramètres :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Depth (mm)</source>
-        <translation>Profondeur (mm)</translation>
+        <translation type="obsolete">Profondeur (mm)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Methods :</source>
-        <translation>Méthodes :</translation>
+        <translation type="obsolete">Méthodes :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Step (mm)</source>
-        <translation>Pas (mm)</translation>
+        <translation type="obsolete">Pas (mm)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Geometrical</source>
-        <translation>Géométrique</translation>
+        <translation type="obsolete">Géométrique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Fusion mode :</source>
-        <translation>Mode de fusion :</translation>
+        <translation type="obsolete">Mode de fusion :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Corrected mean</source>
-        <translation>Moyenne corrigée</translation>
+        <translation type="obsolete">Moyenne corrigée</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Submethods :</source>
-        <translation>Sous-méthodes :</translation>
+        <translation type="obsolete">Sous-méthodes :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Sphere to point</source>
-        <translation>Sphère</translation>
+        <translation type="obsolete">Sphère</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Point to point with depth offset (inside)</source>
-        <translation>Point à point décalé en profondeur (intérieur)</translation>
+        <translation type="obsolete">Point à point décalé en profondeur (intérieur)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Point to point with depth offset (outside)</source>
-        <translation>Point à point décalé en profondeur (extérieur)</translation>
+        <translation type="obsolete">Point à point décalé en profondeur (extérieur)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Abs. Max</source>
-        <translation>Max. abs</translation>
-    </message>
-    <message>
-        <source>Median</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Max. abs</translation>
     </message>
 </context>
 <context>
     <name>FusionChooser</name>
     <message>
+        <location line="+0"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Which fusion ?</source>
         <translation type="obsolete">Quelle fusion ?</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Fusion2DMethod</source>
-        <translation>Volumes superposés</translation>
+        <translation type="obsolete">Volumes superposés</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Fusion3DMethod</source>
-        <translation>Plaque sur le maillage une texture correspondant aux valeurs trouvées dans le volume</translation>
+        <translation type="obsolete">Plaque sur le maillage une texture correspondant aux valeurs trouvées dans le volume</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>PlanarFusion3DMethod</source>
-        <translation>Plaque sur un maillage planaire une texture 2D correspondant à une coupe de volume</translation>
+        <translation type="obsolete">Plaque sur un maillage planaire une texture 2D correspondant à une coupe de volume</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>FusionTextureMethod</source>
-        <translation>Fabrique une texture 2D à partir de deux textures 1D</translation>
+        <translation type="obsolete">Fabrique une texture 2D à partir de deux textures 1D</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>FusionMultiTextureMethod</source>
-        <translation>Multi-texture: permet d&apos;appliquer plusieurs textures sur un maillage</translation>
+        <translation type="obsolete">Multi-texture: permet d&apos;appliquer plusieurs textures sur un maillage</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>FusionCutMeshMethod</source>
-        <translation>Maillage coupé par un plan: le plan de coupe contiendra la texture du volume</translation>
+        <translation type="obsolete">Maillage coupé par un plan: le plan de coupe contiendra la texture du volume</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>FusionSliceMethod</source>
-        <translation>Coupe d&apos;orientation indépendante de la vue</translation>
+        <translation type="obsolete">Coupe d&apos;orientation indépendante de la vue</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>FusionTexSurfMethod</source>
-        <translation>Surface texturée</translation>
+        <translation type="obsolete">Surface texturée</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Plane</source>
-        <translation>Intersection d&apos;un maillage et d&apos;un plan de coupe</translation>
+        <translation type="obsolete">Intersection d&apos;un maillage et d&apos;un plan de coupe</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cylinder</source>
-        <translation>Cylindre passant par les centres de gravité des deux objets sélectionnés</translation>
+        <translation type="obsolete">Cylindre passant par les centres de gravité des deux objets sélectionnés</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>SurfaceMatcher</source>
-        <translation>Mise en correspondance de surfaces. Cet objet donne accès à un algorithme de déformation de surface qui déformera une surface vers l&apos;autre</translation>
+        <translation type="obsolete">Mise en correspondance de surfaces. Cet objet donne accès à un algorithme de déformation de surface qui déformera une surface vers l&apos;autre</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Interpoler</source>
-        <translation>Interpoleur: permet d&apos;interpoler les textures faites pour un maillage sur un autre maillage de géométrie différente. Pour espérer un résultat raisonnable, il vaut mieux utiliser d&apos;abord un &quot;SurfaceMatcher&quot; qui déforme une surface vers l&apos;autre</translation>
+        <translation type="obsolete">Interpoleur: permet d&apos;interpoler les textures faites pour un maillage sur un autre maillage de géométrie différente. Pour espérer un résultat raisonnable, il vaut mieux utiliser d&apos;abord un &quot;SurfaceMatcher&quot; qui déforme une surface vers l&apos;autre</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>VolumeRenderingFusionMethod</source>
-        <translation>Rendu volumique</translation>
+        <translation type="obsolete">Rendu volumique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>FusionRGBAVolumeMethod</source>
-        <translation>Extraction de volume RGBA</translation>
+        <translation type="obsolete">Extraction de volume RGBA</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>FusionClipMethod</source>
-        <translation>Clipping: tronque l&apos;objet par un demi-espace défini par un plan (un seul côté du plan est affiché)</translation>
+        <translation type="obsolete">Clipping: tronque l&apos;objet par un demi-espace défini par un plan (un seul côté du plan est affiché)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>TesselationMethod</source>
-        <translation>Tesselation de polygône</translation>
+        <translation type="obsolete">Tesselation de polygône</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Fusion2DMeshMethod</source>
-        <translation>Intersection maillage/plan</translation>
+        <translation type="obsolete">Intersection maillage/plan</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>ConnectivityMatrixFusionMethod</source>
-        <translation>Martice de connectivité</translation>
+        <translation type="obsolete">Martice de connectivité</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Select fusion type</source>
-        <translation>Choix d&apos;un type de fusion</translation>
+        <translation type="obsolete">Choix d&apos;un type de fusion</translation>
+    </message>
+</context>
+<context>
+    <name>GradientObjectParamSelect</name>
+    <message>
+        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/branches/4.4/shared/python_plugins/gradientpalette.py" line="+120"/>
+        <source>Save palette image...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Edit gradient information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Keep as static palette</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>RGB mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>HSV mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+138"/>
+        <source>Gradient definition:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>OK</source>
+        <translation type="unfinished">OK</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuler</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Palette name:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>GraphLandmarkPicker</name>
     <message>
+        <location line="+6356501"/>
         <source>Pick landmark</source>
-        <translation>Choisir un point de repère</translation>
+        <translation type="obsolete">Choisir un point de repère</translation>
     </message>
     <message>
+        <location line="-6356797"/>
         <source>Landmark type :</source>
-        <translation>Type de points de repère :</translation>
+        <translation type="obsolete">Type de points de repère :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Point bucket</source>
-        <translation>Voxel (bucket)</translation>
+        <translation type="obsolete">Voxel (bucket)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Landmarks picker on </source>
-        <translation>Prise de points de repère sur </translation>
+        <translation type="obsolete">Prise de points de repère sur </translation>
     </message>
 </context>
 <context>
     <name>LightModelWindow</name>
     <message>
+        <location line="+0"/>
         <source>X :</source>
-        <translation>X :</translation>
+        <translation type="obsolete">X :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Y :</source>
-        <translation>Y :</translation>
+        <translation type="obsolete">Y :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Z :</source>
-        <translation>Z :</translation>
+        <translation type="obsolete">Z :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Spot</source>
         <translation type="obsolete">Spot</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear :</source>
-        <translation>Linéaire :</translation>
+        <translation type="obsolete">Linéaire :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Model</source>
         <translation type="obsolete">Modèle</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Position :</source>
-        <translation>Position :</translation>
+        <translation type="obsolete">Position :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Local viewer</source>
-        <translation>Observateur local</translation>
+        <translation type="obsolete">Observateur local</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Source</source>
         <translation type="obsolete">Source</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Attenuation</source>
         <translation type="obsolete">Atténuation</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Exponent :</source>
-        <translation>Exposant :</translation>
+        <translation type="obsolete">Exposant :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Quadratic :</source>
-        <translation>Quadratique :</translation>
+        <translation type="obsolete">Quadratique :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Ambient :</source>
-        <translation>Ambiante :</translation>
+        <translation type="obsolete">Ambiante :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Parameters :</source>
-        <translation>Paramètres :</translation>
+        <translation type="obsolete">Paramètres :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Controlers :</source>
         <translation type="obsolete">Contrôleurs :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Light model : </source>
-        <translation>Modèle de lumière : </translation>
+        <translation type="obsolete">Modèle de lumière : </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Constant :</source>
-        <translation>Constant :</translation>
+        <translation type="obsolete">Constant :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Specular :</source>
-        <translation>Spéculaire :</translation>
+        <translation type="obsolete">Spéculaire :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Direction :</source>
-        <translation>Direction :</translation>
+        <translation type="obsolete">Direction :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cutoff :</source>
-        <translation>Coupure :</translation>
+        <translation type="obsolete">Coupure :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Diffuse :</source>
-        <translation>Diffuse :</translation>
+        <translation type="obsolete">Diffuse :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Background :</source>
-        <translation>Fond :</translation>
+        <translation type="obsolete">Fond :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Two side</source>
-        <translation>Eclairage des 2 côtés</translation>
+        <translation type="obsolete">Eclairage des 2 côtés</translation>
     </message>
 </context>
 <context>
     <name>MaterialWindow</name>
     <message>
+        <location line="+0"/>
         <source>Blue</source>
         <translation type="obsolete">Bleu</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Red:</source>
-        <translation>Rouge :</translation>
+        <translation type="obsolete">Rouge :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Shininess :</source>
-        <translation>Étendue des reflets :</translation>
+        <translation type="obsolete">Étendue des reflets :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Green:</source>
-        <translation>Vert :</translation>
+        <translation type="obsolete">Vert :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Value:</source>
-        <translation>Valeur :</translation>
+        <translation type="obsolete">Valeur :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Opacity:</source>
-        <translation>Opacité :</translation>
+        <translation type="obsolete">Opacité :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Responsive</source>
-        <translation>Temps-réel</translation>
+        <translation type="obsolete">Temps-réel</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Advanced settings</source>
         <translation type="obsolete">Réglages avancés</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Ambient :</source>
-        <translation>Ambiante :</translation>
+        <translation type="obsolete">Ambiante :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Fast color selection</source>
         <translation type="obsolete">Sélection rapide</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Emission :</source>
-        <translation>Emission :</translation>
+        <translation type="obsolete">Emission :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Specular :</source>
-        <translation>Spéculaire :</translation>
+        <translation type="obsolete">Spéculaire :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Update mode :</source>
-        <translation>Mode de mise à jour :</translation>
+        <translation type="obsolete">Mode de mise à jour :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Diffuse :</source>
-        <translation>Diffuse :</translation>
+        <translation type="obsolete">Diffuse :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Rendering</source>
         <translation type="obsolete">Rendu</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Rendering mode :</source>
         <translation type="obsolete">Mode d&apos;affichage :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Default (view setting)</source>
         <translation type="obsolete">Défaut (réglages de la vue)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Normal</source>
         <translation type="obsolete">Normal</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Wireframe</source>
         <translation type="obsolete">Fil de fer</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Outlined (filled faces + wireframes)</source>
         <translation type="obsolete">Entourés (faces pleines + fils de fer)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Wireframe with hidden faces</source>
         <translation type="obsolete">Fil de fer avec faces cachées</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display properties :</source>
         <translation type="obsolete">Propriétés d&apos;affichage :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Enable lighting</source>
         <translation type="obsolete">Activer l&apos;éclairage</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Smooth shading</source>
         <translation type="obsolete">Couleurs lissées</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Smooth polygons / lines</source>
         <translation type="obsolete">Polygônes / lignes filtrés</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Write in depth buffer</source>
         <translation type="obsolete">Écrire dans le buffer de profondeur</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cull polygon faces</source>
         <translation type="obsolete">Eliminer les faces vues de dos</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Blue:</source>
-        <translation>Bleu :</translation>
+        <translation type="obsolete">Bleu :</translation>
     </message>
 </context>
 <context>
     <name>MeshPaint</name>
     <message>
+        <location line="+0"/>
         <source>&amp;trackball</source>
-        <translation>&amp;trackball</translation>
+        <translation type="obsolete">&amp;trackball</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>trackball</source>
-        <translation>trackball</translation>
+        <translation type="obsolete">trackball</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&amp;ColorPicker</source>
-        <translation>Sélection de &amp;Couleur</translation>
+        <translation type="obsolete">Sélection de &amp;Couleur</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>ColorPicker</source>
-        <translation>Sélection de couleur</translation>
+        <translation type="obsolete">Sélection de couleur</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&amp;GeodesicDistance</source>
-        <translation>Distance &amp;Géodésique</translation>
+        <translation type="obsolete">Distance &amp;Géodésique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>GeodesicDistance</source>
-        <translation>Distance géodésique</translation>
+        <translation type="obsolete">Distance géodésique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>distance : </source>
-        <translation>distance :</translation>
+        <translation type="obsolete">distance :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&amp;magic_selection</source>
-        <translation>sélection &amp;magique</translation>
+        <translation type="obsolete">sélection &amp;magique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>magic_selection</source>
-        <translation>sélection magique</translation>
+        <translation type="obsolete">sélection magique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>tolerance : </source>
-        <translation>tolérence :</translation>
+        <translation type="obsolete">tolérence :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Shortest Path</source>
-        <translation>Plus court chemin</translation>
+        <translation type="obsolete">Plus court chemin</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&amp;Unconstrained</source>
-        <translation>Non-contraint (&amp;U)</translation>
+        <translation type="obsolete">Non-contraint (&amp;U)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Unconstrained</source>
-        <translation>Non-contraint</translation>
+        <translation type="obsolete">Non-contraint</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&amp;sulci</source>
-        <translation>&amp;sillons</translation>
+        <translation type="obsolete">&amp;sillons</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>sulci</source>
-        <translation>sillons</translation>
+        <translation type="obsolete">sillons</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&amp;gyri</source>
-        <translation>&amp;gyri</translation>
+        <translation type="obsolete">&amp;gyri</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>gyri</source>
-        <translation>gyri</translation>
+        <translation type="obsolete">gyri</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>constraint : </source>
-        <translation>contrainte :</translation>
+        <translation type="obsolete">contrainte :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>sigmo : </source>
-        <translation>sigmo :</translation>
+        <translation type="obsolete">sigmo :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Brush</source>
-        <translation>Pinceau</translation>
+        <translation type="obsolete">Pinceau</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&amp;paintBrush</source>
-        <translation>brosse &amp;pinceau</translation>
+        <translation type="obsolete">brosse &amp;pinceau</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>paintBrush</source>
-        <translation>brosse peinceau</translation>
+        <translation type="obsolete">brosse peinceau</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&amp;magicBrush</source>
-        <translation>brosse &amp;magique</translation>
+        <translation type="obsolete">brosse &amp;magique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>magicBrush</source>
-        <translation>brosse magique</translation>
+        <translation type="obsolete">brosse magique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&amp;erase</source>
-        <translation>gomme (&amp;e)</translation>
+        <translation type="obsolete">gomme (&amp;e)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>erase</source>
-        <translation>gomme</translation>
+        <translation type="obsolete">gomme</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&amp;filling</source>
-        <translation>remplissage (&amp;f)</translation>
+        <translation type="obsolete">remplissage (&amp;f)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>fill</source>
-        <translation>remplissage</translation>
+        <translation type="obsolete">remplissage</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&amp;clear</source>
-        <translation>effacer (&amp;e)</translation>
+        <translation type="obsolete">effacer (&amp;e)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>clear</source>
-        <translation>effacer</translation>
+        <translation type="obsolete">effacer</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&amp;Save Texture</source>
-        <translation>&amp;Sauver la textuire</translation>
+        <translation type="obsolete">&amp;Sauver la textuire</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>save</source>
-        <translation>sauver</translation>
+        <translation type="obsolete">sauver</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>PaintToolBar</source>
-        <translation>Barre d&apos;outils de dessin</translation>
+        <translation type="obsolete">Barre d&apos;outils de dessin</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>InfosToolBar</source>
-        <translation>Barre d&apos;outils d&apos;infos</translation>
+        <translation type="obsolete">Barre d&apos;outils d&apos;infos</translation>
     </message>
 </context>
 <context>
     <name>ObjectParamSelect</name>
     <message>
+        <location line="+0"/>
         <source>&lt;no object&gt;</source>
-        <translation>&lt;pas d&apos;objet&gt;</translation>
+        <translation type="obsolete">&lt;pas d&apos;objet&gt;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Set parameters on these objects:</source>
-        <translation>Réglage de paramètres sur les objets suivants:</translation>
+        <translation type="obsolete">Réglage de paramètres sur les objets suivants:</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Show all objects</source>
-        <translation>Montrer tous les objets</translation>
+        <translation type="obsolete">Montrer tous les objets</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Show initial objects</source>
-        <translation>Montrer les objets initiaux</translation>
+        <translation type="obsolete">Montrer les objets initiaux</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Show top-level objects</source>
-        <translation>Montrer les objets principaux</translation>
+        <translation type="obsolete">Montrer les objets principaux</translation>
     </message>
 </context>
 <context>
     <name>PaintActionView</name>
     <message>
+        <location line="+0"/>
         <source>On</source>
-        <translation>Activé</translation>
+        <translation type="obsolete">Activé</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Off</source>
-        <translation>Désactivé</translation>
+        <translation type="obsolete">Désactivé</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Ball</source>
-        <translation>Boule</translation>
+        <translation type="obsolete">Boule</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Disk</source>
-        <translation>Disque</translation>
+        <translation type="obsolete">Disque</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Line</source>
-        <translation>Ligne</translation>
+        <translation type="obsolete">Ligne</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Redo</source>
-        <translation>Refaire</translation>
+        <translation type="obsolete">Refaire</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Undo</source>
-        <translation>Défaire</translation>
+        <translation type="obsolete">Défaire</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Brush</source>
-        <translation>Pinceau</translation>
+        <translation type="obsolete">Pinceau</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Modes</source>
-        <translation>Modes</translation>
+        <translation type="obsolete">Modes</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Point</source>
-        <translation>Point</translation>
+        <translation type="obsolete">Point</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Clear Region</source>
-        <translation>Effacer la région</translation>
+        <translation type="obsolete">Effacer la région</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Transparency</source>
-        <translation>Opacité</translation>
+        <translation type="obsolete">Opacité</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Fill Region</source>
-        <translation>Remplir la région</translation>
+        <translation type="obsolete">Remplir la région</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Actions</source>
-        <translation>Actions</translation>
+        <translation type="obsolete">Actions</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Replace</source>
-        <translation>Remplacement</translation>
+        <translation type="obsolete">Remplacement</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Brushes</source>
-        <translation>Pinceaux</translation>
+        <translation type="obsolete">Pinceaux</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Brush Size</source>
-        <translation>Rayon du pinceau</translation>
+        <translation type="obsolete">Rayon du pinceau</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>LinkedCursor</source>
-        <translation>Curseur lié</translation>
+        <translation type="obsolete">Curseur lié</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>BrushUnit</source>
-        <translation>Taille du pinceau en </translation>
+        <translation type="obsolete">Taille du pinceau en </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Voxel</source>
-        <translation>Voxel</translation>
+        <translation type="obsolete">Voxel</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Mm</source>
-        <translation>mm</translation>
+        <translation type="obsolete">mm</translation>
     </message>
 </context>
 <context>
     <name>PreferencesWindow</name>
     <message>
+        <location line="+0"/>
         <source>Language options will apply the next time you start Anatomist (save preferences !)</source>
-        <translation>La nouvelle langue s&apos;appliquera au prochain lancement d&apos;Anatomist (sauvez les préférences !)</translation>
+        <translation type="obsolete">La nouvelle langue s&apos;appliquera au prochain lancement d&apos;Anatomist (sauvez les préférences !)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Control window</source>
         <translation type="obsolete">Fenêtre de contrôle</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Anatomist global settings</source>
-        <translation>Anatomist : réglages globaux</translation>
+        <translation type="obsolete">Anatomist : réglages globaux</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Interpolation on volumes when changing referential</source>
-        <translation>Interpolation pour les changements de référentiels pour les volumes</translation>
+        <translation type="obsolete">Interpolation pour les changements de référentiels pour les volumes</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cursor shape :</source>
-        <translation>Forme du curseur :</translation>
+        <translation type="obsolete">Forme du curseur :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Size :</source>
-        <translation>Taille :</translation>
+        <translation type="obsolete">Taille :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linked cursor</source>
         <translation type="obsolete">Curseur lié</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cursor color :</source>
-        <translation>Couleur du curseur :</translation>
+        <translation type="obsolete">Couleur du curseur :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Custom color :</source>
-        <translation>Couleur personnelle :</translation>
+        <translation type="obsolete">Couleur personnelle :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>default</source>
-        <translation>défaut</translation>
+        <translation type="obsolete">défaut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display L/R in corners</source>
-        <translation>Afficher L/R dans les coins</translation>
+        <translation type="obsolete">Afficher L/R dans les coins</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display nice logo</source>
-        <translation>Afficher le beau logo</translation>
+        <translation type="obsolete">Afficher le beau logo</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use default color</source>
-        <translation>Couleur automatique</translation>
+        <translation type="obsolete">Couleur automatique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Volumes</source>
         <translation type="obsolete">Volumes</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display linked cursor</source>
-        <translation>Afficher le curseur lié</translation>
+        <translation type="obsolete">Afficher le curseur lié</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>HTML browser command line :</source>
-        <translation>Lancement du browser HTML :</translation>
+        <translation type="obsolete">Lancement du browser HTML :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Language :</source>
-        <translation>Langue :</translation>
+        <translation type="obsolete">Langue :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Application</source>
         <translation type="obsolete">Application</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Unstable/in development features</source>
         <translation type="obsolete">Fonctionnalités instables / en développement</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Warning</source>
         <translation type="obsolete">Attention</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Unstable features may cause anatomist to crash</source>
         <translation type="obsolete">Les fonctionnalités instables peuvent faire &quot;planter&quot; Anatomist</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Enable unstable features in this session</source>
         <translation type="obsolete">Activer les fonctionnalités instables pour cette session</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Enable unstable features in all sessions</source>
         <translation type="obsolete">Activer les fonctionnalités instables pour troutes les sessions</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Radioligical convention (seen from bottom, L/R flipped)</source>
-        <translation>Convention radiologique (vue par dessous, G/D inversées)</translation>
+        <translation type="obsolete">Convention radiologique (vue par dessous, G/D inversées)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Neurological convention (seen from top)</source>
-        <translation>Convention neurologique (vue de dessus)</translation>
+        <translation type="obsolete">Convention neurologique (vue de dessus)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>By default, build a transformation to the origin of SPM volumes</source>
         <translation type="obsolete">Par défaut, utiliser une transformation vers l&apos;origine des volumes SPM</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Axial/coronal slices orientation</source>
-        <translation>Orientation des vues axiales / coronales</translation>
+        <translation type="obsolete">Orientation des vues axiales / coronales</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Windows</source>
         <translation type="obsolete">Fenêtres</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Default windows size</source>
-        <translation>Taille par défaut des fenêtres</translation>
+        <translation type="obsolete">Taille par défaut des fenêtres</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>pixel / mm</source>
-        <translation>pixel / mm</translation>
+        <translation type="obsolete">pixel / mm</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Default referentials</source>
-        <translation>Référentiels par défaut</translation>
+        <translation type="obsolete">Référentiels par défaut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Default referential for loaded objects</source>
-        <translation>Référentiel par défaut au chargement des objets</translation>
+        <translation type="obsolete">Référentiel par défaut au chargement des objets</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Default referential for new windows</source>
-        <translation>Référentiel par défaut pour les nouvelles fenêtres</translation>
+        <translation type="obsolete">Référentiel par défaut pour les nouvelles fenêtres</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Default objects referential</source>
-        <translation>Référentiel par défaut pour les objets</translation>
+        <translation type="obsolete">Référentiel par défaut pour les objets</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Default windows referential</source>
-        <translation>Référentiel par défaut pour les fenêtres</translation>
+        <translation type="obsolete">Référentiel par défaut pour les fenêtres</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Load...</source>
-        <translation>Charger...</translation>
+        <translation type="obsolete">Charger...</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Load Anatomist objects</source>
-        <translation>Charger des objets Anatomist</translation>
+        <translation type="obsolete">Charger des objets Anatomist</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use referential / transformations information found in objects headers (SPM, NIFTI...)</source>
-        <translation>Utiliser les information de référentiel / transformations trouvés dans les en-têtes des objets (SPM, NIFTI...)</translation>
+        <translation type="obsolete">Utiliser les information de référentiel / transformations trouvés dans les en-têtes des objets (SPM, NIFTI...)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>User level</source>
         <translation type="obsolete">Niveau d&apos;utilisateur</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>OpenGL</source>
         <translation type="obsolete">OpenGL</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display cursor position by default</source>
-        <translation>Afficher par défaut la position du curseur</translation>
+        <translation type="obsolete">Afficher par défaut la position du curseur</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Browsers</source>
-        <translation>Browsers</translation>
+        <translation type="obsolete">Browsers</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>limit browsers attribute values to: </source>
-        <translation>limiter la taille des valeurs des attributs dans les browsers :</translation>
+        <translation type="obsolete">limiter la taille des valeurs des attributs dans les browsers :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source> characters</source>
-        <translation> caractères</translation>
+        <translation type="obsolete"> caractères</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>limit number of textures: </source>
-        <translation>limiter le nombre de textures: </translation>
+        <translation type="obsolete">limiter le nombre de textures: </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Unlimited</source>
-        <translation>Illimité</translation>
+        <translation type="obsolete">Illimité</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Try this option if you encounter OpenGL rendering problems.
 Such problems have been seen on Windows machines, where rendering was not performed at all
 if more than 3 texture units were enabled (even on non-tetured objects).
 Use &apos;Unlimited&apos; if rendering is OK.</source>
-        <translation>Essayez cette option si vous rencontrez des problèmes de rendu OpenGL.
+        <translation type="obsolete">Essayez cette option si vous rencontrez des problèmes de rendu OpenGL.
 De tels problèmes ont été rencontrés sur des systèmes Windows: le rendu n&apos;était pas effectué du tout
 si plus de 3 unités de textures étaient activées (même sur des objets non-texturés).
 Utilisez &quot;Illimité&quot; si le rendu fonctionne normalement.</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use OpenGL selection</source>
-        <translation>Utiliser la sélection par OpenGL</translation>
+        <translation type="obsolete">Utiliser la sélection par OpenGL</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Disabling OpenGL-based selection (in selection control, and 3D windows tooltips)
 may be needed with some buggy OpenGL implementations which may cause Anatomist to crash.
 The &quot;Surface Paint&quot; tool also makes use of it in an unconditional way, so this module
 might still crash with such an OpenGL implementation.</source>
-        <translation>Désactiver la sélection basée sur OpenGL (dans le contrôle de sélection et les bulles d&apos;aides des fenêtres 3D)
+        <translation type="obsolete">Désactiver la sélection basée sur OpenGL (dans le contrôle de sélection et les bulles d&apos;aides des fenêtres 3D)
 peut être nécessaire avec certaines implémentations boguées d&apos;OpenGL, ce qui peut faire planter Anatomist.
 L&apos;outil &quot;Dessin sur surfaces&quot; l&apos;utilise aussi de manière inconditionnelle, donc ce module
 peut toujours planter sur de telles implémentations d&apos;OpenGL.</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Assume all &apos;scanner-based&apos; referentials are the same </source>
-        <translation>Supposer que tous les référentiels &apos;scanner-based&apos; sont les mêmes</translation>
+        <translation type="obsolete">Supposer que tous les référentiels &apos;scanner-based&apos; sont les mêmes</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>User level :</source>
-        <translation>Niveau d&apos;utilisateur :</translation>
+        <translation type="obsolete">Niveau d&apos;utilisateur :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Confirm before quitting</source>
-        <translation>Confirmer avant de quitter</translation>
+        <translation type="obsolete">Confirmer avant de quitter</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>3D views</source>
-        <translation>Vues 3D</translation>
+        <translation type="obsolete">Vues 3D</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use graphics overlay on OpenGL rendering</source>
-        <translation>Utiliser des surimpressions graphiques sur les rendus OpenGL</translation>
+        <translation type="obsolete">Utiliser des surimpressions graphiques sur les rendus OpenGL</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Enable OpenGL shaders (GLSL 1.2 support needed)</source>
-        <translation>Activer les &quot;shaders&quot; OpenGL (support GLSL 1.2 nécessaire)</translation>
+        <translation type="obsolete">Activer les &quot;shaders&quot; OpenGL (support GLSL 1.2 nécessaire)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Enable OpenGL shaders.</source>
-        <translation>Activer les &quot;shaders&quot; OpenGL </translation>
+        <translation type="obsolete">Activer les &quot;shaders&quot; OpenGL </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use shader-based OpenGL pipeline (lighting/shading model) by default</source>
-        <translation>Utiliser le pipeline OpenGL basé sur des &quot;shaders&quot; (modèles de lumière/ombrage) par défaut</translation>
+        <translation type="obsolete">Utiliser le pipeline OpenGL basé sur des &quot;shaders&quot; (modèles de lumière/ombrage) par défaut</translation>
     </message>
 </context>
 <context>
     <name>QAColorDialog</name>
     <message>
+        <location line="+0"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
 </context>
 <context>
     <name>QAColorWidget</name>
     <message>
+        <location line="+0"/>
         <source>A :</source>
-        <translation>A :</translation>
+        <translation type="obsolete">A :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>B :</source>
-        <translation>B :</translation>
+        <translation type="obsolete">B :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>G :</source>
-        <translation>V :</translation>
+        <translation type="obsolete">V :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>R :</source>
-        <translation>R :</translation>
+        <translation type="obsolete">R :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Neutral alpha channel</source>
-        <translation>Transparence indifférente</translation>
+        <translation type="obsolete">Transparence indifférente</translation>
     </message>
 </context>
 <context>
     <name>QAPaletteWin</name>
     <message>
+        <location line="+0"/>
         <source>1D</source>
-        <translation>1D</translation>
+        <translation type="obsolete">1D</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>2D</source>
-        <translation>2D</translation>
+        <translation type="obsolete">2D</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Max:</source>
-        <translation>Max:</translation>
+        <translation type="obsolete">Max:</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Min:</source>
-        <translation>Min:</translation>
+        <translation type="obsolete">Min:</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>None</source>
-        <translation>Aucune</translation>
+        <translation type="obsolete">Aucune</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Reset values</source>
-        <translation>Valeurs par défaut</translation>
+        <translation type="obsolete">Valeurs par défaut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Available palettes :</source>
-        <translation>Palettes disponibles :</translation>
+        <translation type="obsolete">Palettes disponibles :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Reset bounds</source>
-        <translation>Bornes standard</translation>
+        <translation type="obsolete">Bornes standard</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>1st dimension settings :</source>
-        <translation>Réglages pour la 1ère dimension :</translation>
+        <translation type="obsolete">Réglages pour la 1ère dimension :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>2nd dimension settings :</source>
-        <translation>Réglages pour la 2nde dimension :</translation>
+        <translation type="obsolete">Réglages pour la 2nde dimension :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Second palette :</source>
-        <translation>Seconde palette :</translation>
+        <translation type="obsolete">Seconde palette :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Update</source>
-        <translation>Rafraîchir</translation>
+        <translation type="obsolete">Rafraîchir</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Dimension :</source>
-        <translation>Dimension :</translation>
+        <translation type="obsolete">Dimension :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Responsive</source>
-        <translation>Temps réel</translation>
+        <translation type="obsolete">Temps réel</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Mixing factor :</source>
-        <translation>Facteur de mélange :</translation>
+        <translation type="obsolete">Facteur de mélange :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Bounds:</source>
-        <translation>Bornes :</translation>
+        <translation type="obsolete">Bornes :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Update mode :</source>
-        <translation>Mode de mise à jour :</translation>
+        <translation type="obsolete">Mode de mise à jour :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Palettes mixing method :</source>
-        <translation>Méthode de melange des palettes :</translation>
+        <translation type="obsolete">Méthode de melange des palettes :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Object palette composition</source>
-        <translation>Composition d&apos;une palette d&apos;objet</translation>
+        <translation type="obsolete">Composition d&apos;une palette d&apos;objet</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use a second palette for 2D</source>
-        <translation>Utiliser une seconde palette pour le 2D</translation>
+        <translation type="obsolete">Utiliser une seconde palette pour le 2D</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Palette view :</source>
-        <translation>Vue de la palette :</translation>
+        <translation type="obsolete">Vue de la palette :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Palette 1D Mapping :</source>
-        <translation>Palette 1D :</translation>
+        <translation type="obsolete">Palette 1D :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Value 0 at center</source>
-        <translation>Valeur 0 au centre</translation>
+        <translation type="obsolete">Valeur 0 au centre</translation>
     </message>
 </context>
 <context>
     <name>QAWindowBlock</name>
     <message>
+        <location line="+0"/>
         <source>Windows block layout</source>
-        <translation>Disposition des fenêtres dans le bloc</translation>
+        <translation type="obsolete">Disposition des fenêtres dans le bloc</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Lay in columns</source>
-        <translation>Disposer en colonnes</translation>
+        <translation type="obsolete">Disposer en colonnes</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Lay in rows</source>
-        <translation>Disposer en lignes</translation>
+        <translation type="obsolete">Disposer en lignes</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Lay in rectangle</source>
-        <translation>Disposer en rectangle</translation>
+        <translation type="obsolete">Disposer en rectangle</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Set number of columns</source>
-        <translation>Fixer le nombre de colonnes</translation>
+        <translation type="obsolete">Fixer le nombre de colonnes</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Set number of rows</source>
-        <translation>Fixer le nombre de lignes</translation>
+        <translation type="obsolete">Fixer le nombre de lignes</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Set columns / rows ratio for rectangular layout</source>
-        <translation>Fixer le ratio colonnes / lignes pour la disposition rectangulaire</translation>
+        <translation type="obsolete">Fixer le ratio colonnes / lignes pour la disposition rectangulaire</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Set columns / rows ratio</source>
-        <translation>Fixer le ratio colonnes / lignes</translation>
+        <translation type="obsolete">Fixer le ratio colonnes / lignes</translation>
     </message>
 </context>
 <context>
     <name>QAWindowFactory</name>
     <message>
+        <location line="+0"/>
         <source>Open window of type </source>
-        <translation>Ouvrir une fenêtre de type </translation>
+        <translation type="obsolete">Ouvrir une fenêtre de type </translation>
     </message>
 </context>
 <context>
     <name>QAbout</name>
     <message>
+        <location line="+0"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cannot find text file</source>
         <translation type="obsolete">Impossible de trouver le fichier texte de ce message</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>check config and ANATOMIST_PATH environment variable</source>
         <translation type="obsolete">Vérifiez la config et la variable d&apos;environnement ANATOMIST_PATH</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>About Anatomist</source>
-        <translation>À propos d&apos;Anatomist</translation>
+        <translation type="obsolete">À propos d&apos;Anatomist</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cannot find about.txt file</source>
-        <translation>Impossible de trouver le fichier texte de ce message &quot;about.txt&quot;</translation>
+        <translation type="obsolete">Impossible de trouver le fichier texte de ce message &quot;about.txt&quot;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>check config and BRAINVISA_SHARE or ANATOMIST_PATH environment variable</source>
         <translation type="obsolete">Vérifiez la config et la variable d&apos;environnement BRAINVISA_SHARE ou ANATOMIST_PATH</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>check config and BRAINVISA_SHARE environment variable</source>
-        <translation>vérifier la configuration et la variable d&apos;environnement BRAINVISA_SHARE</translation>
+        <translation type="obsolete">vérifier la configuration et la variable d&apos;environnement BRAINVISA_SHARE</translation>
     </message>
 </context>
 <context>
     <name>QGraphParam</name>
     <message>
+        <location line="+0"/>
         <source>Colors (2D / 3D)</source>
-        <translation>Couleurs (2D / 3D)</translation>
+        <translation type="obsolete">Couleurs (2D / 3D)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display first object</source>
-        <translation>Afficher le premier objet</translation>
+        <translation type="obsolete">Afficher le premier objet</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use one file per individual sub-object</source>
-        <translation>Sauver chaque sous-objet dans un fichier individuel</translation>
+        <translation type="obsolete">Sauver chaque sous-objet dans un fichier individuel</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Graph parameters</source>
-        <translation>Paramètres des graphes</translation>
+        <translation type="obsolete">Paramètres des graphes</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display all</source>
-        <translation>Afficher tout</translation>
+        <translation type="obsolete">Afficher tout</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Selection color</source>
-        <translation>Couleur de sélection</translation>
+        <translation type="obsolete">Couleur de sélection</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display trangulations</source>
-        <translation>Afficher les surfaces</translation>
+        <translation type="obsolete">Afficher les surfaces</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display ToolTips</source>
-        <translation>Afficher les bulles</translation>
+        <translation type="obsolete">Afficher les bulles</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use one file per sub-object type</source>
-        <translation>Sauver un fichier par type de sous-objet</translation>
+        <translation type="obsolete">Sauver un fichier par type de sous-objet</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>IO saving settings</source>
         <translation type="obsolete">Paramètres de sauvegarde</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Constant color :</source>
-        <translation>Couleur fixe :</translation>
+        <translation type="obsolete">Couleur fixe :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display facets</source>
-        <translation>Afficher les facettes</translation>
+        <translation type="obsolete">Afficher les facettes</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Graph 3D display mode</source>
-        <translation>Mode d&apos;affichage 3D des graphes</translation>
+        <translation type="obsolete">Mode d&apos;affichage 3D des graphes</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use inverse color</source>
-        <translation>Utiliser la couleur inverse</translation>
+        <translation type="obsolete">Utiliser la couleur inverse</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Save only modified sub-objects</source>
-        <translation>Sauver seulement les sous-objest modifiés</translation>
+        <translation type="obsolete">Sauver seulement les sous-objest modifiés</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use attribute :</source>
-        <translation>Utiliser l&apos;attribut :</translation>
+        <translation type="obsolete">Utiliser l&apos;attribut :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Set sub-objects dir. from graph filename</source>
-        <translation>Fixer le répertoire des sous-objets au du nom du graphe</translation>
+        <translation type="obsolete">Fixer le répertoire des sous-objets au du nom du graphe</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Default (as loaded)</source>
-        <translation>Défaut (tel qu&apos;au chargement)</translation>
+        <translation type="obsolete">Défaut (tel qu&apos;au chargement)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use Nomenclature/color bindings (if any)</source>
-        <translation>Utiliser la correspondance Nomenclature/couleur</translation>
+        <translation type="obsolete">Utiliser la correspondance Nomenclature/couleur</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>IO settings</source>
-        <translation>Paramètres de lecture / sauvegarde</translation>
+        <translation type="obsolete">Paramètres de lecture / sauvegarde</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Load sub-objects in relations</source>
-        <translation>Charger les sous-objets des relations</translation>
+        <translation type="obsolete">Charger les sous-objets des relations</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Selection highlight type :</source>
-        <translation>Type de visualisation de la sélection :</translation>
+        <translation type="obsolete">Type de visualisation de la sélection :</translation>
     </message>
 </context>
 <context>
     <name>QGraphProperties</name>
     <message>
+        <location line="+0"/>
         <source>Display mode : </source>
-        <translation>Mode d&apos;affichage : </translation>
+        <translation type="obsolete">Mode d&apos;affichage : </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation type="obsolete">Normal</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Property map</source>
-        <translation>Propriété</translation>
+        <translation type="obsolete">Propriété</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Property to be mapped : </source>
-        <translation>Propriété à afficher : </translation>
+        <translation type="obsolete">Propriété à afficher : </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Map property on :</source>
-        <translation>Afficher la propriété sur :</translation>
+        <translation type="obsolete">Afficher la propriété sur :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>nodes</source>
-        <translation>noeuds</translation>
+        <translation type="obsolete">noeuds</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>relations</source>
-        <translation>relations</translation>
+        <translation type="obsolete">relations</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>label / nomenclature property :</source>
-        <translation>propriété label / nomenclature :</translation>
+        <translation type="obsolete">propriété label / nomenclature :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>default (as in settings)</source>
-        <translation>défaut (comme réglages)</translation>
+        <translation type="obsolete">défaut (comme réglages)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>name (manual)</source>
-        <translation>name (manuel)</translation>
+        <translation type="obsolete">name (manuel)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>label (automatic)</source>
-        <translation>label (automatique)</translation>
+        <translation type="obsolete">label (automatique)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Keep palette absolute values</source>
-        <translation>Garder les valeurs absolue de la palette</translation>
+        <translation type="obsolete">Garder les valeurs absolue de la palette</translation>
     </message>
 </context>
 <context>
     <name>QImageLabel</name>
     <message>
+        <location line="+0"/>
         <source>  This big stupid logo annoys you ?  
   Remove it !
   (in Settings-&gt;Prefs)...</source>
-        <translation>  Ce logo n&apos;est pas beau ?
+        <translation type="obsolete">  Ce logo n&apos;est pas beau ?
   Enlevez-le (menu Réglages-&gt;Préférences)  
   ou mettez le vôtre à la place !
   (placez-le en ~/.anatomist/icons/anatomist.png)
@@ -2771,1389 +3206,1673 @@ peut toujours planter sur de telles implémentations d&apos;OpenGL.</translation
 <context>
     <name>QObjectBrowser</name>
     <message>
+        <location line="+0"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>EDIT</source>
-        <translation>EDITION</translation>
+        <translation type="obsolete">EDITION</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Name</source>
-        <translation>Nom</translation>
+        <translation type="obsolete">Nom</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Reg.</source>
-        <translation>Enr.</translation>
+        <translation type="obsolete">Enr.</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Sel.</source>
-        <translation>Sél.</translation>
+        <translation type="obsolete">Sél.</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="obsolete">Type</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Label</source>
-        <translation>Étiquette</translation>
+        <translation type="obsolete">Étiquette</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Value</source>
-        <translation>Valeur</translation>
+        <translation type="obsolete">Valeur</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cannot determine attribute characteristics</source>
-        <translation>Je ne peux pas déterminer les caractéristiques de l&apos;attribut</translation>
+        <translation type="obsolete">Je ne peux pas déterminer les caractéristiques de l&apos;attribut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cannot determine attributed object</source>
-        <translation>Je ne peux pas déterminer l&apos;objet attribué</translation>
+        <translation type="obsolete">Je ne peux pas déterminer l&apos;objet attribué</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>SEND edit</source>
-        <translation>ENVOI édit</translation>
+        <translation type="obsolete">ENVOI édit</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Conflicting type for attribute </source>
-        <translation>conflit de types pour l&apos;attribut </translation>
+        <translation type="obsolete">conflit de types pour l&apos;attribut </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Delete attribute </source>
-        <translation>Effacer l&apos;attribut </translation>
+        <translation type="obsolete">Effacer l&apos;attribut </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>New attribute in </source>
-        <translation>Nouvel attribut dans </translation>
+        <translation type="obsolete">Nouvel attribut dans </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Modify attribute</source>
-        <translation>Modifier l&apos;attribut</translation>
+        <translation type="obsolete">Modifier l&apos;attribut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>I cannot edit this attribute type</source>
-        <translation>Je ne peux pas éditer ce type d&apos;attribut</translation>
+        <translation type="obsolete">Je ne peux pas éditer ce type d&apos;attribut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Modify attribute </source>
-        <translation>Modifier l&apos;attribut </translation>
+        <translation type="obsolete">Modifier l&apos;attribut </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Label1</source>
-        <translation>Étiquette1</translation>
+        <translation type="obsolete">Étiquette1</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Label2</source>
-        <translation>Étiquette2</translation>
+        <translation type="obsolete">Étiquette2</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation type="obsolete">Normal</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Object</source>
-        <translation>Objet</translation>
+        <translation type="obsolete">Objet</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Color for </source>
-        <translation>Couleur pour </translation>
+        <translation type="obsolete">Couleur pour </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Delete attribute</source>
-        <translation>Effacer l&apos;attribut</translation>
+        <translation type="obsolete">Effacer l&apos;attribut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>so cannot be edited as </source>
-        <translation>donc ne peut pas être édité en tant que </translation>
+        <translation type="obsolete">donc ne peut pas être édité en tant que </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>exists as </source>
-        <translation>existe en tant que </translation>
+        <translation type="obsolete">existe en tant que </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Attribute exists and I can&apos;t get it!
 (not direct child in tree ?)
 try clicking it and selecting &apos;Modify&apos;</source>
-        <translation>L&apos;attribut existe mais je ne peux pas le récupérer
+        <translation type="obsolete">L&apos;attribut existe mais je ne peux pas le récupérer
 (pas un enfant direct dans l&apos;arbre ?)
 Essayez de cliquer et de sélectionner &apos;Modifier&apos;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Add attribute</source>
-        <translation>Ajouter un attribut</translation>
+        <translation type="obsolete">Ajouter un attribut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Item not found</source>
-        <translation>Element pas trouvé</translation>
+        <translation type="obsolete">Element pas trouvé</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>An editor is already open. close it first.</source>
-        <translation>Un éditeur est déjà ouvert. Fermez-le d&apos;abord.</translation>
+        <translation type="obsolete">Un éditeur est déjà ouvert. Fermez-le d&apos;abord.</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Can&apos;t find attribute in tree.
 Try using &quot;add attribute (?)&quot;</source>
-        <translation>L&apos;attribut n&apos;existe pas dans l&apos;arbre.
+        <translation type="obsolete">L&apos;attribut n&apos;existe pas dans l&apos;arbre.
 Essayez avec &quot;ajouter un attribut&quot; (?)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Browser</source>
-        <translation>Browser</translation>
+        <translation type="obsolete">Browser</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Can only edit the same attribute on multiple items</source>
-        <translation>Il n&apos;est possible d&apos;éditer plusieurs éléments que pour le même attribut</translation>
+        <translation type="obsolete">Il n&apos;est possible d&apos;éditer plusieurs éléments que pour le même attribut</translation>
     </message>
 </context>
 <context>
     <name>QObjectBrowserWidget</name>
     <message>
+        <location line="+0"/>
         <source>nodes</source>
-        <translation>noeuds</translation>
+        <translation type="obsolete">noeuds</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Graph nodes</source>
-        <translation>Noeuds du graphe</translation>
+        <translation type="obsolete">Noeuds du graphe</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Global attributes</source>
-        <translation>Attributs globaux</translation>
+        <translation type="obsolete">Attributs globaux</translation>
     </message>
 </context>
 <context>
     <name>QObjectTree</name>
     <message>
+        <location line="+0"/>
         <source>Ref</source>
-        <translation>Ref</translation>
+        <translation type="obsolete">Ref</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="obsolete">Type</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Objects</source>
-        <translation>Objets</translation>
-    </message>
-    <message>
-        <source>cnt</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Objets</translation>
     </message>
 </context>
 <context>
     <name>QSelAttrib</name>
     <message>
+        <location line="+0"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Value :</source>
-        <translation>Valeur :</translation>
+        <translation type="obsolete">Valeur :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>AnaQt attribute criterion</source>
-        <translation>Critère d&apos;attribut</translation>
+        <translation type="obsolete">Critère d&apos;attribut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Attribute :</source>
-        <translation>Attribut :</translation>
+        <translation type="obsolete">Attribut :</translation>
     </message>
 </context>
 <context>
     <name>QSelectMenu</name>
     <message>
+        <location line="+0"/>
         <source>File</source>
-        <translation>Fichier</translation>
+        <translation type="obsolete">Fichier</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Load</source>
-        <translation>Charger</translation>
+        <translation type="obsolete">Charger</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Save</source>
-        <translation>Sauver</translation>
+        <translation type="obsolete">Sauver</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Color</source>
-        <translation>Couleur</translation>
+        <translation type="obsolete">Couleur</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Create associated roi graph</source>
-        <translation>Créer un graphe associé</translation>
+        <translation type="obsolete">Créer un graphe associé</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Objects manipulations</source>
-        <translation>Objet-spécifique</translation>
+        <translation type="obsolete">Objet-spécifique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Invert polygon orientation</source>
-        <translation>Inverser l&apos;orientation des polygones</translation>
+        <translation type="obsolete">Inverser l&apos;orientation des polygones</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Select nodes of attribute ...</source>
-        <translation>Sélectionner les noeuds d&apos;attribut ...</translation>
+        <translation type="obsolete">Sélectionner les noeuds d&apos;attribut ...</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Remove from this window</source>
-        <translation>Enlever de cette fenêtre</translation>
+        <translation type="obsolete">Enlever de cette fenêtre</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Landmarks</source>
-        <translation>Points de repère</translation>
+        <translation type="obsolete">Points de repère</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Reload</source>
-        <translation>Recharger</translation>
+        <translation type="obsolete">Recharger</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Unselect</source>
-        <translation>Dé-sélectionner</translation>
+        <translation type="obsolete">Dé-sélectionner</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Delete attribute</source>
-        <translation>Effacer l&apos;attribut</translation>
+        <translation type="obsolete">Effacer l&apos;attribut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>ERP loader</source>
-        <translation>Chargeur d&apos;ERPs</translation>
+        <translation type="obsolete">Chargeur d&apos;ERPs</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Add region</source>
-        <translation>Nouvelle région</translation>
+        <translation type="obsolete">Nouvelle région</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Send value </source>
-        <translation>Envoyer la valeur </translation>
+        <translation type="obsolete">Envoyer la valeur </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Select neighbours</source>
-        <translation>Sélectionner les voisins</translation>
+        <translation type="obsolete">Sélectionner les voisins</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Export mask as volume</source>
-        <translation>Exporter le masque sous forme de volume</translation>
+        <translation type="obsolete">Exporter le masque sous forme de volume</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Material</source>
-        <translation>Matériau</translation>
+        <translation type="obsolete">Matériau</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Referential</source>
-        <translation>Référentiel</translation>
+        <translation type="obsolete">Référentiel</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Remove from windows of this group</source>
-        <translation>Enlever des fenêtres de ce groupe</translation>
+        <translation type="obsolete">Enlever des fenêtres de ce groupe</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Surface matching window</source>
-        <translation>Mise en correspondance de surfaces</translation>
+        <translation type="obsolete">Mise en correspondance de surfaces</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Modify attribute...</source>
-        <translation>Modifier l&apos;attribut...</translation>
+        <translation type="obsolete">Modifier l&apos;attribut...</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Pick landmarks</source>
-        <translation>Prendre des points de repère</translation>
+        <translation type="obsolete">Prendre des points de repère</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Select all</source>
-        <translation>Tout sélectionner</translation>
+        <translation type="obsolete">Tout sélectionner</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Geometry</source>
-        <translation>Géométrie</translation>
+        <translation type="obsolete">Géométrie</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Set name</source>
-        <translation>Changer le nom</translation>
+        <translation type="obsolete">Changer le nom</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>View / select objects</source>
-        <translation>Voir / sélectionner les objets</translation>
+        <translation type="obsolete">Voir / sélectionner les objets</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Modify name</source>
-        <translation>Modifier &apos;name&apos;</translation>
+        <translation type="obsolete">Modifier &apos;name&apos;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Modify label</source>
-        <translation>Modifier &apos;label&apos;</translation>
+        <translation type="obsolete">Modifier &apos;label&apos;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Add attribute...</source>
-        <translation>Ajouter l&apos;attribut...</translation>
+        <translation type="obsolete">Ajouter l&apos;attribut...</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Control 2D fusion</source>
-        <translation>Contrôle de la fusion 2D</translation>
+        <translation type="obsolete">Contrôle de la fusion 2D</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Control 3D fusion</source>
-        <translation>Contrôle de la fusion 3D</translation>
+        <translation type="obsolete">Contrôle de la fusion 3D</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Rename object</source>
-        <translation>Renommer</translation>
+        <translation type="obsolete">Renommer</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Palette</source>
-        <translation>Palette</translation>
+        <translation type="obsolete">Palette</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Roi</source>
-        <translation>ROI</translation>
+        <translation type="obsolete">ROI</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Perfusion</source>
-        <translation>Perfusion</translation>
+        <translation type="obsolete">Perfusion</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Perfusion Control Window</source>
-        <translation>Fenêtre de contrôle de la perfusion</translation>
+        <translation type="obsolete">Fenêtre de contrôle de la perfusion</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Fusion</source>
-        <translation>Fusionner</translation>
+        <translation type="obsolete">Fusionner</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Export texture</source>
-        <translation>Exporter la texture</translation>
+        <translation type="obsolete">Exporter la texture</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Translate origin (SPM)</source>
         <translation type="obsolete">Translation de l&apos;origine (SPM)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Texturing</source>
-        <translation>Texture</translation>
+        <translation type="obsolete">Texture</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Create generated 1D texture</source>
-        <translation>Créer une texture 1D auto-générée</translation>
+        <translation type="obsolete">Créer une texture 1D auto-générée</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Create generated 2D texture</source>
-        <translation>Créer une texture 2D auto-générée</translation>
+        <translation type="obsolete">Créer une texture 2D auto-générée</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Extract texture as new object</source>
-        <translation>Extraire la texture en tant que nouvel objet</translation>
+        <translation type="obsolete">Extraire la texture en tant que nouvel objet</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display</source>
-        <translation>Afficher</translation>
+        <translation type="obsolete">Afficher</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Apply builtin referential (SPM/NIFTI)</source>
         <translation type="obsolete">Appliquer le changement de référentiel (SPM/NIFTI)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Default Menu</source>
-        <translation>Menu par défaut</translation>
+        <translation type="obsolete">Menu par défaut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>default</source>
-        <translation>défaut</translation>
+        <translation type="obsolete">défaut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display nodes</source>
-        <translation>Afficher les noeuds</translation>
+        <translation type="obsolete">Afficher les noeuds</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display relations</source>
-        <translation>Afficher les relations</translation>
+        <translation type="obsolete">Afficher les relations</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Load all sub-objects</source>
-        <translation>Charger tous les sous-objets</translation>
+        <translation type="obsolete">Charger tous les sous-objets</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Volume rendering properties</source>
-        <translation>Propriétés de rendu volumique</translation>
+        <translation type="obsolete">Propriétés de rendu volumique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Set value </source>
-        <translation>Appliquer la valeur </translation>
+        <translation type="obsolete">Appliquer la valeur </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source> as &quot;</source>
-        <translation>pour la propriété &quot;</translation>
+        <translation type="obsolete">pour la propriété &quot;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&quot; property to any selected object</source>
-        <translation>&quot; de tous les objets sélectionnés</translation>
+        <translation type="obsolete">&quot; de tous les objets sélectionnés</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Labeling</source>
-        <translation>Étiquetage</translation>
+        <translation type="obsolete">Étiquetage</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Move automatic labeling (&apos;label&apos;) to manual (&apos;name&apos;)</source>
-        <translation>Déplacer l&apos;étiquetage automatique (&apos;label&apos;) vers le manuel (&apos;name&apos;)</translation>
+        <translation type="obsolete">Déplacer l&apos;étiquetage automatique (&apos;label&apos;) vers le manuel (&apos;name&apos;)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use automatic labeling (&apos;label&apos;)</source>
-        <translation>Utiliser l&apos;étiquetage automatique (&apos;label&apos;)</translation>
+        <translation type="obsolete">Utiliser l&apos;étiquetage automatique (&apos;label&apos;)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use manual labeling (&apos;name&apos;)</source>
-        <translation>Utiliser l&apos;étiquetage manuel (&apos;name&apos;)</translation>
+        <translation type="obsolete">Utiliser l&apos;étiquetage manuel (&apos;name&apos;)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use default labeling property</source>
-        <translation>Utiliser l&apos;étiquetage par défaut</translation>
+        <translation type="obsolete">Utiliser l&apos;étiquetage par défaut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Load information from file header</source>
-        <translation>Charger les informations de l&apos;en-tête de fichier</translation>
+        <translation type="obsolete">Charger les informations de l&apos;en-tête de fichier</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Add without nodes</source>
-        <translation>Ajouter sans les noeuds</translation>
+        <translation type="obsolete">Ajouter sans les noeuds</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Rendering</source>
-        <translation>Rendu</translation>
+        <translation type="obsolete">Rendu</translation>
     </message>
 </context>
 <context>
     <name>QSelectWidget</name>
     <message>
+        <location line="+0"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Select</source>
-        <translation>Sélectionner</translation>
+        <translation type="obsolete">Sélectionner</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Selectable objects</source>
         <translation type="obsolete">Objets sélectionnables</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Select object(s)</source>
-        <translation>Sélection d&apos;objet(s)</translation>
-    </message>
-    <message>
-        <source>Selectable Objects</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Sélection d&apos;objet(s)</translation>
     </message>
 </context>
 <context>
     <name>QSurfMatchWin</name>
     <message>
+        <location line="+0"/>
         <source>to:</source>
-        <translation>vers :</translation>
+        <translation type="obsolete">vers :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Stop</source>
-        <translation>Arrêter</translation>
+        <translation type="obsolete">Arrêter</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>On / Off</source>
-        <translation>On / Off</translation>
+        <translation type="obsolete">On / Off</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Surface matching control: </source>
-        <translation>Contrôle de la mise en correspondance de surfaces : </translation>
+        <translation type="obsolete">Contrôle de la mise en correspondance de surfaces : </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>From:</source>
-        <translation>De :</translation>
+        <translation type="obsolete">De :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Reset</source>
-        <translation>Remise à zéro</translation>
+        <translation type="obsolete">Remise à zéro</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Start</source>
-        <translation>Commencer</translation>
+        <translation type="obsolete">Commencer</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Matching parameters:</source>
-        <translation>Paramètres des forces :</translation>
+        <translation type="obsolete">Paramètres des forces :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Origin surface:</source>
-        <translation>Surface d&apos;origine :</translation>
+        <translation type="obsolete">Surface d&apos;origine :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Delete point</source>
-        <translation>Enlever ce point</translation>
+        <translation type="obsolete">Enlever ce point</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Add point (number)</source>
-        <translation>Ajouter un point (num.)</translation>
+        <translation type="obsolete">Ajouter un point (num.)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Change</source>
-        <translation>Changer</translation>
+        <translation type="obsolete">Changer</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Control points:</source>
-        <translation>Points de conrôle :</translation>
+        <translation type="obsolete">Points de conrôle :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Add point (click)</source>
-        <translation>Ajouter un point (click)</translation>
+        <translation type="obsolete">Ajouter un point (click)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Destination surface:</source>
-        <translation>Surface cible :</translation>
+        <translation type="obsolete">Surface cible :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Direction :</source>
-        <translation>Direction :</translation>
+        <translation type="obsolete">Direction :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Record over time:</source>
-        <translation>Enregistrer au cours du temps :</translation>
+        <translation type="obsolete">Enregistrer au cours du temps :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Processing:</source>
-        <translation>Calcul :</translation>
+        <translation type="obsolete">Calcul :</translation>
     </message>
 </context>
 <context>
     <name>QTexturePanel</name>
     <message>
+        <location line="+0"/>
         <source>Mapping mode</source>
-        <translation>Mode de plaquage</translation>
+        <translation type="obsolete">Mode de plaquage</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Geometric</source>
-        <translation>Géométrique</translation>
+        <translation type="obsolete">Géométrique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear</source>
-        <translation>Linéaire</translation>
+        <translation type="obsolete">Linéaire</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Replace</source>
-        <translation>Remplacement</translation>
+        <translation type="obsolete">Remplacement</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Texture filtering</source>
-        <translation>Filtrage de la texture</translation>
+        <translation type="obsolete">Filtrage de la texture</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>None</source>
-        <translation>Aucun</translation>
+        <translation type="obsolete">Aucun</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear filter</source>
-        <translation>Filtrage linéaire</translation>
+        <translation type="obsolete">Filtrage linéaire</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Decal</source>
-        <translation>Décalage</translation>
+        <translation type="obsolete">Décalage</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Blend</source>
-        <translation>Mélange</translation>
+        <translation type="obsolete">Mélange</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Add</source>
-        <translation>Addition</translation>
+        <translation type="obsolete">Addition</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Combine</source>
-        <translation>Combinaison</translation>
+        <translation type="obsolete">Combinaison</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Texture generation</source>
-        <translation>Génération de texture</translation>
+        <translation type="obsolete">Génération de texture</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear - object</source>
-        <translation>Linéaire - objet</translation>
+        <translation type="obsolete">Linéaire - objet</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear - eye</source>
-        <translation>Linéaire - oeil</translation>
+        <translation type="obsolete">Linéaire - oeil</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Sphere reflection</source>
-        <translation>Réflexion sphérique</translation>
+        <translation type="obsolete">Réflexion sphérique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Reflection</source>
-        <translation>Réflexion</translation>
+        <translation type="obsolete">Réflexion</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation type="obsolete">Normal</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Mixing rate</source>
-        <translation>Taux de mélange</translation>
+        <translation type="obsolete">Taux de mélange</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear on non-nul</source>
         <translation type="obsolete">Linéaire sur valeurs non-nulles</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Texture interpolation</source>
-        <translation>Interpolation de texture</translation>
+        <translation type="obsolete">Interpolation de texture</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>RGB space interpolation (label textures)</source>
-        <translation>Interpolation dans l&apos;espace RGB (textures de labels)</translation>
+        <translation type="obsolete">Interpolation dans l&apos;espace RGB (textures de labels)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Parameters...</source>
-        <translation>Paramètres...</translation>
+        <translation type="obsolete">Paramètres...</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear / A if A is white</source>
-        <translation>Linéaire / A si A est blanc</translation>
+        <translation type="obsolete">Linéaire / A si A est blanc</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear / A if B is white</source>
-        <translation>Linéaire / A si B est blanc</translation>
+        <translation type="obsolete">Linéaire / A si B est blanc</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear / A if A is black</source>
-        <translation>Linéaire / A si A est noir</translation>
+        <translation type="obsolete">Linéaire / A si A est noir</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear / A if B is black</source>
-        <translation>Linéaire / A si B est noir</translation>
+        <translation type="obsolete">Linéaire / A si B est noir</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear / B if A is white</source>
-        <translation>Linéaire / B si A est blanc</translation>
+        <translation type="obsolete">Linéaire / B si A est blanc</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear / B if B is white</source>
-        <translation>Linéaire / B si B est blanc</translation>
+        <translation type="obsolete">Linéaire / B si B est blanc</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear / B if A is black</source>
-        <translation>Linéaire / B si A est noir</translation>
+        <translation type="obsolete">Linéaire / B si A est noir</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear / B if B is black</source>
-        <translation>Linéaire / B si B est noir</translation>
+        <translation type="obsolete">Linéaire / B si B est noir</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear / A if A is opaque</source>
-        <translation>Linéaire / A si A est opaque</translation>
+        <translation type="obsolete">Linéaire / A si A est opaque</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear / A if B is not opaque</source>
-        <translation>Linéaire / A si B n&apos;est pas opaque</translation>
+        <translation type="obsolete">Linéaire / A si B n&apos;est pas opaque</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear / B if B is opaque</source>
-        <translation>Linéaire / B si B est opaque</translation>
+        <translation type="obsolete">Linéaire / B si B est opaque</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Linear / B if A is not opaque</source>
-        <translation>Linéaire / B si A n&apos;est pas opaque</translation>
+        <translation type="obsolete">Linéaire / B si A n&apos;est pas opaque</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Max channel</source>
-        <translation>Max canal</translation>
+        <translation type="obsolete">Max canal</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Min channel</source>
-        <translation>Min canal</translation>
+        <translation type="obsolete">Min canal</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Max opacity</source>
-        <translation>Max opacité</translation>
+        <translation type="obsolete">Max opacité</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Min opacity</source>
-        <translation>Min opacité</translation>
+        <translation type="obsolete">Min opacité</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Geometric (square root)</source>
-        <translation>Géométrique &apos;racine carrée)</translation>
+        <translation type="obsolete">Géométrique &apos;racine carrée)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Geometric lighten</source>
-        <translation>Géométrique éclaircissant</translation>
+        <translation type="obsolete">Géométrique éclaircissant</translation>
     </message>
 </context>
 <context>
     <name>QTextureParams</name>
     <message>
+        <location line="+0"/>
         <source>Texture generation parameters</source>
-        <translation>Paramètres de génération de texture</translation>
+        <translation type="obsolete">Paramètres de génération de texture</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>1st comp.</source>
-        <translation>1ère comp.</translation>
+        <translation type="obsolete">1ère comp.</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>2nd comp.</source>
-        <translation>2nde comp.</translation>
+        <translation type="obsolete">2nde comp.</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>3rd comp.</source>
-        <translation>3ème comp.</translation>
+        <translation type="obsolete">3ème comp.</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
 </context>
 <context>
     <name>QTextureVectorEditor</name>
     <message>
+        <location line="+0"/>
         <source>Direction:</source>
-        <translation>Direction:</translation>
+        <translation type="obsolete">Direction:</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Scale:</source>
-        <translation>Éhelle:</translation>
+        <translation type="obsolete">Éhelle:</translation>
     </message>
 </context>
 <context>
     <name>QTextureWin</name>
     <message>
+        <location line="+0"/>
         <source>Texturing properties</source>
-        <translation>Propriétés de texturage</translation>
+        <translation type="obsolete">Propriétés de texturage</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Texture number</source>
-        <translation>Numéro de texture</translation>
+        <translation type="obsolete">Numéro de texture</translation>
     </message>
 </context>
 <context>
     <name>QWindowTree</name>
     <message>
+        <location line="+0"/>
         <source>Ref</source>
-        <translation>Ref</translation>
+        <translation type="obsolete">Ref</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="obsolete">Type</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Nb. obj.</source>
-        <translation>Nb. obj.</translation>
+        <translation type="obsolete">Nb. obj.</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Windows</source>
-        <translation>Fenêtres</translation>
-    </message>
-    <message>
-        <source>cnt</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Fenêtres</translation>
     </message>
 </context>
 <context>
     <name>ReferentialWindow</name>
     <message>
+        <location line="+0"/>
         <source>Transformation</source>
-        <translation>Transformation</translation>
+        <translation type="obsolete">Transformation</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Delete transformation</source>
-        <translation>Effacer la transformation</translation>
+        <translation type="obsolete">Effacer la transformation</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Reload transformation</source>
-        <translation>Recharger la transformation</translation>
+        <translation type="obsolete">Recharger la transformation</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Open transformation</source>
-        <translation>Charger une transformation</translation>
+        <translation type="obsolete">Charger une transformation</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Delete referential</source>
-        <translation>Détruire le référentiel</translation>
+        <translation type="obsolete">Détruire le référentiel</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Invert transformation</source>
-        <translation>Inverser la transformation</translation>
+        <translation type="obsolete">Inverser la transformation</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Referentials</source>
-        <translation>Référentiels</translation>
+        <translation type="obsolete">Référentiels</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Save transformation...</source>
-        <translation>Sauver la transformation...</translation>
+        <translation type="obsolete">Sauver la transformation...</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Save transformation</source>
-        <translation>Sauver la transformation</translation>
+        <translation type="obsolete">Sauver la transformation</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Load referential information</source>
-        <translation>Charger les informations sur le référentiel</translation>
+        <translation type="obsolete">Charger les informations sur le référentiel</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>New referential</source>
-        <translation>Nouveau référentiel</translation>
+        <translation type="obsolete">Nouveau référentiel</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Load referential</source>
-        <translation>Charger un référentiel</translation>
+        <translation type="obsolete">Charger un référentiel</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Load transformation</source>
-        <translation>Charger une transformation</translation>
+        <translation type="obsolete">Charger une transformation</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Referential</source>
-        <translation>Référentiel</translation>
+        <translation type="obsolete">Référentiel</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Clear unused referentials</source>
-        <translation>Effacer les référentiels inutilisés</translation>
+        <translation type="obsolete">Effacer les référentiels inutilisés</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Split referential to disconnect transformations</source>
-        <translation>Dupliquer le référentiel pour déconnecter les transformations</translation>
+        <translation type="obsolete">Dupliquer le référentiel pour déconnecter les transformations</translation>
     </message>
 </context>
 <context>
     <name>RegionsFusionWindow</name>
     <message>
+        <location line="+0"/>
         <source>Regions Fusion</source>
-        <translation>Fusion de régions</translation>
+        <translation type="obsolete">Fusion de régions</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Ok</source>
-        <translation>OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
 </context>
 <context>
     <name>RenderingWindow</name>
     <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location line="+0"/>
         <source>Rendering</source>
-        <translation>Rendu</translation>
+        <translation type="obsolete">Rendu</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Rendering mode :</source>
-        <translation>Mode d&apos;affichage :</translation>
+        <translation type="obsolete">Mode d&apos;affichage :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Default (view setting)</source>
-        <translation>Défaut (réglages de la vue)</translation>
+        <translation type="obsolete">Défaut (réglages de la vue)</translation>
     </message>
     <message>
-        <source>rendering_buttonGroup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location line="+0"/>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation type="obsolete">Normal</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Wireframe</source>
-        <translation>Fil de fer</translation>
+        <translation type="obsolete">Fil de fer</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Outlined (filled faces + wireframes)</source>
-        <translation>Entourés (faces pleines + fils de fer)</translation>
+        <translation type="obsolete">Entourés (faces pleines + fils de fer)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Wireframe with hidden faces</source>
-        <translation>Fil de fer avec faces cachées</translation>
+        <translation type="obsolete">Fil de fer avec faces cachées</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display properties</source>
-        <translation>Propriétés d&apos;affichage</translation>
+        <translation type="obsolete">Propriétés d&apos;affichage</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Enable lighting</source>
-        <translation>Activer l&apos;éclairage</translation>
+        <translation type="obsolete">Activer l&apos;éclairage</translation>
     </message>
     <message>
-        <source>display_buttonGroup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location line="+0"/>
         <source>Smooth shading</source>
-        <translation>Couleurs lissées</translation>
+        <translation type="obsolete">Couleurs lissées</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Smooth polygons / lines</source>
-        <translation>Polygônes / lignes filtrés</translation>
+        <translation type="obsolete">Polygônes / lignes filtrés</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Write in depth buffer</source>
-        <translation>Écrire dans le buffer de profondeur</translation>
+        <translation type="obsolete">Écrire dans le buffer de profondeur</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cull polygon faces</source>
-        <translation>Eliminer les faces vues de dos</translation>
+        <translation type="obsolete">Eliminer les faces vues de dos</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Advanced (shaders)</source>
-        <translation>Avancés (shaders)</translation>
+        <translation type="obsolete">Avancés (shaders)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>enable shaders</source>
-        <translation>activer les shaders</translation>
+        <translation type="obsolete">activer les shaders</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Lighting model :</source>
-        <translation>Modèle de lumière :</translation>
+        <translation type="obsolete">Modèle de lumière :</translation>
     </message>
     <message>
-        <source>lighting_model_buttonGroup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location line="+0"/>
         <source>None</source>
-        <translation>Aucun</translation>
+        <translation type="obsolete">Aucun</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Phong (faster)</source>
-        <translation>Phong (rapide)</translation>
+        <translation type="obsolete">Phong (rapide)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Blinn-Phong (better)</source>
-        <translation>Blinn-Phong (meilleur)</translation>
+        <translation type="obsolete">Blinn-Phong (meilleur)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Interpolation Model :</source>
-        <translation>Modèle d&apos;interpolation :</translation>
+        <translation type="obsolete">Modèle d&apos;interpolation :</translation>
     </message>
     <message>
-        <source>interpolation_model_buttonGroup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location line="+0"/>
         <source>None (flat rendering)</source>
-        <translation>Aucun (polygones plats)</translation>
+        <translation type="obsolete">Aucun (polygones plats)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Gouraud (faster)</source>
-        <translation>Gouraud (rapide)</translation>
+        <translation type="obsolete">Gouraud (rapide)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Phong (better)</source>
-        <translation>Phong (meilleur)</translation>
+        <translation type="obsolete">Phong (meilleur)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Coloring Model :</source>
-        <translation>Modèle de couleurs :</translation>
+        <translation type="obsolete">Modèle de couleurs :</translation>
     </message>
     <message>
-        <source>coloring_model_buttonGroup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location line="+0"/>
         <source>Material</source>
-        <translation>Matériau</translation>
+        <translation type="obsolete">Matériau</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Normals</source>
-        <translation>Normales</translation>
+        <translation type="obsolete">Normales</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Directions</source>
-        <translation>Directions</translation>
+        <translation type="obsolete">Directions</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Reload</source>
-        <translation>Recharger</translation>
+        <translation type="obsolete">Recharger</translation>
     </message>
 </context>
 <context>
     <name>RoiDynSegmentActionView</name>
     <message>
+        <location line="+0"/>
         <source>Faith Interval</source>
-        <translation>Intervalle de confiance</translation>
+        <translation type="obsolete">Intervalle de confiance</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Order Interval</source>
-        <translation>Nombre de Valeurs Propres</translation>
+        <translation type="obsolete">Nombre de Valeurs Propres</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Confidence Measurements</source>
-        <translation>Mesures du taux de confiance</translation>
+        <translation type="obsolete">Mesures du taux de confiance</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Mean Error : </source>
-        <translation>Erreur moyenne : </translation>
+        <translation type="obsolete">Erreur moyenne : </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Error Deviation : </source>
-        <translation>Écart-type : </translation>
+        <translation type="obsolete">Écart-type : </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Dimension</source>
-        <translation>Dimension</translation>
+        <translation type="obsolete">Dimension</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>2D</source>
-        <translation>2D</translation>
+        <translation type="obsolete">2D</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>3D</source>
-        <translation>3D</translation>
+        <translation type="obsolete">3D</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Find Nearest Minimum</source>
-        <translation>Chercher le minimum le plus proche</translation>
+        <translation type="obsolete">Chercher le minimum le plus proche</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Yes</source>
-        <translation>Oui</translation>
+        <translation type="obsolete">Oui</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>No</source>
-        <translation>Non</translation>
+        <translation type="obsolete">Non</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Compute Mode</source>
-        <translation>Mode de calcul</translation>
+        <translation type="obsolete">Mode de calcul</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Region</source>
-        <translation>Région</translation>
+        <translation type="obsolete">Région</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Whole Image</source>
-        <translation>Toute l&apos;image</translation>
+        <translation type="obsolete">Toute l&apos;image</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Refine Mode</source>
-        <translation>Mode d&apos;affinage</translation>
+        <translation type="obsolete">Mode d&apos;affinage</translation>
     </message>
 </context>
 <context>
     <name>RoiHistoPlot</name>
     <message>
+        <location line="+0"/>
         <source>Image</source>
-        <translation>Image</translation>
+        <translation type="obsolete">Image</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>ROI Session</source>
-        <translation>Session de ROI</translation>
+        <translation type="obsolete">Session de ROI</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Bins</source>
-        <translation>Echantillons</translation>
+        <translation type="obsolete">Echantillons</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Ignore Under Low</source>
-        <translation>Ignorer sous seuil bas</translation>
+        <translation type="obsolete">Ignorer sous seuil bas</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Roi Histos</source>
-        <translation>Histo ROI</translation>
+        <translation type="obsolete">Histo ROI</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Image Histo</source>
-        <translation>Histo image</translation>
+        <translation type="obsolete">Histo image</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Save Histos</source>
-        <translation>Sauver histos</translation>
+        <translation type="obsolete">Sauver histos</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Graph Histos</source>
-        <translation>Histo graphe</translation>
+        <translation type="obsolete">Histo graphe</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>High</source>
-        <translation>Haut</translation>
+        <translation type="obsolete">Haut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Low</source>
-        <translation>Bas</translation>
+        <translation type="obsolete">Bas</translation>
     </message>
 </context>
 <context>
     <name>RoiLevelSetActionView</name>
     <message>
+        <location line="+0"/>
         <source>Levelset Activation</source>
         <translation type="obsolete">Activation du Levelset</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Activate Levelset</source>
         <translation type="obsolete">Activer</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Deactivate Levelset</source>
         <translation type="obsolete">Désactiver</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Low Level</source>
-        <translation>Niveau bas</translation>
+        <translation type="obsolete">Niveau bas</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>High Level</source>
-        <translation>Niveau haut</translation>
+        <translation type="obsolete">Niveau haut</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Dimension</source>
-        <translation>Dimension</translation>
+        <translation type="obsolete">Dimension</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>2D</source>
-        <translation>2D</translation>
+        <translation type="obsolete">2D</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>3D</source>
-        <translation>3D</translation>
+        <translation type="obsolete">3D</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>MixMethod</source>
-        <translation>Méthode de mélange</translation>
+        <translation type="obsolete">Méthode de mélange</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Mixing Factor</source>
-        <translation>Facteur de mélange</translation>
+        <translation type="obsolete">Facteur de mélange</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Blob segmentation</source>
-        <translation>Segmentation de blobs</translation>
+        <translation type="obsolete">Segmentation de blobs</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Region max size</source>
-        <translation>Taille max de région</translation>
+        <translation type="obsolete">Taille max de région</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Percentage of extremum</source>
-        <translation>Pourcentage de l&apos;extrêmum</translation>
+        <translation type="obsolete">Pourcentage de l&apos;extrêmum</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Region Max Size</source>
         <translation type="obsolete">Taille max de la région</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Threshold Preview Activation</source>
-        <translation>Activation de la prévisualisation du seuillage</translation>
+        <translation type="obsolete">Activation de la prévisualisation du seuillage</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Activate Threshold Preview</source>
-        <translation>Activation de la prévisualisation du seuillage</translation>
+        <translation type="obsolete">Activation de la prévisualisation du seuillage</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Deactivate Threshold Preview</source>
-        <translation>Désactivation de la prévisualisation du seuillage</translation>
+        <translation type="obsolete">Désactivation de la prévisualisation du seuillage</translation>
     </message>
 </context>
 <context>
     <name>RoiManagementActionView</name>
     <message>
+        <location line="+0"/>
         <source>Save</source>
-        <translation>Sauver</translation>
+        <translation type="obsolete">Sauver</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Load Hierarchy</source>
-        <translation>Charger</translation>
+        <translation type="obsolete">Charger</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>New</source>
-        <translation>Nouvelle</translation>
+        <translation type="obsolete">Nouvelle</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Open</source>
-        <translation>Ouvrir</translation>
+        <translation type="obsolete">Ouvrir</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="obsolete">Fermer</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Save As</source>
-        <translation>Sauver sous</translation>
+        <translation type="obsolete">Sauver sous</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Delete</source>
-        <translation>Détruire</translation>
+        <translation type="obsolete">Détruire</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Fusion</source>
-        <translation>Fusionner</translation>
+        <translation type="obsolete">Fusionner</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Export as mask</source>
-        <translation>Exporter en tant que masque</translation>
+        <translation type="obsolete">Exporter en tant que masque</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Neuro</source>
-        <translation>Neuro</translation>
+        <translation type="obsolete">Neuro</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Sulci</source>
-        <translation>Sillons</translation>
+        <translation type="obsolete">Sillons</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Rat_wb</source>
-        <translation>Rat_wb</translation>
+        <translation type="obsolete">Rat_wb</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Axial</source>
-        <translation>Axiale</translation>
+        <translation type="obsolete">Axiale</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Sagittal</source>
-        <translation>Sagittale</translation>
+        <translation type="obsolete">Sagittale</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Coronal</source>
-        <translation>Coronale</translation>
+        <translation type="obsolete">Coronale</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>3D</source>
-        <translation>3D</translation>
+        <translation type="obsolete">3D</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Session</source>
-        <translation>Session</translation>
+        <translation type="obsolete">Session</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Region</source>
-        <translation>Région</translation>
+        <translation type="obsolete">Région</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Image</source>
-        <translation>Image</translation>
+        <translation type="obsolete">Image</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Painting Views</source>
-        <translation>Vues de dessin</translation>
+        <translation type="obsolete">Vues de dessin</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Load ROI Graph</source>
-        <translation>Charger un graphe de ROI</translation>
+        <translation type="obsolete">Charger un graphe de ROI</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Load Anatomist objects</source>
-        <translation>Charger des objets Anatomist</translation>
+        <translation type="obsolete">Charger des objets Anatomist</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>FrameWork</source>
-        <translation>Nomenclature</translation>
+        <translation type="obsolete">Nomenclature</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Windows</source>
-        <translation>Fenêtres</translation>
+        <translation type="obsolete">Fenêtres</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Clean</source>
-        <translation>Nettoyer</translation>
+        <translation type="obsolete">Nettoyer</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Lateral Neuro</source>
-        <translation>Neuro Latéralisée</translation>
+        <translation type="obsolete">Neuro Latéralisée</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Region Transparency</source>
-        <translation>Opacité de la région</translation>
+        <translation type="obsolete">Opacité de la région</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Graph Transparency</source>
-        <translation>Opacité du graphe</translation>
+        <translation type="obsolete">Opacité du graphe</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Load</source>
-        <translation>Charger</translation>
+        <translation type="obsolete">Charger</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Define new region</source>
-        <translation>Définir une nouvelle région</translation>
+        <translation type="obsolete">Définir une nouvelle région</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Modify region name</source>
-        <translation>Modifier un nom de région</translation>
+        <translation type="obsolete">Modifier un nom de région</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Modify region color</source>
-        <translation>Modifier une couleur de région</translation>
+        <translation type="obsolete">Modifier une couleur de région</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Personnal</source>
-        <translation>Personnelle</translation>
+        <translation type="obsolete">Personnelle</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Free</source>
-        <translation>Libre</translation>
+        <translation type="obsolete">Libre</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Please enter new framework&apos;s name</source>
-        <translation>Veuillez entrer le nom de votre nouvelle nomenclature</translation>
+        <translation type="obsolete">Veuillez entrer le nom de votre nouvelle nomenclature</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Load User Defined Framework</source>
-        <translation>Charger une nomenclature personnelle</translation>
+        <translation type="obsolete">Charger une nomenclature personnelle</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Modify Frame Work Region Name</source>
-        <translation>Modification d&apos;un nom de région de la nomenclature</translation>
+        <translation type="obsolete">Modification d&apos;un nom de région de la nomenclature</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Choose the name of the region
 whose color you want to change</source>
-        <translation>Choisissez le nom de la région
+        <translation type="obsolete">Choisissez le nom de la région
 dont vous voulez changer la couleur
 </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Change Framework ?</source>
-        <translation>Changer de nomenclature ?</translation>
+        <translation type="obsolete">Changer de nomenclature ?</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>If you change of framework, your 
 user defined one will be deleted.
 Do you want to save it ?</source>
-        <translation>Si vous changez de nomenclature, votre nomenclature 
+        <translation type="obsolete">Si vous changez de nomenclature, votre nomenclature 
 personnelle actuellement ouvert sera détruite !
 Voulez-vous la sauver ?</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&amp;Yes</source>
-        <translation>&amp;Oui</translation>
+        <translation type="obsolete">&amp;Oui</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&amp;No</source>
-        <translation>&amp;Non</translation>
+        <translation type="obsolete">&amp;Non</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Morpho Stats</source>
-        <translation>Stats morpho</translation>
+        <translation type="obsolete">Stats morpho</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Load ROI session</source>
-        <translation>Charger une session de ROI</translation>
+        <translation type="obsolete">Charger une session de ROI</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Delete region name</source>
-        <translation>Effacer le nom de région</translation>
+        <translation type="obsolete">Effacer le nom de région</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Huge amount of data !</source>
-        <translation>Données énormes !</translation>
+        <translation type="obsolete">Données énormes !</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>You can procced, but it will 
 take few minutes
 Do you still want to proceed ?</source>
-        <translation>Vous pouvez continuer, mais cela peut
+        <translation type="obsolete">Vous pouvez continuer, mais cela peut
 prendre quelques minutes
 Voulez-vous continuer ?</translation>
     </message>
@@ -4161,125 +4880,155 @@ Voulez-vous continuer ?</translation>
 <context>
     <name>RoiMorphoMathActionView</name>
     <message>
+        <location line="+0"/>
         <source>Structuring Element Radius</source>
-        <translation>Rayon de l&apos;élément structurant</translation>
+        <translation type="obsolete">Rayon de l&apos;élément structurant</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Distance Mode</source>
-        <translation>Mode de distance</translation>
+        <translation type="obsolete">Mode de distance</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>mm</source>
-        <translation>mm</translation>
+        <translation type="obsolete">mm</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>voxel</source>
-        <translation>voxel</translation>
+        <translation type="obsolete">voxel</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Mathematic Morphology Actions</source>
-        <translation>Actions de morphologie mathématique</translation>
+        <translation type="obsolete">Actions de morphologie mathématique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Erosion</source>
-        <translation>Érosion</translation>
+        <translation type="obsolete">Érosion</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Dilation</source>
-        <translation>Dilatation</translation>
+        <translation type="obsolete">Dilatation</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Opening</source>
-        <translation>Ouverture</translation>
+        <translation type="obsolete">Ouverture</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Closure</source>
-        <translation>Fermeture</translation>
+        <translation type="obsolete">Fermeture</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Apply on ROI region or session</source>
-        <translation>Appliquer à une région ROI ou à une session</translation>
+        <translation type="obsolete">Appliquer à une région ROI ou à une session</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Region</source>
-        <translation>Région</translation>
+        <translation type="obsolete">Région</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Session</source>
-        <translation>Session</translation>
+        <translation type="obsolete">Session</translation>
     </message>
 </context>
 <context>
     <name>SelectionParameters</name>
     <message>
+        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/branches/4.4/shared/python_plugins/selection-qt4.ui" line="+14"/>
         <source>Form1</source>
         <translation>Form1</translation>
     </message>
     <message>
+        <location line="+20"/>
         <source>Edges display mode:</source>
         <translation>Mode de visu des relations :</translation>
     </message>
     <message>
+        <location line="+25"/>
         <source>Opacity:</source>
         <translation>Opacité :</translation>
     </message>
     <message>
+        <location line="+14"/>
         <source>Nodes</source>
         <translation>Noeuds</translation>
     </message>
     <message>
+        <location line="+66"/>
         <source>100</source>
         <translation>100</translation>
     </message>
     <message>
+        <location line="-23"/>
         <source>Edges</source>
         <translation>Relations</translation>
     </message>
     <message>
+        <location line="+6356861"/>
         <source>Opacity: </source>
         <translation type="obsolete">Opacité :</translation>
     </message>
     <message>
+        <location line="-6356957"/>
         <source>Edge selection:</source>
         <translation>Sélection des relationos :</translation>
     </message>
     <message>
+        <location line="+134"/>
         <source>Box highlight:</source>
         <translation>Affichage des boîtes :</translation>
     </message>
     <message>
+        <location line="+12"/>
         <source>Use box highlighting for selection</source>
         <translation>Afficher des boîtes pour la sélection</translation>
     </message>
     <message>
+        <location line="+13"/>
         <source>Use one box per selected object</source>
         <translation>Utiliser une boîte par objet sélectionné</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>Box color: </source>
         <translation>Couleur des boîtes :</translation>
     </message>
     <message>
+        <location line="+6356717"/>
         <source>Grey</source>
         <translation type="obsolete">Gris</translation>
     </message>
     <message>
+        <location line="-6356704"/>
         <source>As selection</source>
         <translation>Comme la sélection</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Custom</source>
         <translation>Personnalisé</translation>
     </message>
     <message>
+        <location line="+12"/>
         <source>Custom box color: </source>
         <translation>Couleur personnalisée pour les boîtes :</translation>
     </message>
     <message>
+        <location line="+13"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
+        <location line="-35"/>
         <source>Gray</source>
         <translation>Gris</translation>
     </message>
@@ -4287,96 +5036,118 @@ Voulez-vous continuer ?</translation>
 <context>
     <name>SurfpaintTools</name>
     <message>
+        <location line="+6356701"/>
         <source>ConstraintEditor</source>
         <translation type="obsolete">Editeur de contraintes</translation>
     </message>
     <message>
+        <location line="-6356897"/>
         <source>TextureValue</source>
         <translation type="obsolete">Texture :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>IDPolygon</source>
         <translation type="obsolete">Triangle :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>IDVertex</source>
         <translation type="obsolete">Sommet :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>tolerance</source>
-        <translation>Tolérance :</translation>
+        <translation type="obsolete">Tolérance :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>constraint</source>
         <translation type="obsolete">Tension :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>surfpainttoolbarTex</source>
         <translation type="obsolete">Infos texture (surfpaint)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>surfpainttoolbar3D</source>
         <translation type="obsolete">Infos 3D (surfpaint)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>surfpainttoolbarControls</source>
         <translation type="obsolete">Actions (surfpaint)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Texture value selection</source>
-        <translation>Sélection de la valeur de texture</translation>
+        <translation type="obsolete">Sélection de la valeur de texture</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Unconstrained</source>
-        <translation>Non-contraint</translation>
+        <translation type="obsolete">Non-contraint</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>sulci</source>
-        <translation>sillons</translation>
+        <translation type="obsolete">sillons</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>gyri</source>
-        <translation>gyri</translation>
+        <translation type="obsolete">gyri</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>distance map</source>
-        <translation>carte de distance</translation>
+        <translation type="obsolete">carte de distance</translation>
     </message>
 </context>
 <context>
     <name>ToolBox</name>
     <message>
+        <location line="+0"/>
         <source>Tool Box</source>
-        <translation>Boîte à outils</translation>
+        <translation type="obsolete">Boîte à outils</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Show control description</source>
-        <translation>Montrer la description du contrôle</translation>
+        <translation type="obsolete">Montrer la description du contrôle</translation>
     </message>
 </context>
 <context>
     <name>Tools3DWindow</name>
     <message>
+        <location line="+0"/>
         <source>Fog</source>
-        <translation>Brouillard</translation>
+        <translation type="obsolete">Brouillard</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Flat-shaded polygons</source>
-        <translation>Polygônes plats</translation>
+        <translation type="obsolete">Polygônes plats</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use perspective</source>
-        <translation>Vue en perspective</translation>
+        <translation type="obsolete">Vue en perspective</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Clipping plane :</source>
-        <translation>Plan de clipping :</translation>
+        <translation type="obsolete">Plan de clipping :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Single plane</source>
-        <translation>Plan simple</translation>
+        <translation type="obsolete">Plan simple</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Only polygon edges are drawn. Hidden faces are also
 drawn, except for polygons facing back if culling
 is enabled</source>
@@ -4386,10 +5157,12 @@ polygônes vus de dos si l&apos;élimination des polygônes
 de dos est activée</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>No clipping</source>
-        <translation>Pas de clipping</translation>
+        <translation type="obsolete">Pas de clipping</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Normal projection mode is orthogonal. In perspective
 mode, you can get a distance effect between the
 observer and objects. It is useful for the
@@ -4400,6 +5173,7 @@ entre l&apos;observateur et les objets. C&apos;est utile pour
 le contrôle &apos;simulateur de vol&apos;.</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Normal rendering uses smoothed colors polygons, so you
 don&apos;t see polygon boundaries. It&apos;s nicer but if you
 are looking at exact details of where polygons are,
@@ -4413,6 +5187,7 @@ soit un mode de rendu montrant les arêtes des polygônes
 (fil de fer, faces entourées, ...)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>This enables smooth filtering (anti-aliasing) of lines
 and polygons edges, but doesn&apos;t work well in all
 cases (polygons should be sorted by depth), and it can
@@ -4423,18 +5198,22 @@ pas bien dans tous les cas (les polygônes devraient
 être triés par profondeur), et cela peut être très lent</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cull polygon faces</source>
-        <translation>Eliminer les faces vues de dos</translation>
+        <translation type="obsolete">Eliminer les faces vues de dos</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Smooth polygons / lines</source>
-        <translation>Polygônes / lignes filtrés</translation>
+        <translation type="obsolete">Polygônes / lignes filtrés</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Transparent objects are drawn in depth buffer</source>
-        <translation>La profondeur des objets transparents s&apos;imprime</translation>
+        <translation type="obsolete">La profondeur des objets transparents s&apos;imprime</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>You can clip the whole scene to cut meshes on one or
 both sides of the current plane of the 2D window mode</source>
         <translation type="obsolete">Il est possible de tronquer la scène entière pour
@@ -4442,14 +5221,17 @@ couper les maillages d&apos;un côté ou des deux côtés du
 plan de coupe courant de la fenêtre en mode 2D</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use fog (useful only in perspective mode</source>
-        <translation>Ajouter du brouillard (utile seulement en mode perspecive)</translation>
+        <translation type="obsolete">Ajouter du brouillard (utile seulement en mode perspecive)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation type="obsolete">Normal</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Polygons are filled and polygon edges are re-drawn
 using a different color (black). This mode is quite
 slow as two renderings are performed</source>
@@ -4459,6 +5241,7 @@ Ce mode est assez lent puisque deux rendus
 doivent être effectués</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Only polygon edges are drawn, and hidden faces are
 actually hidden. To do so two renderings must be
 performed like in outline mode (slow)</source>
@@ -4468,12 +5251,14 @@ Pour se faire, deux rendus doivent être effectués
 comme dans le mode contour (lent, donc)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Normal rendering mode - you should almost always
 use this one. It uses filled polygons</source>
         <translation type="obsolete">Mode de rendu normal - vous devriez presque toujours
 utiliser celui-ci. Il utilise des polygônes pleins</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Culling avoids drawing polygons facing back.
 Without this options, transparent objects will look
 bad, but only the external side of open (or clipped)
@@ -4486,34 +5271,42 @@ ouverts (ou tronqués) sera visible, donc ça dépend de
 ce que vous regardez</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Wireframe</source>
-        <translation>Fil de fer</translation>
+        <translation type="obsolete">Fil de fer</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display bounding frame</source>
-        <translation>Afficher la boîte englobante</translation>
+        <translation type="obsolete">Afficher la boîte englobante</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Wireframe with hidden faces</source>
-        <translation>Fil de fer avec faces cachées</translation>
+        <translation type="obsolete">Fil de fer avec faces cachées</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>3D settings : </source>
-        <translation>Réglages 3D : </translation>
+        <translation type="obsolete">Réglages 3D : </translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Clip both sides</source>
-        <translation>Couper des deux côtés</translation>
+        <translation type="obsolete">Couper des deux côtés</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Fast rendering</source>
-        <translation>Affichage rapide</translation>
+        <translation type="obsolete">Affichage rapide</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Helper gadgets :</source>
-        <translation>Gadgets d&apos;aide :</translation>
+        <translation type="obsolete">Gadgets d&apos;aide :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Enable this if you want to click on opaque objects
 through transparent ones, or if some superimposed
 transparent objects can&apos;t be seen. As a counterpart
@@ -4525,6 +5318,7 @@ s&apos;affichent pas. En contrepartie, la superposition des
 objets ne sera pas correcte</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>This is the thickness of the slice between the current
 2D window plane and the clipping plane(s). If you are
 using a volume (slice), don&apos;t set the distance to zero
@@ -4538,18 +5332,22 @@ plan de troncature, et on ne peut alors pas savoir ce qui
 sera dessiné et ce qui ne le sera pas</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Outlined (filled faces + wireframes)</source>
-        <translation>Entourés (faces pleines + fils de fer)</translation>
+        <translation type="obsolete">Entourés (faces pleines + fils de fer)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Rendering mode :</source>
-        <translation>Mode d&apos;affichage :</translation>
+        <translation type="obsolete">Mode d&apos;affichage :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display orientation cube</source>
-        <translation>Afficher le cube d&apos;orientation</translation>
+        <translation type="obsolete">Afficher le cube d&apos;orientation</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Well, this mode doesn&apos;t exist in fact...
 Maybe one day it will perform real-time polygon
 pruning to speed-up huge mesh rendering,
@@ -4560,187 +5358,230 @@ en temps réel des polygônes pour accélérer le
 rendu des très gros maillages, mais pour l&apos;instant...</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Distance to current plane (mm) :</source>
         <translation type="obsolete">Distance au plan courant (mm) :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Transparency improvement:</source>
-        <translation>Amélioration de la transparence:</translation>
+        <translation type="obsolete">Amélioration de la transparence:</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Use slower-but-better transparency rendering algorithm</source>
-        <translation>Algorithme lent pour un meilleur rendu de la transparence</translation>
+        <translation type="obsolete">Algorithme lent pour un meilleur rendu de la transparence</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Number of rendering passes (0=as necessary)</source>
-        <translation>Nombre de passes de rendu (0=autant que nécessaire)</translation>
+        <translation type="obsolete">Nombre de passes de rendu (0=autant que nécessaire)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Window saving modes:</source>
-        <translation>Modes de sauvegarde des images:</translation>
+        <translation type="obsolete">Modes de sauvegarde des images:</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>RGB buffer</source>
-        <translation>Couleurs RVB</translation>
+        <translation type="obsolete">Couleurs RVB</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Alpha buffer</source>
-        <translation>Opacité (alpha)</translation>
+        <translation type="obsolete">Opacité (alpha)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>RGBA buffer</source>
-        <translation>RGBA</translation>
+        <translation type="obsolete">RGBA</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Depth buffer</source>
-        <translation>Carte de profondeur</translation>
+        <translation type="obsolete">Carte de profondeur</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Luminance buffer</source>
-        <translation>Luminance</translation>
+        <translation type="obsolete">Luminance</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Display cursor</source>
-        <translation>Afficher le curseur</translation>
+        <translation type="obsolete">Afficher le curseur</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Show/hide the linked cursor on the individual associated window. You can override the global default (in the settings)</source>
         <translation type="obsolete">Afficher/cacher le curseur lié sur la fenêtre associée. Il est possible de remplacer le défaut global (dans les préférences)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&lt;p align=&quot;justify&quot;&gt;Show/hide the linked cursor on the individual associated window. You can override the global default (in the settings)&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;justify&quot;&gt;Afficher/cacher le curseur lié sur la fenêtre associée. Il est possible de remplacer le défaut global (dans les préférences)&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p align=&quot;justify&quot;&gt;Afficher/cacher le curseur lié sur la fenêtre associée. Il est possible de remplacer le défaut global (dans les préférences)&lt;/p&gt;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&lt;p align=&quot;justify&quot;&gt;Normal rendering mode - you should almost always use this one. It uses filled polygons&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;justify&quot;&gt;Mode de rendu normal - vous devriez presque toujours utiliser celui-ci. Il utilise des polygônes pleins&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p align=&quot;justify&quot;&gt;Mode de rendu normal - vous devriez presque toujours utiliser celui-ci. Il utilise des polygônes pleins&lt;/p&gt;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&lt;p align=&quot;justify&quot;&gt;Only polygon edges are drawn. Hidden faces are also drawn, except for polygons facing back if culling is enabled&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;justify&quot;&gt;Seules les arêtes des polygônes sont dessinées. Les faces cachées sont dessinées également, sauf les polygônes vus de dos si l&apos;élimination des polygônes de dos est activée&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p align=&quot;justify&quot;&gt;Seules les arêtes des polygônes sont dessinées. Les faces cachées sont dessinées également, sauf les polygônes vus de dos si l&apos;élimination des polygônes de dos est activée&lt;/p&gt;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&lt;p align=&quot;justify&quot;&gt;Polygons are filled and polygon edges are re-drawn using a different color (black). This mode is quite slow as two renderings are performed&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;justify&quot;&gt;Les polygônes sont pleins et les arêtes sont re-dessinées avec une couleur différente (noir). Ce mode est assez lent puisque deux rendus doivent être effectués&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p align=&quot;justify&quot;&gt;Les polygônes sont pleins et les arêtes sont re-dessinées avec une couleur différente (noir). Ce mode est assez lent puisque deux rendus doivent être effectués&lt;/p&gt;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&lt;p align=&quot;justify&quot;&gt;Only polygon edges are drawn, and hidden faces are actually hidden. To do so two renderings must be performed like in outline mode (slow)&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;justify&quot;&gt;Seules les arêtes des polygônes sont dessinées et les faces cachées sont effectivement cachées. Pour se faire, deux rendus doivent être effectués
+        <translation type="obsolete">&lt;p align=&quot;justify&quot;&gt;Seules les arêtes des polygônes sont dessinées et les faces cachées sont effectivement cachées. Pour se faire, deux rendus doivent être effectués
 comme dans le mode contour (lent, donc)&lt;/p&gt;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&lt;p align=&quot;justify&quot;&gt;Normal projection mode is orthogonal. In perspective mode, you can get a distance effect between the observer and objects. It is useful for the &apos;flight simulator&apos; control.&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;justify&quot;&gt;Le mode normal de projection est orthogonal. En perspective, vous pouvez avoir un effet de distance entre l&apos;observateur et les objets. C&apos;est utile pour le contrôle &apos;simulateur de vol&apos;.&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p align=&quot;justify&quot;&gt;Le mode normal de projection est orthogonal. En perspective, vous pouvez avoir un effet de distance entre l&apos;observateur et les objets. C&apos;est utile pour le contrôle &apos;simulateur de vol&apos;.&lt;/p&gt;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&lt;p align=&quot;justify&quot;&gt;Enable this if you want to click on opaque objects through transparent ones, or if some superimposed transparent objects can&apos;t be seen. As a counterpart objects superimposition will not be handled correctly&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;justify&quot;&gt;Mettez cette option si vous voulez cliquer sur des objets opaques à travers des objets transparents, ou si certains objets transparents superposés ne s&apos;affichent pas. En contrepartie, la superposition des objets ne sera pas correcte.&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p align=&quot;justify&quot;&gt;Mettez cette option si vous voulez cliquer sur des objets opaques à travers des objets transparents, ou si certains objets transparents superposés ne s&apos;affichent pas. En contrepartie, la superposition des objets ne sera pas correcte.&lt;/p&gt;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&lt;p align=&quot;justify&quot;&gt;Culling avoids drawing polygons facing back. Without this options, transparent objects will look bad, but only the external side of open (or clipped) meshes will be seen, so it depends on what you&apos;re looking at&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;justify&quot;&gt;Ne dessine pas les polygônes vus de dos. Sans cette option, les objets transparents ne seront pas beaux, mais seule la face externe des maillages ouverts (ou tronqués) sera visible, donc ça dépend de ce que vous regardez.&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p align=&quot;justify&quot;&gt;Ne dessine pas les polygônes vus de dos. Sans cette option, les objets transparents ne seront pas beaux, mais seule la face externe des maillages ouverts (ou tronqués) sera visible, donc ça dépend de ce que vous regardez.&lt;/p&gt;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&lt;p align=&quot;justify&quot;&gt;Normal rendering uses smoothed colors polygons, so you don&apos;t see polygon boundaries. It&apos;s nicer but if you are looking at exact details of where polygons are, you&apos;ll have to use either flat-shading, or a rendering mode showing polygon edges (wireframe, outline, ...)&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;justify&quot;&gt;Le rendu normal utilise des polygônes lisses, vous ne voyez donc pas les bords des polygônes. C&apos;est plus joli mais si vous regardez les limites exactes des polygônes, vous devrez utiliser soit des polygônes plats soit un mode de rendu montrant les arêtes des polygônes (fil de fer, faces entourées, ...)&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p align=&quot;justify&quot;&gt;Le rendu normal utilise des polygônes lisses, vous ne voyez donc pas les bords des polygônes. C&apos;est plus joli mais si vous regardez les limites exactes des polygônes, vous devrez utiliser soit des polygônes plats soit un mode de rendu montrant les arêtes des polygônes (fil de fer, faces entourées, ...)&lt;/p&gt;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&lt;p align=&quot;justify&quot;&gt;This enables smooth filtering (anti-aliasing) of lines and polygons edges, but doesn&apos;t work well in all cases (polygons should be sorted by depth), and it can be very slow&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;justify&quot;&gt;Cette option active le filtrage (anti-aliasing) des lignes et arêtes de polygônes, mais ne fonctionne pas bien dans tous les cas (les polygônes devraient être triés par profondeur), et cela peut être très lent&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p align=&quot;justify&quot;&gt;Cette option active le filtrage (anti-aliasing) des lignes et arêtes de polygônes, mais ne fonctionne pas bien dans tous les cas (les polygônes devraient être triés par profondeur), et cela peut être très lent&lt;/p&gt;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&lt;p align=&quot;justify&quot;&gt;You can clip the whole scene to cut meshes on one or both sides of the current plane of the 2D window mode&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;justify&quot;&gt;Il est possible de tronquer la scène entière pour couper les maillages d&apos;un côté ou des deux côtés du plan de coupe courant de la fenêtre en mode 2D&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p align=&quot;justify&quot;&gt;Il est possible de tronquer la scène entière pour couper les maillages d&apos;un côté ou des deux côtés du plan de coupe courant de la fenêtre en mode 2D&lt;/p&gt;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Distance to current plane (mm/100) :</source>
-        <translation>Distance au plan courant (mm/100) :</translation>
+        <translation type="obsolete">Distance au plan courant (mm/100) :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&lt;p align=&quot;justify&quot;&gt;This is the thickness of the slice between the current 2D window plane and the clipping plane(s). If you are using a volume (slice), don&apos;t set the distance to zero because the slice will be just on the clipping plane, and you don&apos;t know what will be drawn and what won&apos;t be&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;justify&quot;&gt;Épaisseur de la tranche entre le plan courant de la fenêtre en mode 2D et le(s) plan(s) de troncature. Si vous visualisez un volume (coupe), me mettez pas cette distance à zéro, car la coupe sera alors juste dans le plan de troncature, et on ne peut alors pas savoir ce qui sera dessiné et ce qui ne le sera pas.&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p align=&quot;justify&quot;&gt;Épaisseur de la tranche entre le plan courant de la fenêtre en mode 2D et le(s) plan(s) de troncature. Si vous visualisez un volume (coupe), me mettez pas cette distance à zéro, car la coupe sera alors juste dans le plan de troncature, et on ne peut alors pas savoir ce qui sera dessiné et ce qui ne le sera pas.&lt;/p&gt;</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>&lt;p align=&quot;justify&quot;&gt;Well, this mode doesn&apos;t exist in fact... Maybe one day it will perform real-time polygon pruning to speed-up huge mesh rendering, but up to now...&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;justify&quot;&gt;Bon, ce mode n&apos;existe pas en fait... Peut-être qu&apos;un jour il effectuera une décimation en temps réel des polygônes pour accélérer le rendu des très gros maillages, mais pour l&apos;instant...&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p align=&quot;justify&quot;&gt;Bon, ce mode n&apos;existe pas en fait... Peut-être qu&apos;un jour il effectuera une décimation en temps réel des polygônes pour accélérer le rendu des très gros maillages, mais pour l&apos;instant...&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
     <name>VolRenderPanel</name>
     <message>
+        <location line="+0"/>
         <source>Volume Rendering Properties</source>
-        <translation>Propriétés de rendu volumique</translation>
+        <translation type="obsolete">Propriétés de rendu volumique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Volume rendering mode</source>
-        <translation>Mode de rendu volumique</translation>
+        <translation type="obsolete">Mode de rendu volumique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>VRShader</source>
         <translation type="obsolete">Rendu Volumique</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>MIPShader</source>
         <translation type="obsolete">MIP (Projection du Maximum d&apos;Intensité)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>SumShader</source>
         <translation type="obsolete">Somme</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>MPVRShader</source>
         <translation type="obsolete">MPVR (coupes épaisses)</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Limit number of slices :</source>
-        <translation>Limiter le nombre de coupes :</translation>
+        <translation type="obsolete">Limiter le nombre de coupes :</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Max.</source>
-        <translation>Max.</translation>
+        <translation type="obsolete">Max.</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>MPVR slab thickness</source>
-        <translation>Épaisseur de la tranche MPVR</translation>
+        <translation type="obsolete">Épaisseur de la tranche MPVR</translation>
     </message>
 </context>
 <context>
     <name>WhatsNew</name>
     <message>
+        <location line="+0"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Anatomist News</source>
-        <translation>News Anatomist</translation>
+        <translation type="obsolete">News Anatomist</translation>
     </message>
 </context>
 <context>
     <name>ZoomDialog</name>
     <message>
+        <location line="+0"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Resize window to fit objects</source>
-        <translation>Redimensionner la fenêtre pour cadrer des objets</translation>
+        <translation type="obsolete">Redimensionner la fenêtre pour cadrer des objets</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Zoom selection</source>
-        <translation>Sélection du zoom</translation>
+        <translation type="obsolete">Sélection du zoom</translation>
     </message>
     <message>
+        <location line="+0"/>
         <source>Zoom :</source>
-        <translation>Zoom :</translation>
+        <translation type="obsolete">Zoom :</translation>
     </message>
 </context>
 <context>
     <name>paintingToolBox</name>
     <message>
+        <location line="+0"/>
         <source>SurfpaintColorPickerControl</source>
         <translation type="obsolete">pipette à texture :
         clic gauche : choisir un vertex
