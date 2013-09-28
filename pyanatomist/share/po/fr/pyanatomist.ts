@@ -1239,7 +1239,18 @@ Bt droit   :  menu
     <message>
         <location filename="../../../../../../neurosvn/anatomist/anatomist-free/branches/4.4/shared/python_plugins/foldsplit.py" line="+442"/>
         <source>SplitFoldControl</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;div align=&quot;center&quot;&gt;&lt;b&gt;Contrôle de découpe de plis:&lt;/b&gt;&lt;/div&gt;
+&lt;p&gt;
+Découpe manuellement ou semi-manuellement des plis corticaux dans un graphe de sillons.
+&lt;tabe&gt;&lt;tr&gt;
+&lt;td&gt;Btn gauche:&lt;/td&gt;&lt;td&gt;prépare une découpe avec un seul point sur un pli (noeud de graphe)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl&amp;&amp;gt;+btn gauche:&lt;/td&gt;&lt;td&gt;pose un point de contrôle pour une découpe le long d&apos;une ligne définie par une série de points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;S&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;montre la découpe possible, ou confirme la découpe si la ligne est déjà visible&lt;/td&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ESC&amp;&amp;gt; :&lt;/td&gt;&lt;td&gt;annule la découpe, efface les points de contrôle et la ligne de découpe proposée&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;ctrl&amp;&amp;gt;+btn droit:&lt;/td&gt;&lt;td&gt;subdivise automatiquement un noeud en plusieurs morceaux de taille &quot;raisonnable&quot;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;&amp;lt;shift&amp;&amp;gt;+btn droit:&lt;/td&gt;&lt;td&gt;subdivise automatioquement le graphe de sillons entier en découpant les trop grands noeuds&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;&lt;tr/&gt;
+Les contrôles classiques de rotation, translation et zoom s&apos;appliquent également.&lt;/p&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../../../../../neurosvn/anatomist/anatomist-free/branches/4.4/shared/python_plugins/selection.py" line="+519"/>
@@ -1275,12 +1286,12 @@ Bt droit   :  menu
 <context>
     <name>ErpWraper</name>
     <message>
-        <location line="+6356574"/>
+        <location line="+6356055"/>
         <source>Cell:</source>
         <translation type="obsolete">Cellule :</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-6356574"/>
         <source>Observation:</source>
         <translation type="obsolete">Observation :</translation>
     </message>
@@ -1542,12 +1553,12 @@ Bt droit   :  menu
 <context>
     <name>Fusion2DWindow</name>
     <message>
-        <location line="+6356902"/>
+        <location line="+6356711"/>
         <source>Fusion 2D control</source>
         <translation type="obsolete">Contrôle de fusion 2D</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-6356902"/>
         <source>Objects :</source>
         <translation type="obsolete">Objets :</translation>
     </message>
@@ -1844,12 +1855,12 @@ Bt droit   :  menu
 <context>
     <name>GraphLandmarkPicker</name>
     <message>
-        <location line="+6356797"/>
+        <location line="+6356501"/>
         <source>Pick landmark</source>
         <translation type="obsolete">Choisir un point de repère</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-6356797"/>
         <source>Landmark type :</source>
         <translation type="obsolete">Type de points de repère :</translation>
     </message>
@@ -4962,12 +4973,12 @@ Voulez-vous continuer ?</translation>
         <translation>Relations</translation>
     </message>
     <message>
-        <location line="+6356977"/>
+        <location line="+6356861"/>
         <source>Opacity: </source>
         <translation type="obsolete">Opacité :</translation>
     </message>
     <message>
-        <location line="-6357073"/>
+        <location line="-6356957"/>
         <source>Edge selection:</source>
         <translation>Sélection des relationos :</translation>
     </message>
@@ -4992,12 +5003,12 @@ Voulez-vous continuer ?</translation>
         <translation>Couleur des boîtes :</translation>
     </message>
     <message>
-        <location line="+6356905"/>
+        <location line="+6356717"/>
         <source>Grey</source>
         <translation type="obsolete">Gris</translation>
     </message>
     <message>
-        <location line="-6356892"/>
+        <location line="-6356704"/>
         <source>As selection</source>
         <translation>Comme la sélection</translation>
     </message>
@@ -5025,12 +5036,12 @@ Voulez-vous continuer ?</translation>
 <context>
     <name>SurfpaintTools</name>
     <message>
-        <location line="+6356897"/>
+        <location line="+6356701"/>
         <source>ConstraintEditor</source>
         <translation type="obsolete">Editeur de contraintes</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-6356897"/>
         <source>TextureValue</source>
         <translation type="obsolete">Texture :</translation>
     </message>
