@@ -16,6 +16,11 @@ from PyQt4.QtGui import QHBoxLayout, QDockWidget, QErrorMessage, QAction
 from PyQt4.QtGui import QDesktopWidget,QTreeWidget, QTreeWidgetItem, QMenu
 from PyQt4.QtGui import QFileDialog, QTreeWidgetItemIterator,QAbstractItemView
 from PyQt4.QtCore import Qt, SIGNAL, QString, QT_TRANSLATE_NOOP, QThread
+try:
+  from PyQt4.QtCore import QString
+  _use_qstring = True
+except ImportError:
+  _use_qstring = False
 
 from anatomist import cpp
 import anatomist.direct.api as anatomist
@@ -95,7 +100,7 @@ class AtlasJsonRois(QMainWindow):
     toolbar.addAction(self.convention)
     
     # Tool window
-    self.tree = TreeRois( json_roi_path )   
+    self.tree = TreeRois( json_roi_path )
     self.tree_widget = self.tree.getWidget()
     self.tree_widget.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
@@ -118,6 +123,9 @@ class AtlasJsonRois(QMainWindow):
     #display atlas in Axial anatomist window
     file_readed = aims.Reader({'Volume': 'AimsData'})
     graph = aims.read( arg_roi_path )
+    self.nomenclature = None
+    if self.tree.nomenclature is not None:
+      self.nomenclature = a.toAObject( self.tree.nomenclature )
     self.ana_graph = a.toAObject(graph)
     self.window_anat_viewer.addObjects( self.ana_graph, add_graph_nodes=True)
     if t1mri_vol_path is not None:
@@ -127,12 +135,12 @@ class AtlasJsonRois(QMainWindow):
       self.statusBar().showMessage("Display convention : Radiological")
     else:
       self.t1mri_anat_vol = None
-    
-    
-    self.ana_graph.setColorMode( self.ana_graph.PropertyMap )
-    self.ana_graph.setColorProperty( 'name' )
-    self.ana_graph.setPalette( a.getPalette( "random" ) )
-    self.ana_graph.notifyObservers()
+
+    if not self.nomenclature:
+      self.ana_graph.setColorMode( self.ana_graph.PropertyMap )
+      self.ana_graph.setColorProperty( 'name' )
+      self.ana_graph.setPalette( a.getPalette( "random" ) )
+      self.ana_graph.notifyObservers()
 
     self.window_anat_viewer.show()
     #******************************************
@@ -298,7 +306,15 @@ class AtlasJsonRois(QMainWindow):
         self.window_anat_viewer.removeObjects(self.t1mri_anat_vol)
       else:
         self.window_anat_viewer.addObjects(self.t1mri_anat_vol)
-    
+
+  def getGravityCenter( self, aobject ):
+      if 'gravity_center' in aobject.attributed():
+        gravity_center_position = aobject.attributed()['gravity_center']
+      else:
+        bbox = aobject.boundingbox()
+        gravity_center_position = bbox[1] - bbox[0]
+      return gravity_center_position
+
   def selectionChanged( self ):
     """This method aims is to synchronize selection in the window with QTree selection """
     a = anatomist.Anatomist('-b')
@@ -317,15 +333,14 @@ class AtlasJsonRois(QMainWindow):
     for i in select_obj:
       name = i.name.split()[0]
       #t1mri hasn't field : 'gravity_center'
-      if 'gravity_center' in i.attributed():
-        gravity_center_position = i.attributed()['gravity_center']
-        self.window_anat_viewer.camera(cursor_position=gravity_center_position)
-        leaves_list = self.tree.getLeaves()
-        leaves = leaves_list[2]
-        for l in leaves:
-          if str(l.text(1))==name:
-            l.setSelected(True)
-            self.tree.expandHierarchy(l)
+      gravity_center_position = self.getGravityCenter( i )
+      self.window_anat_viewer.camera(cursor_position=gravity_center_position)
+      leaves_list = self.tree.getLeaves()
+      leaves = leaves_list[2]
+      for l in leaves:
+        if str(l.text(1))==name:
+          l.setSelected(True)
+          self.tree.expandHierarchy(l)
 
 
   def updateViewWithTree(self, item=None ):
@@ -345,21 +360,23 @@ class AtlasJsonRois(QMainWindow):
     clust_list=[]
     if len(items) != 1:
       for n in items:
-        select_list = self.multipleOrSingleSelection( n, toggle_clust_dict, clust_list )    
+        select_list = self.multipleOrSingleSelection( n, toggle_clust_dict, clust_list )
         clust_list = select_list[0]
         toggle_clust_dict = select_list[1]
     else:
       select_list = self.multipleOrSingleSelection( item, toggle_clust_dict, clust_list )
       clust_list = select_list[0]
+      gravity_center_position = None
       if len( clust_list ) != 0:#check if clust_list is empty
-        gravity_center_position = clust_list[0].attributed()['gravity_center']
+        gravity_center_position = self.getGravityCenter( clust_list[0] )
         self.window_anat_viewer.camera(cursor_position=gravity_center_position)
       toggle_clust_dict = select_list[1]
     #"="Apply the colors of nodes
-    self.ana_graph.setColorMode( self.ana_graph.PropertyMap )
-    self.ana_graph.setColorProperty( 'name' )
-    self.ana_graph.setPalette(a.getPalette("random"))
-    self.ana_graph.notifyObservers()
+    if not self.nomenclature:
+      self.ana_graph.setColorMode( self.ana_graph.PropertyMap )
+      self.ana_graph.setColorProperty( 'name' )
+      self.ana_graph.setPalette(a.getPalette("random"))
+      self.ana_graph.notifyObservers()
     a.sync()
     #"="
     for g in clust_list:
@@ -503,14 +520,33 @@ class TreeRois:
     self.tree_widget.setColumnCount(2)
     self.tree_widget.headerItem().setText(0, "Labels name")
     self.tree_widget.headerItem().setText(1, "Labels value")
-    self.json_full_data = self.createJSONData(json_path)
+    self.json_full_data, self.nomenclature = self.createJSONData(json_path)
     self.updateTree(self.json_full_data)
     self.leaves_sorted = self.sortLeavesBySide()
     self.createMemoryCheckedDict()
-    
+
+  def _treeToDict(self, jitem, hitem):
+    for item in hitem.children():
+      if item.has_key('name'):
+        name = item['name']
+        if item.childrenSize() == 0:
+          jitem[name] = [name]
+        else:
+          jitem[name] = {}
+          self._treeToDict(jitem[name],item)
+
   def createJSONData(self, json_path):
+    if json_path.endswith( '.hie' ):
+      try:
+        hie = aims.read( json_path )
+        # convert to dict
+        jsondict = {}
+        self._treeToDict(jsondict,hie)
+        return jsondict, hie
+      except:
+        pass # try json format
     json_file=open(json_path)
-    return json.load(json_file) 
+    return json.load(json_file), None
 #______________________________________________________________________________  
   def getWidget(self):
     return self.tree_widget
@@ -652,8 +688,12 @@ class TreeRois:
         self.getLeavesChecked(tree_item.child(c), leaf_list)
         c += 1
     #we are on leaf level
-    elif tree_item.checkState(0) == 2:  
-      if 'R_' in tree_item.text(0) or 'L_' in tree_item.text(0):  
+    elif tree_item.checkState(0) == 2:
+      text = tree_item.text(0)
+      if _use_qstring:
+        text = unicode( text )
+      if 'R_' in text or 'L_' in text \
+          or text.endswith('_left') or text.endswith('_right'):
         parent_existing_in_list = False
         for t in leaf_list:
           #to avoid duplicate
@@ -661,19 +701,19 @@ class TreeRois:
           #if the parent exist we just have to add item as child
             t.addChild(tree_item.clone())
             parent_existing_in_list = True
-	    
+
         if not parent_existing_in_list:
           p = tree_item.parent().clone()
           c = 0
           while c < p.childCount():
-	        #we remove all "systers" of item
+            #we remove all "systers" of item
             if p.child(c).text(0) != tree_item.text(0):
               p.removeChild(p.child(c))
             #we don't iterate c because p.childCount() = p.childCount()-1
             else:
               c += 1
           #we add the parent with only one child (the item)
-          leaf_list.append(p)	  
+          leaf_list.append(p)
       else:
         #usefull for example: brainstem (neither R nor L)
         leaf_list.append(tree_item.clone())
