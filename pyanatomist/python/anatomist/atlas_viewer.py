@@ -8,6 +8,7 @@ import sys
 import json
 import gc #use in "SelectionAtlasAction"
 import re
+import os
 
 from PyQt4.QtGui import QLineEdit, QPushButton, QMainWindow, QApplication
 from PyQt4.QtGui import QWidget, QLabel, QVBoxLayout, QToolBar, QIcon
@@ -61,19 +62,22 @@ class AtlasJsonRois(QMainWindow):
     dock.setWidget(tool_window)
     
     toolbar = QToolBar('View toolbar')
-    self.open_json = QAction(QIcon('icon/Open_icon.png'), 'open JSON', self)
+    icondir = os.path.expandvars( os.path.join( \
+      aims.carto.Paths.globalShared(), 'anatomist-%s' % '.'.join( \
+       [ str(x) for x in aims.version() ] ), 'icons', 'atlas_viewer' ) )
+    self.open_json = QAction(QIcon(os.path.join(icondir,'Open_icon.png')), 'open JSON', self)
     toolbar.addAction(self.open_json)
-    self.save_json = QAction(QIcon('icon/Save_icon.png'), 'save JSON', self)
+    self.save_json = QAction(QIcon(os.path.join(icondir,'Save_icon.png')), 'save JSON', self)
     toolbar.addAction(self.save_json)
-    self.all_brain = QAction(QIcon('icon/brain.png'), 'reset selection brain', self)
+    self.all_brain = QAction(QIcon(os.path.join(icondir,'brain.png')), 'reset selection brain', self)
     toolbar.addAction(self.all_brain)
-    self.right_brain = QAction(QIcon('icon/left_brain.png'), 'select right brain', self)
+    self.right_brain = QAction(QIcon(os.path.join(icondir,'left_brain.png')), 'select right brain', self)
     toolbar.addAction(self.right_brain)
-    self.left_brain = QAction(QIcon('icon/right_brain.png'), 'select left brain', self)
+    self.left_brain = QAction(QIcon(os.path.join(icondir,'right_brain.png')), 'select left brain', self)
     toolbar.addAction(self.left_brain)
-    self.central_struct = QAction(QIcon('icon/central_struct.png'), 'select central struct', self)
+    self.central_struct = QAction(QIcon(os.path.join(icondir,'central_struct.png')), 'select central struct', self)
     toolbar.addAction(self.central_struct)
-    self.t1mri_view = QAction(QIcon('icon/t1mri.png'), 'select t1mri view', self)
+    self.t1mri_view = QAction(QIcon(os.path.join(icondir,'t1mri.png')), 'select t1mri view', self)
     toolbar.addAction( self.t1mri_view )
     self.menu_file = QMenu( "t1mri_view")
     self.t1mri_axial_view = QAction( 'select axial t1mri view', self)
@@ -85,9 +89,9 @@ class AtlasJsonRois(QMainWindow):
     self.menu_file.addAction(self.t1mri_coronal_view)
     self.menu_file.addAction(self.dimension)
     self.t1mri_view.setMenu(self.menu_file)
-    self.outline = QAction( QIcon('icon/roi_contour.png'), 'Display outline of selected rois', self )
+    self.outline = QAction( QIcon(os.path.join(icondir,'roi_contour.png')), 'Display outline of selected rois', self )
     toolbar.addAction(self.outline)
-    self.convention = QAction( QIcon('icon/convention_brain_2.png'), 'change convention display', self )
+    self.convention = QAction( QIcon(os.path.join(icondir,'convention_brain_2.png')), 'change convention display', self )
     toolbar.addAction(self.convention)
     
     # Tool window
