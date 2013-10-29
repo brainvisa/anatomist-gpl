@@ -1323,6 +1323,13 @@ class Anatomist(Singleton, object):
       """
       pass
 
+    def takeAppRef(self):
+      """
+      Take anatomist application reference on this object : so object life is controled the normal way by Anatomist.
+      Inverse of releaseAppRef(). The object is now owned by anatomist application.
+      """
+      pass
+
     def getRef(self, refType):
       """
       Get a reference of type *refType* on this object.

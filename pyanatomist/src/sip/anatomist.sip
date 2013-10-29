@@ -76,7 +76,15 @@ public:
   AnatomistSip( const vector_STRING & = vector_STRING() );
   QWidget *createWindow( const QString &, QWidget * = 0 ) /Factory/;
   void releaseWindow( anatomist::AWindow * );
+  void takeWindowRef( anatomist::AWindow * );
+%MethodCode
+  theAnatomist->takeWindowRef( a0 );
+%End
   void releaseObject( anatomist::AObject * );
+  void takeObjectRef( anatomist::AObject * );
+%MethodCode
+  theAnatomist->takeObjectRef( a0 );
+%End
   QString anatomistSharedPath();
   QString anatomistHomePath();
   ControlWindow *getControlWindow();
@@ -102,6 +110,14 @@ public:
   void unregisterObject( anatomist::AObject * );
 %MethodCode
   theAnatomist->unregisterObject( a0 );
+%End
+  void registerWindow( anatomist::AWindow * );
+%MethodCode
+  theAnatomist->registerWindow( a0 );
+%End
+  void unregisterWindow( anatomist::AWindow * );
+%MethodCode
+  theAnatomist->unregisterWindow( a0 );
 %End
   anatomist::Referential *centralReferential() const;
 %MethodCode

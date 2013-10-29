@@ -995,11 +995,14 @@ class Anatomist(base.Anatomist):
       super(Anatomist.AItem, self).releaseRef()
       if self.refType:
         self.anatomistinstance.execute("ExternalReference", elements=[self], action_type="Release"+self.refType+"Ref")
-        
+
     def releaseAppRef(self):
       #print "release app ref ", self
       self.anatomistinstance.execute("ExternalReference", elements=[self], action_type="ReleaseApplication")
-        
+
+    def takeAppRef(self):
+      self.anatomistinstance.execute("ExternalReference", elements=[self], action_type="TakeApplication")
+
   ###############################################################################
   class AObject(AItem, base.Anatomist.AObject):
     """
