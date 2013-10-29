@@ -1484,11 +1484,15 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       #print "release ref ", self
       super(Anatomist.AObject, self).releaseRef()
       del self.internalRep
-        
+
     def releaseAppRef(self):
       #print "release app ref ", self
       self.anatomistinstance.releaseObject(self.getInternalRep())
-     
+
+    def takeAppRef(self):
+      #print "release app ref ", self
+      self.anatomistinstance.takeObjectRef(self.getInternalRep())
+
     #def __del__(self):
       #print "del AObject ", self
       #super(Anatomist.AObject, self).__del__()
@@ -1623,6 +1627,10 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     def releaseAppRef(self):
       #print "release app ref ", self
       self.anatomistinstance.releaseWindow(self.getInternalRep())
+
+    def takeAppRef(self):
+      #print "release app ref ", self
+      self.anatomistinstance.takeWindowRef(self.getInternalRep())
 
     #def __del__(self):
       #print "del AWindow ", self
