@@ -72,6 +72,8 @@ class PaletteEditor( QtGui.QGroupBox ):
             self.palettecb.setToolTip( "Change the palette" )
             hlay.addWidget( self.palettecb )
             hlay.addSpacerItem( QtGui.QSpacerItem( 20 , 20 , hPolicy = QtGui.QSizePolicy.Expanding ) )
+        else:
+            self.palettecb = None
         
         hlay = QtGui.QHBoxLayout()
         hlay.setMargin( 0 )
@@ -153,7 +155,9 @@ class PaletteEditor( QtGui.QGroupBox ):
         paletteEnd = image.palette().max1() * (real_max - real_min) +  real_min
         paletteEnd = int(paletteEnd)
         self.rangeslider.setStart(int(image.palette().min1() * (real_max - real_min) + real_min))
-        self.rangeslider.setEnd(int(image.palette().max1() * (real_max - real_min) +  real_min))        
+        self.rangeslider.setEnd(int(image.palette().max1() * (real_max - real_min) +  real_min))
+#        self.rangeslider.setStart(0)
+#        self.rangeslider.setEnd(100)
         self.paletteMinMaxChanged()
     
         self.connect( self.rangeslider,
@@ -164,7 +168,30 @@ class PaletteEditor( QtGui.QGroupBox ):
                  self.paletteMinMaxChanged)
         
 
+    def setImage(self, image, realMin=None, realMax=None):
+        self.image = image
+        pal = self.image.getOrCreatePalette()
         
+        if self.palettecb:
+            self.palettecb.blockSignals(True)
+            self.palettecb.setCurrentIndex(self.paletteDic[pal.refPalette().name()])
+            self.palettecb.blockSignals(False)
+        
+        if realMin:
+            self.real_min = realMin
+        if realMax:
+            self.real_max = realMax
+
+        min = ((self.real_max - self.real_min)*pal.min1()) + self.real_min
+        max = ((self.real_max - self.real_min)*pal.max1()) + self.real_min
+        
+        self.minsb.setRange(self.real_min, self.real_max)
+        self.maxsb.setRange(self.real_min, self.real_max)
+        self.minsb.setValue(self.real_min)
+        self.maxsb.setValue(self.real_max)
+        self.minsb.setValue(min)
+        self.maxsb.setValue(max)
+
     def loadPaletteList( self, palette_filter ):
         if palette_filter == []:
             return
@@ -216,6 +243,8 @@ class PaletteEditor( QtGui.QGroupBox ):
         self.maxsb.setValue( real_max )
         self.maxsb.blockSignals( False )
 
+        self.emit(QtCore.SIGNAL("paletteMinMaxChanged(PyQt_PyObject)"), self.image)
+
     def updatePaletteLabel( self ):
         apal = self.image.getOrCreatePalette()
         min = apal.min1()
@@ -232,7 +261,8 @@ class PaletteEditor( QtGui.QGroupBox ):
             dimx = 1
         if dimy > 256:
             dimy = 256
-        if (int(max - min) < 1): 
+        if (int(max - min) < 1):
+#        if max == min: 
             min = 0
             max = 1
         
@@ -262,7 +292,7 @@ class PaletteEditor( QtGui.QGroupBox ):
             pmbackground = QtGui.QPixmap.fromImage( imbackground )
         else:
             pmbackground.convertFromImage( imbackground );
-        
+
         rgb = refpal.value( 0, 0 )
         valueinf = '#%02x%02x%02x' % (rgb.red(), rgb.green(), rgb.blue() )
         rgb = refpal.value( int( facx * (dimx-1) ), int( facy * (dimy-1) ) )
