@@ -364,6 +364,7 @@ public:
   virtual int polygonAtCursorPosition( int x, int y,
                                        const anatomist::AObject* obj );
   ViewType viewType() const;
+  const aims::Quaternion & sliceQuaternion() const;
   QSlider * getSliceSlider() const;
 };
 
