@@ -37,6 +37,7 @@ from soma.qt4gui.rangeSlider import QRangeSlider
 from tempfile import mkstemp
 import anatomist.api as ana
 import os
+import sys
 
 class PaletteEditor( QtGui.QGroupBox ):
     def __init__( self, image,
@@ -261,8 +262,7 @@ class PaletteEditor( QtGui.QGroupBox ):
             dimx = 1
         if dimy > 256:
             dimy = 256
-        if (int(max - min) < 1):
-#        if max == min: 
+        if abs(max - min) <= sys.float_info.epsilon:
             min = 0
             max = 1
         
@@ -291,7 +291,7 @@ class PaletteEditor( QtGui.QGroupBox ):
         if cmp( QtCore.QT_VERSION_STR , '4.7' ) == -1:
             pmbackground = QtGui.QPixmap.fromImage( imbackground )
         else:
-            pmbackground.convertFromImage( imbackground );
+            pmbackground.convertFromImage( imbackground )
 
         rgb = refpal.value( 0, 0 )
         valueinf = '#%02x%02x%02x' % (rgb.red(), rgb.green(), rgb.blue() )
