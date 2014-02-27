@@ -335,3 +335,15 @@ class PaletteEditor( QtGui.QGroupBox ):
         
     def setPaletteComBoxEditable(self, boolean_state):
         self.palettecb.setEditable( boolean_state )
+        
+    def changeCurrentImage(self, image):
+        a = ana.Anatomist( '-b' )
+        min = self.rangeslider.start()
+        max = self.rangeslider.end()
+        refpal = self.image.getOrCreatePalette().refPalette()
+        palette_object = a.getPalette( str( refpal.name() ) )
+        image.setPalette( palette_object,\
+                          minVal=min*(1.0/self.sliderPrecision),\
+                          maxVal=max*(1.0/self.sliderPrecision) )
+        self.image = image
+      
