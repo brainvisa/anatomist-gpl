@@ -206,17 +206,21 @@ class PaletteEditor( QtGui.QGroupBox ):
             self.palettecb.addItem( p.name() )
 
     def paletteNameChanged( self, name):
+        a = ana.Anatomist( '-b' )
+        palette_object = a.getPalette( str(name) )
         apal = self.image.getOrCreatePalette()        
-        self.image.setPalette( name,\
+        self.image.setPalette( palette_object,\
                                minVal=apal.min1(),\
                                maxVal=apal.max1() )
         self.paletteMinMaxChanged()
 
     def paletteMinMaxChanged( self ):
+        a = ana.Anatomist( '-b' )
         min = self.rangeslider.start()
         max = self.rangeslider.end()
         refpal = self.image.getOrCreatePalette().refPalette()
-        self.image.setPalette( refpal.name(),\
+        palette_object = a.getPalette( str( refpal.name() ) )
+        self.image.setPalette( palette_object,\
                                 minVal=min*(1.0/self.sliderPrecision),\
                                 maxVal=max*(1.0/self.sliderPrecision) )
 
@@ -315,3 +319,6 @@ class PaletteEditor( QtGui.QGroupBox ):
         slider_value = self.sliderPrecision * ( value - self.real_min ) / ( self.real_max - self.real_min )
         
         self.rangeslider.setEnd( int( slider_value ) )
+        
+    def setPaletteComBoxEditable(self, boolean_state):
+        self.palettecb.setEditable( boolean_state )
