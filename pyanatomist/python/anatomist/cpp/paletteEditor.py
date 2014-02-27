@@ -43,7 +43,8 @@ class PaletteEditor( QtGui.QGroupBox ):
     def __init__( self, image,
                   default=None, title="", palette_filter=None,
                   real_min = 0, real_max = 100,
-                  parent=None, sliderPrecision = 100, zoom = 1):
+                  parent=None, sliderPrecision = 100, zoom = 1,
+                  all_palettes=False):
         QtGui.QGroupBox.__init__( self, parent )
         
         self.real_min = real_min
@@ -60,7 +61,7 @@ class PaletteEditor( QtGui.QGroupBox ):
         font = QtGui.QFont()
         font.setPixelSize(12 * zoom)
         
-        if palette_filter != []:
+        if palette_filter is not None or all_palettes:
             hlay = QtGui.QHBoxLayout()
             vlay.addLayout( hlay )
             hlay.addSpacerItem( QtGui.QSpacerItem( 20 , 20 , hPolicy = QtGui.QSizePolicy.Expanding ) )
@@ -116,7 +117,10 @@ class PaletteEditor( QtGui.QGroupBox ):
         
         self.paletteDic = {}
         
-        self.loadPaletteList( palette_filter )
+        if all_palettes:
+            self.loadAllPaletteList()
+        else:
+            self.loadPaletteList( palette_filter )
         
         if(default is None):
           # set palette name using current object palette info
@@ -125,16 +129,18 @@ class PaletteEditor( QtGui.QGroupBox ):
             except:
               default = None
 
-        if palette_filter != []:
+              
+        if palette_filter is not None or all_palettes:
+            self.connect( self.palettecb,
+                          QtCore.SIGNAL( " currentIndexChanged( const QString& ) " ),
+                          self.paletteNameChanged )
+                          
+        if palette_filter is not None or all_palettes:
             try:
                 self.palettecb.setCurrentIndex( self.paletteDic[ default ] )
             except:
                 self.palettecb.setCurrentIndex( 0 )
     
-        if palette_filter != []:
-            self.connect( self.palettecb,
-                          QtCore.SIGNAL( " currentIndexChanged( const QString& ) " ),
-                          self.paletteNameChanged )
         if isinstance( self.real_min, float ) or isinstance( self.real_max, float ):
             self.connect( self.minsb,
                           QtCore.SIGNAL( " valueChanged( double ) " ),
@@ -193,6 +199,13 @@ class PaletteEditor( QtGui.QGroupBox ):
         self.minsb.setValue(min)
         self.maxsb.setValue(max)
 
+    def loadAllPaletteList( self ):
+        a = ana.Anatomist( '-b' )
+        for p in a.palettes().palettes():
+            self.paletteDic.update( { p.name() : self.palettecb.count() } )
+            self.palettecb.addItem( p.name() )
+            
+            
     def loadPaletteList( self, palette_filter ):
         if palette_filter == []:
             return
