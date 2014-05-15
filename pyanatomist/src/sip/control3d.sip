@@ -258,7 +258,8 @@ class Control3D : anatomist::Control
 %End
 
   public:
-    Control3D();
+    Control3D( int priority = 1, 
+      const std::string & name = "Default 3D control" );
     Control3D( const anatomist::Control3D & c );
     virtual ~Control3D();
 
