@@ -255,7 +255,7 @@ class Anatomist(Singleton, object):
     """
     pass
 
-  def createWindow(self, wintype, geometry=None, block=None, 
+  def createWindow(self, wintype, geometry=None, block=None,
     no_decoration=None, options=None):
     """
     Creates a new window and opens it.
@@ -1090,7 +1090,7 @@ class Anatomist(Singleton, object):
     :param boolean millimeter_mode: brush size can be either in mm or in voxels. In voxels mode, the brush may be anisotropic.
 
     :param boolean replace_mode: region replacing mode (when drawing on a different region)
-    
+
     :param float region_transparency: value of the region transparency
     """
     if follow_linked_cursor is not None:
@@ -1655,7 +1655,7 @@ class Anatomist(Singleton, object):
       :param bool duplicate:
         enables duplication of nodes with the same name attribute.
 
-      :returns: 
+      :returns:
         (the created node, the created bucket) or only the created node if with_bucket is False
       """
       pass
@@ -1666,21 +1666,21 @@ class Anatomist(Singleton, object):
     Represents an anatomist window.
 
     .. py:attribute:: windowType
-  
+
       Windows type (``'axial'``, ``'sagittal'``, ...)
-    
+
     .. py:attribute:: group
-      
+
       :py:class:`anatomist.base.Anatomist.AWindowsGroup`. The group which this window belongs to.
 
     .. py:attribute:: objects
-      
+
       List of :py:class:`anatomist.base.Anatomist.AObject`. The window contains these objects.
-    
+
     .. py:attribute:: block
-      
+
       :py:class:`anatomist.base.Anatomist.AWindowsBlock`. The block in which the window is contained, None if it is not in a block.
-    
+
     """
     def __init__(self, anatomistinstance, internalRep=None, *args, **kwargs):
       """
@@ -1814,7 +1814,32 @@ class Anatomist(Singleton, object):
       """
       self.anatomistinstance.closeWindows([self])
 
-  ###############################################################################
+    def activateAction(self, action_type, method, **kwargs):
+      """
+      Triggers window action activation.
+
+      New in Anatomist 4.5.
+
+      Parameters
+      ----------
+      action_type:  str (mandatory)
+          type of action: "key_press", "key_release", "mouse_press", 
+          "mouse_release", "mouse_double_click", "mouse_move". Additional
+          parameters depend on the action type:
+          * key actions do not use any;
+          * mouse actions need x and y keyword parameters
+      method:  str (mandatory)
+          action method name, as registered in the active control. Deteremines
+          what will actually be done.
+      x:  int (optional)
+          x mouse coord, for mouse actions only.
+      y:  int (optional)
+          y mouse coord, for mouse actions only.
+      """
+      self.anatomistinstance.execute('ActivateAction', window=self,
+        action_type=action_type, method=method, **kwargs)
+
+  #############################################################################
   class AWindowsBlock(AItem):
     """
     A window containing other windows.

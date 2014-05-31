@@ -220,23 +220,32 @@ public:
 %#if QT_VERSION >= 0x040000%
 
   bool keyPressEventSubscribe( int, Qt::KeyboardModifiers, 
-                               const anatomist::Control::KeyActionLink & )
+                               const anatomist::Control::KeyActionLink &,
+                               const std::string & name = "" )
     /PyName=_keyPressEventSubscribe/;
+  bool keyReleaseEventSubscribe( int, Qt::KeyboardModifiers, 
+                                 const anatomist::Control::KeyActionLink &,
+                                 const std::string & name = "" )
+    /PyName=_keyReleaseEventSubscribe/;
   bool mousePressButtonEventSubscribe
     ( Qt::MouseButtons, Qt::KeyboardModifiers,
-      const anatomist::Control::MouseActionLink & ) 
+      const anatomist::Control::MouseActionLink &,
+      const std::string & name = "" )
     /PyName=_mousePressButtonEventSubscribe/;
   bool mouseReleaseButtonEventSubscribe
     ( Qt::MouseButtons, Qt::KeyboardModifiers,
-      const anatomist::Control::MouseActionLink & )
+      const anatomist::Control::MouseActionLink &,
+      const std::string & name = "" )
     /PyName=_mouseReleaseButtonEventSubscribe/;
   bool mouseDoubleClickEventSubscribe
     ( Qt::MouseButtons, Qt::KeyboardModifiers,
-      const anatomist::Control::MouseActionLink & )
+      const anatomist::Control::MouseActionLink &,
+      const std::string & name = "" )
     /PyName=_mouseDoubleClickEventSubscribe/;
   bool mouseMoveEventSubscribe
     ( Qt::MouseButtons, Qt::KeyboardModifiers,
-      const anatomist::Control::MouseActionLink & )
+      const anatomist::Control::MouseActionLink &,
+      const std::string & name = "" )
     /PyName=_mouseMoveEventSubscribe/;
   bool mouseLongEventSubscribe
     ( Qt::MouseButtons, Qt::KeyboardModifiers,
@@ -249,6 +258,9 @@ public:
   bool keyPressEventUnsubscribe( int, Qt::KeyboardModifiers, 
                                  const anatomist::Control::KeyActionLink & )
     /PyName=_keyPressEventUnsubscribe/;
+  bool keyReleaseEventUnsubscribe( int, Qt::KeyboardModifiers, 
+                                   const anatomist::Control::KeyActionLink & )
+    /PyName=_keyReleaseEventUnsubscribe/;
   bool mousePressButtonEventUnsubscribe
     ( Qt::MouseButtons, Qt::KeyboardModifiers,
       const anatomist::Control::MouseActionLink & ) 

@@ -500,19 +500,68 @@ ActionDictionary.addAction = \
   lambda self, name, creator: \
     self._addAction( name, PyActionCreator( creator ) )
 
-# create lambda subscribe functions
-Control.keyPressEventSubscribe = lambda self, key, state, func: \
-                                 self._keyPressEventSubscribe( \
-  key, state, PyKeyActionLink( func ) )
-Control.mousePressButtonEventSubscribe = lambda self, but, state, func: \
-  self._mousePressButtonEventSubscribe( but, state,
-                                        PyMouseActionLink( func ) )
-Control.mouseReleaseButtonEventSubscribe = lambda self, but, state, func: \
-  self._mouseReleaseButtonEventSubscribe( but, state,
-                                          PyMouseActionLink( func ) )
-Control.mouseMoveEventSubscribe = lambda self, but, state, func: \
-                                  self._mouseMoveEventSubscribe( \
-  but, state, PyMouseActionLink( func ) )
+# control subscribe functions
+def keyPressSubscribeFunction(self, key, state, func, name=''):
+  if name == '':
+    if hasattr(func, '__name__'):
+      name = func.__name__
+    elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
+      name = func.__func__.__name__
+  self._keyPressEventSubscribe(key, state, PyKeyActionLink(func), name)
+
+def keyReleaseSubscribeFunction(self, key, state, func, name=''):
+  if name == '':
+    if hasattr(func, '__name__'):
+      name = func.__name__
+    elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
+      name = func.__func__.__name__
+  self._keyReleaseEventSubscribe(key, state, PyKeyActionLink(func), name)
+
+def mousePressSubscribeFunction(self, but, state, func, name=''):
+  if name == '':
+    if hasattr(func, '__name__'):
+      name = func.__name__
+    elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
+      name = func.__func__.__name__
+  self._mousePressButtonEventSubscribe(
+    but, state, PyMouseActionLink(func), name)
+
+def mouseReleaseSubscribeFunction(self, but, state, func, name=''):
+  if name == '':
+    if hasattr(func, '__name__'):
+      name = func.__name__
+    elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
+      name = func.__func__.__name__
+  self._mouseReleaseButtonEventSubscribe(
+    but, state, PyMouseActionLink(func), name)
+
+def mouseDoubleClickSubscribeFunction(self, but, state, func, name=''):
+  if name == '':
+    if hasattr(func, '__name__'):
+      name = func.__name__
+    elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
+      name = func.__func__.__name__
+  self._mouseDoubleClickEventSubscribe(
+    but, state, PyMouseActionLink(func), name)
+
+def mouseMoveSubscribeFunction(self, but, state, func, name=''):
+  if name == '':
+    if hasattr(func, '__name__'):
+      name = func.__name__
+    elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
+      name = func.__func__.__name__
+  self._mouseMoveEventSubscribe(but, state, PyMouseActionLink(func), name)
+
+Control.keyPressEventSubscribe = keyPressSubscribeFunction
+Control.keyReleaseEventSubscribe = keyReleaseSubscribeFunction
+Control.mousePressButtonEventSubscribe = mousePressSubscribeFunction
+Control.mouseReleaseButtonEventSubscribe = mouseReleaseSubscribeFunction
+Control.mouseMoveEventSubscribe = mouseMoveSubscribeFunction
+Control.mouseDoubleClickEventSubscribe = mouseDoubleClickSubscribeFunction
+del keyPressSubscribeFunction, keyReleaseSubscribeFunction, \
+  mousePressSubscribeFunction, mouseReleaseSubscribeFunction, \
+  mouseDoubleClickSubscribeFunction, mouseMoveSubscribeFunction
+
 Control.mouseLongEventSubscribe = lambda self, but, state, startfunc, \
                                   longfunc, endfunc, exclusive: \
                                   self._mouseLongEventSubscribe( \
@@ -527,8 +576,9 @@ Control.selectionChangedEventSubscribe = lambda self, func: \
 
 # create lambda unsubscribe functions
 Control.keyPressEventUnsubscribe = lambda self, key, state, func: \
-                                 self._keyPressEventUnsubscribe( \
-  key, state, PyKeyActionLink( func ) )
+  self._keyPressEventUnsubscribe( key, state, PyKeyActionLink( func ) )
+Control.keyReleaseEventUnsubscribe = lambda self, key, state, func: \
+  self._keyPressEventUnsubscribe( key, state, PyKeyActionLink( func ) )
 Control.mousePressButtonEventUnsubscribe = lambda self, but, state, func: \
   self._mousePressButtonEventUnsubscribe( but, state,
                                         PyMouseActionLink( func ) )
