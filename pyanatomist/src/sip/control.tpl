@@ -339,6 +339,13 @@ public:
     /PyName=_selectionChangedEventSubscribe/;
   bool selectionChangedEventUnsubscribe( const SelectionChangedActionLink& )
     /PyName=_selectionChangedEventUnsubscribe/;
+
+  set_STRING keyPressActionLinkNames() const;
+  set_STRING keyReleaseActionLinkNames() const;
+  set_STRING mousePressActionLinkNames() const;
+  set_STRING mouseReleaseActionLinkNames() const;
+  set_STRING mouseDoubleClickActionLinkNames() const;
+  set_STRING mouseMoveActionLinkNames() const;
 };
 
 
@@ -441,6 +448,8 @@ class ControlSwitch : QObject
 public:
   virtual ~ControlSwitch();
   anatomist::Action* getAction( const std::string& actionName );
+  std::string activeControl() const;
+  anatomist::Control* activeControlInstance() const;
 
   void keyPressEvent( QKeyEvent *) ;
   void keyReleaseEvent( QKeyEvent *) ;
