@@ -211,6 +211,16 @@ Download source: `anagraphannotate.py <../examples/anagraphannotate.py>`_
 .. literalinclude:: ../examples/anagraphannotate.py
 
 
+Activating actions in the current control
+-----------------------------------------
+
+Activate actions in the current contol of a window
+
+Download source: `activateaction.py <../examples/activateaction.py>`_
+
+.. literalinclude:: ../examples/activateaction.py
+
+
 Simple viewer
 -------------
 
