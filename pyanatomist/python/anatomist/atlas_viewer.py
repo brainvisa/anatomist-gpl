@@ -15,7 +15,7 @@ from PyQt4.QtGui import QWidget, QLabel, QVBoxLayout, QToolBar, QIcon
 from PyQt4.QtGui import QHBoxLayout, QDockWidget, QErrorMessage, QAction
 from PyQt4.QtGui import QDesktopWidget,QTreeWidget, QTreeWidgetItem, QMenu
 from PyQt4.QtGui import QFileDialog, QTreeWidgetItemIterator,QAbstractItemView
-from PyQt4.QtCore import Qt, SIGNAL, QString, QT_TRANSLATE_NOOP, QThread
+from PyQt4.QtCore import Qt, SIGNAL, QT_TRANSLATE_NOOP, QThread
 try:
   from PyQt4.QtCore import QString
   _use_qstring = True
