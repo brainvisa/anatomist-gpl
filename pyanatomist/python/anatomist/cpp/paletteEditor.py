@@ -215,6 +215,9 @@ class PaletteEditor( QtGui.QGroupBox ):
             name = p.name()
             if palette_filter and not name in palette_filter:
                 continue
+            if self.palettecb is None:
+                continue
+            
             self.paletteDic.update( { p.name() : self.palettecb.count() } )
             self.palettecb.addItem( p.name() )
 
