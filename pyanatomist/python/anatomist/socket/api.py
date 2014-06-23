@@ -116,6 +116,7 @@ class Anatomist(base.Anatomist):
     return self
   
   def __singleton_init__( self, *args, **kwargs):
+    super(Anatomist, self).__singleton_init__(*args, **kwargs)
     host = kwargs.get( 'host', 'localhost' )
     port = kwargs.get( 'port', None )
     if host == 'localhost':

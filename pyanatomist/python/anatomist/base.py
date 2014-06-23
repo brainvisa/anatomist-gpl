@@ -43,7 +43,7 @@ import string
 import threading
 
 
-class Anatomist(Singleton, object):
+class Anatomist(Singleton):
   """
   Interface to communicate with an Anatomist Application. This class is virtual, some methods are not implemented. It is the base class of Anatomist classes in each implementation.
 
@@ -176,7 +176,7 @@ class Anatomist(Singleton, object):
     return instance
 
   def __singleton_init__(self, *args, **kwargs):
-    object.__init__(self, *args, **kwargs)
+    super(Anatomist, self).__singleton_init__()
 
     self.onLoadNotifier=ObservableNotifier()
     # enable listening of event  only when the notifier has at least one listener.
