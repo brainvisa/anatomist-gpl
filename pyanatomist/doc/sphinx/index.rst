@@ -30,6 +30,12 @@ Sub-modules
 - :doc:`pyanatomist_wip`
 
 
+How to
+------
+
+- :doc:`pyanatomist_howto`
+
+
 PyAnatomist examples
 --------------------
 
