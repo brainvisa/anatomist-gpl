@@ -6,10 +6,10 @@ Use / change Anatomist settings
 
 >>> import anatomist.direct.api as ana
 >>> a = ana.Anatomist()
->>> print a.config()['windowSizeFactor' ]
+>>> print a.config()['windowSizeFactor']
 2.0
->>> a.config()['windowSizeFactor' ] = 1.
->>> print a.config()['windowSizeFactor' ]
+>>> a.config()['windowSizeFactor'] = 1.
+>>> print a.config()['windowSizeFactor']
 1.0
 
 Configuration options are those recognized in the configuration file.
