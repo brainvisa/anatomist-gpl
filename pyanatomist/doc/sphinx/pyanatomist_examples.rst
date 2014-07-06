@@ -221,6 +221,8 @@ Download source: `activateaction.py <../examples/activateaction.py>`_
 .. literalinclude:: ../examples/activateaction.py
 
 
+.. _simple_viewer:
+
 Simple viewer
 -------------
 
