@@ -557,6 +557,14 @@ aims.convertersObjectToPython.update( { \
 import mobject
 # delete things from other modules
 
+# apply changes to config properties to Anatomist internal state
+def __GlobalConfiguration_setitem__(self, param, value):
+  print 'config.setitem:', param, ':', value
+  super(GlobalConfiguration, self).__setitem__(param, value)
+  self.apply()
+anatomist.GlobalConfiguration.__setitem__ = __GlobalConfiguration_setitem__
+del __GlobalConfiguration_setitem__
+
 del os, sys, string, glob
 del anatomist # , aims
 
