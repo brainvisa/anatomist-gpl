@@ -57,10 +57,10 @@ namespace anatomist
     virtual void Refresh();
     int Group() const;
     bool hasObject(anatomist::AObject *) const;
-    float GetTime() const;
-    virtual void SetTime( float time );
-    virtual Point3df GetPosition() const;
-    virtual void SetPosition( const Point3df &position,
+    float getTime() const;
+    virtual void setTime( float time );
+    virtual Point3df getPosition() const;
+    virtual void setPosition( const Point3df &position,
       const anatomist::Referential *refdep );
     void setHasCursor(int);
     virtual bool toolBarsVisible() const;
