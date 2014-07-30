@@ -1237,7 +1237,7 @@ Bt droit   :  menu
         <translation type="obsolete">Aucun objet sélecionné</translation>
     </message>
     <message>
-        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/branches/4.4/shared/python_plugins/foldsplit.py" line="+442"/>
+        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/trunk/shared/python_plugins/foldsplit.py" line="+442"/>
         <source>SplitFoldControl</source>
         <translation>&lt;html&gt;&lt;div align=&quot;center&quot;&gt;&lt;b&gt;Contrôle de découpe de plis:&lt;/b&gt;&lt;/div&gt;
 &lt;p&gt;
@@ -1253,7 +1253,7 @@ Découpe manuellement ou semi-manuellement des plis corticaux dans un graphe de 
 Les contrôles classiques de rotation, translation et zoom s&apos;appliquent également.&lt;/p&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/branches/4.4/shared/python_plugins/selection.py" line="+519"/>
+        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/trunk/shared/python_plugins/selection.py" line="+533"/>
         <source>SelectionControl</source>
         <translation>&lt;html&gt;&lt;div align=&quot;center&quot;&gt;&lt;b&gt;Sélection&lt;/b&gt;&lt;/div&gt;
 &lt;p&gt;&lt;table&gt;
@@ -1286,17 +1286,16 @@ Les contrôles classiques de rotation, translation et zoom s&apos;appliquent ég
 <context>
     <name>ErpWraper</name>
     <message>
-        <location line="+6356055"/>
+        <location line="+6354989"/>
         <source>Cell:</source>
         <translation type="obsolete">Cellule :</translation>
     </message>
     <message>
-        <location line="-6356574"/>
+        <location line="+0"/>
         <source>Observation:</source>
         <translation type="obsolete">Observation :</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>ERP loader : </source>
         <translation type="obsolete">Chargeur d&apos;ERP : </translation>
     </message>
@@ -1304,7 +1303,7 @@ Les contrôles classiques de rotation, translation et zoom s&apos;appliquent ég
 <context>
     <name>ErrorMessage</name>
     <message>
-        <location line="+0"/>
+        <location line="-6355522"/>
         <source>Save failed: object </source>
         <translation type="obsolete">Echec de la sauvegarde: l&apos;objet </translation>
     </message>
@@ -1485,90 +1484,89 @@ Les contrôles classiques de rotation, translation et zoom s&apos;appliquent ég
 <context>
     <name>Form</name>
     <message>
-        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/branches/4.4/shared/python_plugins/modelGraphs.ui" line="+25"/>
+        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/trunk/shared/python_plugins/modelGraphs.ui" line="+20"/>
         <source>Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>Affichage</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message utf8="true">
-        <location line="+10"/>
-        <source>Données :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
+        <location line="+26"/>
         <source>Type :</source>
         <translation>Type :</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>raw</source>
-        <translation type="unfinished"></translation>
+        <translation>brut</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>mean</source>
-        <translation type="unfinished"></translation>
+        <translation>moyenne</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>bad</source>
-        <translation type="unfinished"></translation>
+        <translation>mauvais</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>good</source>
-        <translation type="unfinished"></translation>
+        <translation>bons</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <source>sillons seulements</source>
-        <translation type="unfinished"></translation>
+        <location line="-50"/>
+        <source>Display</source>
+        <translation>Afficher</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Data:</source>
+        <translation>Données:</translation>
+    </message>
+    <message>
+        <location line="+49"/>
+        <source>sulci only</source>
+        <translation>sillons seulement</translation>
     </message>
     <message>
         <location line="+5"/>
-        <source>sillons + relations</source>
-        <translation type="unfinished"></translation>
+        <source>sulci + relations</source>
+        <translation>sillons + relations</translation>
     </message>
-    <message utf8="true">
+    <message>
         <location line="+14"/>
-        <source>Différences absolues</source>
-        <translation type="unfinished"></translation>
+        <source>Absolute differences</source>
+        <translation>Différences absolues</translation>
     </message>
     <message>
         <location line="+75"/>
-        <source>Fermer</source>
-        <translation type="unfinished"></translation>
+        <source>Close</source>
+        <translation>Fermer</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Appliquer</source>
-        <translation type="unfinished"></translation>
+        <source>Apply</source>
+        <translation>Appliquer</translation>
     </message>
 </context>
 <context>
     <name>Fusion2DWindow</name>
     <message>
-        <location line="+6356711"/>
+        <location line="+6356334"/>
         <source>Fusion 2D control</source>
         <translation type="obsolete">Contrôle de fusion 2D</translation>
     </message>
     <message>
-        <location line="-6356902"/>
+        <location line="+0"/>
         <source>Objects :</source>
         <translation type="obsolete">Objets :</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Up</source>
         <translation type="obsolete">Monter</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-6356520"/>
         <source>Down</source>
         <translation type="obsolete">Descendre</translation>
     </message>
@@ -1807,70 +1805,69 @@ Les contrôles classiques de rotation, translation et zoom s&apos;appliquent ég
 <context>
     <name>GradientObjectParamSelect</name>
     <message>
-        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/branches/4.4/shared/python_plugins/gradientpalette.py" line="+120"/>
+        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/trunk/shared/python_plugins/gradientpalette.py" line="+120"/>
         <source>Save palette image...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauver l&apos;image de palette...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Edit gradient information</source>
-        <translation type="unfinished"></translation>
+        <translation>Editer les informations de gradients</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Keep as static palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Garder comme palette statique</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>RGB mode</source>
-        <translation type="unfinished"></translation>
+        <translation>mode RVB</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>HSV mode</source>
-        <translation type="unfinished"></translation>
+        <translation>mode HSV</translation>
     </message>
     <message>
         <location line="+138"/>
         <source>Gradient definition:</source>
-        <translation type="unfinished"></translation>
+        <translation>Définition des gradients:</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Palette name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de la palette:</translation>
     </message>
 </context>
 <context>
     <name>GraphLandmarkPicker</name>
     <message>
-        <location line="+6356501"/>
+        <location line="+6355909"/>
         <source>Pick landmark</source>
         <translation type="obsolete">Choisir un point de repère</translation>
     </message>
     <message>
-        <location line="-6356797"/>
+        <location line="+0"/>
         <source>Landmark type :</source>
         <translation type="obsolete">Type de points de repère :</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Point bucket</source>
         <translation type="obsolete">Voxel (bucket)</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-6356205"/>
         <source>Landmarks picker on </source>
         <translation type="obsolete">Prise de points de repère sur </translation>
     </message>
@@ -4943,7 +4940,7 @@ Voulez-vous continuer ?</translation>
 <context>
     <name>SelectionParameters</name>
     <message>
-        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/branches/4.4/shared/python_plugins/selection-qt4.ui" line="+14"/>
+        <location filename="../../../../../../neurosvn/anatomist/anatomist-free/trunk/shared/python_plugins/selection-qt4.ui" line="+14"/>
         <source>Form1</source>
         <translation>Form1</translation>
     </message>
@@ -4973,12 +4970,12 @@ Voulez-vous continuer ?</translation>
         <translation>Relations</translation>
     </message>
     <message>
-        <location line="+6356861"/>
+        <location line="+6356629"/>
         <source>Opacity: </source>
         <translation type="obsolete">Opacité :</translation>
     </message>
     <message>
-        <location line="-6356957"/>
+        <location line="-6356725"/>
         <source>Edge selection:</source>
         <translation>Sélection des relationos :</translation>
     </message>
@@ -5003,12 +5000,12 @@ Voulez-vous continuer ?</translation>
         <translation>Couleur des boîtes :</translation>
     </message>
     <message>
-        <location line="+6356717"/>
+        <location line="+6356341"/>
         <source>Grey</source>
         <translation type="obsolete">Gris</translation>
     </message>
     <message>
-        <location line="-6356704"/>
+        <location line="-6356328"/>
         <source>As selection</source>
         <translation>Comme la sélection</translation>
     </message>
@@ -5036,22 +5033,21 @@ Voulez-vous continuer ?</translation>
 <context>
     <name>SurfpaintTools</name>
     <message>
-        <location line="+6356701"/>
+        <location line="+6356309"/>
         <source>ConstraintEditor</source>
         <translation type="obsolete">Editeur de contraintes</translation>
     </message>
     <message>
-        <location line="-6356897"/>
+        <location line="+0"/>
         <source>TextureValue</source>
         <translation type="obsolete">Texture :</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>IDPolygon</source>
         <translation type="obsolete">Triangle :</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-6356505"/>
         <source>IDVertex</source>
         <translation type="obsolete">Sommet :</translation>
     </message>
