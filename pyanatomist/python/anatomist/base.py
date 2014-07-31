@@ -2119,30 +2119,41 @@ class Anatomist(Singleton):
       Lines thickness (meshes, segments, wireframe rendering modes). A null or negative value fallsback to default (1 in principle).
 
     :param int ghost:
+      obsolete: use selectable_mode instead.
       In ghost mode, objects are not drawn in the depth buffer
+
+    :param string selectable_mode:
+      New in Anatomist 4.5.
+      Replaces the ghost property.
+      always_selectable: object is selecatble whatever its opacity.
+      ghost: object is not selectable.
+      selectable_when_opaque: object is selectable when totally opaque (this is the default in Anatomist).
+      selectable_when_not_totally_transparent: object is selectable unless opacity is zero.
 
     :param string front_face:
       Specifies if the mesh(es) polygons external face is the clockwise or counterclockwise side. Normally in Aims/Anatomist indirect referentials, polygons are in clockwise orientation. Values are "clockwise", "counterclockwise", or "neutral" (the default).
     """
 
-    def __init__(self, ambient=None, diffuse=None, emission=None, shininess=None, specular=None, lighting=None, smooth_shading=None, polygon_filtering=None, depth_buffer=None, face_culling=None, polygon_mode=None, unlit_color=None, line_width=None, ghost=None, front_face=None):
-      self.ambient=ambient
-      self.diffuse=diffuse
-      self.emission=emission
-      self.shininess=shininess
-      self.specular=specular
+    def __init__(self, ambient=None, diffuse=None, emission=None, shininess=None, specular=None, lighting=None, smooth_shading=None, polygon_filtering=None, depth_buffer=None, face_culling=None, polygon_mode=None, unlit_color=None, line_width=None, ghost=None, front_face=None, selectable_mode=None):
+      self.ambient = ambient
+      self.diffuse = diffuse
+      self.emission = emission
+      self.shininess = shininess
+      self.specular = specular
       # render properties
-      self.lighting=lighting
-      self.smooth_shading=smooth_shading
-      self.polygon_filtering=polygon_filtering
-      self.depth_buffer=depth_buffer
-      self.face_culling=face_culling
-      self.polygon_mode=polygon_mode
-      self.unlit_color=unlit_color
-      self.line_width=line_width
-      self.ghost=ghost
+      self.lighting = lighting
+      self.smooth_shading = smooth_shading
+      self.polygon_filtering = polygon_filtering
+      self.depth_buffer = depth_buffer
+      self.face_culling = face_culling
+      self.polygon_mode = polygon_mode
+      self.unlit_color = unlit_color
+      self.line_width = line_width
+      self.selectable_mode = selectable_mode
+      if ghost and self.selectable_mode is None:
+        self.selectable_mode = 'ghost'
       self.front_face = front_face
 
     def __repr__(self):
-      return "{ambient :"+ str(self.ambient)+ ", diffuse :"+ str(self.diffuse)+ ", emission :"+ str(self.emission)+ ", shininess :"+ str(self.shininess)+ ", specular :"+ str(self.specular)+ ", lighting :"+str(self.lighting)+", smooth_shading:"+str(self.smooth_shading)+", polygon_filtering :"+str(self.polygon_filtering)+", depth_buffer :"+str(self.depth_buffer)+", face_culling :"+str(self.face_culling)+", polygon_mode :"+str(self.polygon_mode)+", unlit_color :"+str(self.unlit_color)+", line_width :"+str(self.line_width)+", ghost :"+str(self.ghost)+", front_face:"+str(self.front_face)+"}"
+      return "{ambient :"+ str(self.ambient)+ ", diffuse :"+ str(self.diffuse)+ ", emission :"+ str(self.emission)+ ", shininess :"+ str(self.shininess)+ ", specular :"+ str(self.specular)+ ", lighting :"+str(self.lighting)+", smooth_shading:"+str(self.smooth_shading)+", polygon_filtering :"+str(self.polygon_filtering)+", depth_buffer :"+str(self.depth_buffer)+", face_culling :"+str(self.face_culling)+", polygon_mode :"+str(self.polygon_mode)+", unlit_color :"+str(self.unlit_color)+", line_width :"+str(self.line_width)+", selectable_mode :"+str(self.selectable_mode)+", front_face:"+str(self.front_face)+"}"
 
