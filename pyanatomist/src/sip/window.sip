@@ -342,6 +342,12 @@ class AWindow3D : ControlledWindow, anatomist::Observable
 %End
 public:
   enum ViewType { Oblique, Axial, Sagittal, Coronal, ThreeD };
+  enum ClipMode
+  {
+    NoClip,
+    Single,
+    Double
+  };
 
   virtual ~AWindow3D();
 
@@ -366,6 +372,20 @@ public:
   ViewType viewType() const;
   const aims::Quaternion & sliceQuaternion() const;
   QSlider * getSliceSlider() const;
+  ClipMode clipMode() const;
+  void setClipMode( ClipMode m );
+  float clipDistance() const;
+  void setClipDistance( float d );
+  bool transparentZEnabled() const;
+  void enableTransparentZ( bool );
+  bool cullingEnabled() const;
+  void setCulling( bool );
+  bool flatShading() const;
+  void setFlatShading( bool );
+  bool smoothing() const;
+  void setSmoothing( bool );
+  void setFog( bool );
+  bool fog() const;
 };
 
 

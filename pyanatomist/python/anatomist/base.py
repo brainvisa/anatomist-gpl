@@ -871,13 +871,9 @@ class Anatomist(Singleton):
     diffuse=None, emission=None, specular=None, shininess=None, lighting=None,
     smooth_shading=None, polygon_filtering=None, depth_buffer=None,
     face_culling=None, polygon_mode=None, unlit_color=None, line_width=None,
-    ghost=None, front_face=None ):
+    ghost=None, front_face=None, selectable_mode=None ):
     """
     Changes objects material properties.
-
-    :param objects:
-      Objects whose material must be changed
-    :type objects: list of :py:class:`AObject`
 
     :param material:
       Material characteristics, including render properties.
@@ -885,7 +881,7 @@ class Anatomist(Singleton):
       properties (ambient, diffuse, etc.). If both a material parameter and
       other properties are specified, the material is used as a base, and
       properties are used to modify it
-    :type material: :py:class:`Material`
+    :type material: :py:class:`anatomist.base.Anatomist.Material`
 
     :param bool refresh:
       If *True*, force windows refreshing
@@ -933,6 +929,14 @@ class Anatomist(Singleton):
 
     :param string front_face:
       Specifies if the mesh(es) polygons external face is the clockwise or counterclockwise side. Normally in Aims/Anatomist indirect referentials, polygons are in clockwise orientation. Values are "clockwise", "counterclockwise", or "neutral" (the default).
+
+    :param string selectable_mode:
+      New in Anatomist 4.5.
+      Replaces the ghost property.
+      always_selectable: object is selecatble whatever its opacity.
+      ghost: object is not selectable.
+      selectable_when_opaque: object is selectable when totally opaque (this is the default in Anatomist).
+      selectable_when_not_totally_transparent: object is selectable unless opacity is zero.
     """
     if material is not None:
       if ambient is None:
@@ -961,11 +965,11 @@ class Anatomist(Singleton):
         unlit_color = material.unlit_color
       if line_width is None:
         line_width = material.line_width
-      if ghost is None:
-        ghost = material.ghost
       if front_face is None:
         front_face = material.front_face
-    self.execute("SetMaterial", objects=self.makeList(objects), ambient=ambient, diffuse=diffuse, emission=emission, specular=specular, shininess=shininess, refresh=refresh, lighting=lighting, smooth_shading=smooth_shading, polygon_filtering=polygon_filtering, depth_buffer=depth_buffer, face_culling=face_culling, polygon_mode=polygon_mode, unlit_color=unlit_color, line_width=line_width, ghost=ghost, front_face=front_face)
+      if selectable_mode is None:
+        selectable_mode = material.selectable_mode
+    self.execute("SetMaterial", objects=self.makeList(objects), ambient=ambient, diffuse=diffuse, emission=emission, specular=specular, shininess=shininess, refresh=refresh, lighting=lighting, smooth_shading=smooth_shading, polygon_filtering=polygon_filtering, depth_buffer=depth_buffer, face_culling=face_culling, polygon_mode=polygon_mode, unlit_color=unlit_color, line_width=line_width, selectable_mode=selectable_mode, front_face=front_face)
 
   def setObjectPalette(self, objects, palette=None, minVal=None, maxVal=None, palette2=None,  minVal2=None, maxVal2=None, mixMethod=None, linMixFactor=None, palette1Dmapping=None, absoluteMode=False):
     """
@@ -1468,7 +1472,8 @@ class Anatomist(Singleton):
       diffuse=None, emission=None, specular=None, shininess=None,
       lighting=None, smooth_shading=None, polygon_filtering=None,
       depth_buffer=None, face_culling=None, polygon_mode=None,
-      unlit_color=None, line_width=None, ghost=None, front_face=None ):
+      unlit_color=None, line_width=None, ghost=None, front_face=None,
+      selectable_mode=None):
       """
       Changes object material properties.
 
@@ -1526,11 +1531,21 @@ class Anatomist(Singleton):
 
       :param string front_face:
         Specifies if the mesh(es) polygons external face is the clockwise or counterclockwise side. Normally in Aims/Anatomist indirect referentials, polygons are in clockwise orientation. Values are "clockwise", "counterclockwise", or "neutral" (the default).
+
+      :param string selectable_mode:
+        New in Anatomist 4.5.
+        Replaces the ghost property.
+        always_selectable: object is selecatble whatever its opacity.
+        ghost: object is not selectable.
+        selectable_when_opaque: object is selectable when totally opaque (this is the default in Anatomist).
+        selectable_when_not_totally_transparent: object is selectable unless opacity is zero.
+
       """
       self.anatomistinstance.setMaterial([self], material, refresh,
       ambient, diffuse, emission, specular, shininess, lighting,
       smooth_shading, polygon_filtering, depth_buffer, face_culling,
-      polygon_mode, unlit_color, line_width, ghost, front_face)
+      polygon_mode, unlit_color, line_width, ghost=None,
+      front_face=front_face, selectable_mode=selectable_mode)
 
     def setPalette(self, palette=None, minVal=None, maxVal=None, palette2=None,  minVal2=None, maxVal2=None, mixMethod=None, linMixFactor=None, palette1Dmapping=None, absoluteMode=False):
       """
