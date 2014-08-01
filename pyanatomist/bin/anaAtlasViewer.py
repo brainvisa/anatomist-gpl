@@ -12,7 +12,8 @@ def main(args):
 
   parser = OptionParser('Atlas viewer and ROIs selector')
   parser.add_option('-i', '--input', dest='input', metavar='FILE',
-      help='input model/atlas graph (.arg)')
+      action='append', default=[],
+      help='input model/atlas graph[s] (.arg). Selveral items allowed.')
   parser.add_option('-v', '--volume', dest='volume', metavar='FILE',
       help='volume which may be viewed optionally')
   parser.add_option('-s', '--sel', dest='selection', metavar='FILE',

@@ -98,7 +98,12 @@ class AtlasJsonRois(QMainWindow):
     toolbar.addAction(self.convention)
 
     # load data and nomenclature
-    graph = aims.read( arg_roi_path )
+    graphs = []
+    if not isinstance(arg_roi_path, list) or isinstance(arg_roi_path, tuple):
+      arg_roi_path = [arg_roi_path]
+    for arg_path in arg_roi_path:
+      graph = aims.read(arg_path)
+      graphs.append(graph)
 
     if nomenclature_path is not None:
       nomenclature = aims.read(nomenclature_path)
@@ -134,8 +139,8 @@ class AtlasJsonRois(QMainWindow):
     self.nomenclature = None
     if self.tree.nomenclature is not None:
       self.nomenclature = a.toAObject( self.tree.nomenclature )
-    self.ana_graph = a.toAObject(graph)
-    self.window_anat_viewer.addObjects( self.ana_graph, add_graph_nodes=True)
+    self.ana_graphs = [a.toAObject(graph) for graph in graphs]
+    self.window_anat_viewer.addObjects( self.ana_graphs, add_graph_nodes=True)
     if t1mri_vol_path is not None:
       t1mri = aims.read( t1mri_vol_path )
       self.t1mri_anat_vol = a.toAObject(t1mri)
@@ -145,17 +150,18 @@ class AtlasJsonRois(QMainWindow):
       self.t1mri_anat_vol = None
 
     if not self.nomenclature:
-      self.ana_graph.setColorMode( self.ana_graph.PropertyMap )
-      self.ana_graph.setColorProperty( 'name' )
-      self.ana_graph.setPalette( a.getPalette( "random" ) )
-      self.ana_graph.notifyObservers()
+      for ana_graph in self.ana_graphs:
+        ana_graph.setColorMode( self.ana_graph.PropertyMap )
+        ana_graph.setColorProperty( 'name' )
+        ana_graph.setPalette( a.getPalette( "random" ) )
+        ana_graph.notifyObservers()
 
     self.window_anat_viewer.show()
     #******************************************
     #save cluster in Python dictionary
-    graphs = self.window_anat_viewer.objects
+    objects = self.window_anat_viewer.objects
     self.clust_dict = {}
-    for n in graphs:
+    for n in objects:
       #self.t1mri_anat_vol must be managed otherwise
       if n != self.t1mri_anat_vol:
         name = n.name.split()
@@ -381,10 +387,11 @@ class AtlasJsonRois(QMainWindow):
       toggle_clust_dict = select_list[1]
     #"="Apply the colors of nodes
     if not self.nomenclature:
-      self.ana_graph.setColorMode( self.ana_graph.PropertyMap )
-      self.ana_graph.setColorProperty( 'name' )
-      self.ana_graph.setPalette(a.getPalette("random"))
-      self.ana_graph.notifyObservers()
+      for ana_graph in self.ana_graphs:
+        ana_graph.setColorMode( self.ana_graph.PropertyMap )
+        ana_graph.setColorProperty( 'name' )
+        ana_graph.setPalette(a.getPalette("random"))
+        ana_graph.notifyObservers()
     a.sync()
     #"="
     for g in clust_list:
