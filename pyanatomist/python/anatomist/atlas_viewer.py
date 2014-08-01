@@ -36,9 +36,6 @@ class AtlasJsonRois(QMainWindow):
         nomenclature_path=None):
     """
     """
-    if json_roi_path == None:
-      json_roi_path = self.createRoiFileOnTheFly(arg_roi_path)
-
     QMainWindow.__init__(self)
     self.setGeometry(0, 0, 750, 500 )
     self.setWindowTitle("Atlas viewer")
@@ -54,9 +51,9 @@ class AtlasJsonRois(QMainWindow):
     #*****# Definition of windows #**********
     self.viewer_widget = QWidget()
     self.setCentralWidget(self.viewer_widget)
- 
+
     # MRI anatomist wiever
-    self.window_anat_viewer = a.createWindow('3D', no_decoration=True) 
+    self.window_anat_viewer = a.createWindow('3D', no_decoration=True)
     self.window_anat_viewer.setControl('SelectionAtlasControl')
     self.window_anat_viewer.setParent(self.viewer_widget)
     w_anat_viewer_layout = QVBoxLayout( self.viewer_widget )
@@ -99,7 +96,16 @@ class AtlasJsonRois(QMainWindow):
     toolbar.addAction(self.outline)
     self.convention = QAction( QIcon(os.path.join(icondir,'convention_brain_2.png')), 'change convention display', self )
     toolbar.addAction(self.convention)
-    
+
+    # load data and nomenclature
+    graph = aims.read( arg_roi_path )
+    self.nomenclature = None
+    if nomenclature_path:
+      self.nomenclature = a.loadObject(nomenclature_path)
+    if json_roi_path == None:
+      json_roi_path = self.createRoiFileOnTheFly(graph,
+        self.nomenclature.toAimsObject())
+
     # Tool window
     self.tree = TreeRois( json_roi_path )
     self.tree_widget = self.tree.getWidget()
@@ -120,14 +126,9 @@ class AtlasJsonRois(QMainWindow):
     tool_window_layout.addLayout(group_layout)
     tool_window_layout.addWidget(create_group)
     tool_window.setLayout(tool_window_layout)
-    
+
     #display atlas in Axial anatomist window
-    file_readed = aims.Reader({'Volume': 'AimsData'})
-    graph = aims.read( arg_roi_path )
-    self.nomenclature = None
-    if nomenclature_path:
-      self.nomenclature = a.loadObject(nomenclature_path)
-    elif self.tree.nomenclature is not None:
+    if self.nomenclature is None and self.tree.nomenclature is not None:
       self.nomenclature = a.toAObject( self.tree.nomenclature )
     self.ana_graph = a.toAObject(graph)
     self.window_anat_viewer.addObjects( self.ana_graph, add_graph_nodes=True)
@@ -415,7 +416,9 @@ class AtlasJsonRois(QMainWindow):
     state_list = self.tree.getLeaves()
     unchecked_graphs_list = []
     for n in state_list[0]:
-      unchecked_graphs_list.extend(self.clust_dict[str(n.text(1))])
+      item = self.clust_dict.get(str(n.text(1)))
+      if item is not None:
+        unchecked_graphs_list.extend(item)
     for g in unchecked_graphs_list:
       objects = []
       if isinstance(g,list):
@@ -486,19 +489,20 @@ class AtlasJsonRois(QMainWindow):
     #self.tree.createGroupWithNodeChecked(self.name_group.text())
     self.tree.createGroupWithNodeSelected(self.name_group.text())
     self.tree.leaves_sorted = self.tree.sortLeavesBySide()
-#______________________________________________________________________________   
-  def createRoiFileOnTheFly(self, arg_roi_path):
-    roi_dict = {} 
-    
-    graph = aims.read(arg_roi_path)
-    for v in graph.vertices():
-    #sometimes it exists several buckets for the same node and they are named "xx (1)", "xx (2)" ...
-      name = v['name'].split()[0]
-      if isinstance(name, str):
-        if name in roi_dict:
-          roi_dict[name].extend( v['name'] )
-        else:
-          roi_dict[name] = [ v['name'] ]
+#______________________________________________________________________________
+  def createRoiFileOnTheFly(self, graph, nomenclature=None):
+    if nomenclature is not None:
+      roi_dict = TreeRois.treeToDict(nomenclature)
+    else:
+      roi_dict = {}
+      for v in graph.vertices():
+      #sometimes it exists several buckets for the same node and they are named "xx (1)", "xx (2)" ...
+        name = v['name'].split()[0]
+        if isinstance(name, str):
+          if name in roi_dict:
+            roi_dict[name].extend( v['name'] )
+          else:
+            roi_dict[name] = [ v['name'] ]
     Json_data = {}
     Json_data["brain"] = roi_dict
     write_file = open('/tmp/roiTmp.roi', "w")
@@ -528,23 +532,27 @@ class TreeRois:
     self.leaves_sorted = self.sortLeavesBySide()
     self.createMemoryCheckedDict()
 
-  def _treeToDict(self, jitem, hitem):
-    for item in hitem.children():
-      if item.has_key('name'):
-        name = item['name']
-        if item.childrenSize() == 0:
-          jitem[name] = [name]
-        else:
-          jitem[name] = {}
-          self._treeToDict(jitem[name],item)
+  @staticmethod
+  def treeToDict(nomenclature):
+    roi_dict = {}
+    children = [(child, roi_dict) for child in nomenclature.children()]
+    while children:
+      child, layer = children.pop(0)
+      if child.childrenSize() == 0: # terminal element
+        clist = layer.setdefault(child['name'], [])
+        clist.append(child['name'])
+      else:
+        clist = layer.setdefault(child['name'], {})
+        clist[child['name']] = [child['name']] # make it also a leaf
+        children += [(c, clist) for c in child.children()]
+    return roi_dict
 
   def createJSONData(self, json_path):
     if json_path.endswith( '.hie' ):
       try:
         hie = aims.read( json_path )
         # convert to dict
-        jsondict = {}
-        self._treeToDict(jsondict,hie)
+        jsondict = self.treeToDict(hie)
         return jsondict, hie
       except:
         pass # try json format
