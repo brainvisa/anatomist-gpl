@@ -17,6 +17,8 @@ def main(args):
       help='volume which may be viewed optionally')
   parser.add_option('-s', '--sel', dest='selection', metavar='FILE',
       help='selection file for pre-selected regions/groups')
+  parser.add_option('-n', '--nomenclature', dest='nomenclature',
+      metavar='FILE', help='nomenclature file (.hie) for names and colors')
 
   options, args = parser.parse_args(args[1:])
 
@@ -28,18 +30,23 @@ def main(args):
   # interface = AtlasJsonRois( '/home/ml236783/Bureau/nmr_new/sujet01/t1mri/default_acquisition/default_analysis/folds/3.1/Lsujet01.arg')
 
   new_args = args
-  if options.input:
-      new_args.insert(0, options.input)
-  if len(new_args) == 0:
-      parser.parse_args(['-h'])
-  if options.volume:
-      new_args.insert(1, options.volume)
-  if options.selection:
-      if len(new_args) < 2:
-          new_args.append(None)
-      new_args.insert(2, options.selection)
+  roi = options.input
+  if not roi:
+      if len(args) == 0:
+          parser.parse_args(['-h'])
+      roi = args.pop(0)
+  volume = options.volume
+  if not volume and len(args) != 0:
+      volume = args.pop(0)
+  selection = options.selection
+  if not selection and len(args) != 0:
+      selection = args.pop(0)
+  nomenclature = options.nomenclature
+  if not nomenclature and len(args) != 0:
+      nomenclature = args.pop(0)
 
-  interface = AtlasJsonRois( *new_args )
+  interface = AtlasJsonRois(arg_roi_path=roi, t1mri_vol_path=volume,
+      json_roi_path=selection, nomenclature_path=nomenclature)
   interface.show()
   r = app.exec_()
   return r

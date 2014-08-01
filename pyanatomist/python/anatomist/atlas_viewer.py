@@ -32,7 +32,8 @@ class AtlasJsonRois(QMainWindow):
   """This class is the graphical interface inherited from QMainWindow
   """
 
-  def __init__(self, arg_roi_path, t1mri_vol_path=None, json_roi_path=None):
+  def __init__(self, arg_roi_path, t1mri_vol_path=None, json_roi_path=None,
+        nomenclature_path=None):
     """
     """
     if json_roi_path == None:
@@ -124,7 +125,9 @@ class AtlasJsonRois(QMainWindow):
     file_readed = aims.Reader({'Volume': 'AimsData'})
     graph = aims.read( arg_roi_path )
     self.nomenclature = None
-    if self.tree.nomenclature is not None:
+    if nomenclature_path:
+      self.nomenclature = a.loadObject(nomenclature_path)
+    elif self.tree.nomenclature is not None:
       self.nomenclature = a.toAObject( self.tree.nomenclature )
     self.ana_graph = a.toAObject(graph)
     self.window_anat_viewer.addObjects( self.ana_graph, add_graph_nodes=True)
@@ -438,7 +441,7 @@ class AtlasJsonRois(QMainWindow):
   def multipleOrSingleSelection( self, item, toggle_clust_dict, clust_list):
     """This method is used to allow the multiple selection  """
     g = self.window_anat_viewer.group
-    if item.text(1):
+    if item is not None and item.text(1):
       if item.checkState(0)==2:
         #??Why it's not already the case?
         if str(item.text(1)) in self.clust_dict.keys():
