@@ -99,15 +99,18 @@ class AtlasJsonRois(QMainWindow):
 
     # load data and nomenclature
     graph = aims.read( arg_roi_path )
-    self.nomenclature = None
-    if nomenclature_path:
-      self.nomenclature = a.loadObject(nomenclature_path)
-    if json_roi_path == None:
-      json_roi_path = self.createRoiFileOnTheFly(graph,
-        self.nomenclature.toAimsObject())
+
+    if nomenclature_path is not None:
+      nomenclature = aims.read(nomenclature_path)
+
+    json_dict = {}
+    if json_roi_path is not None:
+      json_file = open(json_roi_path)
+      json_dict = json.load(json_file), None
+      del json_file
 
     # Tool window
-    self.tree = TreeRois( json_roi_path )
+    self.tree = TreeRois(json_dict, nomenclature)
     self.tree_widget = self.tree.getWidget()
     self.tree_widget.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
@@ -128,7 +131,8 @@ class AtlasJsonRois(QMainWindow):
     tool_window.setLayout(tool_window_layout)
 
     #display atlas in Axial anatomist window
-    if self.nomenclature is None and self.tree.nomenclature is not None:
+    self.nomenclature = None
+    if self.tree.nomenclature is not None:
       self.nomenclature = a.toAObject( self.tree.nomenclature )
     self.ana_graph = a.toAObject(graph)
     self.window_anat_viewer.addObjects( self.ana_graph, add_graph_nodes=True)
@@ -490,27 +494,6 @@ class AtlasJsonRois(QMainWindow):
     self.tree.createGroupWithNodeSelected(self.name_group.text())
     self.tree.leaves_sorted = self.tree.sortLeavesBySide()
 #______________________________________________________________________________
-  def createRoiFileOnTheFly(self, graph, nomenclature=None):
-    if nomenclature is not None:
-      roi_dict = TreeRois.treeToDict(nomenclature)
-    else:
-      roi_dict = {}
-      for v in graph.vertices():
-      #sometimes it exists several buckets for the same node and they are named "xx (1)", "xx (2)" ...
-        name = v['name'].split()[0]
-        if isinstance(name, str):
-          if name in roi_dict:
-            roi_dict[name].extend( v['name'] )
-          else:
-            roi_dict[name] = [ v['name'] ]
-    Json_data = {}
-    Json_data["brain"] = roi_dict
-    write_file = open('/tmp/roiTmp.roi', "w")
-    write_file.write(json.dumps(Json_data, indent=4))  
-     
-    return '/tmp/roiTmp.roi'
-#--------------******************-------------***************------
-#______________________________________________________________________________
   def centerOnScreen(self):
     '''centerOnScreen()
 	centers the window on the screen.'''
@@ -521,13 +504,14 @@ class AtlasJsonRois(QMainWindow):
 #------------------------------------------------------------------------------
 class TreeRois:
   
-  def __init__(self, json_path):
+  def __init__(self, json_dict, nomenclature=None):
     # Initialization of Tree creation
     self.tree_widget = QTreeWidget()
     self.tree_widget.setColumnCount(2)
     self.tree_widget.headerItem().setText(0, "Labels name")
     self.tree_widget.headerItem().setText(1, "Labels value")
-    self.json_full_data, self.nomenclature = self.createJSONData(json_path)
+    self.json_full_data, self.nomenclature \
+      = self.createJSONData(json_dict, nomenclature)
     self.updateTree(self.json_full_data)
     self.leaves_sorted = self.sortLeavesBySide()
     self.createMemoryCheckedDict()
@@ -547,17 +531,17 @@ class TreeRois:
         children += [(c, clist) for c in child.children()]
     return roi_dict
 
-  def createJSONData(self, json_path):
-    if json_path.endswith( '.hie' ):
-      try:
-        hie = aims.read( json_path )
-        # convert to dict
-        jsondict = self.treeToDict(hie)
-        return jsondict, hie
-      except:
-        pass # try json format
-    json_file=open(json_path)
-    return json.load(json_file), None
+  def createJSONData(self, json_dict, nomenclature):
+    if nomenclature is not None:
+      nom_dict = self.treeToDict(nomenclature)
+      json_dict2 = {}
+      if json_dict:
+        json_dict2.update(json_dict)
+      json_dict2['brain'] = nom_dict
+      return json_dict2, nomenclature
+    return json_dict, None
+    #json_file = open(json_path)
+    #return json.load(json_file), None
 #______________________________________________________________________________  
   def getWidget(self):
     return self.tree_widget
