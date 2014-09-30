@@ -885,6 +885,7 @@ class TreeRois:
         # we have to remove the potential old nodes if exists
         if len(self.json_full_data) == 2:
             del self.json_full_data["customized group"]
+        saved_dict = {"customized group": {}}
         # we have to create new jsondata for "customized group"
         if self.tree_widget.findItems("customized group", Qt.MatchExactly):
             item = self.tree_widget.findItems(
@@ -893,8 +894,10 @@ class TreeRois:
             new_json_data = self.writeNodeInJson(item)
             # we have to mix the both trees
             self.json_full_data["customized group"] = new_json_data
+            saved_dict["customized group"] = new_json_data
+        # save only customized group
         write_file = open(filename, "w")
-        write_file.write(json.dumps(self.json_full_data, indent=4))
+        write_file.write(json.dumps(saved_dict, indent=4))
 
     def writeNodeInJson(self, item, dictio={}):
         """This method aims is to create JSON data with current tree """
