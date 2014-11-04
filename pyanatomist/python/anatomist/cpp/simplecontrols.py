@@ -112,6 +112,7 @@ class Simple2DControl( anatomist.Control ):
       pool.action( "ResetFOVAction" ).resetFOV )
 
   def doAlsoOnDeselect( self, pool ):
+    a = anatomist.Anatomist('-b')
     for k,ac in self.myActions.iteritems():
       if isinstance( a, anatomist.MovieAction ) and a.isRunning():
         a.startOrStop()
