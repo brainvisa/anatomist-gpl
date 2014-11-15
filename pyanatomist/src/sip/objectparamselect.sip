@@ -36,6 +36,9 @@ protected slots:
 };
 
 
+namespace anatomist
+{
+
 class ObjectParamSelectSip : ObjectParamSelect
 {
 %TypeHeaderCode
@@ -49,5 +52,9 @@ public:
 signals:
   void objectsSelectedSip( const set_AObjectPtr & );
 };
+
+};
+
+
 
 
