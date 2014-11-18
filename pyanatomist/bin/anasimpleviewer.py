@@ -64,7 +64,8 @@ else:
 
 # the following imports have to be made after the qApp.startingUp() test
 # since they do instantiate Anatomist for registry to work.
-from anatomist.cpp.simplecontrols import Simple2DControl, Simple3DControl
+from anatomist.cpp.simplecontrols import Simple2DControl, Simple3DControl, \
+  registerSimpleControls
 from anatomist.cpp.palettecontrastaction import PaletteContrastAction
 
 # splash
@@ -78,6 +79,8 @@ qt.qApp.processEvents()
 
 # start the Anatomist engine, in batch mode (no main window)
 a = ana.Anatomist( '-b' )
+
+registerSimpleControls()
 
 # load the anasimpleviewer GUI
 anasimpleviewerdir = os.path.join( \

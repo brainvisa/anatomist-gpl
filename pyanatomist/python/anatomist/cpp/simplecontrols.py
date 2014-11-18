@@ -140,24 +140,26 @@ class Simple3DControl( Simple2DControl ):
     self.keyPressEventSubscribe( key.Key_Space, ControlModifier,
       pool.action( "ContinuousTrackball" ).startOrStop )
 
-# register actions and controls
-a = anatomist.Anatomist( '-b' )
-iconpath = os.path.join( str( a.anatomistSharedPath() ), 'icons' )
-pix = QtGui.QPixmap( os.path.join( iconpath, 'simple2Dcontrol.png' ) )
-anatomist.IconDictionary.instance().addIcon( 'Simple2DControl', pix )
-pix = QtGui.QPixmap( os.path.join( iconpath, 'simple3Dcontrol.png' ) )
-anatomist.IconDictionary.instance().addIcon( 'Simple3DControl', pix )
 
-del pix, iconpath, a, os, QtGui
+def registerSimpleControls():
+  ''' register actions and controls'''
+  a = anatomist.Anatomist( '-b' )
+  iconpath = os.path.join( str( a.anatomistSharedPath() ), 'icons' )
+  pix = QtGui.QPixmap( os.path.join( iconpath, 'simple2Dcontrol.png' ) )
+  anatomist.IconDictionary.instance().addIcon( 'Simple2DControl', pix )
+  pix = QtGui.QPixmap( os.path.join( iconpath, 'simple3Dcontrol.png' ) )
+  anatomist.IconDictionary.instance().addIcon( 'Simple3DControl', pix )
 
-ad = anatomist.ActionDictionary.instance()
-ad.addAction( 'ResetFOVAction', ResetFOVAction )
-cd = anatomist.ControlDictionary.instance()
-cd.addControl( 'Simple2DControl', Simple2DControl, 25 )
-cd.addControl( 'Simple3DControl', Simple3DControl, 26 )
-#cm = anatomist.ControlManager.instance()
-#cm.addControl( 'QAGLWidget3D', '', 'Simple2DControl' )
-#cm.addControl( 'QAGLWidget3D', '', 'Simple3DControl' )
+  del pix, iconpath, a #, os, QtGui
 
-del cd, ad
+  ad = anatomist.ActionDictionary.instance()
+  ad.addAction( 'ResetFOVAction', ResetFOVAction )
+  cd = anatomist.ControlDictionary.instance()
+  cd.addControl( 'Simple2DControl', Simple2DControl, 25 )
+  cd.addControl( 'Simple3DControl', Simple3DControl, 26 )
+  #cm = anatomist.ControlManager.instance()
+  #cm.addControl( 'QAGLWidget3D', '', 'Simple2DControl' )
+  #cm.addControl( 'QAGLWidget3D', '', 'Simple3DControl' )
+
+  del cd, ad
 
