@@ -211,6 +211,8 @@ Download source: `anagraphannotate.py <../examples/anagraphannotate.py>`_
 .. literalinclude:: ../examples/anagraphannotate.py
 
 
+.. _simple_viewer:
+
 Simple viewer
 -------------
 

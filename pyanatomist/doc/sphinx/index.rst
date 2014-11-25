@@ -30,6 +30,12 @@ Sub-modules
 - :doc:`pyanatomist_wip`
 
 
+How to
+------
+
+- :doc:`pyanatomist_howto`
+
+
 PyAnatomist examples
 --------------------
 
@@ -39,6 +45,6 @@ PyAnatomist examples
 Tutorial
 --------
 
-- The :anatomist:`tutorial is accessible here <ana_training/en/html/ch09.html>`.
+- :doc:`pyanatomist_tutorial`
 - You can also have a look at the :pyaims:`PyAims tutorial <pyaims_tutorial.html>`.
 
