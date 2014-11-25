@@ -46,5 +46,6 @@ Tutorial
 --------
 
 - :doc:`pyanatomist_tutorial`
+- :doc:`pyanatomist_pyaims_tutorial`
 - You can also have a look at the :pyaims:`PyAims tutorial <pyaims_tutorial.html>`.
 
