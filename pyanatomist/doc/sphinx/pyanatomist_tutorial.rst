@@ -339,7 +339,7 @@ When you use the direct implementation of Anatomist Python API, more features ar
 
 See the :anatomist:`Anatomist doxygen documentation <doxygen/index.html>` about the C++ API to have more information about the classes and functions that may be available in Python (if the bindings are done).
 
-In this mode, it is also possible to interact on objects directly and interactively with Python Aims API. See more details about that in :pyaims:`PyAims / PyAnatomist integration part in PyAims tutorial <pyaims_tutorial.html#pyaims-pyanatomist-integration>`.
+In this mode, it is also possible to interact on objects directly and interactively with Python Aims API. See more details about that in :doc:`pyanatomist_pyaims_tutorial`.
 
 Amongst the noticeable benefits of the direct implementation is the possibility to use Anatomist views as Qt widgets to build custom interfaces. This is what has been used to program the :anatomist:`AnaSimpleViewer <ana_training/en/html/ch08.html>` application. See the :ref:`simple_viewer` example.
 
