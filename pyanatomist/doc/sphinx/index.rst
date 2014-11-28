@@ -9,6 +9,8 @@
 PyAnatomist programming documentation
 -------------------------------------
 
+First, have a look at the :anatomist:`PyAnatomist overview <pyanatomist_overview.pdf>` slides
+
 .. automodule:: anatomist
 
 
