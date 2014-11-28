@@ -3,6 +3,7 @@
 
 
 .. image:: anatomist.png
+  :align: center
 
 .. _pyanatomist_index:
 
