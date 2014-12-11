@@ -10,7 +10,7 @@
 PyAnatomist programming documentation
 -------------------------------------
 
-First, have a look at the :anatomist:`PyAnatomist overview <pyanatomist_overview.pdf>` slides
+First, have a look at the :anatomist:`PyAnatomist overview <pyanatomist_overview.pdf>` slides, which were presented at the `Python in Neuroscience 2011 <http://pythonneuro.sciencesconf.org/>`_ conference on 2011/08/30.
 
 .. automodule:: anatomist
 

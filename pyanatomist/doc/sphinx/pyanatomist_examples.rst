@@ -196,6 +196,10 @@ Complete example with a specific graphical interface that embeds an Anatomist wi
 
 Download source: `volumeMeasures.py <../examples/volumeMeasures.py>`_
 
+.. figure:: images/volume_measures.png
+
+  Volume Measures Example
+
 .. literalinclude:: ../examples/volumeMeasures.py
 
 
@@ -204,9 +208,9 @@ Download source: `volumeMeasures.py <../examples/volumeMeasures.py>`_
 
 Display graph labels as 3D text annotations.
 
-.. image:: graphannotate.jpg
-
 Download source: `anagraphannotate.py <../examples/anagraphannotate.py>`_
+
+.. image:: graphannotate.jpg
 
 .. literalinclude:: ../examples/anagraphannotate.py
 
@@ -219,6 +223,10 @@ Simple viewer
 An even simplified version of the anasimpleviewer application, which may also be used as a programming example. Its code is in the "bin/"" directory of the binary packages.
 
 Download source: `anaevensimplerviewer.py <../examples/anaevensimplerviewer.py>`_
+
+.. figure:: images/anaevensimplerviewer.png
+
+  Ana Even Simpler Viewer Example
 
 .. literalinclude:: ../examples/anaevensimplerviewer.py
 
