@@ -103,6 +103,8 @@ By default, brainvisa module uses socket implementation. This way, Brainvisa and
   type: string
 
   Use this constant to load anatomist api threaded direct implementation. See :py:mod:`anatomist.threaded.api` module.
+
+In addition to the Python APIs, the :py:meth:`Anatomist.execute <base.Anatomist.execute>` method of Anatomist also grants access to the :anatomist:`commands system <html/fr/programmation/commands.html>` which offers many functionalities, some of which have not been wrapped yet int the more "pythonic" API.
 """
 __docformat__ = 'restructuredtext en'
 
