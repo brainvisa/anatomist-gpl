@@ -327,26 +327,27 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       objectName=""
     options=None
     if restrict_object_types is not None or hidden or asyncCallback:
-      options={'__syntax__' : 'dictionary'}
+      options = {'__syntax__' : 'dictionary'}
       if restrict_object_types:
-        restrict_object_types['__syntax__']='dictionary'
-        options['restrict_object_types']=restrict_object_types
+        restrict_object_types['__syntax__'] = 'dictionary'
+        options['restrict_object_types'] = restrict_object_types
       if hidden:
-        options['hidden']=1
+        options['hidden'] = 1
       if asyncCallback:
-        options['asynchronous']=True
-    c=cpp.LoadObjectCommand(filename, -1, objectName, False, aims.Object(options))
+        options['asynchronous'] = True
+    c = cpp.LoadObjectCommand(filename, -1, objectName, False,
+                              aims.Object(options))
     if asyncCallback:
       cbk = self._ObjectLoaded( self, duplicate, asyncCallback, filename )
       self._loadCbks.add( cbk )
       c.objectLoaded.connect( cbk.loaded )
     self.execute(c)
     if not asyncCallback:
-      o=self.AObject(self, c.loadedObject())
+      o = self.AObject(self, c.loadedObject())
       o.releaseAppRef()
       if duplicate:
         # the original object has been loaded hidden, duplicate it
-        copyObject=self.duplicateObject(o)
+        copyObject = self.duplicateObject(o)
         return copyObject
       return o
 
@@ -384,8 +385,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     newObjectId=self.newId()
     if shallowCopy:
-      shallowCopy =1
-    else: shallowCopy=0
+      shallowCopy = 1
+    else: shallowCopy = 0
     self.execute("DuplicateObject", source=source, res_pointer=newObjectId, shallow=shallowCopy)
     cObject= self.context.object(newObjectId)
     if cObject is not None:
