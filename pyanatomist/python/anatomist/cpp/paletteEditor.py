@@ -50,6 +50,8 @@ class PaletteEditor( QtGui.QGroupBox ):
         self.real_min = real_min
         self.real_max = real_max
         self.sliderPrecision = sliderPrecision
+
+        self.palette_image_temp_path = None
         
         a = ana.Anatomist('-b')
         self.image = image
@@ -242,16 +244,22 @@ class PaletteEditor( QtGui.QGroupBox ):
 
         if not self.rangeslider._movingHandle:
             paletteinfo = self.updatePaletteLabel()
-            tempfile = mkstemp()[1]
-            paletteinfo[0].save(tempfile, "PNG")
+            if self.palette_image_temp_path is not None:
+              if os.path.exists(self.palette_image_temp_path):
+                os.remove(self.palette_image_temp_path)
+              else:
+                raise Exception('The temporary palette image has not been normally deleted')
+            else:
+              self.palette_image_temp_path = mkstemp()[1]
+            
+            paletteinfo[0].save(self.palette_image_temp_path, "PNG")
             self.rangeslider.setStyleSheet("QRangeSlider * { border: 0px; padding: 0px; } \
                                             QRangeSlider #Head { background: " + paletteinfo[1] + " repeat-x; } \
-                                            QRangeSlider #Span { background: url(" + tempfile + ") repeat-x; } \
+                                            QRangeSlider #Span { background: url(" + self.palette_image_temp_path + ") repeat-x; } \
                                             QRangeSlider #Tail { background: "+ paletteinfo[2] + " repeat-x; } \
                                             QRangeSlider > QSplitter::handle { background: #888888; } \
                                             QRangeSlider > QSplitter::handle:vertical { height: 4px; } \
                                             QRangeSlider > QSplitter::handle:pressed { background: #ACACAC; } ")
-            os.remove(tempfile)
         
         
         real_min = ( ( self.real_max - self.real_min ) * min /  self.sliderPrecision ) + self.real_min
