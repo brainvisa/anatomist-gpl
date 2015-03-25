@@ -358,3 +358,12 @@ class PaletteEditor( QtGui.QGroupBox ):
                           maxVal=max*(1.0/self.sliderPrecision) )
         self.image = image
       
+    def closeEvent( self, event ):
+        if self.palette_image_temp_path is not None:
+            if os.path.exists(self.palette_image_temp_path):
+                os.remove(self.palette_image_temp_path)
+            else:
+                raise Exception('The temporary palette image has not been normally deleted')
+        else:
+            raise Exception('paletteEditor instance was closed before palette_image_temp_path variate creation')
+        event.accept()
