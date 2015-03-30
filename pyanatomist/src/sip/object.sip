@@ -189,10 +189,12 @@ namespace anatomist
 %End
 
     virtual vector_FLOAT texValues( const Point3df & pos, float time,
-                                    const anatomist::Referential* orgRef,
-                                    const Point3df & orgVoxSz ) const;
+                                    const anatomist::Referential* orgRef ) const;
     virtual vector_FLOAT texValues( const Point3df & pos,
                                     float time ) const;
+    virtual float mixedTexValue( const Point3df & pos, float time,
+                                 const anatomist::Referential* orgRef ) const;
+    virtual float mixedTexValue( const Point3df & pos, float time ) const;
 
   };
 
