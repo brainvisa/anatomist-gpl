@@ -181,30 +181,12 @@ class QAWindow : QMainWindow, anatomist::AWindow
 %End
 
 public:
-%If (Qt_4_1_1 - )
   QAWindow( QWidget * /TransferThis/ = 0, const char *=0,
     carto::Object =carto::none(), Qt::WindowFlags=Qt::Window );
-%End
-%If ( - Qt_3_3_6)
-  QAWindow( QWidget * /TransferThis/ = 0, const char *=0,
-    carto::Object =carto::none(), Qt::WFlags=Qt::WType_TopLevel );
-%End
-%If (Qt_3_3_6-) // the previous condition doesn't include the Qt_3_3_6 case,
-  // as far as I know, impossible to make both fit in the same condition (!)
-  QAWindow( QWidget * /TransferThis/ = 0, const char *=0,
-    carto::Object =carto::none(), Qt::WFlags=Qt::WType_TopLevel );
-%End
   virtual ~QAWindow();
   virtual void refreshNow();
   virtual bool close() /AutoGen/;
-%If ( - Qt_3_3_6)
-  virtual bool close( int ) /AutoGen/;
-%End
-%If (Qt_3_3_6-) // the previous condition doesn't include the Qt_3_3_6 case,
-  // as far as I know, impossible to make both fit in the same condition (!)
-  virtual bool close( int ) /AutoGen/;
-%End
-static QAWindow* fromObject( carto::GenericObject );
+  static QAWindow* fromObject( carto::GenericObject );
 %MethodCode
   try
   {
