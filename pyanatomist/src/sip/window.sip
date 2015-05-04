@@ -186,7 +186,7 @@ public:
   virtual ~QAWindow();
   virtual void refreshNow();
   virtual bool close() /AutoGen/;
-static QAWindow* fromObject( carto::GenericObject );
+  static QAWindow* fromObject( carto::GenericObject );
 %MethodCode
   try
   {
