@@ -33,7 +33,7 @@
 
 from PyQt4 import QtCore, QtGui
 from soma import aims
-from soma.qt4gui.rangeSlider import QRangeSlider
+from soma.qt_gui.rangeSlider import QRangeSlider
 from tempfile import mkstemp
 import anatomist.api as ana
 import os

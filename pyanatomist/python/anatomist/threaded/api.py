@@ -54,10 +54,7 @@ from anatomist import cpp
 import anatomist.threadedimpl
 import anatomist.direct.api
 import sys
-if sys.modules.has_key( 'PyQt4' ):
-  from soma.qt4gui.api import QtThreadCall
-else:
-  from soma.qt3gui.api import QtThreadCall
+from soma.qt_gui.qtThread import QtThreadCall
 
 mainThread=QtThreadCall()
 Anatomist=anatomist.threadedimpl.getThreadSafeClass(\

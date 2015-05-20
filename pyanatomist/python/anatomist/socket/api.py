@@ -64,8 +64,8 @@ import sys, os
 import distutils.spawn
 import atexit
 
-from soma.qt4gui.io import Socket
-from soma.qt4gui.api import QtThreadCall
+from soma.qt_gui.io import Socket
+from soma.qt_gui.qtThread import QtThreadCall
 from PyQt4.QtCore import QProcess, SIGNAL
 from PyQt4.QtGui import qApp
 
