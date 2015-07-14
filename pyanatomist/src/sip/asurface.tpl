@@ -32,10 +32,10 @@ public:
   ASurface_%Template1typecode%( const char *="" );
   virtual ~ASurface_%Template1typecode%();
 
-  // const rc_ptr_AimsTimeSurface_%Template1typecode% surface() const;
-  rc_ptr_AimsTimeSurface_%Template1typecode% surface();
-  void setSurface( rc_ptr_AimsTimeSurface_%Template1typecode% );
-  void setSurface( AimsTimeSurface_%Template1typecode% * /Transfer/ );
+  // const rc_ptr_AimsTimeSurface_%Template1typecode%_VOID surface() const;
+  rc_ptr_AimsTimeSurface_%Template1typecode%_VOID surface();
+  void setSurface( rc_ptr_AimsTimeSurface_%Template1typecode%_VOID );
+  void setSurface( AimsTimeSurface_%Template1typecode%_VOID * /Transfer/ );
   // const AimsSurface_%Template1typecode% * surfaceOfTime( float ) const;
   bool isPlanar() const;
   virtual bool Is2DObject();

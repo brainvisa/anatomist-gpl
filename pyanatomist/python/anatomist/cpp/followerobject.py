@@ -41,7 +41,7 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
     self.GetMaterial().set( { 'ghost': 1 } )
     self._objects = []
     # print 'ObjectFollowerCube.__init__, objects:', len( obj )
-    self.setSurface( aims.AimsTimeSurface_2() )
+    self.setSurface( aims.AimsTimeSurface_2_VOID() )
     self.setObserved( obj )
 
   def observed( self ):
@@ -99,7 +99,7 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
     #print 'ObjectFollowerCube.redraw'
     mesh = self.surface()
     if mesh.isNull():
-      self.setSurface( aims.AimsTimeSurface_2() )
+      self.setSurface( aims.AimsTimeSurface_2_VOID() )
       mesh = self.surface()
     if len( self._objects ) == 0:
       mesh.vertex().assign( [] )

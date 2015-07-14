@@ -201,11 +201,11 @@ public:
       carto::Object options = carto::Object() );
   static rc_ptr_Volume_RGBA volume_RGBA( anatomist::AObject*,
       carto::Object options = carto::Object() );
-  static rc_ptr_AimsTimeSurface_2 aimsSurface2( anatomist::AObject*,
+  static rc_ptr_AimsTimeSurface_2_VOID aimsSurface2( anatomist::AObject*,
       carto::Object options = carto::Object() );
-  static rc_ptr_AimsTimeSurface_3 aimsSurface3( anatomist::AObject*,
+  static rc_ptr_AimsTimeSurface_3_VOID aimsSurface3( anatomist::AObject*,
       carto::Object options = carto::Object() );
-  static rc_ptr_AimsTimeSurface_4 aimsSurface4( anatomist::AObject*,
+  static rc_ptr_AimsTimeSurface_4_VOID aimsSurface4( anatomist::AObject*,
       carto::Object options = carto::Object() );
   static rc_ptr_BucketMap_VOID aimsBucketMap_VOID( anatomist::AObject*,
       carto::Object options = carto::Object() );
@@ -245,9 +245,9 @@ public:
   static anatomist::AObject* anatomist( rc_ptr_AimsData_DOUBLE );
   static anatomist::AObject* anatomist( rc_ptr_AimsData_RGB );
   static anatomist::AObject* anatomist( rc_ptr_AimsData_RGBA );
-  static anatomist::AObject* anatomist( rc_ptr_AimsTimeSurface_2 );
-  static anatomist::AObject* anatomist( rc_ptr_AimsTimeSurface_3 );
-  static anatomist::AObject* anatomist( rc_ptr_AimsTimeSurface_4 );
+  static anatomist::AObject* anatomist( rc_ptr_AimsTimeSurface_2_VOID );
+  static anatomist::AObject* anatomist( rc_ptr_AimsTimeSurface_3_VOID );
+  static anatomist::AObject* anatomist( rc_ptr_AimsTimeSurface_4_VOID );
   static anatomist::AObject* anatomist( rc_ptr_BucketMap_VOID );
   static anatomist::AObject* anatomist( rc_ptr_Graph );
   static anatomist::AObject* anatomist( rc_ptr_TimeTexture_FLOAT );
