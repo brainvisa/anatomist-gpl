@@ -113,7 +113,7 @@ def display_graph(transfile, orientation, trm_name, graphname, meshname,
     # Windows
     if win is None:
         win = a.createWindow(wintype='3D', no_decoration=True,
-        options= {'wflags' : qt.Qt.X11BypassWindowManagerHint | qt.Qt.WindowStaysOnTopHint })
+        options= {'wflags' : int(qt.Qt.X11BypassWindowManagerHint | qt.Qt.WindowStaysOnTopHint) })
     else:
             win.removeObjects( win.getObjects() )
     if selected_sulci is None:
