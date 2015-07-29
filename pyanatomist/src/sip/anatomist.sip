@@ -60,6 +60,7 @@
 %Include choosereferential.sip
 %Include texture.sip
 %Include qapalettewin.sip
+%Include gradwidget.sip
 
 
 class AnatomistSip
