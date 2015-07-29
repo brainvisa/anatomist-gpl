@@ -2,7 +2,7 @@
 class GradientWidget : QWidget {
 
 %TypeHeaderCode
-#include <soma/gradwidget.h>
+#include <anatomist/gradientwidget/gradwidget.h>
 %End
 
 %TypeCode
