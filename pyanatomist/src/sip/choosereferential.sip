@@ -8,17 +8,14 @@ class ChooseReferentialWindow : QDialog, anatomist::Observer
 public:
   ChooseReferentialWindow( const set_AObjectPtr &,
                            const char *name,
-                           Qt::WFlags =
-                           Qt::WDestructiveClose | Qt::WType_Modal );
+                           Qt::WFlags = 0 );
   ChooseReferentialWindow( const set_AWindowPtr &,
                            const char *name,
-                           Qt::WFlags =
-                           Qt::WDestructiveClose | Qt::WType_Modal );
+                           Qt::WFlags = 0 );
   ChooseReferentialWindow( const set_AWindowPtr &,
                            const set_AObjectPtr &,
                            const char *name,
-                           Qt::WFlags =
-                           Qt::WDestructiveClose | Qt::WType_Modal );
+                           Qt::WFlags = 0 );
   virtual ~ChooseReferentialWindow();
 
   void update(const anatomist::Observable* observable, void* arg);

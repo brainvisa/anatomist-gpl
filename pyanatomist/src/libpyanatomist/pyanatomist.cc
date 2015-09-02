@@ -130,12 +130,12 @@ void AnatomistSip::quit()
 QWidget *AnatomistSip::createWindow( const QString &type, QWidget *parent )
 {
   anatomist::CreateWindowCommand *c 
-    = new anatomist::CreateWindowCommand( type.utf8().data() );
+    = new anatomist::CreateWindowCommand( type.toStdString() );
 
   anatomist::theProcessor->execute( c );
   QWidget	*w = dynamic_cast<QWidget *>( c->createdWindow() );
   if( w && parent )
-    w->reparent( parent, 0, QPoint( 0, 0 ) );
+    w->setParent( parent );
 
   return w;
 }
