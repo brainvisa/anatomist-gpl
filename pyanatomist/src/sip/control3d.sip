@@ -253,6 +253,81 @@ class DragObjectAction : anatomist::Action
 };
 
 
+namespace internal
+{
+class TransformerActionData : QObject
+{
+%TypeHeaderCode
+#include <anatomist/window3D/transformer.h>
+%End
+    public:
+        TransformerActionData();
+        virtual ~TransformerActionData();
+        virtual aims::Quaternion initialQuaternion() = 0;
+        virtual anatomist::View* tadView() = 0;
+        bool getCurrentMotion(Motion&);
+        void setTransformData(const anatomist::Transformation &, bool absolute=false, bool addToHistory=false);
+        void selectTransformations(anatomist::AWindow *);
+        anatomist::Transformation* mainTransformation() const;
+        void undo();
+        void redo();
+        bool undoable();
+        bool redoable();
+        
+    public slots:
+        virtual void resetTransform();
+    
+    protected:
+        virtual void updateTemporaryObjects(const aims::Quaternion &) = 0;
+        virtual void updateGVInfo(const aims::Quaternion &) = 0;
+};
+}; // namespace internal
+
+class Transformer : anatomist::internal::TransformerActionData, anatomist::Trackball
+{
+%TypeHeaderCode
+#include <anatomist/window3D/transformer.h>
+%End
+
+public:
+    Transformer();
+    virtual ~Transformer();
+    void toggleDisplayInfo();
+};
+
+class PlanarTransformer : anatomist::Transformer
+{
+%TypeHeaderCode
+#include <anatomist/window3D/transformer.h>
+%End
+
+public:
+    PlanarTransformer();
+    virtual ~PlanarTransformer();
+};
+
+class TranslaterAction : anatomist::internal::TransformerActionData, anatomist::Action
+{
+%TypeHeaderCode
+#include <anatomist/window3D/transformer.h>
+%End
+
+public:
+    TranslaterAction();
+    virtual ~TranslaterAction();
+};
+
+class ResizerAction : anatomist::TranslaterAction
+{
+%TypeHeaderCode
+#include <anatomist/window3D/transformer.h>
+%End
+
+public:
+    ResizerAction();
+    virtual ~ResizerAction();
+};
+
 class Control3D : anatomist::Control
 {
 %TypeHeaderCode
@@ -334,7 +409,6 @@ public:
   virtual void doAlsoOnSelect( anatomist::ActionPool * actionPool );
   virtual void doAlsoOnDeselect( anatomist::ActionPool * actionPool );
 };
-
 
 class CutControl : anatomist::Control
 {
