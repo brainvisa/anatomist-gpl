@@ -29,6 +29,7 @@ namespace anatomist
     Point3df dynamicOffsetFromPoint() const;
     void setScale( float scale );
     float scale() const;
+    virtual anatomist::GLComponent* glAPI();
   };
 
 };

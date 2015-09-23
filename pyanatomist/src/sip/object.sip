@@ -195,6 +195,7 @@ namespace anatomist
     virtual float mixedTexValue( const Point3df & pos, float time,
                                  const anatomist::Referential* orgRef ) const;
     virtual float mixedTexValue( const Point3df & pos, float time ) const;
+    virtual void update( const anatomist::Observable *observable, void *arg );
 
   };
 
