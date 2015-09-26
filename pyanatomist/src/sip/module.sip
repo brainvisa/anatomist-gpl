@@ -37,6 +37,7 @@ class ModuleManager
 
 public:
   static anatomist::ModuleManager *instance();
+  ~ModuleManager();
 
   unsigned size() const;
 
@@ -56,6 +57,9 @@ public:
 protected:
   void insert( anatomist::Module * /Transfer/ );
   void remove( anatomist::Module * /TransferBack/ );
+
+private:
+  ModuleManager();
 };
 
 };
