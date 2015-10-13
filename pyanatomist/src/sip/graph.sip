@@ -57,8 +57,10 @@ public:
     Normal, PropertyMap,
   };
 
+  AGraph( Graph * /Transfer/, const char *, bool,
+          const Point3dl & );
   AGraph( Graph * /Transfer/, const char *, bool=true,
-          const Point3d &=Point3d(64, 64, 64) );
+          const Point3dl &=Point3dl(64, 64, 64) );
   virtual ~AGraph();
 
   Graph	*graph () const;
@@ -71,6 +73,8 @@ public:
   void loadSubObjects( int mask );
   void updateAfterAimsChange();
   void setLabelsVolumeDimension( const Point3d & vd );
+  void setLabelsVolumeDimension( const Point3dl & vd );
+  Point3dl labelsVolumeDimension() const;
   set_STRING mappableVertexProperties() const;
   set_STRING mappableEdgeProperties() const;
 };

@@ -64,6 +64,8 @@ public:
   aims::Quaternion quaternion() const;
   void setQuaternion( const aims::Quaternion &q );
   Point3df translation() const;
+  void SetTranslation(int , float);
+  void SetRotation(int , int , float);
 
   anatomist::Referential* source() const;
   anatomist::Referential* destination() const;

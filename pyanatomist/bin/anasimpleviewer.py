@@ -44,8 +44,9 @@ from PyQt4 import QtCore, QtGui
 if not hasattr( QtCore, 'Slot' ):
   QtCore.Slot = QtCore.pyqtSlot # compatibility with PySide
 qt = QtGui
-from PyQt4 import uic
-from PyQt4.uic import loadUi
+from soma.qt_gui.qt_backend import uic
+from soma.qt_gui.qt_backend.uic import loadUi
+
 uifile = 'anasimpleviewer-qt4.ui'
 findChild = lambda x, y: QtCore.QObject.findChild( x, QtCore.QObject, y )
 

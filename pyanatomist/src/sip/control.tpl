@@ -26,6 +26,7 @@ class Action
 %TypeHeaderCode
 #include <anatomist/window3D/trackball.h>
 #include <anatomist/window3D/control3D.h>
+#include <anatomist/window3D/transformer.h>
 %End
 
 %ConvertToSubClassCode
@@ -35,6 +36,19 @@ class Action
     {
       sipClass = sipClass_anatomist_ContinuousTrackball;
       *sipCppRet = static_cast<anatomist::ContinuousTrackball *>( sipCpp );
+    }
+    else if (dynamic_cast<anatomist::Transformer *>(sipCpp))
+    {
+        if (dynamic_cast<anatomist::PlanarTransformer *>(sipCpp))
+        {
+            sipClass = sipClass_anatomist_PlanarTransformer;
+            *sipCppRet = static_cast<anatomist::PlanarTransformer *>(sipCpp);
+        }
+        else
+        {
+            sipClass = sipClass_anatomist_Transformer;
+            *sipCppRet = static_cast<anatomist::Transformer *>(sipCpp);
+        }
     }
     else
       sipClass = sipClass_anatomist_Trackball;
@@ -57,6 +71,19 @@ class Action
     sipClass = sipClass_anatomist_SliceAction;
   else if( dynamic_cast<anatomist::DragObjectAction *>( sipCpp ) )
     sipClass = sipClass_anatomist_DragObjectAction;
+  else if(dynamic_cast<anatomist::TranslaterAction *>(sipCpp))
+  {
+    if (dynamic_cast<anatomist::ResizerAction *>(sipCpp))
+    {
+        sipClass = sipClass_anatomist_ResizerAction;
+        *sipCppRet = static_cast<anatomist::ResizerAction *>(sipCpp);
+    }
+    else
+    {
+        sipClass = sipClass_anatomist_TranslaterAction;
+        *sipCppRet = static_cast<anatomist::TranslaterAction *>(sipCpp);
+    }
+  }
   else if( dynamic_cast<anatomist::MovieAction *>( sipCpp ) )
   {
     sipClass = sipClass_anatomist_MovieAction;
@@ -450,7 +477,7 @@ public:
   anatomist::Action* getAction( const std::string& actionName );
   std::string activeControl() const;
   anatomist::Control* activeControlInstance() const;
-
+  
   void keyPressEvent( QKeyEvent *) ;
   void keyReleaseEvent( QKeyEvent *) ;
   void mousePressEvent ( QMouseEvent * ) ;
