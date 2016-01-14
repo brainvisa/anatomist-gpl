@@ -1132,7 +1132,8 @@ class Anatomist(Singleton):
       if k.endswith( '_' ):
         return k[:-1]
       return k
-    params=dict( (ununderscore(k),self.convertParamsToIDs(v)) for k, v in kwargs.iteritems() if v is not None )
+    params=dict( (ununderscore(k),self.convertParamsToIDs(v))
+                for k, v in kwargs.iteritems() if v is not None )
     self.logCommand(command, **params )
     self.send(command, **params)
 
@@ -1774,11 +1775,153 @@ class Anatomist(Singleton):
         view_quaternion, slice_quaternion, force_redraw, cursor_position,
         boundingbox_min, boundingbox_max, slice_orientation=slice_orientation)
 
+    def windowConfig(self, clipping=None, clip_distance=None,
+                     cursor_visibility=None, face_culling=None,
+                     flat_shading=None, fog=None, geometry=None, iconify=None,
+                     light=None, linkedcursor_on_slider_change=None,
+                     perspective=None, polygon_filtering=None,
+                     polygon_mode=None, polygons_depth_sorting=None,
+                     raise_window=None, record_basename=None, record_mode=None,
+                     snapshot=None, transparent_depth_buffer=None,
+                     view_size=None, fullscreen=None,
+                     show_cursor_position=None, show_toolbars=None):
+      """Settings for windows (includes various settings)
+
+      Parameters
+      ----------
+      clipping: int (optional)
+          number of clipping planes: 0, 1 or 2
+      clip_distance: float (optional)
+          distance between the slice plane and the clipping planes
+      cursor_visibility: int (optional)
+          makes visible (1) or invisible (0) the linked cursor in the chosen
+          windows. The value -1 sets back the global setting (of the
+          preferences)
+      face_culling: int (optional)
+          enables (1) or disables (0) the elimination of polygons seen from the
+          bottom face
+      flat_shading: int (optional)
+          enables (1) or disables (0) rendering in "flat shading" mode (without
+          color smoothing)
+      fog: int (optional)
+          enables (1) or disables (0) fog
+      geometry: list of int (optional)
+          position and size of the window (external size). If sizes are zero or
+          not specified, the current window size is not changed
+      iconify: int (optional)
+          iconifies (or hides) windows
+      light: dict (optional)
+          Windows lighting settings. This dictionary may include the following
+          parameters:
+              * ambient: ambiant lighting settings (list of float, 4 elements)
+              * diffuse: diffuse lighting settings (list of float, 4 elements)
+              * specular: specular lighting settings (list of float, 4
+                elements)
+              * background: background color (list of float, 4 elements)
+              * position: light position (list of float, 4 elements)
+              * spot_direction: spot light direction (list of float, 3
+                elements)
+              * spot_exponent: spot light intensity exponent (float)
+              * spot_cutoff: spot light cutoff angle (float)
+              * attenuation_offset: light attenuation, offset part (float)
+              * attenuation_linear: light attenuation, linear coefficient
+                (float)
+              * attenuation_quadratic: light attenuation, quadratic coefficient
+                (float)
+              * model_ambient: don't really know... (list of float, 4 elements)
+              * model_local_viewer: don't really know... (float)
+              * model_two_side: don't really know (float)
+      linkedcursor_on_slider_change: int (optional)
+          enables or disables the mode when slice/time sliders act as linked
+          cursor actions (with propagation to other views)
+      perspective: int (optional)
+          enables (1) or disables (0) the perspective rendering mode
+      polygon_filtering: int (optional)
+          enables (1) or disables (0) polygons and lines smoothing (anti-
+          aliasing)
+      polygon_mode: string (optional)
+          polygons rendering mode: "normal", "wireframe", "outline" (normal +
+          wireframe), "hiddenface_wireframe" (wireframe with hidden faces)
+      polygons_depth_sorting: int (optional)
+          enables (1) or disables (0) polygons sortig along depth on
+          transparent objects to allow a better rendering. This mode has a
+          large impact on performances, so use it with care.
+      raise_window: int (optional)
+          unicognifies windows and make them move to the top of the desktop.
+          Note that this parameter has a different name as the anatomist
+          command interface (is was "raise" there) because "raise" is a
+          reserved keyword in Python and cannot be used here.
+      record_basename: string (optional):
+          base filename of images written using the film recording mode (ex:
+          /tmp/toto.jpg). Images will actually have numbers appended before the
+          extension
+      record_mode: int (optional)
+          enables (1) or disables (0) the images recording mode (film) of 3D
+          windows. To enable it, record_basename must also be specified
+      snapshot: string (optional)
+          Saves the image of the view in the specified file. If windows
+          contains several values, then several images have to be saved: in
+          this case, snapshot is a list of filenames separated by space
+          characters: so the file name/path must not contain any space
+          character (this restriction doesn't apply if a single window is
+          used). Node: escape character ("\ ") are not supported yet.
+      transparent_depth_buffer: int (optional)
+          enables (1) or disables (0) writing of transparent objects in the
+          depth buffer. Useful if you want to click across transparents objects
+          (but the rendering can be wrong)
+      view_size: list of int (optional)
+          size of the rendering zone (3D rendering widget). This parameter has
+          a higher priority than sizes given using geometry if both are
+          specified
+      fullscreen: int (optional)
+          enables or disables the fullscreen mode
+      show_cursor_position: int (optional)
+          shows or hides the status bar at the bottom of the window, showing
+          the cursor position and a current object value at this position.
+      show_toolbars: int (optional)
+          shows or hides everything around the 3D view (menus, buttons bars,
+          status bar, referential...)
+      """
+      self.anatomistinstance.execute(
+        "WindowConfig", windows=[self], clipping=clipping,
+        clip_distance=clip_distance,
+        cursor_visibility=cursor_visibility, face_culling=face_culling,
+        flat_shading=flat_shading, fog=fog, geometry=geometry, iconify=iconify,
+        light=light,
+        linkedcursor_on_slider_change=linkedcursor_on_slider_change,
+        perspective=perspective, polygon_filtering=polygon_filtering,
+        polygon_mode=polygon_mode,
+        polygons_depth_sorting=polygons_depth_sorting,
+        raise_=raise_window, record_basename=record_basename,
+        record_mode=record_mode, snapshot=snapshot,
+        transparent_depth_buffer=transparent_depth_buffer,
+        view_size=view_size, fullscreen=fullscreen,
+        show_cursor_position=show_cursor_position, show_toolbars=show_toolbars)
+
+    def snapshot(self, filename):
+      """Take a snapshot of the window 3D contents and save it into a file
+
+      Equivalent to:
+
+      ::
+
+         window.windowConfig(snapshot=filename)
+
+      Parameters
+      ----------
+      filename: string
+          file name to save the snapshot into
+      """
+      self.anatomistinstance.execute("WindowConfig", windows=[self],
+                                     snapshot=filename)
+
     def assignReferential(self, referential):
       """
       Assign a referential to window.
-      The referential must exist. To create a new Referential, execute createReferential,
-      to assign the central referential, first get it with Anatomist.centralRef attribute.
+      The referential must exist. To create a new Referential, execute
+      createReferential,
+      to assign the central referential, first get it with Anatomist.centralRef
+      attribute.
 
       :param referential:
         The referential to assign to objects and/or windows

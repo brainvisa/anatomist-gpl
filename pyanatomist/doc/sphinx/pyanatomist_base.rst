@@ -6,3 +6,9 @@ Common base API
 .. automodule:: anatomist.base
   :members:
 
+  .. class:: anatomist.base.Anatomist
+  .. class:: anatomist.base.Anatomist.AObject
+  .. class:: anatomist.base.Anatomist.AWindow
+
+
+
