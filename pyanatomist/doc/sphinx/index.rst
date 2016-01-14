@@ -32,6 +32,7 @@ Sub-modules
 
 - :doc:`pyanatomist_wip`
 
+- Description of the :anadev:`commands system <commands.html>`
 
 How to
 ------
