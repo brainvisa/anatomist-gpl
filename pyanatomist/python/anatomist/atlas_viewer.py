@@ -578,8 +578,9 @@ class AtlasJsonRois(QMainWindow):
 #______________________________________________________________________________
 
     def loadTree(self):
-        filename = QFileDialog.getOpenFileName(self,
-                                               'Choose roi file', '', "ROI file (*.roi)")
+        filename = QFileDialog.getOpenFileName(
+            self, 'Choose roi file', '', "ROI file (*.roi)", None,
+            QtGui.QFileDialog.DontUseNativeDialog)
         self.tree.json_full_data = self.tree.createJSONData(filename)
         self.tree.updateTree(self.tree.json_full_data)
         # Update the leaves after the new roi file
