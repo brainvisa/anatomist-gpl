@@ -369,6 +369,7 @@ public:
   void setSmoothing( bool );
   void setFog( bool );
   bool fog() const;
+  void resizeView( int w, int h );
 };
 
 
