@@ -158,6 +158,11 @@ public:
 %MethodCode
   theAnatomist->updateFileDialogObjectsFilter();
 %End
+
+  static std::string version();
+%MethodCode
+  sipRes = new std::string( anatomist::Anatomist::versionString() );
+%End
 };
 
 
