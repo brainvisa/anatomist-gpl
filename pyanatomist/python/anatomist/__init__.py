@@ -108,6 +108,10 @@ In addition to the Python APIs, the :py:meth:`Anatomist.execute <base.Anatomist.
 """
 __docformat__ = 'restructuredtext en'
 
+from anatomist import info
+__version__ = '.'.join((info.version_major, info.version_minor,
+                        info.version_micro))
+
 SOCKET='socket'
 DIRECT='direct'
 THREADED='threaded'

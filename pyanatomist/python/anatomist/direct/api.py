@@ -69,6 +69,9 @@ except ImportError:
 from PyQt4 import QtCore
 Slot = QtCore.pyqtSlot
 
+version = cpp.Anatomist.version()
+
+
 class Anatomist(base.Anatomist, cpp.Anatomist):
   """
   Interface to communicate with an Anatomist Application using direct bindings to the C++ api.
@@ -107,6 +110,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     self.context=cpp.CommandContext.defaultContext()
     self.handlers={}
     self._loadCbks = set()
+    global __version__
 
   class AEventHandler(cpp.EventHandler):
     """
