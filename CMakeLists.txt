@@ -39,6 +39,8 @@ if( SIP_FOUND )
 endif()
 include_directories( ${ANATOMIST-GPL_INCLUDE_DIRS} )
 
+configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/config/info.py.in" "${CMAKE_BINARY_DIR}/python/anatomist/info.py" @ONLY )
+
 if( PYTHON_FOUND AND SIP_FOUND AND NUMPY_FOUND AND PYQT${DESIRED_QT_VERSION}_FOUND )
   foreach( component python python-numpy python-qt4 python-sip4 )
     BRAINVISA_DEPENDENCY( RUN DEPENDS ${component} RUN )

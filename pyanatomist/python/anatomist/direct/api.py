@@ -69,11 +69,7 @@ except ImportError:
 from PyQt4 import QtCore
 Slot = QtCore.pyqtSlot
 
-__version__ = cpp.Anatomist.version()
-import anatomist
-# set version in base module
-anatomist.__version__ = __version__
-del anatomist
+version = cpp.Anatomist.version()
 
 
 class Anatomist(base.Anatomist, cpp.Anatomist):
