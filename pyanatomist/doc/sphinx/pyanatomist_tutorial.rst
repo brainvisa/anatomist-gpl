@@ -63,7 +63,7 @@ In this part, we will use the same story as in the :anatomist:`anatomist tutoria
 The following examples use the general API functions that are available in both direct and socket implementations.
 To run the following examples, we will use an interactive python shell `IPython <http://ipython.org>`_. It is much more practical than the classic python shell because it offers useful features like automatic completion. This program is available in the BrainVISA package with all other executable programs in the *bin* directory of the BrainVISA package directory. *IPython* should be run with the option *--gui=qt*, which runs a Qt event loop, needed for the graphical interface.
 
-::
+.. code-block:: bash
 
     <brainvisa_installation_directory>/bin/ipython --gui=qt
 
@@ -90,7 +90,7 @@ In this example, we will put the path to the *data_for_anatomist* directory in a
     import os
     src = "<path to data_for_anatomist directory>"
     # Load an object
-    t1mri = a.loadObject( os.path.join(src, "data_for_anatomist", "subject01", "subject01.nii") )
+    t1mri = a.loadObject(os.path.join(src, "data_for_anatomist", "subject01", "subject01.nii"))
 
 See :anatomist:`the corresponding actions in the graphical interface <ana_training/en/html/ch03s02.html>`.
 
