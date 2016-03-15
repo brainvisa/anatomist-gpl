@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 import sys
 from anatomist.atlas_viewer import AtlasJsonRois
