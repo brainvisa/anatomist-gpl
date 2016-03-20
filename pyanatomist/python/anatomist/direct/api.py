@@ -1153,7 +1153,16 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
     * returns: converted elements
     """
-    if isinstance( params, _string_or_qstring ):
+    def is_untransformed_object(obj):
+      if isinstance(obj, _string_or_qstring):
+        return True
+      name = obj.__class__.__name__
+      begins = ('AimsTimeSurface_', 'TimeTexture_', 'AimsRGB', 'AimsHSV')
+      for n in begins:
+        if name.startswith(n) or name.startswith('rc_ptr_' + n):
+          return True
+      return False
+    if is_untransformed_object(params):
       return params
     elif operator.isSequenceType( params ):
       conv = super( Anatomist, self ).__getattribute__( \
