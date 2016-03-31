@@ -117,7 +117,7 @@ cd.addControl( 'LeftSimple3DControl', LeftSimple3DControl, 25 )
 
 control_3d_type = 'Simple3DControl'
 if options.left_mode:
-    control_3d_ = 'LeftSimple3DControl'
+    control_3d_type = 'LeftSimple3DControl'
 
 # load the anasimpleviewer GUI
 anasimpleviewerdir = os.path.join( \
