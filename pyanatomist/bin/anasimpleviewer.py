@@ -152,6 +152,7 @@ class AnaSimpleViewer( qt.QObject ):
   def __init__( self ):
     qt.QObject.__init__( self )
     self._vrenabled = False
+    self.meshes2d = {}
     # register the function on the cursor notifier of anatomist. It will be
     # called when the user clicks on a window
     a.onCursorNotifier.add( self.clickHandler )
@@ -443,6 +444,50 @@ class AnaSimpleViewer( qt.QObject ):
         return
       self._displayVolume( obj, opts )
 
+  def get_new_mesh2d_color(self):
+    colors = [(1., 0.3, 0.3, 1.),
+              (0.3, 1., 0.3, 1.),
+              (0.3, 0.3, 1., 1.),
+              (1., 1., 0., 1.),
+              (0., 1., 1., 1.),
+              (1., 0., 1., 1.),
+              (1., 1., 1., 1.),
+              (1., 0.7, 0., 1.),
+              (1., 0., 0.7, 1.),
+              (1., 0.7, 0.7, 1.),
+              (0.7, 1., 0., 1.),
+              (0., 1., 0.7, 1.),
+              (0.7, 1., 0.7, 1.),
+              (0.7, 0., 1., 1.),
+              (0., 0.7, 1., 1.),
+              (0.7, 0.7, 1., 1.),
+              (1., 1., 0.5, 1.),
+              (0.5, 1., 1., 1.),
+              (1, 0.5, 1., 1.)]
+    used_cols = set([col for obj, col in self.meshes2d.itervalues()])
+    for col in colors:
+      if col not in used_cols:
+        return col
+    return len(self.meshes2d) % len(colors)
+
+  def addMesh(self, obj, opts):
+    mesh2d = a.fusionObjects([obj.getInternalRep()],
+                             method='Fusion2DMeshMethod')
+    color = self.get_new_mesh2d_color()
+    self.meshes2d[obj.getInternalRep()] = (mesh2d, color)
+    mesh2d.setMaterial(diffuse=color)
+    mesh2d.releaseAppRef()
+    windows_2d = [w for w in awindows if w.subtype() in
+                  (w.AXIAL_WINDOW, w.CORONAL_WINDOW, w.SAGITTAL_WINDOW)]
+    windows_3d = [w for w in awindows if w not in windows_2d]
+    a.addObjects(mesh2d, windows_2d)
+    a.addObjects(obj, windows_3d)
+
+  def removeMesh(self, obj):
+    mesh2d, col = self.meshes2d[obj.getInternalRep()]
+    a.removeObjects([obj, mesh2d], awindows)
+    del self.meshes2d[obj.getInternalRep()]
+
   def addObject( self, obj ):
     '''Display an object in all windows
     '''
@@ -451,6 +496,9 @@ class AnaSimpleViewer( qt.QObject ):
       # volumes have a specific function since several volumes have to be
       # fusionned, and a volume rendering may occur
       self.addVolume( obj, opts )
+      return
+    elif obj.objectType == 'SURFACE':
+      self.addMesh(obj, opts)
       return
     elif obj.objectType == 'GRAPH':
       opts[ 'add_graph_nodes' ] = 1
@@ -461,6 +509,8 @@ class AnaSimpleViewer( qt.QObject ):
     '''
     if obj.objectType == 'VOLUME':
       self.removeVolume( obj )
+    elif obj.objectType == 'SURFACE':
+      self.removeMesh(obj)
     else:
       a.removeObjects( obj, awindows, remove_children=True )
 
