@@ -51,8 +51,10 @@ uifile = 'anasimpleviewer-qt4.ui'
 findChild = lambda x, y: QtCore.QObject.findChild( x, QtCore.QObject, y )
 
 parser = OptionParser( description = 'A simplified version of Anatomist for quick viewing' )
-parser.add_option( '-i', '--input', dest='input', metavar='FILE',
-  action='append', default=[], help='load given objects from files' )
+parser.add_option('-i', '--input', dest='input', metavar='FILE',
+  action='append', default=[], help='load given objects from files')
+parser.add_option('-l', '--left', dest='left_mode', action='store_true',
+                  help='Use left button for rotation in 3D view')
 
 (options, args) = parser.parse_args()
 
@@ -81,7 +83,41 @@ qt.qApp.processEvents()
 # start the Anatomist engine, in batch mode (no main window)
 a = ana.Anatomist( '-b' )
 
+# define another control where rotation is with the left mouse button
+# (useful for touch devices)
+class LeftSimple3DControl(Simple2DControl):
+
+  def __init__(self, prio = 25, name='Simple3DControl'):
+    Simple2DControl.__init__(self, prio, name)
+
+  def eventAutoSubscription(self, pool):
+    key = QtCore.Qt
+    NoModifier = key.NoModifier
+    ShiftModifier = key.ShiftModifier
+    ControlModifier = key.ControlModifier
+    Simple2DControl.eventAutoSubscription(self, pool)
+    self.mouseLongEventUnsubscribe(key.LeftButton, NoModifier)
+    self.mouseLongEventSubscribe(
+      key.LeftButton, NoModifier,
+      pool.action('ContinuousTrackball').beginTrackball,
+      pool.action('ContinuousTrackball').moveTrackball,
+      pool.action('ContinuousTrackball').endTrackball, True )
+    self.keyPressEventSubscribe( key.Key_Space, ControlModifier,
+      pool.action("ContinuousTrackball").startOrStop )
+    self.mousePressButtonEventSubscribe(key.MiddleButton, NoModifier,
+      pool.action('LinkAction').execLink)
+
 registerSimpleControls()
+iconpath = os.path.join( str( a.anatomistSharedPath() ), 'icons' )
+pix = QtGui.QPixmap( os.path.join( iconpath, 'simple3Dcontrol.png' ) )
+ana.cpp.IconDictionary.instance().addIcon( 'LeftSimple3DControl', pix )
+del pix, iconpath
+cd = ana.cpp.ControlDictionary.instance()
+cd.addControl( 'LeftSimple3DControl', LeftSimple3DControl, 25 )
+
+control_3d_type = 'Simple3DControl'
+if options.left_mode:
+    control_3d_ = 'LeftSimple3DControl'
 
 # load the anasimpleviewer GUI
 anasimpleviewerdir = os.path.join( \
@@ -141,6 +177,8 @@ class AnaSimpleViewer( qt.QObject ):
     z = findChild( awin, 'coordZEdit' )
     z.setText( '%8.3f' % pos2[2] )
     t = findChild( awin, 'coordTEdit' )
+    if len(pos) < 4:
+      pos = pos[:3] + [0]
     t.setText( '%8.3f' % pos[3] )
     # display volumes values at the given position
     valbox = findChild( awin, 'volumesBox' )
@@ -224,7 +262,7 @@ class AnaSimpleViewer( qt.QObject ):
     awindows.append( w )
     # set custom control
     if wintype == '3D':
-      a.execute( 'SetControl', windows=[w], control='Simple3DControl' )
+      a.execute( 'SetControl', windows=[w], control=control_3d_type )
     else:
       a.execute( 'SetControl', windows=[w], control='Simple2DControl' )
       a.assignReferential( a.mniTemplateRef, w )
@@ -634,7 +672,7 @@ a.config()[ 'windowSizeFactor' ] = 1.
 # register controls
 cm = ana.cpp.ControlManager.instance()
 cm.addControl( 'QAGLWidget3D', '', 'Simple2DControl' )
-cm.addControl( 'QAGLWidget3D', '', 'Simple3DControl' )
+cm.addControl( 'QAGLWidget3D', '', 'LeftSimple3DControl' )
 print 'controls registered.'
 
 del cm
