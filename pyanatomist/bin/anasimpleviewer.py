@@ -321,6 +321,9 @@ class AnaSimpleViewer( qt.QObject ):
         ana.cpp.AObjectConverter.aims( obj ) )
       obj.attributed()[ 'colormaphints' ] = hints
     bb = obj.boundingbox()
+    if not bb:
+      # not a viewable object
+      return
     # create the 4 windows if they don't exist
     if len( awindows ) == 0:
       self.createWindow( 'Coronal' )
@@ -726,6 +729,8 @@ cm.addControl( 'QAGLWidget3D', '', 'LeftSimple3DControl' )
 print 'controls registered.'
 
 del cm
+
+a.setGraphParams(label_attribute='label')
 
 for i in options.input + args:
   anasimple.loadObject( i )
