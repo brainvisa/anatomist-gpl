@@ -39,10 +39,17 @@ public:
   PyObject	*l = PyDict_New();
   std::map<unsigned, std::set<anatomist::AObject *> >::iterator i, e = s.end();
   for( i=s.begin(); i!=e; ++i )
-    if( PyDict_SetItem(l,PyInt_FromLong( i->first ), 
+#if PY_VERSION_HEX >= 0x03000000
+    if( PyDict_SetItem(l,PyLong_FromLong( i->first ),
+                         pyanatomistConvertFrom_set_anatomist_AObjectP
+                         (&(i->second) ) )
+        < 0 )
+#else
+    if( PyDict_SetItem(l,PyInt_FromLong( i->first ),
                          pyanatomistConvertFrom_set_anatomist_AObjectP
                          (&(i->second) ) ) 
         < 0 )
+#endif
       {
         Py_DECREF(l);
 

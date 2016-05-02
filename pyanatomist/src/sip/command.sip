@@ -431,7 +431,11 @@ namespace anatomist
         PyObject	*tup = PyTuple_New( ids.size() );
         int		n = 0;
         for( i=ids.begin(); i!=e; ++i, ++n )
+#if PY_VERSION_HEX >= 0x03000000
+          PyTuple_SetItem( tup, n, PyLong_FromLong( i->first ) );
+#else
           PyTuple_SetItem( tup, n, PyInt_FromLong( i->first ) );
+#endif
         sipRes = tup;
       }
 %End

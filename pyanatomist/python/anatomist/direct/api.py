@@ -61,6 +61,13 @@ import operator
 from soma import aims
 import os, sys, types
 import weakref
+import sys
+import six
+from anatomist.base import isSequenceType, isMappingType
+
+if sys.version_info[0] >= 3:
+    basestring = str
+
 try:
   from PyQt4.QtCore import QString
   _string_or_qstring = ( basestring, QString )
@@ -68,6 +75,7 @@ except ImportError:
   _string_or_qstring = ( basestring, )
 from PyQt4 import QtCore
 Slot = QtCore.pyqtSlot
+
 
 version = cpp.Anatomist.version()
 
@@ -103,7 +111,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     # via Singleton.__init__ without arguments.
     cpp.Anatomist.__init__(self, *args, **kwargs)
     super(Anatomist, self).__singleton_init__(*args, **kwargs)
-    if sys.modules.has_key( 'PyQt4' ):
+    if 'PyQt4' in sys.modules:
       from PyQt4 import QtGui
       import threading
     self.log( "Anatomist started." )
@@ -1017,7 +1025,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       if k.endswith( '_' ):
         return k[:-1]
       return k
-    params=dict( (ununderscore(k),self.convertParamsToIDs(v)) for k, v in kwargs.iteritems() if v is not None )
+    params=dict((ununderscore(k),self.convertParamsToIDs(v)) for k, v
+                in six.iteritems(kwargs) if v is not None)
     self.logCommand(command, **params )
     return self.theProcessor().execute(command, **params) 
     
@@ -1078,8 +1087,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
       Converted elements
     """
-    if not isinstance( params, basestring ) \
-      and operator.isSequenceType( params ):
+    if not isinstance(params, basestring) \
+        and isSequenceType(params):
       return [self.convertSingleObjectParamsToObjects(i) for i in params]
     else:
       return self.convertSingleObjectParamsToObjects( params )
@@ -1164,7 +1173,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       return False
     if is_untransformed_object(params):
       return params
-    elif operator.isSequenceType( params ):
+    elif isSequenceType( params ):
       conv = super( Anatomist, self ).__getattribute__( \
         'convertParamsToAItems' )
       changed2 = []
@@ -1175,12 +1184,12 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         if not changed:
           changed.append( True )
         return l
-    elif operator.isMappingType( params ):
+    elif isMappingType( params ):
       r = {}
       conv = super( Anatomist, self ).__getattribute__( \
         'convertParamsToAItems' )
       changed2 = []
-      for k, v in params.iteritems():
+      for k, v in six.iteritems(params):
         r[k] = conv( v, convertIDs=convertIDs, changed=changed2 )
       if changed2:
         if not changed:
