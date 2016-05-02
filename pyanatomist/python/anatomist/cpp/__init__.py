@@ -318,6 +318,9 @@ class Anatomist( AnatomistSip ):
     global loaded_modules
 
     for x in mods:
+      if os.path.basename(x).startswith('_'):
+        # don't load files starting with '_' (__init__, __pycache__...)
+        continue
       if x[-4:] == '.pyo':
         x = x[:-4]
       elif x[-4:] == '.pyc':
