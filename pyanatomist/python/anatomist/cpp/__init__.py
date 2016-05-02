@@ -101,6 +101,8 @@ begin with.
     is here to perform this task.
 '''
 
+from __future__ import print_function
+
 import os, sys, string, glob, operator, types
 import numpy
 
@@ -118,14 +120,13 @@ else:
 # when pyhton is run from a library
 path = os.getenv( 'PYTHONPATH' )
 if path is not None:
-  for x in string.split( path, sep ):
+  for x in path.split(sep):
     if x not in sys.path:
       sys.path.append( x )
   del x
 del path, sep
 
 from soma import aims
-from anatomistsip import *
 from soma.importer import ExtendedImporter
 
 # cleanup namespaces in Sip-generated code
@@ -133,6 +134,8 @@ ExtendedImporter().importInModule( '', globals(), locals(), 'anatomistsip' )
 ExtendedImporter().importInModule( '', globals(), locals(), 'anatomistsip',
   ['anatomistsip.anatomist'] )
 del ExtendedImporter
+
+from anatomistsip import *
 
 aims.__fixsipclasses__( locals().items() )
 
@@ -300,8 +303,8 @@ class Anatomist( AnatomistSip ):
     homemodules = os.path.join( str( self.anatomistHomePath() ), 
                                 'python_plugins' )
 
-    print 'global modules:', pythonmodules
-    print 'home   modules:', homemodules
+    print('global modules:', pythonmodules)
+    print('home   modules:', homemodules)
 
     if sys.path[0] != homemodules:
       sys.path.insert( 0, homemodules )
@@ -310,7 +313,7 @@ class Anatomist( AnatomistSip ):
 
     mods = glob.glob( os.path.join( pythonmodules, '*' ) ) \
            + glob.glob( os.path.join( homemodules, '*' ) )
-    # print 'modules:', mods
+    # print('modules:', mods)
 
     global loaded_modules
 
@@ -327,12 +330,12 @@ class Anatomist( AnatomistSip ):
       if x in loaded_modules:
         continue
       loaded_modules.append( x )
-      print 'loading module', x
+      print('loading module', x)
       try:
-        exec( 'import ' + x )
+        exec('import ' + x)
       except:
-        print
-        print 'loading of module', x, 'failed:'
+        print()
+        print('loading of module', x, 'failed:')
         exceptionInfo = sys.exc_info()
         e, v, t = exceptionInfo
         tb = traceback.extract_tb( t )
@@ -340,18 +343,18 @@ class Anatomist( AnatomistSip ):
           name = e.__name__
         except:
           name = str( e )
-        print name, ':', v
-        print 'traceback:'
+        print(name, ':', v)
+        print('traceback:')
         for file, line ,function, text in tb:
           if text is None:
             text = '?'
-          print file, '(', line, ') in', function, ':'
-          print text
+          print(file, '(', line, ') in', function, ':')
+          print(text)
         print
         # must explicitely delete reference to frame objects (traceback) else it creates a reference cycle and the object cannot be deleted
         del e, v, t, tb, exceptionInfo
 
-    print 'all python modules loaded'
+    print('all python modules loaded')
 
 # Processor.execute
 
@@ -609,7 +612,7 @@ import mobject
 
 # apply changes to config properties to Anatomist internal state
 def __GlobalConfiguration_setitem__(self, param, value):
-  print 'config.setitem:', param, ':', value
+  print('config.setitem:', param, ':', value)
   super(GlobalConfiguration, self).__setitem__(param, value)
   self.apply()
 anatomist.GlobalConfiguration.__setitem__ = __GlobalConfiguration_setitem__

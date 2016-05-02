@@ -35,12 +35,41 @@
 General interface of pyanatomist API. It describes classes and methods that are shared by all implementations : the set of Anatomist features available throught this API.
 Several implementations exist depending on the mean of driving Anatomist (Sip bindings C++/Python or commands via socket).
 """
+
+from __future__ import print_function
+
 from soma.notification import ObservableNotifier
 from soma.singleton import Singleton
 from soma.functiontools import partial
 import operator
 import string
 import threading
+import collections
+import sys
+
+
+def isSequenceType(item):
+    if isinstance(item, collections.Sequence):
+        return True
+    methods = ['count', 'index', '__getitem__', '__contains__', '__iter__',
+               '__len__']
+    for m in methods:
+        if not hasattr(item, m):
+            return False
+    return True
+
+
+def isMappingType(item):
+    if isinstance(item, collections.Mapping):
+        return True
+    methods = ['get', 'items', 'keys', 'values', '__getitem__', '__iter__',
+               '__contains__', '__len__']
+    if sys.version_info[0] < 3:
+        methods.append('iteritems')
+    for m in methods:
+        if not hasattr(item, m):
+            return False
+    return True
 
 
 class Anatomist(Singleton):
@@ -981,7 +1010,7 @@ class Anatomist(Singleton):
 
     :param palette:
       Principal palette to apply
-    :type palette: :py:class:`APalette`
+    :type palette: :py:class:`APalette` or string (name)
 
     :param minVal:
       Palette value to assign to objects texture min value (proportionally to palette's limits)
@@ -1015,7 +1044,13 @@ class Anatomist(Singleton):
     :param boolean absoluteMode:
       if *True*, min/max values are supposed to be absolute values (in regard to objects texture) rather than proportions
     """
-    self.execute('SetObjectPalette', objects = self.makeList(objects), palette = palette, palette2 = palette2, min=minVal, max=maxVal, min2=minVal2, max2=maxVal2, mixMethod=mixMethod, linMixFactor=linMixFactor, palette1Dmapping=palette1Dmapping, absoluteMode=int(absoluteMode))
+    if isinstance(palette, self.APalette):
+        palette = palette.name
+    self.execute('SetObjectPalette', objects = self.makeList(objects),
+                 palette = palette, palette2 = palette2, min=minVal,
+                 max=maxVal, min2=minVal2, max2=maxVal2, mixMethod=mixMethod,
+                 linMixFactor=linMixFactor, palette1Dmapping=palette1Dmapping,
+                 absoluteMode=int(absoluteMode))
 
   ###############################################################################
   # application control
@@ -1149,7 +1184,7 @@ class Anatomist(Singleton):
     Transforms the argument into a list: a list with one element if it is
     not a sequence, or return the input sequence if it is already one
     """
-    if operator.isSequenceType( thing ):
+    if isSequenceType( thing ):
       try:
         if thing.__module__.startswith( 'anatomist.' ):
           return [ thing ]
@@ -1192,7 +1227,7 @@ class Anatomist(Singleton):
     :rtype: dictionary or list
     """
     if not isinstance( params, basestring ) \
-      and operator.isSequenceType( params ):
+      and isSequenceType( params ):
       return [self.convertSingleObjectParamsToIDs(i) for i in params]
     else:
       return self.convertSingleObjectParamsToIDs( params )
@@ -1238,7 +1273,7 @@ class Anatomist(Singleton):
     Use this method to print a log message.
     This method prints on standard output. To be redefined for another type of log.
     """
-    print message
+    print(message)
 
   ###############################################################################
   class AItem(object):
@@ -1554,7 +1589,7 @@ class Anatomist(Singleton):
 
       :param palette:
         Principal palette to apply
-      :type palette: :py:class:`anatomist.base.Anatomist.APalette`
+      :type palette: :py:class:`anatomist.base.Anatomist.APalette` or string (name)
 
       :param minVal:
         Palette value to assign to objects texture min value (proportionally to palette's limits)
