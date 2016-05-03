@@ -11,6 +11,8 @@ Programming with Anatomist in Python language
 
 Anatomist is written in C++ language but has also a python API: **PyAnatomist**. This python API enables to drive Anatomist application through python scripts : using Anatomist, loading volumes, meshes, graphs, viewing them in windows, merging objects, changing color palettes, etc... It can be useful in order to automate a repetitive visualization task or to add features to Anatomist application by developping a python plugin, which is much more easier than developping directly in Anatomist C++ library. Actually, several features in Anatomist have been added via a python plugin like the gradient palette for example. The python API is also used by several viewers in BrainVISA.
 
+Depending how the C++/Python bindings are compiled, the tutorial may work using python2 or python3, or both.
+
 
 Description of the API
 ----------------------
@@ -66,6 +68,7 @@ To run the following examples, we will use an interactive python shell `IPython 
 .. code-block:: bash
 
     <brainvisa_installation_directory>/bin/ipython --gui=qt
+
 
 Run Anatomist
 +++++++++++++

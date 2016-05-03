@@ -84,7 +84,7 @@ It is also possible to interact on objects created within Anatomist:
 >>> win2 = a.createWindow('3D')
 >>> win2.addObjects(cutmesh)
 >>> # find the cut sub mesh in cutmesh children
->>> anacutsubmesh = filter(lambda x: x.name.startswith('CutSubMesh'), cutmesh.children)[0]
+>>> anacutsubmesh = [x for x in cutmesh.children if x.name.startswith('CutSubMesh')][0]
 >>> # get the Aims mesh from it
 >>> cutsubmesh = a.toAimsObject(anacutsubmesh)
 >>> # now modify the mesh, adding a random value to vertices along the normal

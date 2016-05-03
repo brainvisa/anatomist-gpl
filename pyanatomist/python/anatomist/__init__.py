@@ -40,6 +40,8 @@ This API enables to drive *Anatomist* application throught python scripts : runn
 
 - license: `CeCILL-v2 <http://www.cecill.info/licences/Licence_CeCILL_V2-en.html>`_ (GPL-compatible)
 
+From version 4.5.1 and later, PyAnatomist work with both Python 2 (2.6 and later) and Python 3 (3.4 and later) (provided C++/python bindings have been compiled appropriately).
+
 The main entry point is one of the :py:class:`anatomist.base.Anatomist`-inhertied classes which must be instantiated before any operation can be performed.
 It represents Anatomist application. This class contains a number of nested classes: :py:class:`anatomist.base.Anatomist.AObject`, :py:class:`anatomist.base.Anatomist.AWindow`... that represents handling elements of Anatomist application.
 
