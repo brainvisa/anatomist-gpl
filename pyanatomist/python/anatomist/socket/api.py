@@ -757,29 +757,35 @@ class Anatomist(base.Anatomist):
       """
       ok = False
       if Anatomist.anatomistExecutable is not None and self.newanatomist:
-        port = self.comm.findFreePort()
-        self.anaServerProcess = somaqt.makeQProcess()
+          port = self.comm.findFreePort()
+          self.anaServerProcess = somaqt.makeQProcess()
 
-        arguments = [ '-s', str( port ) ]
-        arguments += args
-        self.anaServerProcess.connect( self.anaServerProcess, SIGNAL( 'finished( int, QProcess::ExitStatus )' ), self.anaServerProcessExited )
-        self.anaServerProcess.start( Anatomist.anatomistExecutable, arguments )
-        self.log( "<H1>Anatomist launched</H1>")
-        self.log("Command : "
-                 + htmlEscape(Anatomist.anatomistExecutable
-                              + ' '.join(arguments)))
-        ok = True
+          arguments = [ '-s', str( port ) ]
+          arguments += args
+          self.anaServerProcess.connect(
+              self.anaServerProcess,
+              SIGNAL('finished(int, QProcess::ExitStatus )'),
+              self.anaServerProcessExited)
+          self.anaServerProcess.start(
+              Anatomist.anatomistExecutable, arguments)
+          self.log("<H1>Anatomist launched</H1>")
+          self.log("Command : "
+                   + htmlEscape(Anatomist.anatomistExecutable
+                                + ' '.join(arguments)))
+          ok = True
       elif not self.newanatomist:
-        self.log( "<H1>Connecting to Anatomist</H1>" )
-        self.log( '<p><li>host: ' + self.comm.dest + '</li><li>port: ' + str( self.comm.port ) + '</li></p>' )
-        port = self.comm.port
-        ok = True
+          self.log("<H1>Connecting to Anatomist</H1>")
+          self.log('<p><li>host: ' + self.comm.dest + '</li><li>port: '
+                   + str(self.comm.port) + '</li></p>')
+          port = self.comm.port
+          ok = True
 
       if ok:
-        self.comm.initialize( port = port)
-        self.log( "Successfull connection to Anatomist on PORT: " +str( self.comm.port ) )
-        self.launched = 1
-        atexit.register( self.close )
+          self.comm.initialize( port = port)
+          self.log("Successfull connection to Anatomist on PORT: "
+                   + str(self.comm.port))
+          self.launched = 1
+          atexit.register(self.close)
 
   def anaServerProcessExited( self, exitCode=0, exitStatus=0 ):
       """
@@ -787,19 +793,19 @@ class Anatomist(base.Anatomist):
       """
       logtxt = '<b>Anatomist process exited: '
       if exitStatus == QProcess.NormalExit:
-        logtxt += '(normal exit)'
+          logtxt += '(normal exit)'
       else:
-        logtxt += 'abnormal exit, code:'+ str( exitCode )
+          logtxt += 'abnormal exit, code:'+ str( exitCode )
       logtxt += '</b>'
       self.log( logtxt )
       self.comm.close()
       self._requestID = 0
       self.launched=False
       try:
-        delattr(self.__class__, "_singleton_instance")
+          delattr(self.__class__, "_singleton_instance")
       except: # may fail if it is already closed 
-        pass
-        
+          pass
+
   def close( self ):
       """
       Kill current session of Anatomist.
@@ -807,15 +813,18 @@ class Anatomist(base.Anatomist):
       if not self.launched:
           return
       # remove exit handler
-      for x in atexit._exithandlers:
-        if len(x) > 0 and x[0] == self.close:
-          atexit._exithandlers.remove( x )
+      if sys.version_info[0] >= 3:
+          atexit.unregister(self.close)
+      else:
+          for x in atexit._exithandlers:
+            if len(x) > 0 and x[0] == self.close:
+              atexit._exithandlers.remove( x )
       super(Anatomist, self).close()
       if self.newanatomist:
-        isRunning=(self.anaServerProcess.state() == QProcess.Running)
-        if isRunning:
-          self.log( 'Killing Anatomist' )
-          self.anaServerProcess.kill( )
+          isRunning=(self.anaServerProcess.state() == QProcess.Running)
+          if isRunning:
+              self.log('Killing Anatomist')
+              self.anaServerProcess.kill()
       sys.stdout.flush()
       self.comm.close()
       self._requestID = 0
