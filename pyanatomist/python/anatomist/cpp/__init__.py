@@ -105,6 +105,20 @@ from __future__ import print_function
 
 import os, sys, string, glob, operator, types
 import numpy
+import six
+import collections
+
+
+def isSequenceType(item):
+    if isinstance(item, collections.Sequence):
+        return True
+    methods = ['count', 'index', '__getitem__', '__contains__', '__iter__',
+               '__len__']
+    for m in methods:
+        if not hasattr(item, m):
+            return False
+    return True
+
 
 path = os.path.dirname( __file__ )
 if path not in sys.path:
@@ -389,9 +403,9 @@ def newexecute( self, *args, **kwargs ):
         except:
           i = cc.makeID( v )
         dic[k] = i
-      elif hasattr( v, 'iteritems' ): # operator.isMappingType( v ):
+      elif hasattr( v, 'items' ): # operator.isMappingType( v ):
         replace_dict( v, cc )
-      elif not type(v) in types.StringTypes and operator.isSequenceType( v ):
+      elif not isinstance(v, six.string_types) and isSequenceType(v):
         replace_list( v, cc )
 
   def replace_list( l, cc ):
@@ -404,9 +418,9 @@ def newexecute( self, *args, **kwargs ):
         except:
           i = cc.makeID( v )
         l[k] = i
-      elif hasattr( v, 'iteritems' ): # operator.isMappingType( v ):
+      elif hasattr( v, 'items' ): # operator.isMappingType( v ):
         replace_dict( v, cc )
-      elif not type(v) in types.StringTypes and operator.isSequenceType( v ):
+      elif not isinstance(v, six.string_types) and isSequenceType(v):
         replace_list( v, cc )
       k += 1
 
