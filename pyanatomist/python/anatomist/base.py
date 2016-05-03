@@ -46,6 +46,7 @@ import string
 import threading
 import collections
 import sys
+import six
 
 if sys.version_info[0] >= 3:
     basestring = str
@@ -1170,8 +1171,8 @@ class Anatomist(Singleton):
       if k.endswith( '_' ):
         return k[:-1]
       return k
-    params=dict( (ununderscore(k),self.convertParamsToIDs(v))
-                for k, v in kwargs.iteritems() if v is not None )
+    params=dict((ununderscore(k),self.convertParamsToIDs(v))
+                for k, v in six.iteritems(kwargs) if v is not None)
     self.logCommand(command, **params )
     self.send(command, **params)
 

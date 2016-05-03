@@ -56,13 +56,14 @@ To do this, use the constructor with forceNewInstance parameter :
 from anatomist import base
 from soma.html import htmlEscape
 
-import threading, thread
+import threading
 import types
 import string
 import time
 import sys, os
 import distutils.spawn
 import atexit
+import six
 
 from soma.qt_gui.io import Socket
 from soma.qt_gui.qtThread import QtThreadCall
@@ -764,7 +765,9 @@ class Anatomist(base.Anatomist):
         self.anaServerProcess.connect( self.anaServerProcess, SIGNAL( 'finished( int, QProcess::ExitStatus )' ), self.anaServerProcessExited )
         self.anaServerProcess.start( Anatomist.anatomistExecutable, arguments )
         self.log( "<H1>Anatomist launched</H1>")
-        self.log("Command : " +htmlEscape( Anatomist.anatomistExecutable+string.join( arguments ) ) )
+        self.log("Command : "
+                 + htmlEscape(Anatomist.anatomistExecutable
+                              + ' '.join(arguments)))
         ok = True
       elif not self.newanatomist:
         self.log( "<H1>Connecting to Anatomist</H1>" )
@@ -850,8 +853,8 @@ class Anatomist(base.Anatomist):
       cmd = "\n*BEGIN TREE EXECUTE\n*BEGIN TREE " + command + "\n"
       for ( name, value ) in kwargs.items():
           if value is not None:
-              if type( value ) in ( types.TupleType, types.ListType ):
-                  value = string.join( map( str, value ) )
+              if isinstance(value, (tuple, list)):
+                  value = ' '.join(map(str, value))
               elif hasattr( value, 'items' ) and hasattr( value, 'has_key' ):
                 # special case of dictionaries: they should convert to
                 # carto Trees, and have the __syntax__ property first
@@ -885,7 +888,8 @@ class Anatomist(base.Anatomist):
     '''
     if not self.launched:
       raise RuntimeError(  'Anatomist is not running.'  )
-    args=dict( (k,self.convertParamsToIDs(v)) for k,v in kwargs.iteritems() if v is not None )
+    args=dict((k,self.convertParamsToIDs(v))
+              for k,v in six.iteritems(kwargs) if v is not None)
     requestID = self.newRequestID()
     # an id is added to the request in order to retrieve the corresponding answer among messages read on the socket
     args['request_id']=requestID
@@ -1414,8 +1418,8 @@ class ASocket(Socket):
             callbacks = self.eventCallbacks.items()
           finally:
             self.lock.release()
-          for x,y in callbacks:
-            if type( x ) is types.TupleType:
+          for x, y in callbacks:
+            if isinstance(x, tuple):
               for function in y:
                 function( data, excep )
                 self.delCallbacks(x)
@@ -1428,7 +1432,10 @@ class ASocket(Socket):
           header = ( header, requestID )
         callbacks=self.getCallbacks(header)
         # the callbacks are executed in another thread to prevent from blocking event processing
-        thread.start_new_thread(self.executeCallbacks, (header, eval(data), callbacks, requestID))
+        #thread.start_new_thread(self.executeCallbacks, (header, eval(data), callbacks, requestID))
+        thr = threading.Thread(target=self.executeCallbacks,
+                               args=(header, eval(data), callbacks, requestID))
+        thr.start()
 
     def executeCallbacks(self, event, params, callbacks, requestID):
       """
@@ -1546,8 +1553,8 @@ class ASocket(Socket):
       # flush callbacks and send them all an exception before closing
       excep = RuntimeError( 'Connection closed' )
       callbacks = self.eventCallbacks.items()
-      for x,y in callbacks:
-        if type( x ) is types.TupleType:
+      for x, y in callbacks:
+        if isinstance(x, tuple):
           for function in y:
             function( None, excep )
             self.delCallbacks(x)
