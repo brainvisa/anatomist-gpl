@@ -135,10 +135,10 @@ Move the cursor
 ::
 
     # show the cursor position
-    print "\nCursor at : ", a.linkCursorLastClickedPosition()
+    print("\nCursor at : ", a.linkCursorLastClickedPosition())
     # move the linked cursor 
     w1.moveLinkedCursor([150, 100, 60])
-    print "\nCursor at : ", a.linkCursorLastClickedPosition()
+    print("\nCursor at : ", a.linkCursorLastClickedPosition())
 
 Camera
 ++++++
@@ -199,7 +199,7 @@ You can create a new palette by giving the list of RGB parameters of the palette
     # custom palette
     customPalette = a.createPalette("customPalette")
     colors = []
-    for x in xrange(255):
+    for x in range(255):
         colors.extend([0, 0, x])
 
     customPalette.setColors(colors=colors)
@@ -300,7 +300,7 @@ Load referential information from file header
     map.setPalette("tvalues100-200-100")
     t1mri.loadReferentialFromHeader()
     map.loadReferentialFromHeader()
-    fusion_map = a.fusionObjects([map, t1mri], "Fusion2DMethod")
+    fusion_map = a.fusionObjects([t1mri, map], "Fusion2DMethod")
     axial = a.createWindow("Axial")
     axial.addObjects(fusion_map)
     a.execute("Fusion2DParams", object=fusion_map, mode="linear_on_defined", rate=0.5)

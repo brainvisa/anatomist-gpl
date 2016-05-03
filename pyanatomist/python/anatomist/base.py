@@ -47,6 +47,9 @@ import threading
 import collections
 import sys
 
+if sys.version_info[0] >= 3:
+    basestring = str
+
 
 def isSequenceType(item):
     if isinstance(item, collections.Sequence):
