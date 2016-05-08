@@ -52,7 +52,9 @@ To do this, use the constructor with forceNewInstance parameter :
   >>> a=anatomist.Anatomist(forceNewInstance=True)
   
 """
-  
+
+from __future__ import print_function
+
 from anatomist import base
 from soma.html import htmlEscape
 
@@ -67,7 +69,7 @@ import six
 
 from soma.qt_gui.io import Socket
 from soma.qt_gui.qtThread import QtThreadCall
-from soma.qt_gui.qt_backend.QtCore import QProcess, SIGNAL
+from soma.qt_gui.qt_backend.QtCore import QProcess
 from soma.qt_gui.qt_backend.QtGui import qApp
 
 try:
@@ -762,10 +764,7 @@ class Anatomist(base.Anatomist):
 
           arguments = [ '-s', str( port ) ]
           arguments += args
-          self.anaServerProcess.connect(
-              self.anaServerProcess,
-              SIGNAL('finished(int, QProcess::ExitStatus )'),
-              self.anaServerProcessExited)
+          self.anaServerProcess.finished.connect(self.anaServerProcessExited)
           self.anaServerProcess.start(
               Anatomist.anatomistExecutable, arguments)
           self.log("<H1>Anatomist launched</H1>")
@@ -840,12 +839,16 @@ class Anatomist(base.Anatomist):
       @type kwargs: dictionary
       @param kwargs: parameters for the command
       """
+      print("send", command, kwargs)
+      sys.stdout.flush()
       if not self.launched:
+        print('not launched')
         raise RuntimeError(  'Anatomist is not running.'  )
-      #print "send", command, kwargs
-      cmd=self.createCommandMessage(command, **kwargs)
-      #print "-- send", cmd
+      print('creating command')
+      cmd = self.createCommandMessage(command, **kwargs)
+      print("-- send", cmd)
       self.comm.send( cmd )
+      print('send done.')
 
   def createCommandMessage( self, command, **kwargs ):
       """
@@ -1376,8 +1379,10 @@ class ASocket(Socket):
       # register a callback to be aware when the answer will arrive
       self.addEventHandler( command, lambda x,e: _executeMe( self, lock, x, e ), requestID=requestID )
       # send command
-      #print "sendAndWaitAnswer", command, threading.currentThread()
-      self.send( msg )
+      print("sendAndWaitAnswer", command, threading.currentThread(), ':', msg)
+      print('send func:', self.send)
+      self.send(msg)
+      print('send retutned')
       if lock.threaded:
         # block current thread waiting a notify from the reading messages thread
         try:
