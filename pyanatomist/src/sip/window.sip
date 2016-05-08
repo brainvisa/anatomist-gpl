@@ -299,7 +299,7 @@ class QAGLWidget : QGLWidget, anatomist::GLWidgetManager
 
     QAGLWidget( anatomist::AWindow*, QWidget* = 0, 
                 const char* = 0, 
-                const QGLWidget * = 0, Qt::WFlags = 0 );
+                const QGLWidget * = 0, Qt::WindowFlags = 0 );
     virtual ~QAGLWidget();
 
     virtual QSize sizeHint() const;
