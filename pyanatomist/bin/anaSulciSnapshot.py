@@ -37,8 +37,8 @@ from optparse import OptionParser
 import sigraph
 from soma import aims, aimsalgo
 import anatomist.direct.api as anatomist
-import PyQt4.QtCore as qt
-import PyQt4.QtGui as qtgui
+import soma.qt_gui.qt_backend.QtCore as qt
+import soma.qt_gui.qt_backend.QtGui as qtgui
 
 a = anatomist.Anatomist()
 p = a.theProcessor()

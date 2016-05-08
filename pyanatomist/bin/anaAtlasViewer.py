@@ -2,7 +2,7 @@
 
 import sys
 from anatomist.atlas_viewer import AtlasJsonRois
-from PyQt4.QtGui import QApplication
+from soma.qt_gui.qt_backend.QtGui import QApplication
 from optparse import OptionParser
 
 #------------------------------------------------------------------------------

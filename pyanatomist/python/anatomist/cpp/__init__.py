@@ -343,6 +343,7 @@ class Anatomist( AnatomistSip ):
         x = x[:-3]
       elif not os.path.isdir( x ):
         continue
+      print('module:', x)
       x = os.path.basename( x )
       if x in loaded_modules:
         continue
@@ -367,7 +368,7 @@ class Anatomist( AnatomistSip ):
             text = '?'
           print(file, '(', line, ') in', function, ':')
           print(text)
-        print
+        print()
         # must explicitely delete reference to frame objects (traceback) else it creates a reference cycle and the object cannot be deleted
         del e, v, t, tb, exceptionInfo
 

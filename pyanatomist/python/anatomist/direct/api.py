@@ -69,11 +69,11 @@ if sys.version_info[0] >= 3:
     basestring = str
 
 try:
-  from PyQt4.QtCore import QString
+  from soma.qt_gui.qt_backend.QtCore import QString
   _string_or_qstring = ( basestring, QString )
 except ImportError:
   _string_or_qstring = ( basestring, )
-from PyQt4 import QtCore
+from soma.qt_gui.qt_backend import QtCore
 Slot = QtCore.pyqtSlot
 
 
@@ -111,9 +111,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     # via Singleton.__init__ without arguments.
     cpp.Anatomist.__init__(self, *args, **kwargs)
     super(Anatomist, self).__singleton_init__(*args, **kwargs)
-    if 'PyQt4' in sys.modules:
-      from PyQt4 import QtGui
-      import threading
+    from soma.qt_gui.qt_backend import QtGui
+    import threading
     self.log( "Anatomist started." )
     self.context=cpp.CommandContext.defaultContext()
     self.handlers={}
@@ -1242,7 +1241,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     Wait for anatomist finishing current processing.
     """
-    from PyQt4 import QtGui
+    from soma.qt_gui.qt_backend import QtGui
     QtGui.qApp.processEvents()
 
   #############################################################################

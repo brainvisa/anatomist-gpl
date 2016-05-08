@@ -10,17 +10,42 @@ import gc  # use in "SelectionAtlasAction"
 import re
 import os
 
-from PyQt4.QtGui import QLineEdit, QPushButton, QMainWindow, QApplication
-from PyQt4.QtGui import QWidget, QLabel, QVBoxLayout, QToolBar, QIcon
-from PyQt4.QtGui import QHBoxLayout, QDockWidget, QErrorMessage, QAction
-from PyQt4.QtGui import QDesktopWidget, QTreeWidget, QTreeWidgetItem, QMenu
-from PyQt4.QtGui import QFileDialog, QTreeWidgetItemIterator, QAbstractItemView
-from PyQt4.QtCore import Qt, SIGNAL, QT_TRANSLATE_NOOP, QThread
-try:
-    from PyQt4.QtCore import QString
-    _use_qstring = True
-except ImportError:
+from soma.qt_gui import qt_backend
+if qt_backend.get_qt_backend() == 'PyQt5':
+    from soma.qt_gui.qt_backend.QtWidgets import QLineEdit, QPushButton
+    from soma.qt_gui.qt_backend.QtWidgets import QMainWindow, QApplication
+    from soma.qt_gui.qt_backend.QtWidgets import QWidget, QLabel, QVBoxLayout
+    from soma.qt_gui.qt_backend.QtWidgets import QToolBar, QHBoxLayout
+    from soma.qt_gui.qt_backend.QtWidgets import QDockWidget, QErrorMessage
+    from soma.qt_gui.qt_backend.QtWidgets import QAction
+    from soma.qt_gui.qt_backend.QtWidgets import QDesktopWidget, QTreeWidget
+    from soma.qt_gui.qt_backend.QtWidgets import QTreeWidgetItem, QMenu
+    from soma.qt_gui.qt_backend.QtWidgets import QFileDialog
+    from soma.qt_gui.qt_backend.QtWidgets import QTreeWidgetItemIterator
+    from soma.qt_gui.qt_backend.QtWidgets import QAbstractItemView
+    from soma.qt_gui.qt_backend.QtGui import QIcon
+    from soma.qt_gui.qt_backend.QtCore import Qt, QT_TRANSLATE_NOOP
+    from soma.qt_gui.qt_backend.QtCore import QThread
     _use_qstring = False
+else:
+    from soma.qt_gui.qt_backend.QtGui import QLineEdit, QPushButton
+    from soma.qt_gui.qt_backend.QtGui import QMainWindow, QApplication
+    from soma.qt_gui.qt_backend.QtGui import QWidget, QLabel, QVBoxLayout
+    from soma.qt_gui.qt_backend.QtGui import QToolBar, QIcon
+    from soma.qt_gui.qt_backend.QtGui import QHBoxLayout, QDockWidget
+    from soma.qt_gui.qt_backend.QtGui import QErrorMessage, QAction
+    from soma.qt_gui.qt_backend.QtGui import QDesktopWidget, QTreeWidget
+    from soma.qt_gui.qt_backend.QtGui import QTreeWidgetItem, QMenu
+    from soma.qt_gui.qt_backend.QtGui import QFileDialog
+    from soma.qt_gui.qt_backend.QtGui import QTreeWidgetItemIterator
+    from soma.qt_gui.qt_backend.QtGui import QAbstractItemView
+    from soma.qt_gui.qt_backend.QtCore import Qt, SIGNAL, QT_TRANSLATE_NOOP
+    from soma.qt_gui.qt_backend.QtCore import QThread
+    try:
+        from soma.qt_gui.qt_backend.QtCore import QString
+        _use_qstring = True
+    except ImportError:
+        _use_qstring = False
 
 from anatomist import cpp
 import anatomist.direct.api as anatomist

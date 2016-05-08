@@ -67,8 +67,8 @@ import six
 
 from soma.qt_gui.io import Socket
 from soma.qt_gui.qtThread import QtThreadCall
-from PyQt4.QtCore import QProcess, SIGNAL
-from PyQt4.QtGui import qApp
+from soma.qt_gui.qt_backend.QtCore import QProcess, SIGNAL
+from soma.qt_gui.qt_backend.QtGui import qApp
 
 try:
   from soma import somaqt

@@ -40,7 +40,7 @@ from optparse import OptionParser
 
 # determine wheter we are using Qt4 or Qt3, and hack a little bit accordingly
 # the boolean qt4 gloabl variable will tell it for later usage
-from PyQt4 import QtCore, QtGui
+from soma.qt_gui.qt_backend import QtCore, QtGui
 if not hasattr( QtCore, 'Slot' ):
   QtCore.Slot = QtCore.pyqtSlot # compatibility with PySide
 qt = QtGui
