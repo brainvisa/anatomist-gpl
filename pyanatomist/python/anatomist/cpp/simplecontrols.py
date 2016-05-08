@@ -32,7 +32,7 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
 import anatomist.cpp as anatomist
-from PyQt4 import QtCore, QtGui
+from soma.qt_gui.qt_backend import QtCore, QtGui
 import os
 
 '''Simplified controls useful to avoid complex interactions.

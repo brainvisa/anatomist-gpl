@@ -45,10 +45,14 @@ BRAINVISA_INSTALL( FILES "${CMAKE_BINARY_DIR}/python/anatomist/info.py"
                    COMPONENT ${PROJECT_NAME} )
 
 if( PYTHON_FOUND AND SIP_FOUND AND NUMPY_FOUND AND PYQT${DESIRED_QT_VERSION}_FOUND )
-  foreach( component python python-numpy python-qt4 python-sip4 )
-    BRAINVISA_DEPENDENCY( RUN DEPENDS ${component} RUN )
-    BRAINVISA_DEPENDENCY( DEV DEPENDS ${component} DEV )
-  endforeach()
+  if( DESIRED_QT_VERSION EQUAL 4 )
+    foreach( component python python-numpy python-qt4 python-sip4 )
+      BRAINVISA_DEPENDENCY( RUN DEPENDS ${component} RUN )
+      BRAINVISA_DEPENDENCY( DEV DEPENDS ${component} DEV )
+    endforeach()
+  elseif( DESIRED_QT_VERSION EQUAL 5 )
+    # TODO
+  endif()
   BRAINVISA_DEPENDENCY( RUN RECOMMANDS "python-matplotlib" RUN )
   set( ANATOMIST_RELATIVE_SIP_DIRECTORY
        "share/anatomist-${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}/sip" )

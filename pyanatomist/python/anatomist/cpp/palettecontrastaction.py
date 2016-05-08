@@ -35,7 +35,7 @@ import anatomist.cpp as anatomist
 #from soma import aims
 import sys
 
-from PyQt4 import QtCore, QtGui
+from soma.qt_gui.qt_backend import QtCore, QtGui
 
 testControl = False
 

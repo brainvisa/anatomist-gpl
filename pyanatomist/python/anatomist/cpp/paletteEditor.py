@@ -31,7 +31,7 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
-from PyQt4 import QtCore, QtGui
+from soma.qt_gui.qt_backend import QtCore, QtGui
 from soma import aims
 from soma.qt_gui.rangeSlider import QRangeSlider
 from tempfile import mkstemp
@@ -131,33 +131,20 @@ class PaletteEditor( QtGui.QGroupBox ):
             except:
               default = None
 
-              
+
         if palette_filter is not None or all_palettes:
-            self.connect( self.palettecb,
-                          QtCore.SIGNAL( " currentIndexChanged( const QString& ) " ),
-                          self.paletteNameChanged )
-                          
+            self.palettecb.currentIndexChanged.connect(
+                self.paletteNameChanged)
+
         if palette_filter is not None or all_palettes:
             try:
                 self.palettecb.setCurrentIndex( self.paletteDic[ default ] )
             except:
                 self.palettecb.setCurrentIndex( 0 )
-    
-        if isinstance( self.real_min, float ) or isinstance( self.real_max, float ):
-            self.connect( self.minsb,
-                          QtCore.SIGNAL( " valueChanged( double ) " ),
-                          self.minSbChanged )
-            self.connect( self.maxsb,
-                          QtCore.SIGNAL( " valueChanged( double ) " ),
-                          self.maxSbChanged )
-        else:
-            self.connect( self.minsb,
-                          QtCore.SIGNAL( " valueChanged( int ) " ),
-                          self.minSbChanged )
-            self.connect( self.maxsb,
-                          QtCore.SIGNAL( " valueChanged( int ) " ),
-                          self.maxSbChanged )
-             
+
+        self.minsb.valueChanged.connect(self.minSbChanged)
+        self.maxsb.valueChanged.connect(self.maxSbChanged)
+
         # set palette bound using current object palette info
         paletteStart = image.palette().min1() * (real_max - real_min) + real_min
         paletteStart = int(paletteStart)
@@ -168,14 +155,10 @@ class PaletteEditor( QtGui.QGroupBox ):
 #        self.rangeslider.setStart(0)
 #        self.rangeslider.setEnd(100)
         self.paletteMinMaxChanged()
-    
-        self.connect( self.rangeslider,
-                 QtCore.SIGNAL( "startValueChanged( int ) " ),
-                 self.paletteMinMaxChanged)
-        self.connect( self.rangeslider,
-                 QtCore.SIGNAL( "endValueChanged( int ) " ),
-                 self.paletteMinMaxChanged)
-        
+
+        self.rangeslider.startValueChanged.connect(self.paletteMinMaxChanged)
+        self.rangeslider.endValueChanged.connect(self.paletteMinMaxChanged)
+
 
     def setImage(self, image, realMin=None, realMax=None):
         self.image = image
@@ -272,7 +255,7 @@ class PaletteEditor( QtGui.QGroupBox ):
         self.maxsb.setValue( real_max )
         self.maxsb.blockSignals( False )
 
-        self.emit(QtCore.SIGNAL("paletteMinMaxChanged(PyQt_PyObject)"), self.image)
+        self.paletteMinMaxChanged.emit(self.image)
 
     def updatePaletteLabel( self ):
         apal = self.image.getOrCreatePalette()

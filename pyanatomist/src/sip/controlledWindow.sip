@@ -11,7 +11,7 @@ class ControlledWindow : QAWindow /Abstract/
 public:
   ControlledWindow( QWidget* = 0, const char* = 0, 
 		    carto::Object = carto::none(), 
-                    Qt::WFlags = Qt::WType_TopLevel );
+                    Qt::WindowFlags = Qt::WType_TopLevel );
   virtual ~ControlledWindow();
 
   virtual void registerObject( anatomist::AObject* , bool = false, int=-1 );

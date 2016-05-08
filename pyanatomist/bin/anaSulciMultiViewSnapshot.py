@@ -35,8 +35,8 @@
 from soma import aims
 import anatomist, sigraph
 import os, sys, sip, numpy, time
-import PyQt4.QtCore as qt
-import PyQt4.QtGui as qtgui
+import soma.qt_gui.qt_backend.QtCore as qt
+import soma.qt_gui.qt_backend.QtGui as qtgui
 
 context = anatomist.CommandContext.defaultContext()
 a = anatomist.Anatomist()

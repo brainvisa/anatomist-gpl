@@ -36,7 +36,7 @@ import anatomist.direct.api as ana
 from soma import aims
 from soma.aims import colormaphints
 import sys, os
-from PyQt4 import QtCore, QtGui, uic
+from soma.qt_gui.qt_backend import QtCore, QtGui, uic
 findChild = lambda x, y: QtCore.QObject.findChild( x, QtCore.QObject, y )
 
 qapp = QtGui.QApplication( sys.argv )
