@@ -32,16 +32,18 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 import sys, os, weakref, gc, operator
-from PyQt4.QtCore import Qt, QPoint, SIGNAL
-from PyQt4.QtGui import QSplitter, QListWidget, QTextEdit, QApplication
 import anatomist.direct.api as anatomist
+from soma.qt_gui.qt_backend.QtCore import Qt, QPoint
+from soma.qt_gui.qt_backend.QtGui import QSplitter, QListWidget, QTextEdit, \
+    QApplication
 from soma import aims
 
+from soma.qt_gui import qt_backend
+qt_backend.init_matplotlib_backend()
 import matplotlib, numpy
-matplotlib.use('Qt4Agg')
 import pylab
 
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+FigureCanvas = qt_backend.FigureCanvas
 from matplotlib.figure import Figure
 
 
@@ -70,7 +72,7 @@ class MeasuresWindow( QSplitter ):
         self.maskIterators.append( maskIterator )
         roiIterator.next()
       self.selectedBucket = None
-      self.connect( self.roiList, SIGNAL( 'currentRowChanged( int )' ), self.regionSelected )
+      self.roiList.currentRowChanged.connect(self.regionSelected)
     else:
       self.roiList = None
     
@@ -234,3 +236,4 @@ if __name__ == '__main__':
 
   anatomist.Anatomist().getControlWindow().hide()
   qApp.exec_()
+  del w

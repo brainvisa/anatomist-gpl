@@ -38,8 +38,10 @@ from soma.aims import colormaphints
 import sys, os
 from optparse import OptionParser
 
-# determine wheter we are using Qt4 or Qt3, and hack a little bit accordingly
+# determine wheter we are using Qt4 or Qt5, and hack a little bit accordingly
 # the boolean qt4 gloabl variable will tell it for later usage
+from soma.qt_gui import qt_backend
+qt_backend.set_qt_backend(compatible_qt5=True)
 from soma.qt_gui.qt_backend import QtCore, QtGui
 if not hasattr( QtCore, 'Slot' ):
   QtCore.Slot = QtCore.pyqtSlot # compatibility with PySide
@@ -676,18 +678,13 @@ class AnaSimpleViewer( qt.QObject ):
 # instantiate the machine
 anasimple = AnaSimpleViewer()
 # connect GUI actions callbacks
-awin.connect( findChild( awin, 'fileOpenAction' ), qt.SIGNAL( 'activated()' ),
-  anasimple.fileOpen )
-awin.connect( findChild( awin, 'fileExitAction' ), qt.SIGNAL( 'activated()' ),
-  anasimple.closeAll )
-awin.connect( findChild( awin, 'editAddAction' ), qt.SIGNAL( 'activated()' ),
-  anasimple.editAdd )
-awin.connect( findChild( awin, 'editRemoveAction' ),
-  qt.SIGNAL( 'activated()' ), anasimple.editRemove )
-awin.connect( findChild( awin, 'editDeleteAction' ),
-  qt.SIGNAL( 'activated()' ), anasimple.editDelete )
-awin.connect( findChild( awin, 'viewEnable_Volume_RenderingAction' ),
-  qt.SIGNAL( 'toggled( bool )' ), anasimple.enableVolumeRendering )
+findChild(awin, 'fileOpenAction').activated.connect(anasimple.fileOpen)
+findChild(awin, 'fileExitAction').activated.connect(anasimple.closeAll)
+findChild(awin, 'editAddAction').activated.connect(anasimple.editAdd)
+findChild(awin, 'editRemoveAction').activated.connect(anasimple.editRemove)
+findChild(awin, 'editDeleteAction').activated.connect(anasimple.editDelete)
+findChild(awin, 'viewEnable_Volume_RenderingAction').toggled.connect(
+    anasimple.enableVolumeRendering)
 # manually entered coords
 le = findChild( awin, 'coordXEdit' )
 le.setValidator( qt.QDoubleValidator( le ) )
@@ -698,14 +695,10 @@ le.setValidator( qt.QDoubleValidator( le ) )
 le = findChild( awin, 'coordTEdit' )
 le.setValidator( qt.QDoubleValidator( le ) )
 del le
-awin.connect( findChild( awin, 'coordXEdit' ),
-  qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
-awin.connect( findChild( awin, 'coordYEdit' ),
-  qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
-awin.connect( findChild( awin, 'coordZEdit' ),
-  qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
-awin.connect( findChild( awin, 'coordTEdit' ),
-  qt.SIGNAL( 'editingFinished()' ), anasimple.coordsChanged )
+findChild(awin, 'coordXEdit').editingFinished.connect(anasimple.coordsChanged)
+findChild(awin, 'coordYEdit').editingFinished.connect(anasimple.coordsChanged)
+findChild(awin, 'coordZEdit').editingFinished.connect(anasimple.coordsChanged)
+findChild(awin, 'coordTEdit').editingFinished.connect(anasimple.coordsChanged)
 
 awin.dropEvent = lambda awin, event: anasimple.dropEvent( awin, event )
 awin.dragEnterEvent = lambda awin, event: anasimple.dragEnterEvent( awin, event )
@@ -740,5 +733,5 @@ if runqt:
   qapp.exec_()
 
 # cleanup before exiting
-del pix, fdialog
+del fdialog
 

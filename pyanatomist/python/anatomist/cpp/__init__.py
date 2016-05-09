@@ -112,8 +112,29 @@ import collections
 def isSequenceType(item):
     if isinstance(item, collections.Sequence):
         return True
+    if hasattr(item, 'isArray'):
+        # aims Object API
+        return item.isArray()
+    if isMappingType(item):
+        return False
     methods = ['__getitem__', '__contains__', '__iter__', '__len__']
     # should also include: count, index but pyaims sequences do not have them
+    for m in methods:
+        if not hasattr(item, m):
+            return False
+    return True
+
+
+def isMappingType(item):
+    if isinstance(item, collections.Mapping):
+        return True
+    if hasattr(item, 'isDictionary'):
+        # aims Object API
+        return item.isDictionary()
+    methods = ['get', 'items', 'keys', 'values', '__getitem__', '__iter__',
+               '__contains__', '__len__']
+    if sys.version_info[0] < 3:
+        methods.append('iteritems')
     for m in methods:
         if not hasattr(item, m):
             return False
@@ -636,7 +657,7 @@ def __GlobalConfiguration_setitem__(self, param, value):
 anatomist.GlobalConfiguration.__setitem__ = __GlobalConfiguration_setitem__
 del __GlobalConfiguration_setitem__
 
-del os, sys, string, glob
+del os, string, glob
 del anatomist # , aims
 
 # -------------

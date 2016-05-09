@@ -38,16 +38,14 @@ import sys, os, math
 sys.path.insert( 0, '.' )
 
 userLevel = 4
-# determine wheter we are using Qt4 or Qt3, and hack a little bit accordingly
+# determine wheter we are using Qt4 or Qt5, and hack a little bit accordingly
 # the boolean qt4 gloabl variable will tell it for later usage
-qt4 = True
-from PyQt4 import QtCore, QtGui
-qt = QtGui
-from PyQt4.uic import loadUi
+from soma.qt_gui.qt_backend import QtCore, QtGui
+from soma.qt_gui.qt_backend import loadUi
 
 # do we have to run QApplication ?
-if qt.qApp.startingUp():
-  qapp = qt.QApplication( sys.argv )
+if QtGui.qApp.startingUp():
+  qapp = QtGui.QApplication( sys.argv )
   runqt = True
 else:
   runqt = False
@@ -291,7 +289,7 @@ class TexDrawControl( anatomist.cpp.Control ):
 
 
 #a = anatomist.Anatomist()
-#pix = qt.QPixmap( 'control.xpm' )
+#pix = QtGui.QPixmap( 'control.xpm' )
 #anatomist.cpp.IconDictionary.instance().addIcon( 'MyControl',
   #pix )
 #ad = anatomist.cpp.ActionDictionary.instance()
@@ -308,7 +306,7 @@ class TexDrawControl( anatomist.cpp.Control ):
 
 a = anatomist.Anatomist()
 
-pix = qt.QPixmap( 'control.xpm' )
+pix = QtGui.QPixmap( 'control.xpm' )
 anatomist.cpp.IconDictionary.instance().addIcon( 'TexDrawControl',
   pix )
 ad = anatomist.cpp.ActionDictionary.instance()
@@ -323,7 +321,7 @@ aw = a.createWindow( '3D' )
 a.addObjects( [ s ], [ aw ] )
 a.execute( 'SetControl', windows=[aw], control='TexDrawControl' )
 
-qt.QMessageBox.information( None, 'texture drawing', '1. put a mesh in a 3D view\n2.select the "Mickey" control\n3. ctrl+right click on the mesh to create an empty texture or initiate the drawinf session\n4. draw on the mesh using the mouse left button\n   ctrl+left button erases', qt.QMessageBox.Ok )
+QtGui.QMessageBox.information( None, 'texture drawing', '1. put a mesh in a 3D view\n2.select the "Mickey" control\n3. ctrl+right click on the mesh to create an empty texture or initiate the drawinf session\n4. draw on the mesh using the mouse left button\n   ctrl+left button erases', QtGui.QMessageBox.Ok )
 
 # run Qt
 if runqt:

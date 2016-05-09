@@ -36,7 +36,7 @@ import anatomist.direct.api as ana
 from soma import aims
 from soma.aims import colormaphints
 import sys, os
-from soma.qt_gui.qt_backend import QtCore, QtGui, uic
+from soma.qt_gui.qt_backend import QtCore, QtGui, loadUi
 findChild = lambda x, y: QtCore.QObject.findChild( x, QtCore.QObject, y )
 
 qapp = QtGui.QApplication( sys.argv )
@@ -53,7 +53,7 @@ cwd = os.getcwd()
 # icon files: we have no other choice than globally changing the working
 # directory
 os.chdir( anasimpleviewerdir )
-awin = uic.loadUi( os.path.join( anasimpleviewerdir, uifile ) )
+awin = loadUi( os.path.join( anasimpleviewerdir, uifile ) )
 os.chdir( cwd )
 
 # global variables: lists of windows, objects, a fusion2d with a number of
@@ -301,16 +301,11 @@ class AnaSimpleViewer( QtGui.QObject ):
 # instantiate the machine
 anasimple = AnaSimpleViewer()
 # connect GUI actions callbacks
-awin.connect( findChild( awin, 'fileOpenAction' ),
-  QtGui.SIGNAL( 'activated()' ), anasimple.fileOpen )
-awin.connect( findChild( awin, 'fileExitAction' ),
-  QtGui.SIGNAL( 'activated()' ), anasimple.closeAll )
-awin.connect( findChild( awin, 'editAddAction' ),
-  QtGui.SIGNAL( 'activated()' ), anasimple.editAdd )
-awin.connect( findChild( awin, 'editRemoveAction' ),
-  QtGui.SIGNAL( 'activated()' ), anasimple.editRemove )
-awin.connect( findChild( awin, 'editDeleteAction' ),
-  QtGui.SIGNAL( 'activated()' ), anasimple.editDelete )
+findChild(awin, 'fileOpenAction').activated.connect(anasimple.fileOpen)
+findChild(awin, 'fileExitAction').activated.connect(anasimple.closeAll)
+findChild(awin, 'editAddAction').activated.connect(anasimple.editAdd)
+findChild(awin, 'editRemoveAction').activated.connect(anasimple.editRemove)
+findChild(awin, 'editDeleteAction').activated.connect(anasimple.editDelete)
 
 # display on the whole screen
 awin.showMaximized()

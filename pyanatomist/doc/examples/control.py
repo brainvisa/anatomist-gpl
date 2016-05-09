@@ -41,19 +41,11 @@ sys.path.insert( 0, '.' )
 
 # determine wheter we are using Qt4 or Qt3, and hack a little bit accordingly
 # the boolean qt4 gloabl variable will tell it for later usage
-qt4 = False
-if sys.modules.has_key( 'PyQt4'):
-  qt4 = True
-  from PyQt4 import QtCore, QtGui
-  qt = QtGui
-  from PyQt4.uic import loadUi
-else:
-  import qt, qtui
-  loadUi = qtui.QWidgetFactory.create
+from soma.qt_gui.qt_backend import QtCore, QtGui, loadUi
 
 # do we have to run QApplication ?
-if qt.qApp.startingUp():
-  qapp = qt.QApplication( sys.argv )
+if QtGui.qApp.startingUp():
+  qapp = QtGui.QApplication( sys.argv )
   runqt = True
 else:
   runqt = False
@@ -120,18 +112,11 @@ class MyControl( anatomist.cpp.Control ):
 
   def eventAutoSubscription( self, pool ):
 
-    if qt4:
-      key = QtCore.Qt
-      NoModifier = key.NoModifier
-      ShiftModifier = key.ShiftModifier
-      ControlModifier = key.ControlModifier
-      AltModifier = key.AltModifier
-    else:
-      key = qt.Qt
-      NoModifier = key.NoButton
-      ShiftModifier = key.ShiftButton
-      ControlModifier = key.ControlButton
-      AltModifier = key.AltButton
+    key = QtCore.Qt
+    NoModifier = key.NoModifier
+    ShiftModifier = key.ShiftModifier
+    ControlModifier = key.ControlModifier
+    AltModifier = key.AltModifier
 
     self.keyPressEventSubscribe( key.Key_C, NoModifier, 
                                  pool.action( 'MyAction' ).resetRadius )
@@ -144,7 +129,7 @@ class MyControl( anatomist.cpp.Control ):
       pool.action( 'MyAction' ).takePolygon )
 
 a = anatomist.Anatomist()
-pix = qt.QPixmap( 'control.xpm' )
+pix = QtGui.QPixmap( 'control.xpm' )
 anatomist.cpp.IconDictionary.instance().addIcon( 'MyControl',
   pix )
 ad = anatomist.cpp.ActionDictionary.instance()
@@ -161,7 +146,4 @@ a.addObjects( [ s ], [ aw ] )
 
 # run Qt
 if runqt:
-  if qt4:
     qapp.exec_()
-  else:
-    qapp.exec_loop()

@@ -33,31 +33,34 @@
 import anatomist.direct.api as anatomist
 from soma import aims
 import sys
+from soma.qt_gui import qt_backend
+qt_backend.set_qt_backend(compatible_qt5=True)
+from soma.qt_gui.qt_backend import QtGui
 
-g = aims.read( 'Rbase.arg' )
+if QtGui.qApp.startingUp():
+  runqt = True
+
+g = aims.read('Rbase.arg')
 
 a = anatomist.Anatomist()
 
 ag = a.toAObject( g )
 for x in g.vertices():
-  x[ 'toto' ] = 12.3
+    x['toto'] = 12.3
 
 g.vertices().list()[10]['toto'] = 24.3
 g.vertices().list()[12]['toto'] = 48
 
 ag.setColorMode( ag.PropertyMap )
-ag.setColorProperty( 'toto' )
+ag.setColorProperty('toto')
 ag.notifyObservers()
 
-w = a.createWindow( '3D' )
-w.addObjects( ag, add_graph_nodes=True )
+w = a.createWindow('3D')
+w.addObjects(ag, add_graph_nodes=True)
 
 def main():
-  if sys.modules.has_key( 'PyQt4' ):
-    import PyQt4.QtGui as qt
-  else:
-    import qt
-  if qt.qApp.startingUp():
-    qt.qApp.exec_loop()
+    if runqt:
+        QtGui.qApp.exec_()
 
-if __name__ == '__main__' : main()
+if __name__ == '__main__':
+    main()
