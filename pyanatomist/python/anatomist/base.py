@@ -55,8 +55,10 @@ if sys.version_info[0] >= 3:
 def isSequenceType(item):
     if isinstance(item, collections.Sequence):
         return True
-    methods = ['count', 'index', '__getitem__', '__contains__', '__iter__',
-               '__len__']
+    if isMappingType(item):
+        return False
+    methods = ['__getitem__', '__contains__', '__iter__', '__len__']
+    # should also include: count, index but pyaims sequences do not have them
     for m in methods:
         if not hasattr(item, m):
             return False
@@ -1231,7 +1233,7 @@ class Anatomist(Singleton):
     :rtype: dictionary or list
     """
     if not isinstance( params, basestring ) \
-      and isSequenceType( params ):
+        and isSequenceType( params ):
       return [self.convertSingleObjectParamsToIDs(i) for i in params]
     else:
       return self.convertSingleObjectParamsToIDs( params )

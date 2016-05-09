@@ -112,8 +112,8 @@ import collections
 def isSequenceType(item):
     if isinstance(item, collections.Sequence):
         return True
-    methods = ['count', 'index', '__getitem__', '__contains__', '__iter__',
-               '__len__']
+    methods = ['__getitem__', '__contains__', '__iter__', '__len__']
+    # should also include: count, index but pyaims sequences do not have them
     for m in methods:
         if not hasattr(item, m):
             return False

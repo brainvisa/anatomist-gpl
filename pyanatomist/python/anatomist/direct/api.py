@@ -1024,28 +1024,32 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       if k.endswith( '_' ):
         return k[:-1]
       return k
-    params=dict((ununderscore(k),self.convertParamsToIDs(v)) for k, v
-                in six.iteritems(kwargs) if v is not None)
+    params = dict((ununderscore(k), self.convertParamsToIDs(v)) for k, v
+                  in six.iteritems(kwargs) if v is not None)
     self.logCommand(command, **params )
     return self.theProcessor().execute(command, **params) 
-    
+
   def convertSingleObjectParamsToIDs( self, v ):
     """
-    Converts current api object to corresponding anatomist object representation.
+    Converts current api object to corresponding anatomist object
+    representation.
 
-    * params: :py:class:`AItem` instance
+    Parameters
+    ----------
+    v: :py:class:`AItem` instance
+        Element to convert
 
-      Element to convert
-
-    * returns: *dictionary* or *list*
-
-      Converted elements
+    Returns
+    -------
+    *dictionary* or *list*
+        Converted elements
     """
     if isinstance( v,  base.Anatomist.AItem ) :
       v=v.getInternalRep()
     if isinstance(v, cpp.APalette):
       return v.name()
-    if isinstance(v, cpp.AObject) or isinstance(v, cpp.AWindow) or isinstance(v, cpp.Transformation) or isinstance(v, cpp.Referential):
+    if isinstance(v, cpp.AObject) or isinstance(v, cpp.AWindow) \
+        or isinstance(v, cpp.Transformation) or isinstance(v, cpp.Referential):
       try:
         i = self.context.id( v )
       except:
@@ -1053,7 +1057,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       return i
     elif isinstance( v, ( basestring, int, float, dict ) ):
       return v
-    raise TypeError( 'Expecting an Anatomist object but got one of type %s' % repr( type( v ) )  )
+    raise TypeError('Expecting an Anatomist object but got one of type %s'
+                    % repr(type(v)))
 
 
   def convertSingleObjectParamsToObjects( self, v ):

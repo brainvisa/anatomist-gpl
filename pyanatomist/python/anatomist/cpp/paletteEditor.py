@@ -40,6 +40,9 @@ import os
 import sys
 
 class PaletteEditor( QtGui.QGroupBox ):
+
+    paletteMinMaxChanged = QtCore.Signal(object)
+
     def __init__( self, image,
                   default=None, title="", palette_filter=None,
                   real_min = 0, real_max = 100,
@@ -154,10 +157,10 @@ class PaletteEditor( QtGui.QGroupBox ):
         self.rangeslider.setEnd(int(image.palette().max1() * (real_max - real_min) +  real_min))
 #        self.rangeslider.setStart(0)
 #        self.rangeslider.setEnd(100)
-        self.paletteMinMaxChanged()
+        self._paletteMinMaxChanged()
 
-        self.rangeslider.startValueChanged.connect(self.paletteMinMaxChanged)
-        self.rangeslider.endValueChanged.connect(self.paletteMinMaxChanged)
+        self.rangeslider.startValueChanged.connect(self._paletteMinMaxChanged)
+        self.rangeslider.endValueChanged.connect(self._paletteMinMaxChanged)
 
 
     def setImage(self, image, realMin=None, realMax=None):
@@ -213,9 +216,9 @@ class PaletteEditor( QtGui.QGroupBox ):
         self.image.setPalette( palette_object,\
                                minVal=apal.min1(),\
                                maxVal=apal.max1() )
-        self.paletteMinMaxChanged()
+        self._paletteMinMaxChanged()
 
-    def paletteMinMaxChanged( self ):
+    def _paletteMinMaxChanged( self ):
         a = ana.Anatomist( '-b' )
         min = self.rangeslider.start()
         max = self.rangeslider.end()
