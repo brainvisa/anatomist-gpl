@@ -839,16 +839,11 @@ class Anatomist(base.Anatomist):
       @type kwargs: dictionary
       @param kwargs: parameters for the command
       """
-      print("send", command, kwargs)
       sys.stdout.flush()
       if not self.launched:
-        print('not launched')
         raise RuntimeError(  'Anatomist is not running.'  )
-      print('creating command')
       cmd = self.createCommandMessage(command, **kwargs)
-      print("-- send", cmd)
       self.comm.send( cmd )
-      print('send done.')
 
   def createCommandMessage( self, command, **kwargs ):
       """
@@ -1379,10 +1374,7 @@ class ASocket(Socket):
       # register a callback to be aware when the answer will arrive
       self.addEventHandler( command, lambda x,e: _executeMe( self, lock, x, e ), requestID=requestID )
       # send command
-      print("sendAndWaitAnswer", command, threading.currentThread(), ':', msg)
-      print('send func:', self.send)
       self.send(msg)
-      print('send retutned')
       if lock.threaded:
         # block current thread waiting a notify from the reading messages thread
         try:
