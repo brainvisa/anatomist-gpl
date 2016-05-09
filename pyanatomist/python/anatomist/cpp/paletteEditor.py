@@ -136,7 +136,7 @@ class PaletteEditor( QtGui.QGroupBox ):
 
 
         if palette_filter is not None or all_palettes:
-            self.palettecb.currentIndexChanged.connect(
+            self.palettecb.currentIndexChanged[str].connect(
                 self.paletteNameChanged)
 
         if palette_filter is not None or all_palettes:
@@ -211,10 +211,9 @@ class PaletteEditor( QtGui.QGroupBox ):
 
     def paletteNameChanged( self, name):
         a = ana.Anatomist( '-b' )
-        palette_object = a.getPalette( str(name) )
-        apal = self.image.getOrCreatePalette()        
-        self.image.setPalette( palette_object,\
-                               minVal=apal.min1(),\
+        apal = self.image.getOrCreatePalette()
+        self.image.setPalette( name,
+                               minVal=apal.min1(),
                                maxVal=apal.max1() )
         self._paletteMinMaxChanged()
 
@@ -223,10 +222,9 @@ class PaletteEditor( QtGui.QGroupBox ):
         min = self.rangeslider.start()
         max = self.rangeslider.end()
         refpal = self.image.getOrCreatePalette().refPalette()
-        palette_object = a.getPalette( str( refpal.name() ) )
-        self.image.setPalette( palette_object,\
-                                minVal=min*(1.0/self.sliderPrecision),\
-                                maxVal=max*(1.0/self.sliderPrecision) )
+        self.image.setPalette( refpal.name(),
+                               minVal=min*(1.0/self.sliderPrecision),
+                               maxVal=max*(1.0/self.sliderPrecision) )
 
         if not self.rangeslider._movingHandle:
             paletteinfo = self.updatePaletteLabel()
