@@ -40,6 +40,9 @@ import os
 import sys
 
 class PaletteEditor( QtGui.QGroupBox ):
+
+    paletteMinMaxChanged = QtCore.Signal(object)
+
     def __init__( self, image,
                   default=None, title="", palette_filter=None,
                   real_min = 0, real_max = 100,
@@ -133,7 +136,7 @@ class PaletteEditor( QtGui.QGroupBox ):
 
 
         if palette_filter is not None or all_palettes:
-            self.palettecb.currentIndexChanged.connect(
+            self.palettecb.currentIndexChanged[str].connect(
                 self.paletteNameChanged)
 
         if palette_filter is not None or all_palettes:
@@ -154,10 +157,10 @@ class PaletteEditor( QtGui.QGroupBox ):
         self.rangeslider.setEnd(int(image.palette().max1() * (real_max - real_min) +  real_min))
 #        self.rangeslider.setStart(0)
 #        self.rangeslider.setEnd(100)
-        self.paletteMinMaxChanged()
+        self._paletteMinMaxChanged()
 
-        self.rangeslider.startValueChanged.connect(self.paletteMinMaxChanged)
-        self.rangeslider.endValueChanged.connect(self.paletteMinMaxChanged)
+        self.rangeslider.startValueChanged.connect(self._paletteMinMaxChanged)
+        self.rangeslider.endValueChanged.connect(self._paletteMinMaxChanged)
 
 
     def setImage(self, image, realMin=None, realMax=None):
@@ -208,22 +211,20 @@ class PaletteEditor( QtGui.QGroupBox ):
 
     def paletteNameChanged( self, name):
         a = ana.Anatomist( '-b' )
-        palette_object = a.getPalette( str(name) )
-        apal = self.image.getOrCreatePalette()        
-        self.image.setPalette( palette_object,\
-                               minVal=apal.min1(),\
+        apal = self.image.getOrCreatePalette()
+        self.image.setPalette( name,
+                               minVal=apal.min1(),
                                maxVal=apal.max1() )
-        self.paletteMinMaxChanged()
+        self._paletteMinMaxChanged()
 
-    def paletteMinMaxChanged( self ):
+    def _paletteMinMaxChanged( self ):
         a = ana.Anatomist( '-b' )
         min = self.rangeslider.start()
         max = self.rangeslider.end()
         refpal = self.image.getOrCreatePalette().refPalette()
-        palette_object = a.getPalette( str( refpal.name() ) )
-        self.image.setPalette( palette_object,\
-                                minVal=min*(1.0/self.sliderPrecision),\
-                                maxVal=max*(1.0/self.sliderPrecision) )
+        self.image.setPalette( refpal.name(),
+                               minVal=min*(1.0/self.sliderPrecision),
+                               maxVal=max*(1.0/self.sliderPrecision) )
 
         if not self.rangeslider._movingHandle:
             paletteinfo = self.updatePaletteLabel()
