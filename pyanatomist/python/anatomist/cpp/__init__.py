@@ -343,7 +343,7 @@ class Anatomist( AnatomistSip ):
         x = x[:-3]
       elif not os.path.isdir( x ):
         continue
-      print('module:', x)
+      #print('module:', x)
       x = os.path.basename( x )
       if x in loaded_modules:
         continue
