@@ -35,57 +35,52 @@ import time
 import os
 import anatomist.direct.api as anatomist
 import sys
-if sys.modules.has_key( 'PyQt4' ):
-  from PyQt4.QtGui import *
-else:
-  from qt import *
+from soma.qt_gui.qt_backend.QtGui import qApp
 
-# Load a sphere mesh
-r = aims.Reader()
 # create a unit sphere of radius 1 and 500 vertices
-m = aims.SurfaceGenerator.sphere( aims.Point3df( 0,0,0 ), 1, 500, False )
+m = aims.SurfaceGenerator.sphere(aims.Point3df(0, 0, 0), 1, 500, False)
 
 # Multiply the sphere size by 100
-for p in xrange( m.vertex().size() ):
-  m.vertex()[ p ] *= 100
+for p in xrange(m.vertex().size()):
+    m.vertex()[p] *= 100
 
 # Open Anatomist
 a = anatomist.Anatomist()
 
 # Put the mesh in anatomist
-am = a.toAObject( m )
+am = a.toAObject(m)
 
 # Create a new 3D window in Anatomist
-aw=a.createWindow( '3D' )
+aw = a.createWindow('3D')
 #c = anatomist.CreateWindowCommand( '3D' )
 #proc.execute( c )
 #aw = c.createdWindow()
 
 # Put the mesh in the created window
-a.addObjects( [ am ], [ aw ] )
+a.addObjects(am, aw)
 #c = anatomist.AddObjectCommand( [ am ], [ aw ] )
 #proc.execuFalsete( c )
 
 # keep a copy of original vertices
-coords = [ aims.Point3df( m.vertex()[i] ) \
-           for i in xrange( len( m.vertex() ) ) ]
+coords = [aims.Point3df(m.vertex()[i])
+          for i in xrange(len(m.vertex()))]
 # take one vertex out of 3
-points = xrange( 0, len(coords), 3)
+points = xrange(0, len(coords), 3)
 
-for i in xrange( 10 ):
-  # shrink
-  for s in reversed(xrange(100)):
-    for p in points:
-      m.vertex()[p] = coords[p] * s/100.
-    am.setChanged()
-    am.notifyObservers()
-    qApp.processEvents()
-    time.sleep( 0.01 )
-  # expand
-  for s in xrange(100):
-    for p in points:
-      m.vertex()[p] = coords[p] * s/100.
-    am.setChanged()
-    am.notifyObservers()
-    qApp.processEvents()
-    time.sleep( 0.01 )
+for i in xrange(10):
+    # shrink
+    for s in reversed(xrange(100)):
+        for p in points:
+            m.vertex()[p] = coords[p] * s/100.
+        am.setChanged()
+        am.notifyObservers()
+        qApp.processEvents()
+        time.sleep(0.01)
+    # expand
+    for s in xrange(100):
+        for p in points:
+            m.vertex()[p] = coords[p] * s/100.
+        am.setChanged()
+        am.notifyObservers()
+        qApp.processEvents()
+        time.sleep(0.01)

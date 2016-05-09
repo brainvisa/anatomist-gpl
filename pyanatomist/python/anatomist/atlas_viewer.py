@@ -10,45 +10,34 @@ import gc  # use in "SelectionAtlasAction"
 import re
 import os
 
+from anatomist import cpp
+import anatomist.direct.api as anatomist
+
 from soma.qt_gui import qt_backend
+qt_backend.set_qt_backend(compatible_qt5=True)
+from soma.qt_gui.qt_backend.QtWidgets import QLineEdit, QPushButton
+from soma.qt_gui.qt_backend.QtWidgets import QMainWindow, QApplication
+from soma.qt_gui.qt_backend.QtWidgets import QWidget, QLabel, QVBoxLayout
+from soma.qt_gui.qt_backend.QtWidgets import QToolBar, QHBoxLayout
+from soma.qt_gui.qt_backend.QtWidgets import QDockWidget, QErrorMessage
+from soma.qt_gui.qt_backend.QtWidgets import QAction
+from soma.qt_gui.qt_backend.QtWidgets import QDesktopWidget, QTreeWidget
+from soma.qt_gui.qt_backend.QtWidgets import QTreeWidgetItem, QMenu
+from soma.qt_gui.qt_backend.QtWidgets import QFileDialog
+from soma.qt_gui.qt_backend.QtWidgets import QTreeWidgetItemIterator
+from soma.qt_gui.qt_backend.QtWidgets import QAbstractItemView
+from soma.qt_gui.qt_backend.QtGui import QIcon
+from soma.qt_gui.qt_backend.QtCore import Qt, QT_TRANSLATE_NOOP
+from soma.qt_gui.qt_backend.QtCore import QThread
 if qt_backend.get_qt_backend() == 'PyQt5':
-    from soma.qt_gui.qt_backend.QtWidgets import QLineEdit, QPushButton
-    from soma.qt_gui.qt_backend.QtWidgets import QMainWindow, QApplication
-    from soma.qt_gui.qt_backend.QtWidgets import QWidget, QLabel, QVBoxLayout
-    from soma.qt_gui.qt_backend.QtWidgets import QToolBar, QHBoxLayout
-    from soma.qt_gui.qt_backend.QtWidgets import QDockWidget, QErrorMessage
-    from soma.qt_gui.qt_backend.QtWidgets import QAction
-    from soma.qt_gui.qt_backend.QtWidgets import QDesktopWidget, QTreeWidget
-    from soma.qt_gui.qt_backend.QtWidgets import QTreeWidgetItem, QMenu
-    from soma.qt_gui.qt_backend.QtWidgets import QFileDialog
-    from soma.qt_gui.qt_backend.QtWidgets import QTreeWidgetItemIterator
-    from soma.qt_gui.qt_backend.QtWidgets import QAbstractItemView
-    from soma.qt_gui.qt_backend.QtGui import QIcon
-    from soma.qt_gui.qt_backend.QtCore import Qt, QT_TRANSLATE_NOOP
-    from soma.qt_gui.qt_backend.QtCore import QThread
     _use_qstring = False
 else:
-    from soma.qt_gui.qt_backend.QtGui import QLineEdit, QPushButton
-    from soma.qt_gui.qt_backend.QtGui import QMainWindow, QApplication
-    from soma.qt_gui.qt_backend.QtGui import QWidget, QLabel, QVBoxLayout
-    from soma.qt_gui.qt_backend.QtGui import QToolBar, QIcon
-    from soma.qt_gui.qt_backend.QtGui import QHBoxLayout, QDockWidget
-    from soma.qt_gui.qt_backend.QtGui import QErrorMessage, QAction
-    from soma.qt_gui.qt_backend.QtGui import QDesktopWidget, QTreeWidget
-    from soma.qt_gui.qt_backend.QtGui import QTreeWidgetItem, QMenu
-    from soma.qt_gui.qt_backend.QtGui import QFileDialog
-    from soma.qt_gui.qt_backend.QtGui import QTreeWidgetItemIterator
-    from soma.qt_gui.qt_backend.QtGui import QAbstractItemView
-    from soma.qt_gui.qt_backend.QtCore import Qt, SIGNAL, QT_TRANSLATE_NOOP
-    from soma.qt_gui.qt_backend.QtCore import QThread
     try:
         from soma.qt_gui.qt_backend.QtCore import QString
         _use_qstring = True
     except ImportError:
         _use_qstring = False
 
-from anatomist import cpp
-import anatomist.direct.api as anatomist
 from soma import aims
 
 # To do ==> making accessor : self.tree.leaves_sorted
@@ -240,47 +229,20 @@ class AtlasJsonRois(QMainWindow):
 
         # self.tree_widget.itemPressed.connect(self.tree.removeNode)
         self.tree_widget.itemClicked.connect(self.updateViewWithTree)
-        self.connect(self.save_json, SIGNAL('triggered()'), self.saveTree)
-        self.connect(self.open_json, SIGNAL('triggered()'), self.loadTree)
-        self.connect(self.all_brain, SIGNAL('triggered()'), self.resetBrain)
-        self.connect(
-            self.right_brain,
-            SIGNAL('triggered()'),
-            self.selectRightBrain)
-        self.connect(
-            self.left_brain,
-            SIGNAL('triggered()'),
-            self.selectLeftBrain)
-        self.connect(
-            self.central_struct,
-            SIGNAL('triggered()'),
-            self.selectCentralStruct)
-        self.connect(
-            self.t1mri_view,
-            SIGNAL('triggered()'),
-            self.selectT1MRIView)
-        self.connect(
-            self.dimension,
-            SIGNAL('triggered()'),
-            self.changeDimension)
-        self.connect(
-            self.convention,
-            SIGNAL('triggered()'),
-            self.changeConvention)
-        self.connect(self.outline, SIGNAL('triggered()'), self.ViewOutline)
+        self.save_json.triggered.connect(self.saveTree)
+        self.open_json.triggered.connect(self.loadTree)
+        self.all_brain.triggered.connect(self.resetBrain)
+        self.right_brain.triggered.connect(self.selectRightBrain)
+        self.left_brain.triggered.connect(self.selectLeftBrain)
+        self.central_struct.triggered.connect(self.selectCentralStruct)
+        self.t1mri_view.triggered.connect(self.selectT1MRIView)
+        self.dimension.triggered.connect(self.changeDimension)
+        self.convention.triggered.connect(self.changeConvention)
+        self.outline.triggered.connect(self.ViewOutline)
 #--------------******************-------------***************------
-        self.connect(
-            self.t1mri_axial_view,
-            SIGNAL('triggered()'),
-            self.muteAxial)
-        self.connect(
-            self.t1mri_sagittal_view,
-            SIGNAL('triggered()'),
-            self.muteSagittal)
-        self.connect(
-            self.t1mri_coronal_view,
-            SIGNAL('triggered()'),
-            self.muteCoronal)
+        self.t1mri_axial_view.triggered.connect(self.muteAxial)
+        self.t1mri_sagittal_view.triggered.connect(self.muteSagittal)
+        self.t1mri_coronal_view.triggered.connect(self.muteCoronal)
 #--------------******************-------------***************------
 
     def ViewOutline(self):

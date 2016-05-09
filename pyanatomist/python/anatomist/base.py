@@ -55,6 +55,9 @@ if sys.version_info[0] >= 3:
 def isSequenceType(item):
     if isinstance(item, collections.Sequence):
         return True
+    if hasattr(item, 'isArray'):
+        # aims Object API
+        return item.isArray()
     if isMappingType(item):
         return False
     methods = ['__getitem__', '__contains__', '__iter__', '__len__']
@@ -68,6 +71,9 @@ def isSequenceType(item):
 def isMappingType(item):
     if isinstance(item, collections.Mapping):
         return True
+    if hasattr(item, 'isDictionary'):
+        # aims Object API
+        return item.isDictionary()
     methods = ['get', 'items', 'keys', 'values', '__getitem__', '__iter__',
                '__contains__', '__len__']
     if sys.version_info[0] < 3:
@@ -2212,34 +2218,38 @@ class Anatomist(Singleton):
       else:
         return 1
 
-  ###############################################################################
+  #############################################################################
   class APalette(AItem):
     """
     :param string name:
       Palette name. Must be unique, it is the palette identifier.
     """
-    def __init__(self, name, anatomistinstance, internalRep=None, *args, **kwargs):
-      super(Anatomist.APalette, self).__init__(anatomistinstance, internalRep, *args, **kwargs)
-      self.name=name
+    def __init__(self, name, anatomistinstance, internalRep=None, *args,
+                 **kwargs):
+      super(Anatomist.APalette, self).__init__(anatomistinstance, internalRep,
+                                               *args, **kwargs)
+      self.name = name
 
     def setColors(self, colors, color_mode="RGB"):
       """
       Modifies a palette (colors).
 
-      :param palette:
+      Parameters
+      ----------
+      palette: :py:class:`anatomist.base.Anatomist.APalette` object or name
         The palette which colors must be changed
-      :type palette: :py:class:`anatomist.base.Anatomist.APalette`
 
-      :param colors:
-        Color vectors
-      :type colors: int vector
+      colors: list of ints
+        Color vectors, in line (a list of R, G, B, R, G, B...
+        or R, G, B, A, ..), as int 8 bit values
 
-      :param string colors_mode:
+      color_mode: string
         ``'RGB'`` or ``'RGBA'``
       """
-      self.anatomistinstance.execute("ChangePalette", name=self.name, colors=colors, color_mode=color_mode)
+      self.anatomistinstance.execute("ChangePalette", name=self.name,
+                                     colors=colors, color_mode=color_mode)
 
-  ###############################################################################
+  #############################################################################
   class Transformation(AItem):
     """
     This objects contains informations to convert coordinates from one referential to another.

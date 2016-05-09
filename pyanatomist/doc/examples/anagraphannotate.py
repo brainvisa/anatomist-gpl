@@ -4,7 +4,7 @@
 import anatomist.direct.api as ana
 from soma import aims
 import os, numpy, sys
-from PyQt4 import QtGui
+from soma.qt_gui.qt_backend import QtGui
 
 byvertex = False
 
