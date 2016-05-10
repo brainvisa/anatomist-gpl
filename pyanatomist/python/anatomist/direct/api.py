@@ -656,12 +656,11 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     Transformation instances are converted.
     Drawback: all return values which are lists or dictionaries are copied.
     '''
-    att = super( Anatomist, self ).__getattribute__( name )
-    if callable( att ):
-      if type( att ).__name__ == 'builtin_function_or_method':
-        conv = super( Anatomist, self ).__getattribute__( \
-          'convertParamsToAItems' )
-        return lambda *args, **kwargs: conv( att( *args, **kwargs ) )
+    att = super(Anatomist, self).__getattribute__(name)
+    if callable(att):
+      if type(att).__name__ == 'builtin_function_or_method':
+        conv = super(Anatomist, self).__getattribute__('convertParamsToAItems')
+        return lambda *args, **kwargs: conv(att(*args, **kwargs))
     return att
 
   def _getAttributeNames( self ):
@@ -1103,21 +1102,21 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     Converts a C++ API objects or context IDs to a generic API object.
 
     * idorcpp: *ID or C++ instance to be converted*.
-    
+
       If idorcpp is already an :py:class:`AItem`, it is returned as is
 
     * convertIDs: *boolean*
-    
+
       If *True*, int numbers are treated as item IDs and
       converted accordingly when possible.
-    
+
     * allowother: *boolean*
-    
+
       If *True*, *idorcpp* is returned unchanged if not recognized
 
     * returns: :py:class:`AItem` instance, or *None* (or the unchanged 
     input if allowother is *True*)
-    
+
       Converted element
     """
     if isinstance( idorcpp, base.Anatomist.AItem ):
@@ -1155,12 +1154,12 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     * params: *dictionary* or *list* or anything else
 
     * convertIDs: *boolean*
-    
+
       If *True*, int numbers are treated as item IDs and
       converted accordingly when possible.
-    
+
     * changed: *list*
-    
+
       If anything has been changed from the input params, then
       changed will be added a True value. It's actually an output parameter
 
@@ -1177,24 +1176,22 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       return False
     if is_untransformed_object(params):
       return params
-    elif isSequenceType( params ):
-      conv = super( Anatomist, self ).__getattribute__( \
-        'convertParamsToAItems' )
+    elif isSequenceType(params):
+      conv = super(Anatomist, self).__getattribute__('convertParamsToAItems')
       changed2 = []
-      l = [ conv(i, convertIDs=convertIDs, changed=changed2) for i in params ]
+      l = [conv(i, convertIDs=convertIDs, changed=changed2) for i in params]
       if not changed2:
         return params
       else:
         if not changed:
-          changed.append( True )
+          changed.append(True)
         return l
-    elif isMappingType( params ):
+    elif isMappingType(params):
       r = {}
-      conv = super( Anatomist, self ).__getattribute__( \
-        'convertParamsToAItems' )
+      conv = super(Anatomist, self).__getattribute__('convertParamsToAItems')
       changed2 = []
       for k, v in six.iteritems(params):
-        r[k] = conv( v, convertIDs=convertIDs, changed=changed2 )
+        r[k] = conv(v, convertIDs=convertIDs, changed=changed2)
       if changed2:
         if not changed:
           changed.append( True )
@@ -1203,10 +1200,10 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         return params
     else:
       try:
-        conv = super( Anatomist, self ).__getattribute__( \
-          'convertParamsToAItems' )
+        # TODO FIXME: this list has already been tried: remove it
+        conv = super(Anatomist, self).__getattribute__('convertParamsToAItems')
         changed2 = []
-        l = [conv(i, convertIDs=convertIDs, changed=changed2) for i in params ]
+        l = [conv(i, convertIDs=convertIDs, changed=changed2) for i in params]
         if changed2:
           if not changed:
             changed.append( True )
@@ -1214,10 +1211,10 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         else:
           return params
       except:
-        obj = super( Anatomist, self ).__getattribute__( 'getAItem' )( \
-          params, convertIDs=convertIDs )
+        obj = super(Anatomist, self).__getattribute__('getAItem')(
+          params, convertIDs=convertIDs)
         if obj is not params and not changed:
-          changed.append( True )
+          changed.append(True)
         return obj
 
 
