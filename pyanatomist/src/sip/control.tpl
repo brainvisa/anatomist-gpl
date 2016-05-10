@@ -128,7 +128,7 @@ public:
   ~ActionDictionary();
   static anatomist::ActionDictionary* instance();
 
-  anatomist::Action* getActionInstance( std::string );
+  anatomist::Action* getActionInstance( const std::string & );
   void addAction( const std::string &, 
                   anatomist::ActionDictionary::ActionCreatorBase* /Transfer/ ) 
     /PyName=_addAction/;
@@ -148,7 +148,7 @@ class ActionPool
 
 public:
   ~ActionPool();
-  anatomist::Action* action( std::string & );
+  anatomist::Action* action( const std::string & );
   set_STRING actionSet() const;
 
 private:

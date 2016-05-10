@@ -60,7 +60,7 @@ class PaletteContrastAction( anatomist.Action ):
       if not win.isTemporary( o ):
         pal = o.palette()
         if pal:
-          if self._palettes.has_key( o ):
+          if o in self._palettes:
             initpal = self._palettes[ o ]
           else:
             initpal = [ pal.min1(), pal.max1() ]
@@ -88,7 +88,7 @@ class PaletteContrastAction( anatomist.Action ):
       if not win.isTemporary( o ):
         pal = o.palette()
         if pal:
-          if self._palettes.has_key( o ):
+          if o in self._palettes:
             initpal = self._palettes[ o ]
           else:
             initpal = [ pal.min1(), pal.max1() ]
