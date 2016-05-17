@@ -153,7 +153,7 @@ else:
 
 # PYTHONPATH. On python 2.3, it doesn't seem to be taken into account
 # when pyhton is run from a library
-path = os.getenv( 'PYTHONPATH' )
+path = os.getenv('PYTHONPATH')
 if path is not None:
   for x in path.split(sep):
     if x not in sys.path:
@@ -164,11 +164,26 @@ del path, sep
 from soma import aims
 from soma.importer import ExtendedImporter
 
+# force using sip API v2 for PyQt4
+sip_classes = ['QString', 'QVariant', 'QDate', 'QDateTime',
+                'QTextStream', 'QTime', 'QUrl']
+global _sip_api_set
+import sip
+for sip_class in sip_classes:
+    try:
+        sip.setapi(sip_class, 2)
+    except ValueError as e:
+        if not _sip_api_set:
+            logging.warning(e.message)
+
 # cleanup namespaces in Sip-generated code
 ExtendedImporter().importInModule( '', globals(), locals(), 'anatomistsip' )
 ExtendedImporter().importInModule( '', globals(), locals(), 'anatomistsip',
   ['anatomistsip.anatomist'] )
 del ExtendedImporter
+
+from soma.qt_gui import qt_backend
+qt_backend.set_qt_backend(compatible_qt5=True, pyqt_api=2)
 
 from anatomistsip import *
 
