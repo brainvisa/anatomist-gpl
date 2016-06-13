@@ -166,8 +166,8 @@ from soma.importer import ExtendedImporter
 
 # force using sip API v2 for PyQt4
 sip_classes = ['QString', 'QVariant', 'QDate', 'QDateTime',
-                'QTextStream', 'QTime', 'QUrl']
-global _sip_api_set
+               'QTextStream', 'QTime', 'QUrl']
+_sip_api_set = False
 import sip
 for sip_class in sip_classes:
     try:
@@ -175,6 +175,7 @@ for sip_class in sip_classes:
     except ValueError as e:
         if not _sip_api_set:
             logging.warning(e.message)
+    _sip_api_set = True
 
 # cleanup namespaces in Sip-generated code
 ExtendedImporter().importInModule( '', globals(), locals(), 'anatomistsip' )

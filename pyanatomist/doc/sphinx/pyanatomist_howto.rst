@@ -60,8 +60,8 @@ To get referentials linked to both volumes and set a, identity transformation be
 >>> # now we have the transforms.
 >>> # load identity between them
 >>> trans_from_vol1, trans_from_vol2 = trans_from_vols
->>> a.execute('LoadTransformation', origin=trans_from_vol1,
->>>           destination=trans_from_vol2,
+>>> a.execute('LoadTransformation', origin=trans_from_vol1.destintation(),
+>>>           destination=trans_from_vol2.destination(),
 >>>           matrix=[0, 0, 0, 1, 0, 0,  0, 1, 0,  0, 0, 1])
 
 see :anadev:`The LoadTransformation command doc <commands.html#loadtransformation>`.
