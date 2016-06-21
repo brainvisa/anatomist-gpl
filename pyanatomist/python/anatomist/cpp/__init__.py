@@ -107,6 +107,7 @@ import os, sys, string, glob, operator, types
 import numpy
 import six
 import collections
+import logging
 
 
 def isSequenceType(item):
