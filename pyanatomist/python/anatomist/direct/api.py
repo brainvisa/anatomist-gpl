@@ -1186,7 +1186,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         if not changed:
           changed.append(True)
         return l
-    elif isMappingType(params):
+    elif isMappingType(params) and not isinstance(params, aims.Graph):
       r = {}
       conv = super(Anatomist, self).__getattribute__('convertParamsToAItems')
       changed2 = []
