@@ -39,6 +39,7 @@ The function C{getThreadSafeClass} enables to create a thread safe class based o
 import sys, types
 from soma.qt_gui.qtThread import QtThreadCall
 from soma.singleton import Singleton
+import inspect
 
 def threadedModule(anatomistModule, mainThread=None): 
   """
@@ -82,19 +83,21 @@ def getThreadSafeClass(classObj, mainThread):
       if attName[0:2] != "__" or attName == "__singleton_init__":
         # builtin methods begin with __
         # but __singleton_init__ must be called from the main thread
-        att=getattr(classObj, attName)
-        #att=self.__getattribute__(attName) # getattribute and __setattr__ doesn't exist in classes not derived from object
-        if (type(att) == types.MethodType) and att.im_self is None: # attribute is a method and not a class method
+        att = getattr(classObj, attName)
+        if (sys.version_info[0] < 3
+            and type(att) is types.MethodType and att.im_self is None) \
+            or (sys.version_info[0] >=3 and type(att) is types.FunctionType):
+          # attribute is a method and not a class method
           # replace this method by a thread safe call to this method
-          newAtt=threadSafeCall(mainThread, att)
-          #print "-- methode", attName, "->", newAtt
+          # WARNING:
+          # in Python3 methods are bound on instances, not on the class,
+          # so an instance method taken on the class (no instance) is a
+          # function. Thus I cannot distinguish it from a static method.
+          newAtt = threadSafeCall(mainThread, att)
           setattr(threadSafeClass, attName, newAtt)
-          #self.__setattr__(attName, newAtt)
-        elif type(att) == types.TypeType: # innner class derived from object
+        elif type(att) == type: # innner class derived from object
           # replace this class with a thread safe class
-          newAtt=getThreadSafeClass(att, mainThread)
-          #print "** classe", attName, "->", newAtt
-          #self.__setattr__(attName, newAtt)
+          newAtt = getThreadSafeClass(att, mainThread)
           setattr(threadSafeClass, attName, newAtt)
   return threadSafeClass
 
