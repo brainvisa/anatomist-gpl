@@ -36,7 +36,7 @@ This module makes anatomist module given implementation thread safe.
 The function C{getThreadSafeClass} enables to create a thread safe class based on a given Anatomist implementation class. It replaces all methods by a call in main thread of the same method. 
 """
 
-import sys, new, types
+import sys, types
 from soma.qt_gui.qtThread import QtThreadCall
 from soma.singleton import Singleton
 
@@ -49,15 +49,16 @@ def threadedModule(anatomistModule, mainThread=None):
   @type mainThread: MainThreadActions
   @param mainThread: an object that enables to send tasks to the mainThread. If it is not given in parameters, an instance will be created in this function. So it must be called by the mainThread.
   """
-  moduleName=anatomistModule.__name__+"_threaded"
-  anatomistThreadedModule=sys.modules.get(moduleName)
+  moduleName = anatomistModule.__name__+"_threaded"
+  anatomistThreadedModule = sys.modules.get(moduleName)
   if anatomistThreadedModule is None:
     if mainThread is None:
-      mainThread=QtThreadCall()
-    ThreadedAnatomist=getThreadSafeClass(classObj=anatomistModule.Anatomist, mainThread=mainThread)
-    anatomistThreadedModule=new.module(moduleName)
-    anatomistThreadedModule.__dict__['Anatomist']=ThreadedAnatomist
-    sys.modules[moduleName]=anatomistThreadedModule
+      mainThread = QtThreadCall()
+    ThreadedAnatomist = getThreadSafeClass(
+        classObj=anatomistModule.Anatomist, mainThread=mainThread)
+    anatomistThreadedModule = types.ModuleType(moduleName)
+    anatomistThreadedModule.__dict__['Anatomist'] = ThreadedAnatomist
+    sys.modules[moduleName] = anatomistThreadedModule
   return anatomistThreadedModule
   
 def getThreadSafeClass(classObj, mainThread):
@@ -74,7 +75,7 @@ def getThreadSafeClass(classObj, mainThread):
   @return: The generated thread safe class
   """
   # create a new class that inherits from classObj
-  threadSafeClass=new.classobj(classObj.__name__, (classObj,), {})
+  threadSafeClass = type(classObj.__name__, (classObj,), {})
   # replace all methods (not builtin) by a thread safe call to the same method
   # and replace all inner class by a thread safe class
   for attName in dir(classObj): # for all attributes of this instance
