@@ -39,16 +39,22 @@ The function C{getThreadSafeClass} enables to create a thread safe class based o
 import sys, types
 from soma.qt_gui.qtThread import QtThreadCall
 from soma.singleton import Singleton
-import inspect
+import six
+
 
 def threadedModule(anatomistModule, mainThread=None): 
   """
-  Adds to current module a thread safe version of given anatomist module, replacing Anatomist class by thread safe Anatomist class.
+  Adds to current module a thread safe version of given anatomist module,
+  replacing Anatomist class by thread safe Anatomist class.
   
-  @type anatomistModule: module
-  @param anatomistModule: a module containing an implementation of Anatomist class
-  @type mainThread: MainThreadActions
-  @param mainThread: an object that enables to send tasks to the mainThread. If it is not given in parameters, an instance will be created in this function. So it must be called by the mainThread.
+  Parameters
+  ----------
+  anatomistModule: module
+      a module containing an implementation of Anatomist class
+  mainThread: MainThreadActions (optional)
+      an object that enables to send tasks to the mainThread. If it is not
+      given in parameters, an instance will be created in this function. So it
+      must be called by the mainThread.
   """
   moduleName = anatomistModule.__name__+"_threaded"
   anatomistThreadedModule = sys.modules.get(moduleName)
@@ -61,38 +67,46 @@ def threadedModule(anatomistModule, mainThread=None):
     anatomistThreadedModule.__dict__['Anatomist'] = ThreadedAnatomist
     sys.modules[moduleName] = anatomistThreadedModule
   return anatomistThreadedModule
-  
+
+
 def getThreadSafeClass(classObj, mainThread):
   """
-  Generates a thread safe class which inherits from the class given in parameters. 
+  Generates a thread safe class which inherits from the class given in
+  parameters.
   Methods are executed in the main thread to be thread safe. 
-  
-  @type classObj: Class
-  @param classObj: the class which needs to be thread safe
-  @type mainThread: QtThreadCall
-  @param mainThread: an object that enables to send tasks to the main thread.
-  
-  @rtype: Class
-  @return: The generated thread safe class
+
+  Parameters
+  ----------
+  classObj: Class
+      the class which needs to be thread safe
+  mainThread: QtThreadCall
+      an object that enables to send tasks to the main thread.
+
+  Returns
+  -------
+  new_class: Class
+      The generated thread safe class
   """
   # create a new class that inherits from classObj
   threadSafeClass = type(classObj.__name__, (classObj,), {})
   # replace all methods (not builtin) by a thread safe call to the same method
   # and replace all inner class by a thread safe class
-  for attName in dir(classObj): # for all attributes of this instance
+  for attName, att in six.iteritems(classObj.__dict__):
       if attName[0:2] != "__" or attName == "__singleton_init__":
         # builtin methods begin with __
         # but __singleton_init__ must be called from the main thread
-        att = getattr(classObj, attName)
-        if (sys.version_info[0] < 3
-            and type(att) is types.MethodType and att.im_self is None) \
-            or (sys.version_info[0] >=3 and type(att) is types.FunctionType):
-          # attribute is a method and not a class method
+        if type(att) is types.FunctionType:
+          # attribute is a method and not a class or static method
           # replace this method by a thread safe call to this method
-          # WARNING:
-          # in Python3 methods are bound on instances, not on the class,
-          # so an instance method taken on the class (no instance) is a
-          # function. Thus I cannot distinguish it from a static method.
+          # Note:
+          # using getattr(classObj, attName) the attribute object types are
+          # different in python2 and python3, and in python3 we cannot
+          # distinguish between regular and static methods (both are functions,
+          # whereas class methods are methods). classObj.__dict__[attName]
+          # does not return the same thing however, and allows to determine
+          # the method type, in a python2/3 transparent way: regular methods
+          # are functions, static methods are staticmethod instances,
+          # class methods are classmethod instances.
           newAtt = threadSafeCall(mainThread, att)
           setattr(threadSafeClass, attName, newAtt)
         elif type(att) == type: # innner class derived from object
@@ -101,10 +115,13 @@ def getThreadSafeClass(classObj, mainThread):
           setattr(threadSafeClass, attName, newAtt)
   return threadSafeClass
 
-          
+
 def threadSafeCall(mainThread, func):
-  """
-  @rtype: function
-  @returns: a function that sends the given function's call to the main thread
+  """Utility function wrapper for main thread calls
+
+  Returns
+  -------
+  func: function
+      a function that sends the given function's call to the main thread
   """
   return lambda *args, **kwargs: mainThread.call(func, *args, **kwargs)
