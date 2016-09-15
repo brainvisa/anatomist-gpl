@@ -105,6 +105,7 @@ namespace anatomist
     virtual void setReferentialInheritance( anatomist::AObject* ao );
     virtual bool boundingBox(Point3df & /TransferBack/,
       Point3df & /TransferBack/) const /AutoGen/;
+    float TimeStep() const;
     virtual Point3df VoxelSize() const /Factory/;
     virtual void setVoxelSize( const Point3df & ) /Factory/;
     virtual anatomist::AObjectPalette *palette();
