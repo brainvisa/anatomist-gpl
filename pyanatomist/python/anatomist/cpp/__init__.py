@@ -633,27 +633,6 @@ Control.selectionChangedEventSubscribe = lambda self, func: \
                                   self._selectionChangedEventSubscribe(
                                   PySelectionChangedActionLink( func ) )
 
-# create lambda unsubscribe functions
-Control.keyPressEventUnsubscribe = lambda self, key, state, func: \
-  self._keyPressEventUnsubscribe( key, state, PyKeyActionLink( func ) )
-Control.keyReleaseEventUnsubscribe = lambda self, key, state, func: \
-  self._keyPressEventUnsubscribe( key, state, PyKeyActionLink( func ) )
-Control.mousePressButtonEventUnsubscribe = lambda self, but, state, func: \
-  self._mousePressButtonEventUnsubscribe( but, state,
-                                        PyMouseActionLink( func ) )
-Control.mouseReleaseButtonEventUnsubscribe = lambda self, but, state, func: \
-  self._mouseReleaseButtonEventUnsubscribe( but, state,
-                                          PyMouseActionLink( func ) )
-Control.mouseMoveEventUnsubscribe = lambda self, but, state, func: \
-                                  self._mouseMoveEventUnsubscribe( \
-  but, state, PyMouseActionLink( func ) )
-Control.wheelEventUnsubscribe = lambda self, func: \
-                                  self._wheelEventUnsubscribe(
-                                  PyWheelActionLink( func ) )
-Control.selectionChangedEventUnsubscribe = lambda self, func: \
-                                  self._selectionChangedEventUnsubscribe(
-                                  PySelectionChangedActionLink( func ) )
-
 aims.convertersObjectToPython.update( { \
   'AObject' : AObject.fromObject,
   'PN9anatomist7AObjectE' : AObject.fromObject,

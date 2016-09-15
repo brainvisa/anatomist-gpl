@@ -244,8 +244,6 @@ public:
 
   virtual void eventAutoSubscription( anatomist::ActionPool * );
 
-%#if QT_VERSION >= 0x040000%
-
   bool keyPressEventSubscribe( int, Qt::KeyboardModifiers, 
                                const anatomist::Control::KeyActionLink &,
                                const std::string & name = "" )
@@ -282,90 +280,26 @@ public:
       bool )
     /PyName=_mouseLongEventSubscribe/;
 
-  bool keyPressEventUnsubscribe( int, Qt::KeyboardModifiers, 
-                                 const anatomist::Control::KeyActionLink & )
-    /PyName=_keyPressEventUnsubscribe/;
-  bool keyReleaseEventUnsubscribe( int, Qt::KeyboardModifiers, 
-                                   const anatomist::Control::KeyActionLink & )
-    /PyName=_keyReleaseEventUnsubscribe/;
+  bool keyPressEventUnsubscribe( int, Qt::KeyboardModifiers );
+  bool keyReleaseEventUnsubscribe( int, Qt::KeyboardModifiers );
   bool mousePressButtonEventUnsubscribe
-    ( Qt::MouseButtons, Qt::KeyboardModifiers,
-      const anatomist::Control::MouseActionLink & ) 
-    /PyName=_mousePressButtonEventUnsubscribe/;
+    ( Qt::MouseButtons, Qt::KeyboardModifiers );
   bool mouseReleaseButtonEventUnsubscribe
-    ( Qt::MouseButtons, Qt::KeyboardModifiers,
-      const anatomist::Control::MouseActionLink & )
-    /PyName=_mouseReleaseButtonEventUnsubscribe/;
+    ( Qt::MouseButtons, Qt::KeyboardModifiers );
   bool mouseDoubleClickEventUnsubscribe
-    ( Qt::MouseButtons, Qt::KeyboardModifiers,
-      const anatomist::Control::MouseActionLink & )
-    /PyName=_mouseDoubleClickEventUnsubscribe/;
+    ( Qt::MouseButtons, Qt::KeyboardModifiers );
   bool mouseMoveEventUnsubscribe
-    ( Qt::MouseButtons, Qt::KeyboardModifiers,
-      const anatomist::Control::MouseActionLink & )
-    /PyName=_mouseMoveEventUnsubscribe/;
+    ( Qt::MouseButtons, Qt::KeyboardModifiers );
   bool mouseLongEventUnsubscribe( Qt::MouseButtons, Qt::KeyboardModifiers );
 
-%#else%
-
-  bool keyPressEventSubscribe( int, Qt::ButtonState, 
-                               const anatomist::Control::KeyActionLink & )
-    /PyName=_keyPressEventSubscribe/;
-  bool mousePressButtonEventSubscribe
-    ( Qt::ButtonState, Qt::ButtonState, 
-      const anatomist::Control::MouseActionLink & ) 
-    /PyName=_mousePressButtonEventSubscribe/;
-  bool mouseReleaseButtonEventSubscribe
-    ( Qt::ButtonState, Qt::ButtonState, 
-      const anatomist::Control::MouseActionLink & )
-    /PyName=_mouseReleaseButtonEventSubscribe/;
-  bool mouseDoubleClickEventSubscribe
-    ( Qt::ButtonState, Qt::ButtonState, 
-      const anatomist::Control::MouseActionLink & )
-    /PyName=_mouseDoubleClickEventSubscribe/;
-  bool mouseMoveEventSubscribe
-    ( Qt::ButtonState, Qt::ButtonState, 
-      const anatomist::Control::MouseActionLink & )
-    /PyName=_mouseMoveEventSubscribe/;
-  bool mouseLongEventSubscribe
-    ( Qt::ButtonState, Qt::ButtonState, 
-      const anatomist::Control::MouseActionLink &, 
-      const anatomist::Control::MouseActionLink &, 
-      const anatomist::Control::MouseActionLink &, 
-      bool )
-    /PyName=_mouseLongEventSubscribe/;
-
-  bool keyPressEventUnsubscribe( int, Qt::ButtonState, 
-                                 const anatomist::Control::KeyActionLink & )
-    /PyName=_keyPressEventUnsubscribe/;
-  bool mousePressButtonEventUnsubscribe
-    ( Qt::ButtonState, Qt::ButtonState, 
-      const anatomist::Control::MouseActionLink & ) 
-    /PyName=_mousePressButtonEventUnsubscribe/;
-  bool mouseReleaseButtonEventUnsubscribe
-    ( Qt::ButtonState, Qt::ButtonState, 
-      const anatomist::Control::MouseActionLink & )
-    /PyName=_mouseReleaseButtonEventUnsubscribe/;
-  bool mouseDoubleClickEventUnsubscribe
-    ( Qt::ButtonState, Qt::ButtonState, 
-      const anatomist::Control::MouseActionLink & )
-    /PyName=_mouseDoubleClickEventUnsubscribe/;
-  bool mouseMoveEventUnsubscribe
-    ( Qt::ButtonState, Qt::ButtonState, 
-      const anatomist::Control::MouseActionLink & )
-    /PyName=_mouseMoveEventUnsubscribe/;
-  bool mouseLongEventUnsubscribe( Qt::ButtonState, Qt::ButtonState );
-%#endif%
-
-  bool wheelEventSubscribe( const WheelActionLink& )
+  bool wheelEventSubscribe( const WheelActionLink& actionMethod )
     /PyName=_wheelEventSubscribe/;
-  bool wheelEventUnsubscribe( const WheelActionLink& )
-    /PyName=_wheelEventUnsubscribe/;
-  bool wheelEventUnsubscribeAll( ) ;
-  bool selectionChangedEventSubscribe( const SelectionChangedActionLink& )
+  bool wheelEventUnsubscribe();
+  bool wheelEventUnsubscribeAll();
+  bool selectionChangedEventSubscribe(
+    const SelectionChangedActionLink& actionMethod )
     /PyName=_selectionChangedEventSubscribe/;
-  bool selectionChangedEventUnsubscribe( const SelectionChangedActionLink& )
-    /PyName=_selectionChangedEventUnsubscribe/;
+  bool selectionChangedEventUnsubscribe();
 
   set_STRING keyPressActionLinkNames() const;
   set_STRING keyReleaseActionLinkNames() const;
