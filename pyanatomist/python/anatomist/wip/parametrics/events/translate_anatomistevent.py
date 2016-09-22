@@ -30,6 +30,7 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+from __future__ import print_function
 import qt
 from soma import aims
 from soma.functiontools import partial
@@ -107,7 +108,7 @@ class Translate_AnatomistEvent :
 		pass
 	
 	def __del__( self ) :
-		print 'translate_anatomistevent --> __del__'
+		print('translate_anatomistevent --> __del__')
 
 
 

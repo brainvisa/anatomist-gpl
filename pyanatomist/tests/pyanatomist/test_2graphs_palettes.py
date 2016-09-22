@@ -29,6 +29,7 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+from __future__ import print_function
 import aims, anatomist, sigraph
 import sys, qt
 
@@ -100,7 +101,7 @@ def test3():
 
 
 if len(sys.argv) == 1:
-	print "usage : %s N (N in 0..2)" % sys.argv[0]
+	print("usage : %s N (N in 0..2)" % sys.argv[0])
 	sys.exit(1)
 tests = [test1, test2, test3]
 t = int(sys.argv[1])

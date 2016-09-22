@@ -30,6 +30,8 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+from __future__ import print_function
 import sys, os
 from PIL import Image, ImageChops
 
@@ -49,7 +51,7 @@ def autocrop(img, bgcolor):
 
 def main():
 	if len(sys.argv) != 3:
-		print '%s input output' % sys.argv[0]
+		print('%s input output' % sys.argv[0])
 		sys.exit(1)
 	input, output  = sys.argv[1:]
 	img = Image.open(input)

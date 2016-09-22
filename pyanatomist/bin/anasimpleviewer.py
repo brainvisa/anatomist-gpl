@@ -32,6 +32,7 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+from __future__ import print_function
 import anatomist.direct.api as ana
 from soma import aims
 from soma.aims import colormaphints
@@ -48,6 +49,11 @@ if not hasattr( QtCore, 'Slot' ):
 qt = QtGui
 from soma.qt_gui.qt_backend import uic
 from soma.qt_gui.qt_backend.uic import loadUi
+import six
+
+if sys.version_info[0] >= 3:
+    unicode = str
+
 
 uifile = 'anasimpleviewer-qt4.ui'
 findChild = lambda x, y: QtCore.QObject.findChild( x, QtCore.QObject, y )
@@ -400,17 +406,16 @@ class AnaSimpleViewer( qt.QObject ):
       obj = f2d
     if obj.objectType == 'VOLUME':
       # choose a good colormap for a single volume
-      if obj.attributed()[ 'colormaphints' ].has_key( \
-        'volume_contents_likelihoods' ):
+      if 'volume_contents_likelihoods' in obj.attributed():
         cmap = colormaphints.chooseColormaps( \
           ( obj.attributed()[ 'colormaphints' ], ) )
         obj.setPalette( cmap[0] )
     else:
       # choose good colormaps for the current set of volumes
       hints = [ x.attributed()[ 'colormaphints' ] for x in obj.children ]
-      children = [ x for x,y in zip( obj.children, hints ) \
-        if y.has_key( 'volume_contents_likelihoods' ) ]
-      hints = [ x for x in hints if x.has_key( 'volume_contents_likelihoods' ) ]
+      children = [x for x,y in zip(obj.children, hints)
+                  if 'volume_contents_likelihoods' in y]
+      hints = [x for x in hints if 'volume_contents_likelihoods' in x]
       cmaps = colormaphints.chooseColormaps( hints )
       for x, y in zip( children, cmaps ):
         x.setPalette( y )
@@ -469,7 +474,7 @@ class AnaSimpleViewer( qt.QObject ):
               (1., 1., 0.5, 1.),
               (0.5, 1., 1., 1.),
               (1, 0.5, 1., 1.)]
-    used_cols = set([col for obj, col in self.meshes2d.itervalues()])
+    used_cols = set([col for obj, col in six.itervalues(self.meshes2d)])
     for col in colors:
       if col not in used_cols:
         return col
@@ -533,7 +538,7 @@ class AnaSimpleViewer( qt.QObject ):
     if res:
       fnames = fdialog.selectedFiles()
       for fname in fnames:
-        print unicode( fname )
+        print(unicode( fname ))
         self.loadObject( unicode( fname ) )
 
   def selectedObjects( self ):
@@ -572,7 +577,7 @@ class AnaSimpleViewer( qt.QObject ):
 
   def closeAll( self ):
     '''Exit'''
-    print "Exiting"
+    print("Exiting")
     global vieww, viewgridlay, awindows, fusion2d, aobjects, anasimple, volrender, awin
     del vieww, viewgridlay
     del anasimple
@@ -719,7 +724,7 @@ a.config()[ 'windowSizeFactor' ] = 1.
 cm = ana.cpp.ControlManager.instance()
 cm.addControl( 'QAGLWidget3D', '', 'Simple2DControl' )
 cm.addControl( 'QAGLWidget3D', '', 'LeftSimple3DControl' )
-print 'controls registered.'
+print('controls registered.')
 
 del cm
 
