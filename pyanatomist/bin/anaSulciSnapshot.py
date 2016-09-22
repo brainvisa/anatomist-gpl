@@ -32,6 +32,7 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+from __future__ import print_function
 import os, sys, sip, numpy, time
 from optparse import OptionParser
 import sigraph
@@ -291,7 +292,7 @@ orientation : left, right, bottom, top, auto=q1,q2,q3,q4
         fd.write(str(bb) + '\n')
         fd.close()
 
-    #print 'done.'
+    #print('done.')
     return obj
 
 if __name__ == '__main__':

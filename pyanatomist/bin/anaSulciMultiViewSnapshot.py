@@ -32,6 +32,7 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+from __future__ import print_function
 from soma import aims
 import anatomist, sigraph
 import os, sys, sip, numpy, time
@@ -124,7 +125,7 @@ def display_graph_6_views(graphname, meshname, imagename):
 	shared_path = os.path.dirname(a.anatomistSharedPath().latin1())
 	hiename = os.path.join(shared_path, 'shfj-3.1', 'nomenclature',
 			'hierarchy', 'sulcal_root_colors.hie')
-	print graphname, meshname, hiename
+	print(graphname, meshname, hiename)
 	# Display 2 graphs in 2 separated 3D windows
 	ag = read(graphname)
 	tri = load(meshname)
@@ -170,11 +171,11 @@ def main():
         t2 = '/home/Panabase/data/subjects/zeus/tri/Rzeus_white.tri'
         img = 'plop.png'
         cmd = os.path.basename(sys.argv[0])
-        print "Display one sulci graph + one mesh (grey/white) on"\
-                "6 standard views.\n"
-        print "Usage %s graphname meshname image" % cmd
-        print "  ex : %s %s %s %s" % (cmd, g, t1, img)
-        print "       %s %s %s %s" % (cmd, g, t2, img)
+        print("Display one sulci graph + one mesh (grey/white) on"
+              "6 standard views.\n")
+        print("Usage %s graphname meshname image" % cmd)
+        print("  ex : %s %s %s %s" % (cmd, g, t1, img))
+        print("       %s %s %s %s" % (cmd, g, t2, img))
         sys.exit(1)
     graphname, meshname, imagename = sys.argv[1:]
     display_graph_6_views(graphname, meshname, imagename)
