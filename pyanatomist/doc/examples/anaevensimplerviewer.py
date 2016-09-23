@@ -32,6 +32,7 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+from __future__ import print_function
 import anatomist.direct.api as ana
 from soma import aims
 from soma.aims import colormaphints
@@ -174,18 +175,17 @@ class AnaSimpleViewer( QtGui.QObject ):
       obj = f2d
     if obj.objectType == 'VOLUME':
       # choose a good colormap for a single volume
-      if obj.attributed()[ 'colormaphints' ].has_key( \
-        'volume_contents_likelihoods' ):
+      if 'volume_contents_likelihoods' in obj.attributed()['colormaphints']:
         cmap = colormaphints.chooseColormaps( \
           ( obj.attributed()[ 'colormaphints' ], ) )
         obj.setPalette( cmap[0] )
     else:
       # choose good colormaps for the current set of volumes
-      hints = [ x.attributed()[ 'colormaphints' ] for x in obj.children ]
-      children = [ x for x,y in zip( obj.children, hints ) \
-        if y.has_key( 'volume_contents_likelihoods' ) ]
-      hints = [ x for x in hints \
-        if x.has_key( 'volume_contents_likelihoods' ) ]
+      hints = [x.attributed()[ 'colormaphints' ] for x in obj.children]
+      children = [x for x,y in zip(obj.children, hints)
+                  if 'volume_contents_likelihoods' in y]
+      hints = [x for x in hints
+               if 'volume_contents_likelihoods' in x]
       cmaps = colormaphints.chooseColormaps( hints )
       for x, y in zip( children, cmaps ):
         x.setPalette( y )
@@ -288,7 +288,7 @@ class AnaSimpleViewer( QtGui.QObject ):
 
   def closeAll( self ):
     '''Exit'''
-    print "Exiting"
+    print("Exiting")
     global vieww, awindows, fusion2d, aobjects, anasimple
     del vieww
     del anasimple
