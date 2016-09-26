@@ -40,6 +40,7 @@ namespace anatomist
     virtual void normalize();
     void setTexture( rc_ptr_TimeTexture_FLOAT );
     void setTexture( rc_ptr_TimeTexture_POINT2DF );
+    void setTexture( rc_ptr_TimeTexture_S16 );
     rc_ptr_TimeTexture_FLOAT texture1d( bool rescaled = false,
                                       bool always_copy = false );
 %MethodCode
