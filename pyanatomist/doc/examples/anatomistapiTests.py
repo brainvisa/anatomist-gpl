@@ -38,92 +38,133 @@ This example uses data of i2bm platform.
 """
 from __future__ import print_function
 import os
+import sys
 import soma.config
 
 data_directory = os.path.join(
     os.getenv("BRAINVISA_TESTS_DIR"), "tmp_tests_brainvisa/data_for_anatomist")
 
 
-def testDirectImpl():
+failures = []
+mode = 'direct mode'
+
+def testDirectImpl(interactive=True):
     import anatomist.direct.api as pyanatomist
+    global mode
+    mode = 'direct mode'
     a = pyanatomist.Anatomist()
-    return testAnatomist(a)
+    return testAnatomist(a, interactive)
 
 
-def testSocketImpl():
+def testSocketImpl(interactive=True):
     # test socket impl, not threaded
     import anatomist.socket.api as pyanatomist
+    global mode
+    mode = 'socket mode'
     a = pyanatomist.Anatomist()
-    return testAnatomist(a)
+    return testAnatomist(a, interactive)
 
 
-def testAnatomist(a):
+def test_assert(condition, message):
+    try:
+        assert(condition)
+    except AssertionError:
+        global failures
+        failures.append('%s: %s' % (mode, message))
+        print('** error: %s: %s **' % (mode, message))
+
+
+def testAnatomist(a, interactive=True):
     print("\n--- CreateWindowsBlock ---")
     block = a.createWindowsBlock(3) # a block of windows with 3 columns
     # in direct api the block object is really created only when the first
     # window is added to it
     print("block.internalRep = ", block.internalRep, ", block.nbCols = ",
           block.nbCols)
+    test_assert(block.internalRep not in (None, 0), "block is invalid")
 
     print("\n--- CreateWindow ---")
     w1 = a.createWindow(wintype='Axial', block=block)
     print("w1 : Axial window, added to the block. w1 = ",w1,
           ", block.internalRep = ", block.internalRep)
+    test_assert(w1 is not None, 'window w1 is None')
+    test_assert(w1.block == block, 'block in w1 is wrong')
+
     w2 = a.createWindow(wintype='Sagittal', geometry=[10,20,200,500],
                         block=block)
+    test_assert(w2 is not None, 'window w2 is None')
     print("w2 : Sagittal window, added to the block. The geometry attribute is not taken into account because of the block, the window is resized to fit into the block.")
     w3 = a.createWindow(wintype='Coronal', block=block, no_decoration=True)
     print("w3 : Coronal window, added to the block (3rd column), thanks to the attribute no decoration, the window has no menus, buttons and so on...")
+    test_assert(w3 is not None, 'window w3 is None')
     w4 = a.createWindow(wintype='3D', geometry=[10,20,200,500])
     print("w4 : 3D window, not in the block, with geometry attribute.")
+    test_assert(w4 is not None, 'window w4 is None')
     w5 = a.createWindow(wintype='3D', no_decoration=True)
     print("w5 : 3D window, not in the block, with no decoration.")
+    test_assert(w5 is not None, 'window w5 is None')
 
     print("\n--- LoadObject ---")
     o = a.loadObject(os.path.join(data_directory,
                                   "subject01/subject01_Lwhite.mesh"), "objetO")
+    test_assert(o is not None, 'object o is None')
     print("o : mesh Lhemi.mesh, renamed objecO, internalRep = ", o,
           ", o.__class__ = ", o.__class__)
     o2 = a.loadObject(os.path.join(data_directory,
                                    "subject01/subject01_Lwhite_curv.tex"),
                       "objetO2")
+    test_assert(o2 is not None, 'object o2 is None')
     print("o2 : texture Lwhite_curv.tex, renamed objetO2, internalRep = ", o2)
     o4 = a.loadObject(os.path.join(data_directory,
                                    "roi/basal_ganglia.hie"))
+    test_assert(o4 is not None, 'object o4 is None')
     print("o4 : nomenclature basal_ganglia.hie, internalRep = ", o4)
     o3 = a.loadObject(os.path.join(data_directory,
                                    "roi/basal_ganglia.arg"))
+    test_assert(o3 is not None, 'object o3 is None')
     print("o3 : graph basal_ganglia.arg, internalRep = ", o3)
     # this should fail
     print('o5 : trying to load an object with wrong type (field restrict_object_type doesn\'t match the type of the object): it should fail.')
     o5 = a.loadObject(filename=os.path.join(data_directory,
                                             "subject01/subject01.nii"),
                       restrict_object_types={'Volume': ['FLOAT']})
+    # test_assert(o5 is None, 'object o5 is not None')
     print('The error message is normal, o5 = ', o5)
     o6 = a.loadObject(filename=os.path.join(data_directory,
                                             "subject01/subject01.nii"),
                       restrict_object_types={'Volume': ['S16', 'FLOAT']})
+    test_assert(o6 is not None, 'object o6 is None')
     print("o6 : volume subject01.ima, restrict_object_type match the object type. internalRep = ", o6)
     o7 = a.loadObject(
         filename=os.path.join(data_directory, "subject01/subject01.nii"))
+    test_assert(o7 is not None, 'object o7 is None')
     print("o7 : same object")
     cur = a.loadCursor(os.path.join(data_directory,
                                     "subject01/subject01_Lhemi.mesh"))
+    test_assert(cur is not None, 'object cur is None')
     print("cur : load Lhemi.mesh as a cursor. The object is not in the list of objects in Anatomist main window but can be selected as cursor in preferences. ")
+    test_assert(cur not in a.getObjects(),
+                'object cur is in Anatomist global list')
 
     print("\n--- FusionObjects ---")
-    fus = a.fusionObjects([o, o2], "FusionTexSurfMethod", True)
+    fus = a.fusionObjects([o, o2], "FusionTexSurfMethod", interactive)
+    test_assert(fus is not None, 'fusion fus is None')
     print("fus : fusion of o and o2, method is FusionTexSurfMethod and askOrder is True, so a window opens to let the user choose the order of the objects in the fusion. internalRep = ", fus)
 
     print("\n--- CreateReferential ---")
     r = a.createReferential(os.path.join(
         soma.config.BRAINVISA_SHARE,
         "registration/Talairach-MNI_template-SPM.referential"))
+    test_assert(r is not None, 'referential r is None')
     print("r : Referential loaded from the Talairach-MNI_template-SPM.referential. r.__class__ = ", r.__class__, ", internalRep = ", r, ", r.refUuid = ", r.refUuid,". This should not create a new referential because Talairach-MNI_template-SPM referential is already loaded in Anatomist. ")
+    test_assert(r == a.mniTemplateRef,
+                'referenrial r is not the MNI referential')
     r2 = a.createReferential()
+    test_assert(r2 is not None, 'referential r2 is None')
     print("r2 : new referential. internalRep = ", r2, ", refUuid = ",
           r2.refUuid)
     cr = a.centralRef
+    test_assert(cr is not None, 'central ref is None')
     print("cr : central referential, ", cr, ", refUuid = ", cr.refUuid,
           ". This referential is already loaded in Anatomist.")
 
@@ -132,49 +173,84 @@ def testAnatomist(a):
         data_directory,
         "subject01/RawT1-subject01_default_acquisition_TO_Talairach-ACPC.trm"),
         r2, cr)
+    test_assert(t is not None, 'transformation t is None')
     print("t : loaded from the file chaos_TO_talairach.trm, as a transformation between r2 and cr. t.__class__ = ", t.__class__, ", internalRep = ", t)
 
     print("\n--- CreatePalette ---")
     p = a.createPalette("maPalette")
+    test_assert(p is not None, 'palette p is None')
     print("p : new palette named maPalette, added Anatomist list of palettes. p.__class__ = ", p.__class__, ", internalRep = ", p)
 
     print("\n--- GroupObjects ---")
     g = a.groupObjects([o, o2])
+    test_assert(g is not None, 'group g is None')
     print("g : new group of objects containing o and o2. g.__class__ = ", g.__class__, ", internalRep = ", g)
+    test_assert(o in g.children and o2 in g.children,
+                'objects o or o2 are not children of group g')
 
     print("\n--- linkWindows ---")
     wg = a.linkWindows([w1, w2])
+    test_assert(wg is not None, 'window group wg is None')
     print("wg : new group of windows containing w1 and w2. wg.__class__ = ", wg.__class__, ", internalRep = ", wg)
 
     print("\n--- GetInfos ---")
     lo = a.getObjects()
+    test_assert(lo is not None, 'objects list lo is None')
     print("\nObjects refererenced in current context : ", lo)
     print("Total : ", len(lo))
+    nio = 79
+    if mode == "direct mode":
+        no = 79
+        nt = 6
+    else:
+        no = 9
+        nt = 1
+    test_assert(len(lo) == no, 'wrong number of objects')
     lio = a.importObjects(False) #top_level_only = False -> all objects
+    test_assert(lio is not None, 'objects list lio is None')
     print("All objects (importing those that were not referenced in current context) : ", lio)
     print("Total : ", len(lio))
     print("-> Should be the same in direct implementation.")
+    test_assert(len(lio) == 79, 'wrong total number of objects')
 
     lw = a.getWindows()
+    test_assert(lw is not None, 'windows list lw is None')
     liw = a.importWindows()
+    test_assert(liw is not None, 'windows list liw is None')
     print("\nGetWindows : ", len(lw), ", ImportWindows : ", len(liw))
     print(liw)
+    test_assert(len(liw) == 5, 'wrong number of windows')
 
     print("\nPalettes : ", a.getPalettes())
+    test_assert(len(a.getPalettes()) > 50, 'too few palettes')
 
     lr = a.getReferentials()
+    test_assert(lr is not None, 'referentials list lr is None')
     lir = a.importReferentials()
+    test_assert(lir is not None, 'referentials list lir is None')
     print("\ngetReferentials : ", len(lr), ", importReferentials : ",
           len(lir))
     print(lir)
+    test_assert(len(lr) == 3, 'wrong referentials number')
+    test_assert(len(lir) == 3, 'wrong imported referentials number')
 
     lt = a.getTransformations()
+    test_assert(lt is not None, 'transformations list lt is None')
     lit = a.importTransformations()
+    test_assert(lit is not None, 'transformations list lit is None')
     print("\ngetTransformations : ", len(lt), ", importTransformations : ",
           len(lit))
+    test_assert(len(lt) == nt,
+                'wrong number of transformations: %d instead od %d'
+                % (len(lt), nt))
+    test_assert(len(lit) == 6,
+                'wrong number of imported transformations: %d instead of 6'
+                % len(lt))
 
     sel = a.getSelection()
+    test_assert(sel is not None, 'selection sel is None')
     print("\nSelections in default group", sel)
+    test_assert(len(sel) == 0, 'some objects are already selected')
 
     print("\nCursor last pos", a.linkCursorLastClickedPosition())
     print("Cursor last pos dans ref r2", a.linkCursorLastClickedPosition(r2))
@@ -182,10 +258,13 @@ def testAnatomist(a):
     print("\n--- AddObjects ---")
     a.addObjects([fus], [w1, w2, w3])
     print("Object fus added in windows w1, w2, and w3.")
+    test_assert(w1.objects == [fus], 'wrong objects in window w1')
 
     print("\n--- RemoveObjects ---")
     a.removeObjects([fus], [w2, w1])
     print("Object fus removed from window w1 and w2.")
+    test_assert(len(w1.objects) == 0,
+                'objects still in window w1')
 
     print("\n--- DeleteObjects ---")
     # delete the list of objects to avoid keeping a reference on object that prevent from deleting it
@@ -193,10 +272,21 @@ def testAnatomist(a):
     del lio
     a.deleteObjects([o7])
     print("Delete object o7.")
+    test_assert(len(a.getObjects()) == nio - 1,
+                'wrong objects number after deletion of o7: %d instead of %d'
+                % (len(a.getObjects()), nio - 1))
 
     print("\n--- AssignReferential ---")
-    a.assignReferential(r, [o6, w2])
-    print("Referential r assigned to object o6 and window w2.")
+    a.assignReferential(r, [o2, w2])
+    print("Referential r assigned to object o2 and window w2.")
+    test_assert(w2.getReferential() == r, 'wrong referential in window w2')
+    test_assert(o2.referential is not None, 'No referential in object o6')
+    test_assert(o2.referential is not None and o6.referential == r,
+                'wrong referential in object o6: %s' % repr(o6.referential))
+    o6.assignReferential(r)
+    print("Referential r assigned to object o6. Should not have worked because o6 already has a transform to the MNI ref.")
+    test_assert(o6.referential is None or o6.referential != r,
+                'o6 referential has actually changed to r (wrong)')
 
     print("\n--- camera ---")
     a.camera([w3], zoom=1.5)
@@ -208,6 +298,9 @@ def testAnatomist(a):
     del liw
     a.closeWindows([w4])
     print("Close window w4.")
+    test_assert(len(a.getWindows()) == 4,
+                'wrong number of windows after deletion of w4: %d'
+                % len(a.getWindows()))
 
     print("\n--- setMaterial ---")
     o.addInWindows([w1])
@@ -311,8 +404,26 @@ def testBase():
     print(w)
 
 
+interactive = True
+if len(sys.argv) >= 2 and "-b" in sys.argv[1:] or "--batch" in sys.argv[1:]:
+    interactive = False
+
 print("\n****  TEST ANATOMIST API DIRECT IMPLEMENTATION ****\n")
-res1=testDirectImpl()
+res1=testDirectImpl(interactive)
+if not interactive:
+    del res1
 print("\n****  TEST ANATOMIST API SOCKET IMPLEMENTATION ****\n")
-res2=testSocketImpl()
+res2=testSocketImpl(interactive)
+if not interactive:
+    del res2
+
+
+if len(failures) != 0:
+    print('\n\n** tests have failed: **')
+    print('\n'.join(failures))
+    print()
+    raise RuntimeError('tests have failed:')
+
+else:
+    print('\nTests OK.')
 
