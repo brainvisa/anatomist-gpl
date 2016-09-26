@@ -2153,7 +2153,7 @@ class Anatomist(Singleton):
       :type names: list of string
       """
       if names is not None and names != []: # executing the command with names = [] make errors
-        snames=string.join(names)
+        snames = ' '.join(names)
         self.anatomistinstance.execute("SelectByNomenclature", nomenclature=nomenclature, names=snames, group=self, modifiers="set")
 
     def addToSelectionByNomenclature(self, nomenclature, names):
@@ -2169,7 +2169,7 @@ class Anatomist(Singleton):
       :type names: list of string
       """
       if names is not None and names != []:
-        snames=string.join(names)
+        snames = ' '.join(names)
         self.anatomistinstance.execute("SelectByNomenclature", nomenclature=nomenclature, names=snames, group=self, modifiers="add")
 
 
@@ -2186,7 +2186,7 @@ class Anatomist(Singleton):
       :type names: list of string
       """
       if names is not None and names != []:
-        snames=string.join(names)
+        snames = ' '.join(names)
         self.anatomistinstance.execute("SelectByNomenclature", nomenclature=nomenclature, names=snames, group=self, modifiers="toggle")
 
   ###############################################################################
