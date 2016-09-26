@@ -202,9 +202,14 @@ def testAnatomist(a, interactive=True):
     if mode == "direct mode":
         no = 79
         nt = 6
+        nr = 3
     else:
         no = 9
         nt = 1
+        # in socket mode r has a different ID as mniTemplateRef, but the same
+        # UUID, and it points to the same object in Anatomist. But we now
+        # see 4 refs from the client.
+        nr = 4
     test_assert(len(lo) == no, 'wrong number of objects')
     lio = a.importObjects(False) #top_level_only = False -> all objects
     test_assert(lio is not None, 'objects list lio is None')
@@ -231,8 +236,11 @@ def testAnatomist(a, interactive=True):
     print("\ngetReferentials : ", len(lr), ", importReferentials : ",
           len(lir))
     print(lir)
-    test_assert(len(lr) == 3, 'wrong referentials number')
-    test_assert(len(lir) == 3, 'wrong imported referentials number')
+    test_assert(len(lr) == nr, 'wrong referentials number: %d instead of %d'
+                % (len(lr), nr))
+    test_assert(len(lir) == nr,
+                'wrong imported referentials number: %d instead of %d'
+                % (len(lir), nr))
 
     lt = a.getTransformations()
     test_assert(lt is not None, 'transformations list lt is None')
@@ -281,8 +289,8 @@ def testAnatomist(a, interactive=True):
     print("Referential r assigned to object o2 and window w2.")
     test_assert(w2.getReferential() == r, 'wrong referential in window w2')
     test_assert(o2.referential is not None, 'No referential in object o6')
-    test_assert(o2.referential is not None and o6.referential == r,
-                'wrong referential in object o6: %s' % repr(o6.referential))
+    test_assert(o2.referential is not None and o2.referential == r,
+                'wrong referential in object o2: %s' % repr(o6.referential))
     o6.assignReferential(r)
     print("Referential r assigned to object o6. Should not have worked because o6 already has a transform to the MNI ref.")
     test_assert(o6.referential is None or o6.referential != r,
