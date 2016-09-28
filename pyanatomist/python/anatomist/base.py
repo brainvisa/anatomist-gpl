@@ -1344,6 +1344,30 @@ class Anatomist(Singleton):
       else:
         return 1
 
+    def __eq__(self, other):
+      """
+      Equality operator for python3
+      """
+      if not isinstance(other, Anatomist.AItem):
+        return False
+      return self.internalRep == other.internalRep
+
+    def __lt__(self, other):
+      """
+      Comparison operator for python3
+      """
+      if not isinstance(other, Anatomist.AItem):
+        return False
+      return self.internalRep < other.internalRep
+
+    def __gt__(self, other):
+      """
+      Comparison operator for python3
+      """
+      if not isinstance(other, Anatomist.AItem):
+        return False
+      return self.internalRep > other.internalRep
+
     def getInfos(self):
       """
       Gets informations about this object.
@@ -2211,12 +2235,29 @@ class Anatomist(Singleton):
         -1 if self < other, 0 if self == other, 1 if self > other
       :rtype: int
       """
+      if not isinstance(other, Anatomist.Referential):
+        return 1
       if self.refUuid == other.refUuid:
         return 0
       elif self.refUuid < other.refUuid:
         return -1
       else:
         return 1
+
+    def __eq__(self, other):
+      if not isinstance(other, Anatomist.Referential):
+        return False
+      return self.refUuid == other.refUuid
+
+    def __lt__(self, other):
+      if not isinstance(other, Anatomist.Referential):
+        return False
+      return self.refUuid < other.refUuid
+
+    def __gt__(self, other):
+      if not isinstance(other, Anatomist.Referential):
+        return False
+      return self.refUuid > other.refUuid
 
   #############################################################################
   class APalette(AItem):
