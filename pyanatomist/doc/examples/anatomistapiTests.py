@@ -40,6 +40,9 @@ from __future__ import print_function
 import os
 import sys
 import soma.config
+import numpy as np
+import tempfile
+
 
 data_directory = os.path.join(
     os.getenv("BRAINVISA_TESTS_DIR"), "tmp_tests_brainvisa/data_for_anatomist")
@@ -312,10 +315,15 @@ def testAnatomist(a, interactive=True):
 
     print("\n--- setMaterial ---")
     o.addInWindows([w1])
-    mat = a.Material([0.5,0.1,0.1,1], smooth_shading=1)
+    mat = a.Material(diffuse=[0.5,0.1,0.1,1], smooth_shading=1)
     a.setMaterial([o], mat)
     print("Add object o to the window w1 and change its material : ",
           o.material)
+    test_assert(w1.objects == [o], 'wrong objects in w1')
+    test_assert(np.sum((np.array(o.getInfos()['material']['diffuse']) -
+                        [0.5,0.1,0.1,1]) ** 2) <= 1e-10,
+                'Material on o has not been updated correctly: %s'
+                % repr(o.getInfos()['material']['diffuse']))
 
     print("\n--- setObjectPalette ---")
     pal = a.getPalette("Blue-Red")
@@ -323,6 +331,8 @@ def testAnatomist(a, interactive=True):
     o6.addInWindows([w6])
     a.setObjectPalette([o6], pal, minVal=0, maxVal=0.2)
     print("Put object o6 in a new Axial window w6 and change its palette to Blue-Red with min and max values to 0 and 0.2")
+    test_assert(o6.getInfos()['palette']['palette'] == 'Blue-Red',
+                'Palette on o6 has not been set to "Blue-Red"')
 
     print("\n--- setGraphParams ---")
     a.setGraphParams(display_mode="mesh")
@@ -350,20 +360,44 @@ def testAnatomist(a, interactive=True):
     o.setPalette(pal)
 
     tex = fus.extractTexture()
+    test_assert(tex is not None, 'extracted texture is None')
     print("\nExtract texture from object fus :", tex)
     tex = fus.generateTexture()
+    test_assert(tex is not None, 'generated texture is None')
     print("Generate a texture: tex =", tex)
     fus2 = a.fusionObjects([o, tex], method="FusionTexSurfMethod")
     fus2.addInWindows([w5])
     print("Fusion the generated texture with object o : fus2 = ", fus2)
-    fus.exportTexture("/tmp/exportedTexture.gii")
-    print("fus texture is saved in file /tmp/exportedTexture.gii.")
-    o.save("/tmp/savedObject.gii")
-    print("The object o is saved in the file /tmp/savedObject.mesh.")
+    tmp_file = tempfile.mkstemp(suffix='.gii')
+    os.close(tmp_file[0])
+    fus.exportTexture(tmp_file[1])
+    a.sync() # wait for save operation to complete
+    test_assert(os.path.getsize(tmp_file[1]) != 0,
+                'saved texture file is empty')
+    print("fus texture is saved in file %s." % tmp_file[1])
+    tex = a.loadObject(tmp_file[1])
+    test_assert(tex is not None, 'could not re-read saved texture')
+    test_assert(tex.objectType == 'TEXTURE',
+                'loaded texture is not a texture...')
+    os.unlink(tmp_file[1])
+    os.unlink(tmp_file[1] + '.minf')
+    tmp_file = tempfile.mkstemp(suffix='.gii')
+    os.close(tmp_file[0])
+    o.save(tmp_file[1])
+    print("The object o is saved in the file %s." % tmp_file[1])
+    a.sync() # wait for save operation to complete
+    test_assert(os.path.getsize(tmp_file[1]) != 0, 'saved mesh file is empty')
+    mesh = a.loadObject(tmp_file[1])
+    test_assert(mesh is not None, 'could not re-read saved mesh')
+    test_assert(mesh.objectType == 'SURFACE', 'loaded mesh is not a mesh...')
+    os.unlink(tmp_file[1])
+    os.unlink(tmp_file[1] + '.minf')
 
     print("\n--- AWindow Methods---")
     print("Window attributes: w2.windowType = ", w2.windowType,", w2.group = ",
           w2.group)
+    test_assert(w2.windowType == 'Sagittal', 'w2 type is not Sagittal')
+    test_assert(w2.group == wg, 'w2 group is not wg')
     # Some methods available in Anatomist class are also available directly in AWindows class.
     w2.addObjects([o])
     w2.removeObjects([o])
@@ -395,8 +429,15 @@ def testAnatomist(a, interactive=True):
     print("The colors of palette 'maPalette' has changed.")
 
     print("\n--- ATransformation Methods---")
-    t.save("/tmp/savedTransformation.trm")
-    print("Save the transformation t in file /tmp/savedTransformation.trm.")
+    tmp_file = tempfile.mkstemp(suffix='.trm')
+    os.close(tmp_file[0])
+    t.save(tmp_file[1])
+    a.sync() # wait for save operation to complete
+    print("Save the transformation t in file %s." % tmp_file[1])
+    test_assert(os.path.getsize(tmp_file[1]) != 0,
+                'saved transformation file is empty')
+    os.unlink(tmp_file[1])
+    os.unlink(tmp_file[1] + '.minf')
 
     # return objects and windows to keep a reference on them and avoid their destroying.
     objects = a.getObjects()
