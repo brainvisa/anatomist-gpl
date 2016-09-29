@@ -572,7 +572,7 @@ typedef std::set<anatomist::AWindow * > set_AWindowPtr;
 	AddObjectCommand( const set_AObjectPtr &,
         const set_AWindowPtr,
         bool addchildren = false, bool addgraphnodes = false,
-        bool addgraphrels = false);
+        bool addgraphrels = false, bool temporary = false, int position = -1);
 /*
     AddObjectCommand( SIP_PYLIST, SIP_PYLIST ) 
       [(const set_AObjectPtr &,

@@ -398,7 +398,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     if shallowCopy:
       shallowCopy = 1
     else: shallowCopy = 0
-    self.execute("DuplicateObject", source=source, res_pointer=newObjectId, shallow=shallowCopy)
+    self.execute("DuplicateObject", source=source, res_pointer=newObjectId,
+                 shallow=shallowCopy)
     cObject= self.context.object(newObjectId)
     if cObject is not None:
       newObject=self.AObject(self, cObject)
@@ -934,23 +935,32 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   ###############################################################################
   # objects manipulation
   def addObjects(self, objects, windows, add_children=False,
-    add_graph_nodes=True, add_graph_relations=False):
+      add_graph_nodes=True, add_graph_relations=False, temporary=False,
+      position=-1):
     """
     Adds objects in windows.
     The objects and windows must already exist.
 
-    * objects : *list of* :py:class:`AObject`
-
-      List of objects to add
-
-    * windows : *list of* :py:class:`AWindow`
-
-      List of windows in which the objects must be added
+    Parameters
+    ----------
+    objects: list of :py:class:`AObject`
+        List of objects to add
+    windows: list of :py:class:`AWindow`
+        List of windows in which the objects must be added
+    add_children: bool (optional)
+        if children objects should also be added individually after their
+        parent
+    add_graph_relations: bool (optional)
+        if graph relations should be also be added
+    temporary: bool (optional)
+        temporary object do not affect the view boundaries and camera settings
+    position: int (optional)
+        insert objects as this order number
     """
-    bObjects=self.convertParamsToObjects(objects)
-    bWindows=self.convertParamsToObjects(windows)
-    c=cpp.AddObjectCommand(self.makeList(bObjects), self.makeList(bWindows),
-      add_children, add_graph_nodes, add_graph_relations)
+    bObjects = self.convertParamsToObjects(objects)
+    bWindows = self.convertParamsToObjects(windows)
+    c = cpp.AddObjectCommand(self.makeList(bObjects), self.makeList(bWindows),
+      add_children, add_graph_nodes, add_graph_relations, temporary, position)
     self.execute(c)
 
   def removeObjects(self, objects, windows, remove_children=False):

@@ -733,23 +733,33 @@ class Anatomist(Singleton):
     self.execute("ShowObject", object=object)
 
   def addObjects(self, objects, windows, add_children=False,
-    add_graph_nodes=True, add_graph_relations=False):
+        add_graph_nodes=True, add_graph_relations=False, temporary=False,
+        position=-1):
     """
     Adds objects in windows.
     The objects and windows must already exist.
 
-    :param objects:
-      List of objects to add
-    :type objects: list of :py:class:`AObject`
-
-    :param windows:
-      List of windows in which the objects must be added
-    :type windows: list of :py:class:`AWindow`
+    Parameters
+    ----------
+    objects: list of :py:class:`AObject`
+        List of objects to add
+    windows: list of :py:class:`AWindow`
+        List of windows in which the objects must be added
+    add_children: bool (optional)
+        if children objects should also be added individually after their
+        parent
+    add_graph_relations: bool (optional)
+        if graph relations should be also be added
+    temporary: bool (optional)
+        temporary object do not affect the view boundaries and camera settings
+    position: int (optional)
+        insert objects as this order number
     """
     self.execute("AddObject", objects=self.makeList(objects),
       windows=self.makeList(windows), add_children=int(add_children),
       add_graph_nodes=int(add_graph_nodes),
-      add_graph_relations=int(add_graph_relations))
+      add_graph_relations=int(add_graph_relations), temporary=int(temporary),
+      position=position)
 
   def removeObjects(self, objects, windows, remove_children=False):
     """
@@ -1493,16 +1503,23 @@ class Anatomist(Singleton):
       return windows
 
     # object manipulation
-    def addInWindows(self, windows):
+    def addInWindows(self, windows, temporary=False, position=-1):
       """
       Adds the object in windows.
       Windows must already exist.
 
-      :param  windows:
-        List of windows in which the object must be added
-      :type windows: list of :py:class:`anatomist.base.Anatomist.AWindow`
+      Parameters
+      ----------
+      windows: list of :py:class:`anatomist.base.Anatomist.AWindow`
+          List of windows in which the object must be added
+      temporary: bool (optional)
+          temporary object do not affect the view boundaries and camera
+          settings
+      position: int (optional)
+          insert objects as this order number
       """
-      self.anatomistinstance.addObjects([self], windows)
+      self.anatomistinstance.addObjects([self], windows, temporary=temporary,
+                                        position=position)
 
     def removeFromWindows(self, windows):
       """
@@ -1781,16 +1798,23 @@ class Anatomist(Singleton):
       self.block=None
 
     def addObjects(self, objects, add_children=False, add_graph_nodes=True,
-      add_graph_relations=False):
+      add_graph_relations=False, temporary=False, position=-1):
       """
       Adds objects in window.
 
-      :param objects:
-        List of objects to add
-      :type objects: list of :py:class:`anatomist.base.Anatomist.AObject`
+      Parameters
+      ----------
+      objects: list of :py:class:`anatomist.base.Anatomist.AObject`
+          List of objects to add
+      temporary: bool (optional)
+          temporary object do not affect the view boundaries and camera
+          settings
+      position: int (optional)
+          insert objects as this order number
       """
       self.anatomistinstance.addObjects(objects, [self], add_children,
-        add_graph_nodes, add_graph_relations)
+        add_graph_nodes, add_graph_relations, temporary=temporary,
+        position=position)
 
     def removeObjects(self, objects):
       """
