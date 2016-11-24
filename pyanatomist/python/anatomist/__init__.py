@@ -69,6 +69,7 @@ Several means of driving Anatomist in python scripts exist : Python bindings for
   - :py:mod:`anatomist.socket.api` module contains an implementation using socket communication with an Anatomist application run in another process in server mode.
   - :py:mod:`anatomist.direct.api` module contains an implementation using sip bindings of Anatomist C++ api.
   - :py:mod:`anatomist.threaded.api` module is a thread safe layer for the direct module. Useful if you have to use anatomist api in a multi-threaded environment.
+  - :py:mod:`anatomist.headless` module is an off-screen redirection of Anatomist display.
   - :py:mod:`anatomist.cpp` module contains sip bindings of Anatomist C++ api. It is a low level module, only for advanced user.
   - :doc:`pyanatomist_wip` work in progress module
 

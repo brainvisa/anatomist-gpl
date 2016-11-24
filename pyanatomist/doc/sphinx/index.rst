@@ -28,6 +28,8 @@ Sub-modules
 
 - :doc:`pyanatomist_cpp`
 
+- :doc:`pyanatomist_headless`
+
 - The C++ bindings are built on top of :pyaims:`PyAims <index.html>`
 
 - :doc:`pyanatomist_wip`
