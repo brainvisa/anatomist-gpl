@@ -1022,57 +1022,55 @@ class Anatomist(Singleton):
         selectable_mode = material.selectable_mode
     self.execute("SetMaterial", objects=self.makeList(objects), ambient=ambient, diffuse=diffuse, emission=emission, specular=specular, shininess=shininess, refresh=refresh, lighting=lighting, smooth_shading=smooth_shading, polygon_filtering=polygon_filtering, depth_buffer=depth_buffer, face_culling=face_culling, polygon_mode=polygon_mode, unlit_color=unlit_color, line_width=line_width, selectable_mode=selectable_mode, front_face=front_face)
 
-  def setObjectPalette(self, objects, palette=None, minVal=None, maxVal=None, palette2=None,  minVal2=None, maxVal2=None, mixMethod=None, linMixFactor=None, palette1Dmapping=None, absoluteMode=False):
+  def setObjectPalette(self, objects, palette=None, minVal=None, maxVal=None,
+                       palette2=None,  minVal2=None, maxVal2=None,
+                       mixMethod=None, linMixFactor=None,
+                       palette1Dmapping=None, absoluteMode=False,
+                       zeroCentered1=None, zeroCentered2=None):
     """
     Assign a palette to objects
 
-    :param objects:
+    Parameters
+    ----------
+    objects: list of :py:class:`AObject`
       Assign palette parameters to these objects
-    :type objects: list of :py:class:`AObject`
-
-    :param palette:
+    palette: :py:class:`APalette` or string (name)
       Principal palette to apply
-    :type palette: :py:class:`APalette` or string (name)
-
-    :param minVal:
+    minVal: float (0 - 1)
       Palette value to assign to objects texture min value (proportionally to palette's limits)
-    :type minVal: float (0 - 1)
-
-    :param maxVal:
+    maxVal: float (0 - 1)
       Palette value to assign to objects texture max value
-    :type maxVal: float (0 - 1)
-
-    :param palette2:
+    palette2: :py:class:`APalette`
       Second palette, for 2D textures
-    :type palette2: :py:class:`APalette`
-
-    :param minVal2:
+    minVal2: float (0 - 1)
       Second palette value to affect to object texture second component min value
-    :type minVal2: float (0 - 1)
-
-    :param maxVal2:
+    maxVal2: float (0 - 1)
       Second palette value to assign to object texture second component max value
-    :type maxVal2: float (0 - 1)
-
-    :param string mixMethod:
+    mixMethod: string
       Method to mix two palettes in a 2D palette : linear or geometric
-
-    :param float linMixFactor:
+    linMixFactor: float
       mix factor for the linear method
-
-    :param string palette1Dmapping:
+    palette1Dmapping: string
       way of using 2D palette for 1D texture : FirstLine or Diagonal
-
-    :param boolean absoluteMode:
+    absoluteMode: bool
       if *True*, min/max values are supposed to be absolute values (in regard to objects texture) rather than proportions
+    zeroCentered1: bool
+      min/max should be updated to keep absolute value 0 at the center of the palette (for palette 1).
+    zeroCentered2: bool
+      min/max should be updated to keep absolute value 0 at the center of the palette (for palette 2).
     """
     if isinstance(palette, self.APalette):
         palette = palette.name
-    self.execute('SetObjectPalette', objects = self.makeList(objects),
-                 palette = palette, palette2 = palette2, min=minVal,
-                 max=maxVal, min2=minVal2, max2=maxVal2, mixMethod=mixMethod,
-                 linMixFactor=linMixFactor, palette1Dmapping=palette1Dmapping,
-                 absoluteMode=int(absoluteMode))
+    cmd = dict(objects = self.makeList(objects),
+               palette = palette, palette2 = palette2, min=minVal,
+               max=maxVal, min2=minVal2, max2=maxVal2, mixMethod=mixMethod,
+               linMixFactor=linMixFactor, palette1Dmapping=palette1Dmapping,
+               absoluteMode=int(absoluteMode))
+    if zeroCentered1 is not None:
+        cmd['zero_centered_axis1'] = int(zeroCentered1)
+    if zeroCentered2 is not None:
+        cmd['zero_centered_axis2'] = int(zeroCentered2)
+    self.execute('SetObjectPalette', **cmd)
 
   ###############################################################################
   # application control
@@ -1636,48 +1634,44 @@ class Anatomist(Singleton):
       polygon_mode, unlit_color, line_width, ghost=None,
       front_face=front_face, selectable_mode=selectable_mode)
 
-    def setPalette(self, palette=None, minVal=None, maxVal=None, palette2=None,  minVal2=None, maxVal2=None, mixMethod=None, linMixFactor=None, palette1Dmapping=None, absoluteMode=False):
+    def setPalette(self, palette=None, minVal=None, maxVal=None, palette2=None,
+                   minVal2=None, maxVal2=None, mixMethod=None,
+                   linMixFactor=None, palette1Dmapping=None,
+                   absoluteMode=False, zeroCentered1=None, zeroCentered2=None):
       """
       Assign a palette to object
 
-      :param palette:
+      Parameters
+      ----------
+      palette: :py:class:`APalette` or string (name)
         Principal palette to apply
-      :type palette: :py:class:`anatomist.base.Anatomist.APalette` or string (name)
-
-      :param minVal:
+      minVal: float (0 - 1)
         Palette value to assign to objects texture min value (proportionally to palette's limits)
-      :type minVal: float (0 - 1)
-
-      :param maxVal:
+      maxVal: float (0 - 1)
         Palette value to assign to objects texture max value
-      :type maxVal: float (0 - 1)
-
-      :param palette2:
+      palette2: :py:class:`APalette`
         Second palette, for 2D textures
-      :type palette2: :py:class:`APalette`
-
-      :param minVal2:
+      minVal2: float (0 - 1)
         Second palette value to affect to object texture second component min value
-      :type minVal2: float (0 - 1)
-
-      :param maxVal2:
+      maxVal2: float (0 - 1)
         Second palette value to assign to object texture second component max value
-      :type maxVal2: float (0 - 1)
-
-      :param string mixMethod:
+      mixMethod: string
         Method to mix two palettes in a 2D palette : linear or geometric
-
-      :param float linMixFactor:
+      linMixFactor: float
         mix factor for the linear method
-
-      :param string palette1Dmapping:
+      palette1Dmapping: string
         way of using 2D palette for 1D texture : FirstLine or Diagonal
-
-      :param boolean absoluteMode:
+      absoluteMode: bool
         if *True*, min/max values are supposed to be absolute values (in regard to objects texture) rather than proportions
+      zeroCentered1: bool
+        min/max should be updated to keep absolute value 0 at the center of the palette (for palette 1).
+      zeroCentered2: bool
+        min/max should be updated to keep absolute value 0 at the center of the palette (for palette 2).
       """
-      self.anatomistinstance.setObjectPalette([self], palette, minVal, maxVal, palette2,  minVal2, maxVal2, mixMethod, linMixFactor, palette1Dmapping,
-      absoluteMode=absoluteMode)
+      self.anatomistinstance.setObjectPalette(
+          [self], palette, minVal, maxVal, palette2,  minVal2, maxVal2,
+          mixMethod, linMixFactor, palette1Dmapping, absoluteMode=absoluteMode,
+          zeroCentered1=zeroCentered1, zeroCentered2=zeroCentered2)
 
     def extractTexture(self, time=None):
       """

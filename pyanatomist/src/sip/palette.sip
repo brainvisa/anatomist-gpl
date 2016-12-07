@@ -42,6 +42,10 @@ public:
   void setMax1( float x );
   void setMin2( float x );
   void setMax2( float x );
+  bool zeroCenteredAxis1() const;
+  bool zeroCenteredAxis2() const;
+  void setZeroCenteredAxis1( bool );
+  void setZeroCenteredAxis2( bool );
   void create( unsigned dimx, unsigned dimy = 1, unsigned dimz = 1,
                unsigned dimt = 1 );
   virtual void fill();
