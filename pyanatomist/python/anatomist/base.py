@@ -1873,7 +1873,8 @@ class Anatomist(Singleton):
                      raise_window=None, record_basename=None, record_mode=None,
                      snapshot=None, transparent_depth_buffer=None,
                      view_size=None, fullscreen=None,
-                     show_cursor_position=None, show_toolbars=None):
+                     show_cursor_position=None, show_toolbars=None,
+                     snapshot_width=None, snapshot_height=None):
       """Settings for windows (includes various settings)
 
       Parameters
@@ -1954,6 +1955,12 @@ class Anatomist(Singleton):
           characters: so the file name/path must not contain any space
           character (this restriction doesn't apply if a single window is
           used). Node: escape character ("\ ") are not supported yet.
+      snapshot_width: int (optional)
+          Snapshot or recorded images width. If unspecified, fit the window
+          size. New in Anatomist 4.6.
+      snapshot_height: int (optional)
+          Snapshot or recorded images height. If unspecified, fit the window
+          size. New in Anatomist 4.6.
       transparent_depth_buffer: int (optional)
           enables (1) or disables (0) writing of transparent objects in the
           depth buffer. Useful if you want to click across transparents objects
@@ -1987,14 +1994,15 @@ class Anatomist(Singleton):
         view_size=view_size, fullscreen=fullscreen,
         show_cursor_position=show_cursor_position, show_toolbars=show_toolbars)
 
-    def snapshot(self, filename):
+    def snapshot(self, filename, width=None, height=None):
       """Take a snapshot of the window 3D contents and save it into a file
 
       Equivalent to:
 
       ::
 
-         window.windowConfig(snapshot=filename)
+         window.windowConfig(snapshot=filename, snapshot_width=width,
+                             snapshot_height=height)
 
       Parameters
       ----------
@@ -2002,7 +2010,8 @@ class Anatomist(Singleton):
           file name to save the snapshot into
       """
       self.anatomistinstance.execute("WindowConfig", windows=[self],
-                                     snapshot=filename)
+                                     snapshot=filename, snapshot_width=width,
+                                     snapshot_height=height)
 
     def assignReferential(self, referential):
       """
