@@ -85,3 +85,46 @@ When transformations are external, in ``.trm`` files
 >>> vol2.assignReferential(ref2)
 >>> tr = a.loadTransformation(ref1, ref2, 'transform.trm')
 
+
+Use Anatomist to perform off-screen rendering and snapshots
+-----------------------------------------------------------
+
+This mode needs Framebuffer rendering support in the OpenGL implementation, and on Linux a X server connection is still required. You may use a virtual X server, like **Xvfb**, or use the HeadlessAnatomist class (see below).
+
+With access to a X server
++++++++++++++++++++++++++
+
+>>> import anatomist.api as ana
+>>> a = ana.Anatomist('-b')
+>>> mesh = a.loadObject('subject01_Lhemi.mesh')
+>>> w = a.createWindow('3D', options={'hidden': True})
+>>> w.addObjects(mesh)
+>>> w.snapshot('snapshot.jpg', width=3000, height=2500)
+
+
+Headless Anatomist mode
++++++++++++++++++++++++
+
+HeadlessAnatomist is using Xvfb under the hood, so it should be installed and working. It should also support the GLX protocol, which, with some 3D drivers/OpenGL (nvidia linux driver for instance) will need `VirtualGL <http://www.virtualgl.org>`_ in addition.
+
+>>> import anatomist.headless as hana
+>>> a = hana.HeadlessAnatomist()
+>>> mesh = a.loadObject('subject01_Lhemi.mesh')
+>>> w = a.createWindow('3D')
+>>> w.addObjects(mesh)
+>>> w.snapshot('snapshot.jpg', width=3000, height=2500)
+
+To use VirtualGL, the *anatomist* process must be run through ``vglrun``:
+
+.. code-block:: bash
+
+    vglrun anatomist_script.py
+
+or:
+
+.. code-block:: bash
+
+    vglrun ipython
+
+then use HeadlessAnatomist in the anatomist script.
+

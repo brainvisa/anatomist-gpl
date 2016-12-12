@@ -2008,6 +2008,14 @@ class Anatomist(Singleton):
       ----------
       filename: string
           file name to save the snapshot into
+      width: int
+          width of the snapshot. If unspecified, or if framebuffer rendering is
+          not supported by the OpenGL implementation, the width will always be
+          the actual visible window width.
+      height: int
+          height of the snapshot. If unspecified, or if framebuffer rendering is
+          not supported by the OpenGL implementation, the height will always be
+          the actual visible window height.
       """
       self.anatomistinstance.execute("WindowConfig", windows=[self],
                                      snapshot=filename, snapshot_width=width,
