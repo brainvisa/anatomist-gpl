@@ -260,9 +260,10 @@ class GLWidgetManager : anatomist::View
     // bool autoCentering() const;
     virtual void recordStart( const QString &,
                               const QString & = QString::null );
-    void saveContents( const QString &, const QString & );
+    void saveContents( const QString &, const QString &, int=0, int=0 );
     void saveOtherBuffer( const QString &,
-                          const QString &, int );
+                          const QString &, int, int=0, int=0 );
+    QImage snapshotImage( int bufmode, int width=0, int height=0 );
     void setOtherBuffersSaveMode( int );
     int otherBuffersSaveMode() const;
 
