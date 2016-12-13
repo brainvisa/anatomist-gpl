@@ -12,7 +12,9 @@ class AnatomistSceneProcess(InteractiveProcess):
     an anatomist window containing a scene.
     '''
     output = File(output=True)
-    
+    output_width = Int(None, output=False)
+    output_height = Int(None, output=False)
+
     def __init__(self, *args, **kwargs):
         super(AnatomistSceneProcess, self).__init__(*args, **kwargs)
         self._anatomist = None
@@ -36,7 +38,11 @@ class AnatomistSceneProcess(InteractiveProcess):
                 self.set_anatomist(Anatomist('-b'))
             else:
                 from anatomist.headless import HeadlessAnatomist
-                self.set_anatomist(HeadlessAnatomist())
+                try:
+                    a = HeadlessAnatomist()
+                except:
+                    a = Anatomist('-b')
+                self.set_anatomist(a)
         return self._anatomist
     
     def create_anatomist_view(self):
@@ -59,8 +65,9 @@ class AnatomistSceneProcess(InteractiveProcess):
         '''
         windows = view_objects['windows']
         if windows:
-            windows[0].snapshot(self.output)
-    
+            windows[0].snapshot(self.output, self.output_width,
+                                self.output_height)
+
     def _run_process(self):
         '''
         Process execution method. First, it calls self.create_anatomist_view().
