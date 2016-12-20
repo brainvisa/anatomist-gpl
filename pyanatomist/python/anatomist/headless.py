@@ -1,4 +1,16 @@
 
+''' anatomist.headless module implements a headless (off-screen) version of
+Anatomist, and some helper functions.
+
+The main entry point is HeadlessAnatomist:
+
+>>> import anatomist.headless as ana
+>>> a = ana.HeadlessAnatomist()
+
+Other functions are used by HeadlessAnatomist implementation.
+
+'''
+
 from __future__ import print_function
 
 import subprocess
@@ -15,10 +27,13 @@ original_display = None
 
 
 def setup_virtualGL():
+    ''' Load VirtualGL libraries and LD_PRELOAD env variable to run the current
+    process via VirtualGL.
+    '''
     try:
         rfaker = ctypes.CDLL('librrfaker.so', ctypes.RTLD_GLOBAL)
         dlfaker = ctypes.CDLL('libdlfaker.so', ctypes.RTLD_GLOBAL)
-        os.environ['LD_PREFLOAD'] = 'libdlfaker.so:librrfaker.so'
+        os.environ['LD_PRELOAD'] = 'libdlfaker.so:librrfaker.so'
         os.environ['VGL_ISACTIVE'] = '1'
     except:
         return False
@@ -26,6 +41,19 @@ def setup_virtualGL():
 
 
 def test_glx(xdpyinfo_cmd):
+    ''' Test the presence of the GLX module in the X server, by running
+    xdpyinfo command
+
+    Parameters
+    ----------
+    xdpyinfo_cmd: str or list
+        xdpyinfo command: may be a string ('xdpyinfo') or a list, which allows
+        running it through a wrapper, ex: ['vglrun', 'xdpyinfo']
+
+    Returns
+    -------
+    True if GLX is found, False otherwise.
+    '''
     dpyinfo = ''
     t0 = time.time()
     t1 = 0
@@ -44,12 +72,26 @@ def test_glx(xdpyinfo_cmd):
 
 
 def test_opengl(pid=None, verbose=False):
+    ''' Test the presence of OpenGL libraries (and which ones) in the specified
+    Unix process. Works only on Linux (or maybe ELF Unixes).
+
+    Parameters
+    ----------
+    pid: int (optional)
+        process id to look OpenbGL libs in. Default: current process
+    verbose: bool (optional)
+        if True, print found libs
+
+    Returns
+    -------
+    set of loaded libGL libraries
+    '''
     if pid is None:
         pid = os.getpid()
     gl_libs = set()
     for line in open('/proc/%d/maps' % pid).readlines():
         lib = line.split()[-1]
-        if lib not in gl_libs and lib.find('libGL.so.1') != -1:
+        if lib not in gl_libs and lib.find('libGL.so.') != -1:
             gl_libs.add(lib)
             if verbose:
                 print(lib)
@@ -57,6 +99,14 @@ def test_opengl(pid=None, verbose=False):
 
 
 def find_mesa():
+    ''' Try to find a software Mesa library in the libraries search path.
+    Parses the LD_LIBRARY_PATH env variable and libs listed by the command
+    "ldconfig -p", looks for a mesa/ subdir containing a libGL.so.1 file.
+
+    Returns
+    -------
+    Mesa library file with full path, or None if not found
+    '''
     paths = os.environ.get('LD_LIBRARY_PATH')
     ldconfig = check_output(['ldconfig', '-p'])
     paths2 = [os.path.dirname(p.split()[-1])
@@ -78,6 +128,15 @@ def find_mesa():
 
 
 def setup_headless():
+    ''' Sets up a headless virtual X server and tunes the current process
+    libraries to use it appropriately.
+
+    .. warning::
+        calling this function may run a Xvfb process, and change the
+        current process libraries to use VirtualGL or Mesa GL.
+
+    If no configuration proves to work, raise an exception.
+    '''
     global xvfb
     global original_display
 
@@ -187,32 +246,34 @@ def HeadlessAnatomist():
     ''' Implements an off-screen headless Anatomist.
 
     .. warning:: Only usable with X11.
-        Needs Xvfb and xdpyinfo commands to be available.
+        Needs Xvfb and xdpyinfo commands to be available, and possibly
+        VirtualGL or Mesa.
 
     All X rendering is deported to a virtual X server (Xvfb) which doesn't
     actually display things.
 
-    Depending on the OpenGL implementation / driver, Xvfb will not necessarily
-    support the GLX extension. This especially happens with NVidia OpenGL on
-    Linux.
+    Depending on the OpenGL implementation / driver, Xvfb will not
+    necessarily support the GLX extension. This especially happens with
+    NVidia OpenGL on Linux.
 
-    To overcome this, it is possible to use VirtualGL
-    (http://www.virtualgl.org), but:
+    To overcome this, HeadlessAnatomist will automatically attempt to use
+    VirtualGL (http://www.virtualgl.org), but:
 
-    * it needs to run the whole application through vglrun:
+    * whole application OpenGL rendering will be redirected through
+      VirtualGL, OpenGL calls will be modified.
 
-        .. code-block:: bash
+    * VirtualGL deports the rendering to a working X server, thus this one
+      has to exist (other than Xvfb), to be running, and to have working
+      OpenGL.
 
-            vglrun app_script.py
-            # or:
-            vglrun ipython --gui
-
-    * VirtualGL deports the rendering to a working X server, thus this one has
-      to exist, to be running, and to have working OpenGL.
+    If VirtualGL is not available, or not working (no X server), then
+    HeadlessAnatomist will attempt to find a software Mesa library and
+    use it. This has other side effects, since all openGL calls will be
+    software.
 
     .. note::
-        This implementation connects to a virtual X server, then runs a regular
-        Anatomist. This has several limiations:
+        This implementation connects to a virtual X server, then runs a
+        regular Anatomist. This has several limiations:
 
         * All the widgets from the application will be redirected to this
           display: it is not possible to mix on-screen and off-screen
@@ -236,6 +297,10 @@ def HeadlessAnatomist():
     anatomist.api.Anatomist, as configured via
     anatomist.setDefaultImplementation(), to it can use
     any of the different implementations of the Anatomist API.
+
+    If OpenGL has already been loaded, or Xvfb cannot be made to work, and
+    if a regular X server conection is working, then a regular, on-screen
+    Anatomist will be used.
     '''
 
     setup_headless()
@@ -246,32 +311,34 @@ def HeadlessAnatomist():
         ''' Implements an off-screen headless Anatomist.
 
         .. warning:: Only usable with X11.
-            Needs Xvfb and xdpyinfo commands to be available.
+            Needs Xvfb and xdpyinfo commands to be available, and possibly
+            VirtualGL or Mesa.
 
         All X rendering is deported to a virtual X server (Xvfb) which doesn't
         actually display things.
 
-        Depending on the OpenGL implementation / driver, Xvfb will not necessarily
-        support the GLX extension. This especially happens with NVidia OpenGL on
-        Linux.
+        Depending on the OpenGL implementation / driver, Xvfb will not
+        necessarily support the GLX extension. This especially happens with
+        NVidia OpenGL on Linux.
 
-        To overcome this, it is possible to use VirtualGL
-        (http://www.virtualgl.org), but:
+        To overcome this, HeadlessAnatomist will automatically attempt to use
+        VirtualGL (http://www.virtualgl.org), but:
 
-        * it needs to run the whole application through vglrun:
+        * whole application OpenGL rendering will be redirected through
+          VirtualGL, OpenGL calls will be modified.
 
-            .. code-block:: bash
+        * VirtualGL deports the rendering to a working X server, thus this one
+          has to exist (other than Xvfb), to be running, and to have working
+          OpenGL.
 
-                vglrun app_script.py
-                # or:
-                vglrun ipython --gui
-
-        * VirtualGL deports the rendering to a working X server, thus this one has
-          to exist, to be running, and to have working OpenGL.
+        If VirtualGL is not available, or not working (no X server), then
+        HeadlessAnatomist will attempt to find a software Mesa library and
+        use it. This has other side effects, since all openGL calls will be
+        software.
 
         .. note::
-            This implementation connects to a virtual X server, then runs a regular
-            Anatomist. This has several limiations:
+            This implementation connects to a virtual X server, then runs a
+            regular Anatomist. This has several limiations:
 
             * All the widgets from the application will be redirected to this
               display: it is not possible to mix on-screen and off-screen
@@ -295,6 +362,10 @@ def HeadlessAnatomist():
         anatomist.api.Anatomist, as configured via
         anatomist.setDefaultImplementation(), to it can use
         any of the different implementations of the Anatomist API.
+
+        If OpenGL has already been loaded, or Xvfb cannot be made to work, and
+        if a regular X server conection is working, then a regular, on-screen
+        Anatomist will be used.
         '''
         def __singleton_init__(self):
             self.xvfb = xvfb
@@ -305,6 +376,15 @@ def HeadlessAnatomist():
         def __del__(self):
             atexit._exithandlers.remove((terminate_xvfb, (), {}))
             terminate_xvfb()
+
+        def createWindow(self, wintype, **kwargs):
+            options = kwargs.get('options', {})
+            if 'hidden' not in options:
+                options['hidden'] = True
+            kwargs = dict(kwargs)
+            kwargs['options'] = options
+            return super(HeadlessAnatomist, self).createWindow(wintype,
+                                                               **kwargs)
 
     hana = HeadlessAnatomist()
     return hana
