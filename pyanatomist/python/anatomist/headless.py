@@ -63,7 +63,6 @@ def test_glx(xdpyinfo_cmd):
         try:
             dpyinfo = check_output(xdpyinfo_cmd)
         except Exception, e:
-            print(e)
             time.sleep(0.01)
             t1 = time.time() - t0
     if 'GLX' not in dpyinfo:
