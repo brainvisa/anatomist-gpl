@@ -1,10 +1,9 @@
 
 from anatomist.capsul import Anatomist3DWindowProcess
 from traits.api import File
-from soma.qt_gui.qt_backend import QtGui
 import unittest
 from capsul.api import get_process_instance
-import anatomist.api as ana
+import anatomist.headless as hana
 from soma import aims
 import numpy as np
 import tempfile
@@ -16,6 +15,8 @@ class SingleObjectViewer(Anatomist3DWindowProcess):
     input = File(output=False)
 
     def create_anatomist_view(self):
+        # should not be imported in the module to avoid loading Qt too early
+        from soma.qt_gui.qt_backend import QtGui
         obj = self.anatomist.loadObject(self.input)
         obj.setPalette('Blue-Red')
         win = self.get_window()
@@ -45,6 +46,13 @@ def prepare_volume():
 class TestSingleViewer(unittest.TestCase):
 
     def setUp(self):
+        viewer = get_process_instance(SingleObjectViewer())
+        #viewer.is_interactive = True
+        #a = hana.HeadlessAnatomist('-b')
+        #import anatomist.api as ana
+        #a = ana.Anatomist('-b')
+        #viewer.set_anatomist(a)
+
         input_file = prepare_volume()
         self.input_file = input_file
         output_file_t = tempfile.mkstemp(prefix='pyanat_snapshot',
@@ -53,19 +61,15 @@ class TestSingleViewer(unittest.TestCase):
         output_file = output_file_t[1]
         self.output_file = output_file
 
-        viewer = get_process_instance(SingleObjectViewer())
         viewer.input = input_file
         viewer.output = output_file
         viewer.output_width = 2000
         viewer.output_height = 1500
-        #viewer.is_interactive = True
         self.viewer = viewer
 
 
     def test_class_user_parameters(self):
         viewer = self.viewer
-        viewer.set_anatomist(ana.Anatomist('-b'))
-
         items = viewer()
 
         # read output image and test it
@@ -74,6 +78,9 @@ class TestSingleViewer(unittest.TestCase):
         asked_size = [viewer.output_width, viewer.output_height]
 
         if viewer.is_interactive:
+            # should not be imported in the module to avoid loading Qt
+            # too early
+            from soma.qt_gui.qt_backend import QtGui
             QtGui.qApp.exec_()
 
         self.assertEqual(image_size, asked_size)
@@ -88,6 +95,7 @@ class TestSingleViewer(unittest.TestCase):
 
     def tearDown(self):
         os.unlink(self.input_file)
+        #print('output:', self.output_file)
         os.unlink(self.output_file)
 
 
