@@ -18,14 +18,14 @@ class AnatomistSceneProcess(InteractiveProcess):
     def __init__(self, *args, **kwargs):
         super(AnatomistSceneProcess, self).__init__(*args, **kwargs)
         self._anatomist = None
-    
+
     def set_anatomist(self, anatomist):
         '''
         Define the Anatomist instance that will be used when viewer is
         executed.
         '''
         self._anatomist = anatomist
-    
+
     @property
     def anatomist(self):
         '''
@@ -44,7 +44,7 @@ class AnatomistSceneProcess(InteractiveProcess):
                     a = Anatomist('-b')
                 self.set_anatomist(a)
         return self._anatomist
-    
+
     def create_anatomist_view(self):
          '''
          This method must be defined in derived classes. It is
@@ -65,6 +65,9 @@ class AnatomistSceneProcess(InteractiveProcess):
         '''
         windows = view_objects['windows']
         if windows:
+            from soma.qt_gui.qt_backend import QtGui
+            # still needed until fixed in Anatomist C++ lib
+            QtGui.qApp.processEvents()
             windows[0].snapshot(self.output, self.output_width,
                                 self.output_height)
 
@@ -83,6 +86,7 @@ class AnatomistSceneProcess(InteractiveProcess):
                 window.show()
         return view_objects
 
+
 class Anatomist3DWindowProcess(AnatomistSceneProcess):
     '''
     Specialization of AnatomistSceneProcess for scene with a single
@@ -95,12 +99,15 @@ class Anatomist3DWindowProcess(AnatomistSceneProcess):
     def get_window(self):
         a = self.anatomist
         if self.reuse_window:
-            windows_per_id = dict((w.internalRep.winId(), w) for w in self.anatomist.getWindows())
+            windows_per_id = dict((w.internalRep.winId(), w)
+                                  for w in self.anatomist.getWindows())
             window = windows_per_id.get(self.reuse_window)
             if window is None:
-                raise ValueError('Cannot find an Anatomist window with the given id (%d)' % self.reuse_window)
+                raise ValueError('Cannot find an Anatomist window with the '
+                                 'given id (%d)' % self.reuse_window)
         else:
-            window = self.anatomist.createWindow(self.window_type,  options={'hidden':True})
+            window = self.anatomist.createWindow(self.window_type,
+                                                 options={'hidden':True})
         return window
 
-    
+
