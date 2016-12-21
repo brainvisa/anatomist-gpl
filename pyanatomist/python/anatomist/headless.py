@@ -24,6 +24,7 @@ import sys
 
 xvfb = None
 original_display = None
+hanatomist = None
 
 
 def setup_virtualGL():
@@ -62,7 +63,6 @@ def test_glx(xdpyinfo_cmd):
         try:
             dpyinfo = check_output(xdpyinfo_cmd)
         except Exception, e:
-            print(e)
             time.sleep(0.01)
             t1 = time.time() - t0
     if 'GLX' not in dpyinfo:
@@ -242,7 +242,7 @@ def terminate_xvfb():
             os.environ['DISPLAY'] = original_display
 
 
-def HeadlessAnatomist():
+def HeadlessAnatomist(*args, **kwargs):
     ''' Implements an off-screen headless Anatomist.
 
     .. warning:: Only usable with X11.
@@ -293,7 +293,7 @@ def HeadlessAnatomist():
           rendered, because Qt does not allow mixed-X displays. Once a
           widget is created, all others will go to the same display.
 
-    Otherwise, HeadlessAnatomist inherits the configured Anatomist class
+    Otherwise, returns the unique instance of the configured Anatomist class
     anatomist.api.Anatomist, as configured via
     anatomist.setDefaultImplementation(), to it can use
     any of the different implementations of the Anatomist API.
@@ -303,89 +303,32 @@ def HeadlessAnatomist():
     Anatomist will be used.
     '''
 
+    global hanatomist
+    if hanatomist:
+        return hanatomist
+
     setup_headless()
 
     from anatomist.api import Anatomist
 
-    class HeadlessAnatomist(Anatomist):
-        ''' Implements an off-screen headless Anatomist.
+    #def __del__ana(self):
+        #atexit._exithandlers.remove((terminate_xvfb, (), {}))
+        #terminate_xvfb()
 
-        .. warning:: Only usable with X11.
-            Needs Xvfb and xdpyinfo commands to be available, and possibly
-            VirtualGL or Mesa.
+    #def createWindow_ana(self, wintype, **kwargs):
+        #options = kwargs.get('options', {})
+        #if 'hidden' not in options:
+            #options['hidden'] = True
+            #kwargs = dict(kwargs)
+            #kwargs['options'] = options
+        #return self._old_createWindow(wintype, **kwargs)
 
-        All X rendering is deported to a virtual X server (Xvfb) which doesn't
-        actually display things.
+    hanatomist = Anatomist()
+    hanatomist.xvfb = xvfb
+    atexit.register(terminate_xvfb)
+    #Anatomist.__del__ = __del__ana
+    #Anatomist._old_createWindow = Anatomist.createWindow
+    #Anatomist.createWindow = createWindow_ana
 
-        Depending on the OpenGL implementation / driver, Xvfb will not
-        necessarily support the GLX extension. This especially happens with
-        NVidia OpenGL on Linux.
-
-        To overcome this, HeadlessAnatomist will automatically attempt to use
-        VirtualGL (http://www.virtualgl.org), but:
-
-        * whole application OpenGL rendering will be redirected through
-          VirtualGL, OpenGL calls will be modified.
-
-        * VirtualGL deports the rendering to a working X server, thus this one
-          has to exist (other than Xvfb), to be running, and to have working
-          OpenGL.
-
-        If VirtualGL is not available, or not working (no X server), then
-        HeadlessAnatomist will attempt to find a software Mesa library and
-        use it. This has other side effects, since all openGL calls will be
-        software.
-
-        .. note::
-            This implementation connects to a virtual X server, then runs a
-            regular Anatomist. This has several limiations:
-
-            * All the widgets from the application will be redirected to this
-              display: it is not possible to mix on-screen and off-screen
-              rendering, or a regular on-screen Qt application with off-screen
-              anatomist snapshoting.
-
-            * HeadlessAnatomist should be instantiated before any OpenGL
-              library is loaded to allow tweaking, using either VirtualGL
-              (http://virtualgl.org), or a software Mesa OpenGL if one can be
-              found and is useable.
-              This means any Qt module should *not* be imported yet, including
-              anatomist.api.
-              If OpenGL is already loaded, just hope its implementation will be
-              compatible with Xvfb.
-
-            * HeadlessAnatomist must be instantiated before any Qt widget is
-              rendered, because Qt does not allow mixed-X displays. Once a
-              widget is created, all others will go to the same display.
-
-        Otherwise, HeadlessAnatomist inherits the configured Anatomist class
-        anatomist.api.Anatomist, as configured via
-        anatomist.setDefaultImplementation(), to it can use
-        any of the different implementations of the Anatomist API.
-
-        If OpenGL has already been loaded, or Xvfb cannot be made to work, and
-        if a regular X server conection is working, then a regular, on-screen
-        Anatomist will be used.
-        '''
-        def __singleton_init__(self):
-            self.xvfb = xvfb
-
-            super(HeadlessAnatomist, self).__singleton_init__()
-            atexit.register(terminate_xvfb)
-
-        def __del__(self):
-            atexit._exithandlers.remove((terminate_xvfb, (), {}))
-            terminate_xvfb()
-
-        def createWindow(self, wintype, **kwargs):
-            options = kwargs.get('options', {})
-            if 'hidden' not in options:
-                options['hidden'] = True
-            kwargs = dict(kwargs)
-            kwargs['options'] = options
-            return super(HeadlessAnatomist, self).createWindow(wintype,
-                                                               **kwargs)
-
-    hana = HeadlessAnatomist()
-    return hana
+    return hanatomist
 
