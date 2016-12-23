@@ -21,8 +21,6 @@ class SingleObjectViewer(Anatomist3DWindowProcess):
         obj.setPalette('Blue-Red')
         win = self.get_window()
         win.addObjects(obj)
-        #win.refreshNow()
-        QtGui.qApp.processEvents()
 
         items = {'objects': [obj], 'windows': [win]}
 
@@ -48,10 +46,14 @@ class TestSingleViewer(unittest.TestCase):
     def setUp(self):
         viewer = get_process_instance(SingleObjectViewer())
         #viewer.is_interactive = True
-        #a = hana.HeadlessAnatomist('-b')
+        # instanciation here is very important to ensure VirtualGL libs
+        # can be loaded NOW, before other libs are loaded.
+        # If too late, use the following:
+        # a = hana.HeadlessAnatomist('-b', allow_virtualgl=False)
+        a = hana.HeadlessAnatomist('-b')
         #import anatomist.api as ana
         #a = ana.Anatomist('-b')
-        #viewer.set_anatomist(a)
+        viewer.set_anatomist(a)
 
         input_file = prepare_volume()
         self.input_file = input_file

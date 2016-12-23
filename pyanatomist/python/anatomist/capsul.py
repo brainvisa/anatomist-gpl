@@ -67,7 +67,7 @@ class AnatomistSceneProcess(InteractiveProcess):
         if windows:
             from soma.qt_gui.qt_backend import QtGui
             # still needed until fixed in Anatomist C++ lib
-            QtGui.qApp.processEvents()
+            #QtGui.qApp.processEvents()
             windows[0].snapshot(self.output, self.output_width,
                                 self.output_height)
 
