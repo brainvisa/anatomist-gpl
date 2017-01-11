@@ -201,6 +201,9 @@ public:
   }
 %End
 
+public slots:
+  void triggeredRefresh();
+
 protected:
   virtual void dragEnterEvent( QDragEnterEvent* );
   virtual void dropEvent( QDropEvent* );
@@ -371,6 +374,7 @@ public:
   void setFog( bool );
   bool fog() const;
   void resizeView( int w, int h );
+  QImage snapshotImage( int width=0, int height=0, int bufmode=0 );
 };
 
 
