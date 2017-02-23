@@ -135,6 +135,8 @@ namespace anatomist
     static void addObjectMenuRegistration
     ( anatomist::ObjectMenuRegistrerClass * /Transfer/ );
     virtual void setHeaderOptions();
+    virtual void storeHeaderOptions();
+    virtual carto::Object makeHeaderOptions() const;
 
     SIP_PYTUPLE boundingbox() const;
 %MethodCode
