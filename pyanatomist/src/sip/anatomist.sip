@@ -61,6 +61,7 @@
 %Include texture.sip
 %Include qapalettewin.sip
 %Include gradwidget.sip
+%Include mobjectio.sip
 
 
 class AnatomistSip
