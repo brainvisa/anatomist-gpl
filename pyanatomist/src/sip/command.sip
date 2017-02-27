@@ -518,7 +518,7 @@ namespace anatomist
                        anatomist::CommandContext * = 0 );
     virtual ~LoadObjectCommand();
     virtual std::string name() const;
-    anatomist::AObject *loadedObject();
+    list_AObjectPtr loadedObjects();
 
   signals:
     void objectLoaded( anatomist::AObject*, const std::string & );

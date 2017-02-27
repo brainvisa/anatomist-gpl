@@ -39,6 +39,7 @@
 %Include rcptr_GLItem.sip
 %Include list_RefGLItem.sip
 %Include list_TransformationPtr.sip
+%Include list_AObjectPtr.sip
 //%Include list_QString.sip
 %Include geometry.sip
 %Include viewstate.sip

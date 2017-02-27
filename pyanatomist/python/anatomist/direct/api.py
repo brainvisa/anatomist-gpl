@@ -283,7 +283,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     w.block=block
     return w
     
-  def loadObject(self, filename, objectName="", restrict_object_types=None, forceReload=True, duplicate=False, hidden=False, asyncCallback=None):
+  def loadObject(self, filename, objectName="", restrict_object_types=None,
+                 forceReload=True, duplicate=False, hidden=False,
+                 asyncCallback=None):
     """
     Loads an object from a file (volume, mesh, graph, texture...)
     
@@ -354,13 +356,19 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       c.objectLoaded.connect( cbk.loaded )
     self.execute(c)
     if not asyncCallback:
-      o = self.AObject(self, c.loadedObject())
-      o.releaseAppRef()
-      if duplicate:
-        # the original object has been loaded hidden, duplicate it
-        copyObject = self.duplicateObject(o)
-        return copyObject
-      return o
+      objs = c.loadedObjects()
+      objects = []
+      for obj in objs:
+        o = self.AObject(self, obj)
+        objects.append(o)
+        o.releaseAppRef()
+        if duplicate:
+          # the original object has been loaded hidden, duplicate it
+          copyObject = self.duplicateObject(o)
+          return copyObject
+      if len(objects) == 1:
+        return objects[0]
+      return objects
 
   class _ObjectLoaded( object ):
     '''internal.'''
