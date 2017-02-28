@@ -84,6 +84,7 @@ public:
     virtual void clearHasChangedFlags() const /AutoGen/;
     virtual void setPalette( const anatomist::AObjectPalette & ) /AutoGen/;
     virtual anatomist::GLComponent* glAPI();
+    virtual list_AObjectPtr generativeChildren() const;
 
     anatomist::AObject * __getitem__(int) /AutoGen/;
 %MethodCode
