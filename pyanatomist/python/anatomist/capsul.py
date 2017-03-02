@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import os
 from capsul.api import InteractiveProcess
 from traits.api import File, Enum, Int
+import math
 
 class AnatomistSceneProcess(InteractiveProcess):
     '''
@@ -39,7 +40,7 @@ class AnatomistSceneProcess(InteractiveProcess):
             else:
                 from anatomist.headless import HeadlessAnatomist
                 try:
-                    a = HeadlessAnatomist()
+                    a = HeadlessAnatomist('-b')
                 except:
                     a = Anatomist('-b')
                 self.set_anatomist(a)
@@ -110,4 +111,78 @@ class Anatomist3DWindowProcess(AnatomistSceneProcess):
                                                  options={'hidden':True})
         return window
 
+
+class AnatimistMultipleViewsProcess(AnatomistSceneProcess):
+    '''
+    Specialization of AnatomistSceneProcess for a scene with multiple Anatomist
+    windows. The resulting snapshot will compose a large image according to the specified layout.
+    '''
+    view_layout_cols = Int(0)
+    view_layout_rows = Int(0)
+    margin = Int(5)
+
+    def snapshot(self, view_objects):
+        windows = view_objects['windows']
+        if windows:
+            from soma.qt_gui.qt_backend import QtGui
+
+            if self.view_layout_cols != 0:
+                nc = min(self.view_layout_cols, len(windows))
+                nl = int(math.ceil(float(len(windows)) / nc))
+            elif self.view_layout_rows != 0:
+                nl = min(self.view_layout_rows, len(windows))
+                nc = int(math.ceil(float(len(windows)) / nl))
+            else:
+                nc = int(math.ceil(math.sqrt(len(windows))))
+                nl = int(math.ceil(float(len(windows)) / nc))
+
+            widths = [0] * nc
+            heights = [0] * nl
+
+            for i, win in enumerate(windows):
+                w = 0
+                h = 0
+                if self.output_width or self.output_height:
+                    w, h = self.output_width, self.output_height
+                if w == 0 or h == 0:
+                    w2, h2 = win.getInfos()['view_size']
+                    if w == 0:
+                        w = w2
+                    if h == 0:
+                        h = h2
+                c = i % nc
+                l = i / nc
+                if widths[c] < w:
+                    widths[c] = w
+                if heights[l] < h:
+                    heights[l] = h
+
+            wpos = []
+            p = 0
+            for i in range(nc):
+                wpos.append(p)
+                p += widths[i] + self.margin
+            hpos = []
+            p = 0
+            for i in range(nl):
+                hpos.append(p)
+                p += heights[i] + self.margin
+
+            out_image = QtGui.QImage(wpos[-1] + widths[-1],
+                                     hpos[-1] + heights[-1],
+                                     QtGui.QImage.Format_RGB32)
+            out_image.fill(0)
+            painter = QtGui.QPainter(out_image)
+            for i, win in enumerate(windows):
+                c = i % nc
+                l = i / nc
+                if len(win.objects) == 0:
+                    continue
+                win.windowConfig(cursor_visibility=0)
+                img = win.snapshotImage(self.output_width, self.output_height)
+                win.windowConfig(cursor_visibility=1)
+                painter.drawImage(wpos[c], hpos[l], img)
+            del painter
+
+            out_image.save(self.output)
 

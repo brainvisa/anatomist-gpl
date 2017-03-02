@@ -15,9 +15,10 @@ class SingleObjectViewer(Anatomist3DWindowProcess):
     input = File(output=False)
 
     def create_anatomist_view(self):
-        # should not be imported in the module to avoid loading Qt too early
-        from soma.qt_gui.qt_backend import QtGui
         obj = self.anatomist.loadObject(self.input)
+        # should not be imported in the module to avoid loading Qt too early
+        # and not before a.anatomist is used
+        from soma.qt_gui.qt_backend import QtGui
         obj.setPalette('Blue-Red')
         win = self.get_window()
         win.addObjects(obj)
@@ -48,6 +49,9 @@ class TestSingleViewer(unittest.TestCase):
         #viewer.is_interactive = True
         # instanciation here is very important to ensure VirtualGL libs
         # can be loaded NOW, before other libs are loaded.
+        # It must be done before aims is used (because some of its plugins will
+        # load Qt and indirectly OpenGL), so before prepare_volume().
+        #
         # If too late, use the following:
         # a = hana.HeadlessAnatomist('-b', allow_virtualgl=False)
         a = hana.HeadlessAnatomist('-b')
