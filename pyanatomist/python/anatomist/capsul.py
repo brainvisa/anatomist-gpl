@@ -121,20 +121,28 @@ class AnatimistMultipleViewsProcess(AnatomistSceneProcess):
     view_layout_rows = Int(0)
     margin = Int(5)
 
+    def __init__(self, *args, **kwargs):
+        super(AnatimistMultipleViewsProcess, self).__init__(*args, **kwargs)
+        self.view_layout_position = None
+
     def snapshot(self, view_objects):
         windows = view_objects['windows']
         if windows:
             from soma.qt_gui.qt_backend import QtGui
 
-            if self.view_layout_cols != 0:
-                nc = min(self.view_layout_cols, len(windows))
-                nl = int(math.ceil(float(len(windows)) / nc))
-            elif self.view_layout_rows != 0:
-                nl = min(self.view_layout_rows, len(windows))
-                nc = int(math.ceil(float(len(windows)) / nl))
+            if self.view_layout_position:
+                nc = max([x[1] for x in self.view_layout_position]) + 1
+                nl = max([x[0] for x in self.view_layout_position]) + 1
             else:
-                nc = int(math.ceil(math.sqrt(len(windows))))
-                nl = int(math.ceil(float(len(windows)) / nc))
+                if self.view_layout_cols != 0:
+                    nc = min(self.view_layout_cols, len(windows))
+                    nl = int(math.ceil(float(len(windows)) / nc))
+                elif self.view_layout_rows != 0:
+                    nl = min(self.view_layout_rows, len(windows))
+                    nc = int(math.ceil(float(len(windows)) / nl))
+                else:
+                    nc = int(math.ceil(math.sqrt(len(windows))))
+                    nl = int(math.ceil(float(len(windows)) / nc))
 
             widths = [0] * nc
             heights = [0] * nl
@@ -150,8 +158,11 @@ class AnatimistMultipleViewsProcess(AnatomistSceneProcess):
                         w = w2
                     if h == 0:
                         h = h2
-                c = i % nc
-                l = i / nc
+                if self.view_layout_position:
+                    l, c = self.view_layout_position[i]
+                else:
+                    c = i % nc
+                    l = i / nc
                 if widths[c] < w:
                     widths[c] = w
                 if heights[l] < h:
@@ -174,8 +185,11 @@ class AnatimistMultipleViewsProcess(AnatomistSceneProcess):
             out_image.fill(0)
             painter = QtGui.QPainter(out_image)
             for i, win in enumerate(windows):
-                c = i % nc
-                l = i / nc
+                if self.view_layout_position:
+                    l, c = self.view_layout_position[i]
+                else:
+                    c = i % nc
+                    l = i / nc
                 if len(win.objects) == 0:
                     continue
                 win.windowConfig(cursor_visibility=0)
