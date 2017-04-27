@@ -58,7 +58,7 @@ def setup_virtualGL():
     return True
 
 
-def test_glx(xdpyinfo_cmd):
+def test_glx(xdpyinfo_cmd, timeout=5.):
     ''' Test the presence of the GLX module in the X server, by running
     xdpyinfo command
 
@@ -67,6 +67,9 @@ def test_glx(xdpyinfo_cmd):
     xdpyinfo_cmd: str or list
         xdpyinfo command: may be a string ('xdpyinfo') or a list, which allows
         running it through a wrapper, ex: ['vglrun', 'xdpyinfo']
+    timeout: float (optional)
+        try several times to connect the X server while waiting for it to
+        startup. If 0, try only once and return.
 
     Returns
     -------
@@ -75,8 +78,7 @@ def test_glx(xdpyinfo_cmd):
     dpyinfo = ''
     t0 = time.time()
     t1 = 0
-    timeout = 5
-    while dpyinfo == '' and t1 < timeout:
+    while dpyinfo == '' and t1 <= timeout:
         try:
             dpyinfo = check_output(xdpyinfo_cmd)
         except Exception, e:
@@ -215,7 +217,7 @@ def setup_headless(allow_virtualgl=True):
             vgl = distutils.spawn.find_executable('vglrun')
             if vgl:
                 print('VirtualGL found.')
-                if test_glx([vgl, xdpyinfo_cmd]):
+                if test_glx([vgl, xdpyinfo_cmd], 0):
                     print('VirtualGL should work.')
 
                     glx = setup_virtualGL()
@@ -268,7 +270,7 @@ def setup_headless(allow_virtualgl=True):
 
     if not use_xvfb:
         if xdpyinfo_cmd:
-            glx = test_glx(xdpyinfo_cmd)
+            glx = test_glx(xdpyinfo_cmd, 0)
             if not glx:
                 raise RuntimeError('GLX extension missing')
         print('Headeless Anatomist running in normal (non-headless) mode')
