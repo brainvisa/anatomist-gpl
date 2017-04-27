@@ -127,6 +127,19 @@ def find_mesa():
     return None
 
 
+def terminate_xvfb():
+    global xvfb
+    global original_display
+    if xvfb:
+        xvfb.terminate()
+        xvfb.wait()
+        xvfb = None
+        if original_display:
+            os.environ['DISPLAY'] = original_display
+        else:
+            del os.environ['DISPLAY']
+
+
 def setup_headless():
     ''' Sets up a headless virtual X server and tunes the current process
     libraries to use it appropriately.
@@ -162,10 +175,11 @@ def setup_headless():
         xvfb = Popen(['Xvfb', '-screen', '0', '1280x1024x24',
                       '+extension', 'GLX', ':%d' % display])
 
-        original_display = os.environ['DISPLAY']
-        os.environ['DISPLAY']=':%d' % display
+        original_display = os.environ.get('DISPLAY', None)
+        os.environ['DISPLAY'] = ':%d' % display
 
         glx = test_glx(xdpyinfo_cmd)
+        gl_libs = set()
         if not glx:
             gl_libs = test_opengl(verbose=True)
             if len(gl_libs) != 0:
@@ -219,7 +233,10 @@ def setup_headless():
             xvfb.terminate()
             xvfb.wait()
             xvfb = None
-            os.environ['DISPLAY'] = original_display
+            if original_display is not None:
+                os.environ['DISPLAY'] = original_display
+            else:
+                del os.environ['DISPLAY']
             use_xvfb = False
             #raise RuntimeError('GLX extension missing')
 
@@ -230,16 +247,8 @@ def setup_headless():
                 raise RuntimeError('GLX extension missing')
         print('Headeless Anatomist running in normal (non-headless) mode')
 
-
-def terminate_xvfb():
-    global xvfb
-    global original_display
-    if xvfb:
-        xvfb.terminate()
-        xvfb.wait()
-        xvfb = None
-        if original_display:
-            os.environ['DISPLAY'] = original_display
+    if xvfb is not None:
+        atexit.register(terminate_xvfb)
 
 
 def HeadlessAnatomist(*args, **kwargs):
@@ -324,8 +333,6 @@ def HeadlessAnatomist(*args, **kwargs):
         #return self._old_createWindow(wintype, **kwargs)
 
     hanatomist = Anatomist()
-    hanatomist.xvfb = xvfb
-    atexit.register(terminate_xvfb)
     #Anatomist.__del__ = __del__ana
     #Anatomist._old_createWindow = Anatomist.createWindow
     #Anatomist.createWindow = createWindow_ana
