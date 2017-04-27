@@ -151,7 +151,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       self.anatomistinstance.logEvent( eventName, str(params) )
       o=params.get('object')
       if o is not None: # get the object by identifier and create a AObject representing it
-        params['object']=self.anatomistinstance.AObject(self.anatomistinstance, self.anatomistinstance.context.object( o ))
+        params['object']=self.anatomistinstance.typedObject(
+                            self.anatomistinstance.context.object( o ))
       w=params.get('window')
       if w is not None:
         params['window'] = self.anatomistinstance.AWindow(self.anatomistinstance, self.anatomistinstance.context.object( w ))
@@ -159,7 +160,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       if ch is not None:
         chObj = []
         for c in ch:
-          chObj.append(self.anatomistinstance.AObject(self.anatomistinstance, self.anatomistinstance.context.object( c )))
+          chObj.append(self.anatomistinstance.typedObject(
+                            self.anatomistinstance.context.object( c )))
         params['children']=chObj
       self.notifier.notify(eventName, params)
  
@@ -359,7 +361,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       objs = c.loadedObjects()
       objects = []
       for obj in objs:
-        o = self.AObject(self, obj)
+        o = self.typedObject(obj)
         objects.append(o)
         o.releaseAppRef()
         if duplicate:
@@ -382,7 +384,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       if obj is None:
         self.callback( None, filename )
       else:
-        o=self.anatomistinstance.AObject(self.anatomistinstance, obj)
+        o=self.anatomistinstance.typeObject(obj)
         o.releaseAppRef()
         if self.duplicate:
           # the original object has been loaded hidden, duplicate it
@@ -410,7 +412,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                  shallow=shallowCopy)
     cObject= self.context.object(newObjectId)
     if cObject is not None:
-      newObject=self.AObject(self, cObject)
+      newObject=self.typedObject(cObject)
       newObject.releaseAppRef()
       newObject.source=source
       return newObject
@@ -447,7 +449,29 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     newGraph=self.AGraph(self, self.context.object(newGraphId))
     newGraph.releaseAppRef()
     return newGraph
-  
+
+  def typedObject(self, obj):
+    """
+    Get AObject or a subclass from a sip object when it is possible.
+    
+    * returns: :py:class:`AObject`
+    """
+    #print '==== pyanatomist::typedObject, obj:', obj
+    if isinstance(obj, Anatomist.AObject):
+        return obj
+    
+    else:
+        #print'==== pyanatomist::typedObject, type:', obj.type()
+        typename = obj.objectTypeName(obj.type())
+        #print '==== pyanatomist::typedObject, typename:', typename
+        if typename == 'GRAPH':
+            o = Anatomist.AGraph(self, obj)
+
+        else:
+            o = Anatomist.AObject(self, obj)
+
+        return o
+    
   def toAObject(self, object):
     """
     Converts an AIMS object or numpy array to AObject.
@@ -455,7 +479,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     * returns: :py:class:`AObject`
     """
     bobject=cpp.AObjectConverter.anatomist( object )
-    return self.AObject(self, bobject)
+    return self.typedObject(self, bobject)
     
   def toAimsObject(self, object):
     """
@@ -481,7 +505,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     c=cpp.LoadObjectCommand(filename, -1, "", True)
     self.execute(c)
-    o=self.AObject(self, c.loadedObject())
+    o=self.typedObject(c.loadedObject())
     o.releaseAppRef()
     return o
     
@@ -517,7 +541,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     self.theProcessor().allowExecWhileIdle( ah )
     o = c.createdObject()
     if o is not None:
-      o=self.AObject(self, c.createdObject())
+      o=self.typedObject(c.createdObject())
       o.releaseAppRef()
     return o
 
@@ -637,7 +661,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     bObjects=self.convertParamsToObjects(objects)
     c=cpp.GroupObjectsCommand(self.makeList(bObjects))
     self.execute(c)
-    return self.AObject(self, c.groupObject())
+    return self.typedObject(c.groupObject())
 
   #############################################################################
   # objects access
@@ -717,7 +741,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     boundObjects=cpp.Anatomist.getObjects(self)
     objects=[]
     for o in boundObjects:
-      objects.append(self.AObject(self, o))
+      objects.append(self.typedObject(o))
     return objects
  
   def importObjects(self, top_level_only=False):
@@ -839,7 +863,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     l=[]
     if objects is not None:
       for o in objects:
-        l.append(self.AObject(self, o))
+        l.append(self.typedObject(o))
     return l
   
   def linkCursorLastClickedPosition(self, ref=None):
@@ -1152,7 +1176,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       else:
         idorcpp = o
     if isinstance( idorcpp, cpp.AObject ):
-      return Anatomist.AObject( self, idorcpp )
+      return self.typedObject( idorcpp )
     if isinstance( idorcpp, cpp.AWindow ):
       return Anatomist.AWindow( self, idorcpp )
     if isinstance( idorcpp, cpp.Referential ):
@@ -1421,7 +1445,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         objects=[]
         if issubclass(type(self.getInternalRep()), cpp.MObject): # if internalRep is a multi object, it is iterable and can have children
           for c in self.getInternalRep():
-            objects.append(self.anatomistinstance.AObject(self.anatomistinstance, c))
+            objects.append(self.anatomistinstance.typedObject(c))
         return objects
       elif name == "filename":
         self.filename=self.internalRep.fileName()
@@ -1478,7 +1502,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         time = -1
       c=cpp.ExtractTextureCommand( self.getInternalRep(), -1, time)
       self.anatomistinstance.execute(c)
-      return self.anatomistinstance.AObject(self.anatomistinstance, c.createdObject())
+      return self.anatomistinstance.typedObject(c.createdObject())
     
     def generateTexture(self, dimension=1):
       """
@@ -1494,7 +1518,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       """
       c=cpp.GenerateTextureCommand( self.getInternalRep(), -1, dimension)
       self.anatomistinstance.execute(c)
-      return self.anatomistinstance.AObject(self.anatomistinstance, c.createdObject())
+      return self.anatomistinstance.typedObject(c.createdObject())
     
     def setChanged(self):
       """
@@ -1586,9 +1610,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       else:
         no_duplicate=1
       self.anatomistinstance.execute("AddNode", graph=self, res_pointer=nodeId, name=name, with_bucket=with_bucket, res_bucket=bucketId, no_duplicate=no_duplicate)
-      node=self.anatomistinstance.AObject(self.anatomistinstance, self.anatomistinstance.context.object(nodeId))
+      node=self.anatomistinstance.typedObject(self.anatomistinstance.context.object(nodeId))
       if bucketId is not None:
-        bucket=self.anatomistinstance.AObject(self.anatomistinstance, self.anatomistinstance.context.object(bucketId))
+        bucket=self.anatomistinstance.typedObject(self.anatomistinstance.context.object(bucketId))
         res=(node, bucket)
       else:
         res=node
@@ -1634,7 +1658,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         objs=self.internalRep.Objects()
         aobjs=[]
         for obj in objs:
-          aobjs.append(self.anatomistinstance.AObject(self.anatomistinstance, obj))
+          aobjs.append(self.anatomistinstance.typedObject(obj))
         return aobjs
       elif name == 'block':
         if not self.parent() or not self.parent().parent():
@@ -1802,3 +1826,4 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
     def __init__(self, anatomistinstance, internalRep=None, *args, **kwargs):
       super(Anatomist.Transformation, self).__init__(anatomistinstance, internalRep, *args, **kwargs)
+

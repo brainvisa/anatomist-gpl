@@ -48,12 +48,15 @@ namespace anatomist
       sipClass = sipClass_anatomist_TextObject;
     else if (dynamic_cast<anatomist::TransformedObject *>(sipCpp))
       sipClass = sipClass_anatomist_TransformedObject;
+    else
+        sipClass = sipClass_anatomist_AObject;
   }
   else if( dynamic_cast<AWindow3D *>( sipCpp ) )
   {
     *sipCppRet = static_cast<AWindow3D *>( sipCpp );
     sipClass = sipClass_AWindow3D;
   }
+  
 %End
 
   public:

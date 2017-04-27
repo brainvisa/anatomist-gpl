@@ -154,6 +154,8 @@ class AtlasJsonRois(QMainWindow):
 
         if nomenclature_path is not None:
             nomenclature = aims.read(nomenclature_path)
+        else:
+            nomenclature = None
 
         json_dict = {}
         if json_roi_path is not None:
@@ -200,7 +202,7 @@ class AtlasJsonRois(QMainWindow):
 
         if not self.nomenclature:
             for ana_graph in self.ana_graphs:
-                ana_graph.setColorMode(self.ana_graph.PropertyMap)
+                ana_graph.setColorMode(ana_graph.PropertyMap)
                 ana_graph.setColorProperty('name')
                 ana_graph.setPalette(a.getPalette("random"))
                 ana_graph.notifyObservers()
