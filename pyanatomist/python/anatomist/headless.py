@@ -182,6 +182,9 @@ def setup_headless(allow_virtualgl=True):
     if xvfb:
         # already setup
         return
+    if sys.platform in ('darwin', 'win32'):
+        # not a X11 implementation
+        return
     use_xvfb = True
     xdpyinfo_cmd = distutils.spawn.find_executable('xdpyinfo')
     if not xdpyinfo_cmd:
