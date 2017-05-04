@@ -81,7 +81,7 @@ def test_glx(xdpyinfo_cmd, timeout=5.):
     while dpyinfo == '' and t1 <= timeout:
         try:
             dpyinfo = check_output(xdpyinfo_cmd)
-        except Exception, e:
+        except Exception as e:
             time.sleep(0.01)
             t1 = time.time() - t0
     if 'GLX' not in dpyinfo:
