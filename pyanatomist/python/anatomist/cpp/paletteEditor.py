@@ -61,7 +61,7 @@ class PaletteEditor( QtGui.QGroupBox ):
         self.setTitle( title )
 
         vlay = QtGui.QVBoxLayout( self )
-        vlay.setMargin( 0 )
+        vlay.setContentsMargins(0, 0, 0, 0)
         
         font = QtGui.QFont()
         font.setPixelSize(12 * zoom)
@@ -83,7 +83,7 @@ class PaletteEditor( QtGui.QGroupBox ):
             self.palettecb = None
         
         hlay = QtGui.QHBoxLayout()
-        hlay.setMargin( 0 )
+        hlay.setContentsMargins(0, 0, 0, 0)
         hlay.setSpacing( 0 )
         
         vlay.addLayout( hlay )
