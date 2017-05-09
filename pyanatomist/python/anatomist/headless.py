@@ -276,7 +276,7 @@ def setup_headless(allow_virtualgl=True):
             glx = test_glx(xdpyinfo_cmd, 0)
             if not glx:
                 raise RuntimeError('GLX extension missing')
-        print('Headeless Anatomist running in normal (non-headless) mode')
+        print('Headless Anatomist running in normal (non-headless) mode')
 
     if xvfb is not None:
         atexit.register(terminate_xvfb)
