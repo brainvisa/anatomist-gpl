@@ -1080,7 +1080,7 @@ class Anatomist(Singleton):
     def setObjectPalette(self, objects, palette=None, minVal=None, maxVal=None,
                          palette2=None,  minVal2=None, maxVal2=None,
                          mixMethod=None, linMixFactor=None,
-                         palette1Dmapping=None, absoluteMode=False):
+                         palette1Dmapping=None, absoluteMode=False,
                          zeroCentered1=None, zeroCentered2=None):
         """
         Assign a palette to objects
@@ -1752,11 +1752,11 @@ class Anatomist(Singleton):
             zeroCentered2: bool
                 min/max should be updated to keep absolute value 0 at the center of the palette (for palette 2).
             """
-          self.anatomistinstance.setObjectPalette(
-              [self], palette, minVal, maxVal, palette2,  minVal2, maxVal2,
-              mixMethod, linMixFactor, palette1Dmapping,
-              absoluteMode=absoluteMode,
-              zeroCentered1=zeroCentered1, zeroCentered2=zeroCentered2)
+            self.anatomistinstance.setObjectPalette(
+                [self], palette, minVal, maxVal, palette2,  minVal2, maxVal2,
+                mixMethod, linMixFactor, palette1Dmapping,
+                absoluteMode=absoluteMode,
+                zeroCentered1=zeroCentered1, zeroCentered2=zeroCentered2)
 
         def extractTexture(self, time=None):
             """
