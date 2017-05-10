@@ -1110,9 +1110,9 @@ class Anatomist(Singleton):
         absoluteMode: bool
               if *True*, min/max values are supposed to be absolute values (in regard to objects texture) rather than proportions
         zeroCentered1: bool
-          min/max should be updated to keep absolute value 0 at the center of the palette (for palette 1).
+              min/max should be updated to keep absolute value 0 at the center of the palette (for palette 1).
         zeroCentered2: bool
-          min/max should be updated to keep absolute value 0 at the center of the palette (for palette 2).
+              min/max should be updated to keep absolute value 0 at the center of the palette (for palette 2).
         """
         if isinstance(palette, self.APalette):
             palette = palette.name
@@ -1728,29 +1728,29 @@ class Anatomist(Singleton):
             Parameters
             ----------
             palette: :py:class:`APalette` or string (name)
-                    Principal palette to apply
+                Principal palette to apply
             minVal: float (0 - 1)
-                    Palette value to assign to objects texture min value (proportionally to palette's limits)
+                Palette value to assign to objects texture min value (proportionally to palette's limits)
             maxVal: float (0 - 1)
-                    Palette value to assign to objects texture max value
+                Palette value to assign to objects texture max value
             palette2: :py:class:`APalette`
-                    Second palette, for 2D textures
+                Second palette, for 2D textures
             minVal2: float (0 - 1)
-                    Second palette value to affect to object texture second component min value
+                Second palette value to affect to object texture second component min value
             maxVal2: float (0 - 1)
-                    Second palette value to assign to object texture second component max value
+                Second palette value to assign to object texture second component max value
             mixMethod: string
-                    Method to mix two palettes in a 2D palette : linear or geometric
+                Method to mix two palettes in a 2D palette : linear or geometric
             linMixFactor: float
-                    mix factor for the linear method
+                mix factor for the linear method
             palette1Dmapping: string
-                    way of using 2D palette for 1D texture : FirstLine or Diagonal
+                way of using 2D palette for 1D texture : FirstLine or Diagonal
             absoluteMode: bool
-                    if *True*, min/max values are supposed to be absolute values (in regard to objects texture) rather than proportions
+                if *True*, min/max values are supposed to be absolute values (in regard to objects texture) rather than proportions
             zeroCentered1: bool
-              min/max should be updated to keep absolute value 0 at the center of the palette (for palette 1).
+                min/max should be updated to keep absolute value 0 at the center of the palette (for palette 1).
             zeroCentered2: bool
-              min/max should be updated to keep absolute value 0 at the center of the palette (for palette 2).
+                min/max should be updated to keep absolute value 0 at the center of the palette (for palette 2).
             """
           self.anatomistinstance.setObjectPalette(
               [self], palette, minVal, maxVal, palette2,  minVal2, maxVal2,
@@ -2060,12 +2060,12 @@ class Anatomist(Singleton):
                 characters: so the file name/path must not contain any space
                 character (this restriction doesn't apply if a single window is
                 used). Node: escape character ("\ ") are not supported yet.
-      snapshot_width: int (optional)
-          Snapshot or recorded images width. If unspecified, fit the window
-          size. New in Anatomist 4.6.
-      snapshot_height: int (optional)
-          Snapshot or recorded images height. If unspecified, fit the window
-          size. New in Anatomist 4.6.
+            snapshot_width: int (optional)
+                Snapshot or recorded images width. If unspecified, fit the
+                window size. New in Anatomist 4.6.
+            snapshot_height: int (optional)
+                Snapshot or recorded images height. If unspecified, fit the
+                window size. New in Anatomist 4.6.
             transparent_depth_buffer: int (optional)
                 enables (1) or disables (0) writing of transparent objects in the
                 depth buffer. Useful if you want to click across transparents objects
