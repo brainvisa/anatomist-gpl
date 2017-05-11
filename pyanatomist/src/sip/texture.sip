@@ -38,17 +38,19 @@ namespace anatomist
     void setTexExtrema(float min,float max);
 
     virtual void normalize();
-    void setTexture( rc_ptr_TimeTexture_FLOAT );
-    void setTexture( rc_ptr_TimeTexture_POINT2DF );
-    void setTexture( rc_ptr_TimeTexture_S16 );
+    void setTexture( rc_ptr_TimeTexture_FLOAT, bool = false );
+    void setTexture( rc_ptr_TimeTexture_POINT2DF, bool = false );
+    void setTexture( rc_ptr_TimeTexture_S16, bool = false );
+    void setTexture( rc_ptr_TimeTexture_S32, bool = false );
+    void setTexture( rc_ptr_TimeTexture_U32, bool = false );
     rc_ptr_TimeTexture_FLOAT texture1d( bool rescaled = false,
-                                      bool always_copy = false );
+                                        bool always_copy = false );
 %MethodCode
   sipRes = new rc_ptr_TimeTexture_FLOAT( sipCpp->texture<float>( a0, a1 ) );
 %End
 
     rc_ptr_TimeTexture_POINT2DF texture2d( bool rescaled = false,
-                                        bool always_copy = false );
+                                           bool always_copy = false );
 %MethodCode
   sipRes = new rc_ptr_TimeTexture_POINT2DF( sipCpp->texture<Point2df>( a0, a1 ) );
 %End
