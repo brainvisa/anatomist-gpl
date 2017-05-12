@@ -151,7 +151,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       self.anatomistinstance.logEvent( eventName, str(params) )
       o=params.get('object')
       if o is not None: # get the object by identifier and create a AObject representing it
-        params['object']=self.anatomistinstance.typedObject(
+        params['object'] = self.anatomistinstance.typedObject(
                             self.anatomistinstance.context.object( o ))
       w=params.get('window')
       if w is not None:
@@ -478,8 +478,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     
     * returns: :py:class:`AObject`
     """
-    bobject=cpp.AObjectConverter.anatomist( object )
-    return self.typedObject(self, bobject)
+    bobject = cpp.AObjectConverter.anatomist( object )
+    return self.typedObject(bobject)
     
   def toAimsObject(self, object):
     """
