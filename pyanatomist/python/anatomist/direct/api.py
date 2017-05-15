@@ -1002,9 +1002,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     windows=[]
     # in anatomist command, objects and windows must be passed in two lists
     for e in self.makeList(elements):
-      if issubclass(e.__class__, self.AObject):
+      if isinstance(e, base.Anatomist.AObject):
         objects.append(e.getInternalRep())
-      elif issubclass(e.__class__, self.AWindow):
+      elif isinstance(e, base.Anatomist.AWindow):
         windows.append(e.getInternalRep())
     c=cpp.AssignReferentialCommand(referential.internalRep, objects, windows)
     self.execute(c)
