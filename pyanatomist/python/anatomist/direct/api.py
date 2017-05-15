@@ -453,22 +453,22 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
   def typedObject(self, obj):
     """
     Get AObject or a subclass from a sip object when it is possible.
-    
+
     * returns: :py:class:`AObject`
     """
     #print '==== pyanatomist::typedObject, obj:', obj
-    if isinstance(obj, Anatomist.AObject):
+    if isinstance(obj, base.Anatomist.AObject):
         return obj
-    
+
     else:
         #print'==== pyanatomist::typedObject, type:', obj.type()
         typename = obj.objectTypeName(obj.type())
         #print '==== pyanatomist::typedObject, typename:', typename
         if typename == 'GRAPH':
-            o = Anatomist.AGraph(self, obj)
+            o = self.AGraph(self, obj)
 
         else:
-            o = Anatomist.AObject(self, obj)
+            o = self.AObject(self, obj)
 
         return o
     
@@ -1034,9 +1034,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     windows=[]
     # in anatomist command, objects and windows must be passed in two lists
     for e in self.makeList(elements):
-      if issubclass(e.__class__, self.AObject):
+      if isinstance(e, base.Anatomist.AObject):
         objects.append(e.getInternalRep())
-      elif issubclass(e.__class__, self.AWindow):
+      elif isinstance(e, base.Anatomist.AWindow):
         windows.append(e.getInternalRep())
     c=cpp.AssignReferentialCommand(referential.internalRep, objects, windows)
     self.execute(c)
