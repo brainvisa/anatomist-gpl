@@ -37,7 +37,7 @@ The function C{getThreadSafeClass} enables to create a thread safe class based o
 """
 
 import sys, types
-from soma.qt_gui.qtThread import QtThreadCall
+from soma.qt_gui.qtThread import QtThreadCall, MainThreadLife
 from soma.singleton import Singleton
 import six
 
@@ -88,7 +88,15 @@ def getThreadSafeClass(classObj, mainThread):
       The generated thread safe class
   """
   # create a new class that inherits from classObj
-  threadSafeClass = type(classObj.__name__, (classObj,), {})
+  from anatomist import base
+  is_aitem = False
+  if classObj.__name__ == 'AItem' \
+          or issubclass(classObj, base.Anatomist.AItem):
+      bases = (classObj, MainThreadLife)
+      is_aitem = True
+  else:
+      bases = (classObj,)
+  threadSafeClass = type(classObj.__name__, bases, {})
   # replace all methods (not builtin) by a thread safe call to the same method
   # and replace all inner class by a thread safe class
   for attName, att in six.iteritems(classObj.__dict__):
@@ -113,6 +121,18 @@ def getThreadSafeClass(classObj, mainThread):
           # replace this class with a thread safe class
           newAtt = getThreadSafeClass(att, mainThread)
           setattr(threadSafeClass, attName, newAtt)
+
+  if is_aitem:
+      #classObj.AItem.__bases__ = classObj.AItem.__bases__ + (MainThreadLife, )
+      def aitem_init(self, *args, **kwargs):
+          super(threadSafeClass, self).__init__(*args, **kwargs)
+          self._obj_life = self.internalRep
+      threadSafeClass.__init__ = aitem_init
+      def aitem_del(self):
+          super(threadSafeClass, self).__del__()
+          MainThreadLife.__del__(self)
+      threadSafeClass.__del__ = aitem_del
+
   return threadSafeClass
 
 
