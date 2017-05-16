@@ -230,10 +230,10 @@ extlinks = {
   'aimsdox': ('../../aimsdata-' + version + '/doxygen/%s',
     'aimsdox '),
   'aimsdata' : ('../../aimsdata-' + version + '/%s', 'aimsdata '),
-  'aimsepy': ('../../pyaims-' + version + '/epydoc/%s',
-    'aimsepy '),
   'pyaims': ('../../pyaims-' + version + '/sphinx/%s',
     'pyaims '),
+  'soma': ('../../soma-base-' + version + '/sphinx/%s',
+    'soma '),
   'cartobdox' : ('../../cartobase-' + version + '/doxygen/%s',
   'cartobdox '),
   'cartoddox' : ('../../cartodata-' + version + '/doxygen/%s',
@@ -242,3 +242,10 @@ extlinks = {
   'graphdox '),
 }
 
+import soma
+docpath = os.path.join(os.path.dirname(os.path.dirname(
+    os.path.dirname(soma.__file__))), 'share', 'doc')
+
+intersphinx_mapping = {
+    'soma': (os.path.join(docpath, 'soma-base-' + version + '/sphinx'), None),
+}
