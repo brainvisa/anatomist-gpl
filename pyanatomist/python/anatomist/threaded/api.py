@@ -31,23 +31,46 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
 """
-This module is an implementation of general interface L{anatomist.base}.
+This module is an implementation of general interface :py:mod:`anatomist.base`.
 It is based on direct implementation (bindings of C++ Anatomist api) with adding thread-safe layer. 
 
 This implementation can be used in multi-threaded application. To load it, you can do :
-  
+
   >>> import anatomist
   >>> anatomist.setDefaultImplementation(anatomist.THREADED)
   >>> import anatomist.api as anatomist
-  
+
 or without changing default implementation : 
-    
+
   >>> import anatomist.threaded.api as anatomist
-  
+
 This module redefines the Anatomist class from the direct implementation Anatomist class to make all methods execute in the main thread (qt thread). 
-It uses methods of L{anatomist.threadedimpl}.
+It uses methods of :py:mod:`anatomist.threadedimpl`.
 
 Note that this thread-safe implementation is not actually multi-threaded: all calls to the Anatomist API are stacked for execution in the same thread, so it is actually a single-thread execution, but calls can be performed from various threads in a multi-threaded program, avoiding race conditions (provided the calling thread has not locked the main thread in any way).
+
+All classes in the anatomist module are made thread-safe.
+
+Objects returned by calls to the thread-safe API
+------------------------------------------------
+
+Generally, objects created (or just returned) by calls to the Anatomist thread-safe API belong to the main thread. This means that they must be used, and importantly, destroyed, within the main thread.
+
+Using objects
++++++++++++++
+
+When returned objects are classes from the Anatomist API, they are subclasses of the thread-safe API, and are already made thread-safe when used.
+
+When objects do not belong to the Anatomist API, like Qt widgets, then caution must be taken to use them from the main GUI thread only. You can use :soma:`soma.qt_gui.qtThread.QtThreadCall <api.html#soma.qt_gui.qtThread.QtThreadCall>` to do so.
+
+Destroying objects
+++++++++++++++++++
+
+Destruction of objects in python is somewhat tricky: when a variable is deleted, a reference to it is decremented, and when the last reference is dropped, the object is actually destroyed, indeed from the thread removing this last reference. If several threads hold a reference to a given object, who will actually delete it ? If a sensible (non-thread-safe) object is deleted within the wrong thread, program crashes may occur.
+
+To manage this problem we use wrapper objects which will delegate the destruction of objects they contain to the main thread: :soma:`soma.qt_gui.qtThread.MainThreadLife <api.html#soma.qt_gui.qtThread.MainThreadLife>`.
+
+:py:class:`AItem <anatomist.base.Anatomist.AItem>` subclasses in the threaded implementation (including :py:class:`AObject <anatomist.base.Anatomist.AObject>`, :py:class:`AWindow <anatomist.base.Anatomist.AWindow>` etc) are already subclasses of :soma:`MainThreadLife <api.html#soma.qt_gui.qtThread.MainThreadLife>`.
 
 """
 from anatomist import cpp
