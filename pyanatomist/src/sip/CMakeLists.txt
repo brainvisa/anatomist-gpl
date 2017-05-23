@@ -12,7 +12,7 @@ file( GLOB _sipSources "${CMAKE_CURRENT_SOURCE_DIR}/*.sip" )
 
 file( MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/${ANATOMIST_RELATIVE_SIP_DIRECTORY}" )
 
-exec_program( "${PYTHON_EXECUTABLE}"
+exec_program( "${PYTHON_HOST_EXECUTABLE}"
   ARGS "${AIMS-FREE_SIP_DIRECTORY}/maketemplates.py"
         -s "${AIMS-FREE_SIP_DIRECTORY}"
         -i "${CMAKE_CURRENT_SOURCE_DIR}/generatedtypes.py"
