@@ -32,10 +32,10 @@ def setup_virtualGL():
     process via VirtualGL.
 
     .. warning::
-        If the current process has already used some libraries (dlopen? libGL
+        If the current process has already used some libraries (libX11? libGL
         certainly), setting VirtualGL libs afterwards may cause segfaults and
         program crashes. So it is not safe to use it unless you are sure to to
-        it strait at the beginning of the program, prior to imoprting many
+        it straight at the beginning of the program, prior to importing many
         modules.
 
         Unfortunately, I don't know how to test it.
@@ -117,6 +117,22 @@ def test_opengl(pid=None, verbose=False):
     return gl_libs
 
 
+def test_qapp():
+    ''' If QtGui is already loaded, switching to VirtualGL in the running
+    process leads to segfaults.
+    Moreover if QApplication is instantiated, the display is already connected
+    and cannot change in Qt afterwards.
+    '''
+    mods = ('PyQt4.QtGui', 'PyQt5.QtGui', 'PySide.QtGui')
+    for mod in mods:
+        if mod in sys.modules:
+            from soma.qt_gui.qt_backend import QtGui
+            if QtGui.QApplication.instance() is not None:
+                return 'QApp'
+            return 'QtGui'
+    return None
+
+
 def find_mesa():
     ''' Try to find a software Mesa library in the libraries search path.
     Parses the LD_LIBRARY_PATH env variable and libs listed by the command
@@ -167,6 +183,12 @@ def setup_headless(allow_virtualgl=True):
         calling this function may run a Xvfb process, and change the
         current process libraries to use VirtualGL or Mesa GL.
 
+    If OpenGL library or Qt QtGui module is loaded, then VirtualGL will not be
+    allowed to prevent crashes.
+
+    If Qt QApplication is instantiated, headless mode is disabled because Qt
+    is already connected to a display that cannot change afterwards.
+
     If no configuration proves to work, raise an exception.
 
     Parameters
@@ -184,6 +206,13 @@ def setup_headless(allow_virtualgl=True):
         return
     if sys.platform in ('darwin', 'win32'):
         # not a X11 implementation
+        return
+    qtapp = test_qapp()
+    if qtapp == 'QApp':
+        # QApplication has already opened the current display: we cannot change
+        # it afterwards.
+        print('QApplication already instantiated, headless Anatomist is not '
+              'possible.')
         return
     use_xvfb = True
     xdpyinfo_cmd = distutils.spawn.find_executable('xdpyinfo')
@@ -215,7 +244,7 @@ def setup_headless(allow_virtualgl=True):
                 print('OpenGL lib already loaded. Using Xvfb will not be '
                       'possible.')
 
-        if not glx and not gl_libs and allow_virtualgl:
+        if not glx and not gl_libs and allow_virtualgl and qtapp is None:
             # try VirtualGL
             vgl = distutils.spawn.find_executable('vglrun')
             if vgl:
@@ -254,7 +283,8 @@ def setup_headless(allow_virtualgl=True):
                     print('Running using Mesa software OpenGL: performance '
                           'will be slow. To get faster results, and if X '
                           'server connection can be obtained, consider '
-                          'installing VirtualGL (http://virtualgl.org).')
+                          'installing VirtualGL (http://virtualgl.org) '
+                          'and running again before loading QtGui.')
             else:
                 print('Mesa not found.')
 
