@@ -30,11 +30,28 @@ hanatomist = None
 def setup_virtualGL():
     ''' Load VirtualGL libraries and LD_PRELOAD env variable to run the current
     process via VirtualGL.
+
+    .. warning::
+        If the current process has already used some libraries (libX11? libGL
+        certainly), setting VirtualGL libs afterwards may cause segfaults and
+        program crashes. So it is not safe to use it unless you are sure to to
+        it straight at the beginning of the program, prior to importing many
+        modules.
+
+        Unfortunately, I don't know how to test it.
     '''
     try:
-        rfaker = ctypes.CDLL('librrfaker.so', ctypes.RTLD_GLOBAL)
+        preload = ['libdlfaker']
+        # vglrun may use either librrfaker or libvglfaker depending on its
+        # version.
+        try:
+            vglfaker = ctypes.CDLL('librrfaker.so', ctypes.RTLD_GLOBAL)
+            preload.append('librrfaker.so')
+        except:
+            vglfaker = ctypes.CDLL('libvglfaker.so', ctypes.RTLD_GLOBAL)
+            preload.append('libvglfaker.so')
         dlfaker = ctypes.CDLL('libdlfaker.so', ctypes.RTLD_GLOBAL)
-        os.environ['LD_PRELOAD'] = 'libdlfaker.so:librrfaker.so'
+        os.environ['LD_PRELOAD'] = ':'.join(preload)
         os.environ['VGL_ISACTIVE'] = '1'
     except:
         return False
@@ -100,6 +117,22 @@ def test_opengl(pid=None, verbose=False):
     return gl_libs
 
 
+def test_qapp():
+    ''' If QtGui is already loaded, switching to VirtualGL in the running
+    process leads to segfaults.
+    Moreover if QApplication is instantiated, the display is already connected
+    and cannot change in Qt afterwards.
+    '''
+    mods = ('PyQt4.QtGui', 'PyQt5.QtGui', 'PySide.QtGui')
+    for mod in mods:
+        if mod in sys.modules:
+            from soma.qt_gui.qt_backend import QtGui
+            if QtGui.QApplication.instance() is not None:
+                return 'QApp'
+            return 'QtGui'
+    return None
+
+
 def find_mesa():
     ''' Try to find a software Mesa library in the libraries search path.
     Parses the LD_LIBRARY_PATH env variable and libs listed by the command
@@ -142,7 +175,7 @@ def terminate_xvfb():
             del os.environ['DISPLAY']
 
 
-def setup_headless():
+def setup_headless(allow_virtualgl=True):
     ''' Sets up a headless virtual X server and tunes the current process
     libraries to use it appropriately.
 
@@ -150,7 +183,20 @@ def setup_headless():
         calling this function may run a Xvfb process, and change the
         current process libraries to use VirtualGL or Mesa GL.
 
+    If OpenGL library or Qt QtGui module is loaded, then VirtualGL will not be
+    allowed to prevent crashes.
+
+    If Qt QApplication is instantiated, headless mode is disabled because Qt
+    is already connected to a display that cannot change afterwards.
+
     If no configuration proves to work, raise an exception.
+
+    Parameters
+    ----------
+    allow_virtualgl: bool (optional)
+        If False, VirtualGL will not be attempted. Default is True.
+        Use it if you experience crashes in your programs: it probably means
+        that some incompatible libraries have alrealy been loaded.
     '''
     global xvfb
     global original_display
@@ -160,6 +206,13 @@ def setup_headless():
         return
     if sys.platform in ('darwin', 'win32'):
         # not a X11 implementation
+        return
+    qtapp = test_qapp()
+    if qtapp == 'QApp':
+        # QApplication has already opened the current display: we cannot change
+        # it afterwards.
+        print('QApplication already instantiated, headless Anatomist is not '
+              'possible.')
         return
     use_xvfb = True
     xdpyinfo_cmd = distutils.spawn.find_executable('xdpyinfo')
@@ -191,7 +244,7 @@ def setup_headless():
                 print('OpenGL lib already loaded. Using Xvfb will not be '
                       'possible.')
 
-        if not glx and not gl_libs:
+        if not glx and not gl_libs and allow_virtualgl and qtapp is None:
             # try VirtualGL
             vgl = distutils.spawn.find_executable('vglrun')
             if vgl:
@@ -204,6 +257,8 @@ def setup_headless():
                     if glx:
                         print('Running through VirtualGL + Xvfb: '
                               'this is optimal.')
+                    else:
+                        print('But VirtualGL could not be loaded...')
 
                     #test_opengl(verbose=True)
 
@@ -228,7 +283,8 @@ def setup_headless():
                     print('Running using Mesa software OpenGL: performance '
                           'will be slow. To get faster results, and if X '
                           'server connection can be obtained, consider '
-                          'installing VirtualGL (http://virtualgl.org).')
+                          'installing VirtualGL (http://virtualgl.org) '
+                          'and running again before loading QtGui.')
             else:
                 print('Mesa not found.')
 
@@ -250,7 +306,7 @@ def setup_headless():
             glx = test_glx(xdpyinfo_cmd, 0)
             if not glx:
                 raise RuntimeError('GLX extension missing')
-        print('Headeless Anatomist running in normal (non-headless) mode')
+        print('Headless Anatomist running in normal (non-headless) mode')
 
     if xvfb is not None:
         atexit.register(terminate_xvfb)
@@ -315,13 +371,26 @@ def HeadlessAnatomist(*args, **kwargs):
     If OpenGL has already been loaded, or Xvfb cannot be made to work, and
     if a regular X server conection is working, then a regular, on-screen
     Anatomist will be used.
+
+    Parameters are passed to Anatomist constructor, except the following
+    keyword arguments:
+
+    allow_virtualgl: bool (optional)
+        If False, VirtualGL will not be attempted. Default is True.
+        Use it if you experience crashes in your programs: it probably means
+        that some incompatible libraries have alrealy been loaded.
     '''
 
     global hanatomist
     if hanatomist:
         return hanatomist
 
-    setup_headless()
+    allow_virtualgl = True
+    if 'allow_virtualgl' in kwargs:
+        allow_virtualgl = kwargs['allow_virtualgl']
+        kwargs = dict(kwargs)
+        del kwargs['allow_virtualgl']
+    setup_headless(allow_virtualgl=allow_virtualgl)
 
     from anatomist.api import Anatomist
 
