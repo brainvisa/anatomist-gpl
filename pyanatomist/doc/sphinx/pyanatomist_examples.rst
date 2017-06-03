@@ -134,6 +134,8 @@ Custom controls example
 
 Plugging new conrols / actions in Anatomist views
 
+See also: :anadev:`Anatomist View / Controler model <controler.html>`
+
 Download source: `control.py <../examples/control.py>`_
 
 .. literalinclude:: ../examples/control.py
