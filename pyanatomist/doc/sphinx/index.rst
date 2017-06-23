@@ -1,6 +1,3 @@
-.. toctree::
-   :maxdepth: 3
-
 
 .. image:: anatomist.png
   :align: center
@@ -51,7 +48,53 @@ PyAnatomist examples
 Tutorial
 --------
 
-- :doc:`pyanatomist_tutorial`
-- :doc:`pyanatomist_pyaims_tutorial`
-- You can also have a look at the :pyaims:`PyAims tutorial <pyaims_tutorial.html>`.
+.. ifconfig:: 'nbsphinx' in extensions
+
+    - :doc:`pyanatomist_tutorial_nb`
+    - :download:`Downoad the tutorial notebook <pyanatomist_tutorial_nb.ipynb>`
+    - :doc:`pyanatomist_pyaims_tutorial`
+    - You can also have a look at the :pyaims:`PyAims tutorial <pyaims_tutorial.html>`.
+
+
+.. ifconfig:: 'nbsphinx' not in extensions
+
+    - :doc:`pyanatomist_tutorial`
+    - :doc:`pyanatomist_pyaims_tutorial`
+    - You can also have a look at the :pyaims:`PyAims tutorial <pyaims_tutorial.html>`.
+
+
+Table of contents
+-----------------
+
+.. ifconfig:: 'nbsphinx' in extensions
+
+    .. toctree::
+      :maxdepth: 3
+
+      pyanatomist_base
+      pyanatomist_direct
+      pyanatomist_socket
+      pyanatomist_threaded
+      pyanatomist_cpp
+      pyanatomist_headless
+      pyanatomist_wip
+      pyanatomist_tutorial_nb
+      pyanatomist_howto
+      pyanatomist_examples
+
+.. ifconfig:: 'nbsphinx' not in extensions
+
+    .. toctree::
+      :maxdepth: 3
+
+      pyanatomist_base
+      pyanatomist_direct
+      pyanatomist_socket
+      pyanatomist_threaded
+      pyanatomist_cpp
+      pyanatomist_headless
+      pyanatomist_wip
+      pyanatomist_tutorial
+      pyanatomist_howto
+      pyanatomist_examples
 
