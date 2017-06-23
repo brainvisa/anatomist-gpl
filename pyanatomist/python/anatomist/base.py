@@ -205,7 +205,7 @@ class Anatomist(Singleton):
 
     def __new__(cls, *args, **kwargs):
         '''If the keyword arg create is set to False, then a new instance is
-        not created event if the singleton has not been instantiated yet.
+        not created even if the singleton has not been instantiated yet.
         '''
         instance = None
         create = kwargs.get('create', True)
