@@ -51,7 +51,7 @@ Tutorial
 .. ifconfig:: 'nbsphinx' in extensions
 
     - :doc:`pyanatomist_tutorial_nb`
-    - :doc:`former pyanatomist_tutorial <pyanatomist_tutorial>`
+    - :download:`Downoad the tutorial notebook <pyanatomist_tutorial_nb.ipynb>`
     - :doc:`pyanatomist_pyaims_tutorial`
     - You can also have a look at the :pyaims:`PyAims tutorial <pyaims_tutorial.html>`.
 
