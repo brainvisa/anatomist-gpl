@@ -39,6 +39,7 @@
 %Include rcptr_GLItem.sip
 %Include list_RefGLItem.sip
 %Include list_TransformationPtr.sip
+%Include list_AObjectPtr.sip
 //%Include list_QString.sip
 %Include geometry.sip
 %Include viewstate.sip
@@ -61,6 +62,7 @@
 %Include texture.sip
 %Include qapalettewin.sip
 %Include gradwidget.sip
+%Include mobjectio.sip
 
 
 class AnatomistSip

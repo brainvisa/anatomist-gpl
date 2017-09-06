@@ -222,6 +222,7 @@ public:
   virtual ~Control();
 
   std::string name() const;
+  virtual std::string description() const;
   int priority();
   int userLevel() const;
   void setUserLevel( int );
@@ -411,7 +412,8 @@ public:
   anatomist::Action* getAction( const std::string& actionName );
   std::string activeControl() const;
   anatomist::Control* activeControlInstance() const;
-  
+  std::string controlDescription( const std::string & ctrlname ) const;
+
   void keyPressEvent( QKeyEvent *) ;
   void keyReleaseEvent( QKeyEvent *) ;
   void mousePressEvent ( QMouseEvent * ) ;

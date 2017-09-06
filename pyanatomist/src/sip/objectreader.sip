@@ -19,7 +19,7 @@ namespace anatomist
     {
     public:
       virtual ~LoadFunctionClass();
-      virtual anatomist::AObject* load( const std::string & filename,
+      virtual list_AObjectPtr load( const std::string & filename,
         anatomist::ObjectReader::PostRegisterList &,
         carto::Object options ) = 0;
     };
@@ -32,13 +32,14 @@ namespace anatomist
     static void registerLoader( const std::string & extension,
       anatomist::ObjectReader::LoadFunctionClass *newFunc /Transfer/ );
 
-    anatomist::AObject* load( const std::string & filename,
+    list_AObjectPtr *load( const std::string & filename,
                                       bool notifyFail = true,
                                       carto::Object options = carto::none()
-                                    ) const /ReleaseGIL/;
+                                    ) const /ReleaseGIL, Factory/;
 %MethodCode
   anatomist::ObjectReader::PostRegisterList prl;
-  sipRes = sipCpp->load( *a0, prl, a1, *a2 );
+  std::list<anatomist::AObject *> obj = sipCpp->load( *a0, prl, a1, *a2 );
+  sipRes = new std::list<anatomist::AObject *>( obj );
 %End
 
     virtual bool reload( anatomist::AObject* object, bool notifyFail = true, 
