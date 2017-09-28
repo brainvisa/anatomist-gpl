@@ -112,7 +112,7 @@ class Anatomist3DWindowProcess(AnatomistSceneProcess):
         return window
 
 
-class AnatimistMultipleViewsProcess(AnatomistSceneProcess):
+class AnatomistMultipleViewsProcess(AnatomistSceneProcess):
     '''
     Specialization of AnatomistSceneProcess for a scene with multiple Anatomist
     windows. The resulting snapshot will compose a large image according to the specified layout.
@@ -122,7 +122,7 @@ class AnatimistMultipleViewsProcess(AnatomistSceneProcess):
     margin = Int(5)
 
     def __init__(self, *args, **kwargs):
-        super(AnatimistMultipleViewsProcess, self).__init__(*args, **kwargs)
+        super(AnatomistMultipleViewsProcess, self).__init__(*args, **kwargs)
         self.view_layout_position = None
 
     def snapshot(self, view_objects):
