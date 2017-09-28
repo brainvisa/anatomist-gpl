@@ -4,6 +4,7 @@ set(PYANATOMISTMODULE_HEADERS ${_headers} PARENT_SCOPE)
 BRAINVISA_ADD_MOC_FILES( _sources ${_headers} )
 
 add_library( pyanatomistmodule MODULE ${_sources} )
+add_dependencies( pyanatomistmodule ${headersTarget} )
 
 if( APPLE )
   # Setting VERSION or SOVERSION on a MODULE cause a link error on MacOS 10.5 with cmake 2.6:
