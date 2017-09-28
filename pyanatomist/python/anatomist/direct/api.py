@@ -370,6 +370,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
           return copyObject
       if len(objects) == 1:
         return objects[0]
+      elif len(objects) == 0:
+        return None
       return objects
 
   class _ObjectLoaded( object ):
