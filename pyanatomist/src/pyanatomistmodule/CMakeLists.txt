@@ -20,6 +20,9 @@ else()
     PROPERTIES SOVERSION ${${PROJECT_NAME}_VERSION} SUFFIX ".so.${${PROJECT_NAME}_VERSION}" )
 endif()
 
+if( PYTHON_FLAGS )
+    set_target_properties( pyanatomistmodule PROPERTIES COMPILE_DEFINITIONS ${PYTHON_FLAGS})
+endif()
 target_link_libraries( pyanatomistmodule pyanatomistexports "${PYTHON_LIBRARY}" )
 BRAINVISA_INSTALL( TARGETS pyanatomistmodule
                    DESTINATION lib
