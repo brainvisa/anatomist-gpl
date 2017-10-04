@@ -99,6 +99,7 @@ def getThreadSafeClass(classObj, mainThread):
   threadSafeClass = type(classObj.__name__, bases, {})
   # replace all methods (not builtin) by a thread safe call to the same method
   # and replace all inner class by a thread safe class
+
   for attName, att in six.iteritems(classObj.__dict__):
       if attName[0:2] != "__" or attName == "__singleton_init__":
         # builtin methods begin with __
@@ -115,12 +116,15 @@ def getThreadSafeClass(classObj, mainThread):
           # the method type, in a python2/3 transparent way: regular methods
           # are functions, static methods are staticmethod instances,
           # class methods are classmethod instances.
-          newAtt = threadSafeCall(mainThread, att)
-          setattr(threadSafeClass, attName, newAtt)
+          if att.func_code.co_filename != __file__:
+              # avoid doing this several times
+              newAtt = threadSafeCall(mainThread, att)
+              setattr(threadSafeClass, attName, newAtt)
         elif type(att) == type: # innner class derived from object
           # replace this class with a thread safe class
-          newAtt = getThreadSafeClass(att, mainThread)
-          setattr(threadSafeClass, attName, newAtt)
+          if not issubclass(att, MainThreadLife):
+              newAtt = getThreadSafeClass(att, mainThread)
+              setattr(threadSafeClass, attName, newAtt)
 
   if is_aitem:
       #classObj.AItem.__bases__ = classObj.AItem.__bases__ + (MainThreadLife, )
@@ -144,4 +148,5 @@ def threadSafeCall(mainThread, func):
   func: function
       a function that sends the given function's call to the main thread
   """
+  import threading
   return lambda *args, **kwargs: mainThread.call(func, *args, **kwargs)
