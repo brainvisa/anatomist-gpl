@@ -73,15 +73,17 @@ To manage this problem we use wrapper objects which will delegate the destructio
 :py:class:`AItem <anatomist.base.Anatomist.AItem>` subclasses in the threaded implementation (including :py:class:`AObject <anatomist.base.Anatomist.AObject>`, :py:class:`AWindow <anatomist.base.Anatomist.AWindow>` etc) are already subclasses of :soma:`MainThreadLife <api.html#soma.qt_gui.qtThread.MainThreadLife>`.
 
 """
+from __future__ import print_function
+
 from anatomist import cpp
 import anatomist.threadedimpl
 import anatomist.direct.api
 import sys
 from soma.qt_gui.qtThread import QtThreadCall
+from soma.qt_gui.qt_backend import QtCore
+import types
+import six
 
-mainThread=QtThreadCall()
-Anatomist=anatomist.threadedimpl.getThreadSafeClass(\
-  classObj=anatomist.direct.api.Anatomist, mainThread=mainThread)
-
-del anatomist, mainThread, QtThreadCall
+class Anatomist(anatomist.direct.api.Anatomist):
+    __metaclass__ = anatomist.threadedimpl.ThreadSafeMetaclass
 

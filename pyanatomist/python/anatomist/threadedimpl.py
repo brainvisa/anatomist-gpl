@@ -33,13 +33,19 @@
 """
 This module makes anatomist module given implementation thread safe.
 
-The function C{getThreadSafeClass} enables to create a thread safe class based on a given Anatomist implementation class. It replaces all methods by a call in main thread of the same method. 
+The ThreadSafeMetaclass is used to build thread-safe versions of classes
+(Anatomist, AItem and other inherited classes).
+
+The function :func:`getThreadSafeClass` enables to create a thread safe class based on a given Anatomist implementation class. It replaces all methods by a call in main thread of the same method.
+The ThreadSafeMetaclass metaclass ensures that inherited classes will also be thread safe.
 """
 
 import sys, types
 from soma.qt_gui.qtThread import QtThreadCall, MainThreadLife
 from soma.singleton import Singleton
 import six
+from soma.qt_gui.qt_backend import QtCore
+import inspect
 
 
 def threadedModule(anatomistModule, mainThread=None): 
@@ -69,6 +75,78 @@ def threadedModule(anatomistModule, mainThread=None):
   return anatomistThreadedModule
 
 
+class ThreadSafeMetaclass(QtCore.pyqtWrapperType):
+    ''' The ThreadSafeMetaclass replaces all methods of the classes it builds
+    with thread-safe wrappers. All function calls are actually deported to the
+    main thread. Subclasses are also handled.
+    Anatomist.AItem is also made to inherit soma.qt_gui.qtThread.MainThreadLife
+    and makes a hook to force deletion to happen in the main thread when
+    reference count reaches zero from any thread.
+
+    This meta-class inherits QtCore.pyqtWrapperType, which is the meta-class
+    used for PyQt classes.
+    '''
+
+    def __init__(cls, name, bases, attdict):
+        super(ThreadSafeMetaclass, cls).__init__(name, bases, attdict)
+        mainThread = QtThreadCall()
+        mro = cls.__mro__
+        new_dict = {}
+        # get class attributes using dir(), not __dict__ which only contains the
+        # terminal class specific attributes, not its parents ones.
+        old_dict = dict([(attName, getattr(cls, attName))
+                         for attName in dir(cls)])
+        new_dict.update(get_thead_safe_dict(old_dict, True))
+        for attName, att in six.iteritems(new_dict):
+            setattr(cls, attName, att)
+
+
+def get_thead_safe_dict(dictatt, filtered=False):
+    ''' Builds thread-safe wrappers around dict elements which are methods or
+    functions, replace classes by thread-safe subclasses
+    '''
+    new_dict = {}
+    mainThread = QtThreadCall()
+    for attName, att in six.iteritems(dictatt):
+        if attName[0:2] != "__" or attName == "__singleton_init__":
+          # builtin methods begin with __
+          # but __singleton_init__ must be called from the main thread
+          orig_att = att
+          att = getattr(att, 'im_func', att) # in case it's a method
+          if inspect.isfunction(att) or inspect.isbuiltin(att):
+              # replace this method by a thread safe call to this method
+              # Note:
+              # using getattr(classObj, attName) the attribute object types are
+              # different in python2 and python3, and in python3 we cannot
+              # distinguish between regular and static methods (both are
+              # functions,
+              # whereas class methods are methods). classObj.__dict__[attName]
+              # does not return the same thing however, and allows to determine
+              # the method type, in a python2/3 transparent way: regular methods
+              # are functions, static methods are staticmethod instances,
+              # class methods are classmethod instances.
+              if not hasattr(att, '__code__') \
+                      or att.__code__.co_filename != __file__:
+                  # avoid doing this several times
+                  newAtt = threadSafeCall(mainThread, att)
+                  if inspect.isfunction(orig_att) \
+                          and not inspect.ismethod(orig_att):
+                      newAtt = staticmethod(newAtt)
+                  elif inspect.ismethod(orig_att) \
+                          and (sys.version_info[0] >= 3 or
+                              isinstance(orig_att.__self__, type)):
+                      newAtt = classmethod(newAtt)
+                  new_dict[attName] = newAtt
+          elif type(att) == type: # innner class derived from object
+              # replace this class with a thread safe class
+              if not issubclass(att, MainThreadLife):
+                  newAtt = getThreadSafeClass(att, mainThread)
+                  new_dict[attName] = newAtt
+          elif not filtered:
+              new_dict[attName] = att
+    return new_dict
+
+
 def getThreadSafeClass(classObj, mainThread):
   """
   Generates a thread safe class which inherits from the class given in
@@ -96,38 +174,9 @@ def getThreadSafeClass(classObj, mainThread):
       is_aitem = True
   else:
       bases = (classObj,)
-  threadSafeClass = type(classObj.__name__, bases, {})
-  # replace all methods (not builtin) by a thread safe call to the same method
-  # and replace all inner class by a thread safe class
-
-  for attName, att in six.iteritems(classObj.__dict__):
-      if attName[0:2] != "__" or attName == "__singleton_init__":
-        # builtin methods begin with __
-        # but __singleton_init__ must be called from the main thread
-        if type(att) is types.FunctionType:
-          # attribute is a method and not a class or static method
-          # replace this method by a thread safe call to this method
-          # Note:
-          # using getattr(classObj, attName) the attribute object types are
-          # different in python2 and python3, and in python3 we cannot
-          # distinguish between regular and static methods (both are functions,
-          # whereas class methods are methods). classObj.__dict__[attName]
-          # does not return the same thing however, and allows to determine
-          # the method type, in a python2/3 transparent way: regular methods
-          # are functions, static methods are staticmethod instances,
-          # class methods are classmethod instances.
-          if att.func_code.co_filename != __file__:
-              # avoid doing this several times
-              newAtt = threadSafeCall(mainThread, att)
-              setattr(threadSafeClass, attName, newAtt)
-        elif type(att) == type: # innner class derived from object
-          # replace this class with a thread safe class
-          if not issubclass(att, MainThreadLife):
-              newAtt = getThreadSafeClass(att, mainThread)
-              setattr(threadSafeClass, attName, newAtt)
+  threadSafeClass = ThreadSafeMetaclass(classObj.__name__, bases, {})
 
   if is_aitem:
-      #classObj.AItem.__bases__ = classObj.AItem.__bases__ + (MainThreadLife, )
       def aitem_init(self, *args, **kwargs):
           super(threadSafeClass, self).__init__(*args, **kwargs)
           self._obj_life = self.internalRep
