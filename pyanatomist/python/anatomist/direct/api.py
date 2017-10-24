@@ -1040,7 +1040,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         objects.append(e.getInternalRep())
       elif isinstance(e, base.Anatomist.AWindow):
         windows.append(e.getInternalRep())
-    c=cpp.AssignReferentialCommand(referential.internalRep, objects, windows)
+    referential = getattr(referential, 'internalRep', None) or referential
+    c = cpp.AssignReferentialCommand(referential, objects, windows)
     self.execute(c)
     
   ###############################################################################
