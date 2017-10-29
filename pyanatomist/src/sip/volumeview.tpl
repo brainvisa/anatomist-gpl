@@ -90,7 +90,15 @@ namespace anatomist
     void setupViewFromTransformation();
     void setTargetSize( vector_S32 & );
     const vector_S32 & targetSize() const;
+    int resolutionLevel() const;
     int selectBestResolutionLevel( const Point3df & vs ) const;
+    rc_ptr_AObject view();
+%MethodCode
+    sipRes = new carto::rc_ptr<anatomist::AObject>( sipCpp->view().get() );
+%End
+
+    Point3df initialFOV() const;
+    void setInitialFOV( const Point3df & fov );
 
     // overloads
     virtual int MType() const;
