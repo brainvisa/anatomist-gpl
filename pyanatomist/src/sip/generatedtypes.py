@@ -55,5 +55,6 @@ todo = { 'rcptr' : [ 'anatomist::EventHandler', 'anatomist::Unserializer',
                    ('std::string', 'carto::rc_ptr<anatomist::ObjectMenu>') ],
          'anatomist' : [ 'Void' ],
          'sharedptr' : [ 'anatomist::AObject', 'anatomist::AWindow' ],
+         'volumeview': basetypes,
         }
 

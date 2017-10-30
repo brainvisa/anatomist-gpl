@@ -64,6 +64,16 @@
 %Include gradwidget.sip
 %Include mobjectio.sip
 
+%Include volumeview_U8.sip
+%Include volumeview_S16.sip
+%Include volumeview_U16.sip
+%Include volumeview_S32.sip
+%Include volumeview_U32.sip
+%Include volumeview_FLOAT.sip
+%Include volumeview_DOUBLE.sip
+%Include volumeview_RGB.sip
+%Include volumeview_RGBA.sip
+
 
 class AnatomistSip
 {
