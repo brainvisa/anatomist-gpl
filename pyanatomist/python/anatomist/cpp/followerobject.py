@@ -109,7 +109,7 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
       bbox = self.boundingbox()
       if len( bbox ) == 2:
         cube = aims.SurfaceGenerator.parallelepiped_wireframe( 
-          bbox[0], bbox[1] )
+          bbox[0][:3], bbox[1][:3] )
         mesh.vertex().assign( cube.vertex() )
         mesh.polygon().assign( cube.polygon() )
     self.setChanged()

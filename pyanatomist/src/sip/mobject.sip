@@ -73,7 +73,7 @@ public:
 
     virtual Point3df VoxelSize() const /AutoGen/;
     virtual bool boundingBox( vector_FLOAT &, vector_FLOAT & ) const /AutoGen/;
-    virtual anatomist::AObject* ObjectAt( float, float, float, float, float = 0 ) /AutoGen/;
+    virtual anatomist::AObject* objectAt( const vector_FLOAT &, float = 0 ) /AutoGen/;
     virtual bool Is2DObject() /AutoGen/;
     virtual bool Is3DObject() /AutoGen/;
     virtual bool isTransparent() const /AutoGen/;
