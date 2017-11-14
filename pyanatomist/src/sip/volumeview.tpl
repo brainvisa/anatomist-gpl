@@ -122,7 +122,7 @@ namespace anatomist
     float MaxZ2D() const;
     float MinT() const;
     float MaxT() const;
-    virtual bool boundingBox( Point3df & bmin, Point3df & bmax ) const;
+    virtual bool boundingBox( vector_FLOAT & bmin, vector_FLOAT & bmax ) const;
 
     // virtual void update( const anatomist::Observable *observable, void *arg );
   };

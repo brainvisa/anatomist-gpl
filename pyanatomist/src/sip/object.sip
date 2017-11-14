@@ -103,8 +103,8 @@ namespace anatomist
     anatomist::Referential *getReferential () const;
     anatomist::AObject *referentialInheritance() const;
     virtual void setReferentialInheritance( anatomist::AObject* ao );
-    virtual bool boundingBox(Point3df & /TransferBack/,
-      Point3df & /TransferBack/) const /AutoGen/;
+    virtual bool boundingBox( vector_FLOAT & /TransferBack/,
+      vector_FLOAT & /TransferBack/) const /AutoGen/;
     float TimeStep() const;
     virtual Point3df VoxelSize() const /Factory/;
     virtual void setVoxelSize( const Point3df & ) /Factory/;
@@ -141,7 +141,7 @@ namespace anatomist
     SIP_PYTUPLE boundingbox() const;
 %MethodCode
     // std::cout << "boundingbox\n";
-    Point3df bmin, bmax;
+    std::vector<float> bmin, bmax;
     if( !sipCpp->boundingBox( bmin, bmax ) )
       sipRes = PyTuple_New( 0 );
     else
@@ -149,11 +149,11 @@ namespace anatomist
       // std::cout << "bmax: " << bmax << std::endl;
       sipRes = PyTuple_New( 2 );
       PyTuple_SetItem( sipRes, 0,
-        sipConvertFromInstance( new Point3df( bmin ),
-          sipClass_AimsVector_FLOAT_3, Py_None ) );
+        sipConvertFromInstance( new vector_FLOAT( bmin ),
+          sipClass_vector_FLOAT, Py_None ) );
       PyTuple_SetItem( sipRes, 1,
-        sipConvertFromInstance( new Point3df( bmax ),
-          sipClass_AimsVector_FLOAT_3, Py_None ) );
+        sipConvertFromInstance( new vector_FLOAT( bmax ),
+          sipClass_vector_FLOAT, Py_None ) );
     }
 %End
   virtual void   notifyObservers (void *arg=0);

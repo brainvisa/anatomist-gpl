@@ -10,11 +10,12 @@ class ViewState
 
 public:
   ViewState( float t = 0, anatomist::AWindow * = 0 );
+  ViewState( const vector_FLOAT & timedims, anatomist::AWindow * = 0 );
   virtual ~ViewState();
 
   virtual anatomist::SliceViewState *sliceVS();
 
-  float       time;
+  vector_FLOAT       timedims;
   anatomist::AWindow *window;
 };
 
@@ -31,6 +32,13 @@ typedef AimsVector<float, 3> AimsVector_FLOAT_3;
 
 public:
   SliceViewState( float t = 0, bool slicewanted = false,
+                  const Point3df & pos = Point3df(),
+                  const aims::Quaternion* orient = 0,
+                  const anatomist::Referential* wref = 0,
+                  const anatomist::Geometry* wgeom = 0,
+                  const aims::Quaternion* vorient = 0,
+                  anatomist::AWindow * = 0 );
+  SliceViewState( const vector_FLOAT & timedims, bool slicewanted = false,
                   const Point3df & pos = Point3df(),
                   const aims::Quaternion* orient = 0,
                   const anatomist::Referential* wref = 0,
