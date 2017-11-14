@@ -191,13 +191,12 @@ namespace anatomist
   }
 %End
 
-    virtual vector_FLOAT texValues( const Point3df & pos, float time,
+    virtual vector_FLOAT texValues( const vector_FLOAT & pos,
                                     const anatomist::Referential* orgRef ) const;
-    virtual vector_FLOAT texValues( const Point3df & pos,
-                                    float time ) const;
-    virtual float mixedTexValue( const Point3df & pos, float time,
+    virtual vector_FLOAT texValues( const vector_FLOAT & pos ) const;
+    virtual float mixedTexValue( const vector_FLOAT & pos,
                                  const anatomist::Referential* orgRef ) const;
-    virtual float mixedTexValue( const Point3df & pos, float time ) const;
+    virtual float mixedTexValue( const vector_FLOAT & pos ) const;
     virtual void update( const anatomist::Observable *observable, void *arg );
     virtual std::string toolTip() const;
 
