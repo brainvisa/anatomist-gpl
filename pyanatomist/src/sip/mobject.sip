@@ -64,13 +64,6 @@ public:
     virtual float MinT() const /AutoGen/;
     virtual float MaxT() const /AutoGen/;
 
-    virtual float MinX2D() const /AutoGen/;
-    virtual float MinY2D() const /AutoGen/;
-    virtual float MinZ2D() const /AutoGen/;
-    virtual float MaxX2D() const /AutoGen/;
-    virtual float MaxY2D() const /AutoGen/;
-    virtual float MaxZ2D() const /AutoGen/;
-
     virtual Point3df VoxelSize() const /AutoGen/;
     virtual bool boundingBox( vector_FLOAT &, vector_FLOAT & ) const /AutoGen/;
     virtual anatomist::AObject* objectAt( const vector_FLOAT &, float = 0 ) /AutoGen/;

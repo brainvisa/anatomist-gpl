@@ -114,12 +114,6 @@ namespace anatomist
     bool textured2D();
     bool Is3DObject();
     virtual bool isTransparent() const;
-    float MinX2D() const;
-    float MinY2D() const;
-    float MinZ2D() const;
-    float MaxX2D() const;
-    float MaxY2D() const;
-    float MaxZ2D() const;
     float MinT() const;
     float MaxT() const;
     virtual bool boundingBox( vector_FLOAT & bmin, vector_FLOAT & bmax ) const;
