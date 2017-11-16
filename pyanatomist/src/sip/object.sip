@@ -108,8 +108,8 @@ namespace anatomist
     virtual bool boundingBox2D( vector_FLOAT & /TransferBack/,
       vector_FLOAT & /TransferBack/) const /AutoGen/;
     float TimeStep() const;
-    virtual Point3df VoxelSize() const /Factory/;
-    virtual void setVoxelSize( const Point3df & ) /Factory/;
+    virtual vector_FLOAT voxelSize() const;
+    virtual void setVoxelSize( const vector_FLOAT & );
     virtual anatomist::AObjectPalette *palette();
     virtual void setPalette( const anatomist::AObjectPalette & palette );
     virtual const anatomist::AObjectPalette *getOrCreatePalette() const;

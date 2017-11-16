@@ -64,7 +64,7 @@ public:
     virtual float MinT() const /AutoGen/;
     virtual float MaxT() const /AutoGen/;
 
-    virtual Point3df VoxelSize() const /AutoGen/;
+    virtual vector_FLOAT voxelSize() const /AutoGen/;
     virtual bool boundingBox( vector_FLOAT &, vector_FLOAT & ) const /AutoGen/;
     virtual anatomist::AObject* objectAt( const vector_FLOAT &, float = 0 ) /AutoGen/;
     virtual bool Is2DObject() /AutoGen/;
