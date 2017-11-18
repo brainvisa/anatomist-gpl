@@ -26,10 +26,6 @@ namespace anatomist
     virtual bool Is2DObject();
     virtual bool Is3DObject();
 
-    virtual float MinT() const;
-    virtual float MaxT() const;
-    virtual float MinT3D() const;
-    virtual float MaxT3D() const;
     virtual unsigned dimTexture() const;
 
     virtual anatomist::AObject* objectAt( const vector_FLOAT &, float = 0 );
