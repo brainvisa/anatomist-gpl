@@ -208,7 +208,7 @@ class AnaSimpleViewer( qt.QObject ):
         pos2 = tr.transform( pos[:3] )
       else:
         pos2 = pos[:3]
-      vs = obj.VoxelSize()
+      vs = obj.voxelSize()
       pos2 = [ int(round(x/y)) for x,y in zip(pos2,vs) ]
       # pos2 in in voxels, in obj coords system
       newItem = qt.QTableWidgetItem( obj.name )

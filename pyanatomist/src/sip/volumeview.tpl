@@ -109,20 +109,14 @@ namespace anatomist
     virtual void setFileName( const std::string & fname );
     virtual void SetExtrema();
     virtual void adjustPalette();
-    virtual Point3df VoxelSize();
+    virtual vector_FLOAT voxelSize();
     bool Is2DObject();
     bool textured2D();
     bool Is3DObject();
     virtual bool isTransparent() const;
-    float MinX2D() const;
-    float MinY2D() const;
-    float MinZ2D() const;
-    float MaxX2D() const;
-    float MaxY2D() const;
-    float MaxZ2D() const;
     float MinT() const;
     float MaxT() const;
-    virtual bool boundingBox( Point3df & bmin, Point3df & bmax ) const;
+    virtual bool boundingBox( vector_FLOAT & bmin, vector_FLOAT & bmax ) const;
 
     // virtual void update( const anatomist::Observable *observable, void *arg );
   };

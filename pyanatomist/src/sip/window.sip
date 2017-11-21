@@ -67,7 +67,7 @@ namespace anatomist
     virtual void showToolBars(int = 2 );
     void setFullScreen(int);
     set_AObjectPtr Objects() const;
-    virtual anatomist::AObject *objectAt( float x, float y, float z, float t );
+    virtual anatomist::AObject *objectAt( const vector_FLOAT & pos );
     bool isTemporary( anatomist::AObject* o ) const;
     anatomist::Referential *getReferential() const;
     virtual void setReferential( anatomist::Referential *ref );
