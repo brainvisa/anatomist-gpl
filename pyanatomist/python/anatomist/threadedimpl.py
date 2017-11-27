@@ -75,16 +75,15 @@ def threadedModule(anatomistModule, mainThread=None):
   return anatomistThreadedModule
 
 
-class ThreadSafeMetaclass(QtCore.pyqtWrapperType):
-    ''' The ThreadSafeMetaclass replaces all methods of the classes it builds
+class ThreadSafeMetaclass(type(QtCore.QObject)):
+    '''The ThreadSafeMetaclass replaces all methods of the classes it builds
     with thread-safe wrappers. All function calls are actually deported to the
     main thread. Subclasses are also handled.
     Anatomist.AItem is also made to inherit soma.qt_gui.qtThread.MainThreadLife
     and makes a hook to force deletion to happen in the main thread when
     reference count reaches zero from any thread.
 
-    This meta-class inherits QtCore.pyqtWrapperType, which is the meta-class
-    used for PyQt classes.
+    This meta-class inherits from the meta-class used by PyQt classes.
     '''
 
     def __init__(cls, name, bases, attdict):
