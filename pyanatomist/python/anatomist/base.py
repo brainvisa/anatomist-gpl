@@ -1972,7 +1972,11 @@ class Anatomist(Singleton):
                          flat_shading=None, fog=None, geometry=None,
                          iconify=None,
                          light=None, linkedcursor_on_slider_change=None,
-                         perspective=None, polygon_filtering=None,
+                         perspective=None, perspective_angle=None,
+                         perspective_auto_far_plane=None,
+                         perspective_far_distance=None,
+                         perspective_near_ratio=None,
+                         polygon_filtering=None,
                          polygon_mode=None, polygons_depth_sorting=None,
                          raise_window=None, record_basename=None,
                          record_mode=None,
@@ -2031,6 +2035,14 @@ class Anatomist(Singleton):
                 cursor actions (with propagation to other views)
             perspective: int (optional)
                 enables (1) or disables (0) the perspective rendering mode
+            perspective_angle: float (optional)
+                set the perspective view angle (low: more isometric, high: more distorted). Only used when perspective is enabled.
+            perspective_auto_far_plane: int (optional)
+                enables (1) or disables (0) the automatic perspective far clipping plane setup. Only used when perspective is enabled.
+            perspective_far_distance: float (optional)
+                set the clipping distance from the eye. Only used when perspective is enabled and perspective_auto_far_plane is disabled.
+            perspective_near_ratio: float (optional)
+                set the minimum ratio between the near clipping plane distance and the far one. Objects nearer than this near plane will not be displayed. But reducing this ratio lowers the precision of the depth buffer. Default is 0.01. Only used when perspective is enabled.
             polygon_filtering: int (optional)
                 enables (1) or disables (0) polygons and lines smoothing (anti-
                 aliasing)
@@ -2091,7 +2103,11 @@ class Anatomist(Singleton):
                 iconify=iconify,
                 light=light,
                 linkedcursor_on_slider_change=linkedcursor_on_slider_change,
-                perspective=perspective, polygon_filtering=polygon_filtering,
+                perspective=perspective, perspective_angle=perspective_angle,
+                perspective_auto_far_plane=perspective_auto_far_plane,
+                perspective_far_distance=perspective_far_distance,
+                perspective_near_ratio=perspective_near_ratio,
+                polygon_filtering=polygon_filtering,
                 polygon_mode=polygon_mode,
                 polygons_depth_sorting=polygons_depth_sorting,
                 raise_=raise_window, record_basename=record_basename,
