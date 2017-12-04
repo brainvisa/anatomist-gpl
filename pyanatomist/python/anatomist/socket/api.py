@@ -978,12 +978,14 @@ class Anatomist(base.Anatomist):
     #def releaseAppRef(self):
       #self.anatomistinstance.execute("ExternalReference", elements=[self], action_type="ReleaseApplication")
 
-    def getInfos(self, name_children=0):
+    def getInfo(self, name_children=0):
       """
-      Gets informations about this object.
+      Gets information about this object.
       
-      @rtype: dictionary
-      @return: informations about the object (property -> value)
+      Returns
+      -------
+      info: dictionary
+          information about the object (property -> value)
       """
       infos=self.anatomistinstance.executeAndWaitAnswer("ObjectInfo", objects=[self], name_children=name_children, name_referentials=1)
       if infos is not None:

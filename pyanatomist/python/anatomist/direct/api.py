@@ -1316,13 +1316,14 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     def __init__( self, *args, **kwargs ):
       super(Anatomist.AItem, self).__init__(*args, **kwargs)
     
-    def getInfos(self):
+    def getInfo(self):
       """
-      Gets informations about this object.
+      Gets information about this object.
 
-      * returns: dictionary
-
-        information about the object (property -> value)
+      Returns
+      -------
+      info: dictionary
+          information about the object (property -> value)
       """
       # using ObjectInfoCommand class directly doesn't work, I don't know why...
       # command=cpp.ObjectInfoCommand("", self.anatomistinstance.context, self.anatomistinstance.convertToIds([self]), True, True)
