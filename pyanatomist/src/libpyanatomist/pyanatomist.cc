@@ -468,6 +468,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<AimsData_U8> aims )
 {
   AObject	*ao = new AVolume<uint8_t>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_U8" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -479,6 +480,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<AimsData_S16> aims )
 {
   AObject	*ao = new AVolume<int16_t>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_S16" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -490,6 +492,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<AimsData_U16> aims )
 {
   AObject	*ao = new AVolume<uint16_t>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_U16" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -501,6 +504,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<AimsData_S32> aims )
 {
   AObject	*ao = new AVolume<int32_t>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_S32" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -512,6 +516,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<AimsData_U32> aims )
 {
   AObject	*ao = new AVolume<uint32_t>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_U32" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -523,6 +528,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<AimsData_FLOAT> aims )
 {
   AObject	*ao = new AVolume<float>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_FLOAT" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -534,6 +540,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<AimsData_DOUBLE> aims )
 {
   AObject	*ao = new AVolume<double>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_DOUBLE" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -545,6 +552,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<AimsData_RGB> aims )
 {
   AObject	*ao = new AVolume<AimsRGB>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_RGB" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -556,6 +564,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<AimsData_RGBA> aims )
 {
   AObject	*ao = new AVolume<AimsRGBA>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_RGBA" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -567,6 +576,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<Volume_U8> aims )
 {
   AObject       *ao = new AVolume<uint8_t>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_U8" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -578,6 +588,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<Volume_S16> aims )
 {
   AObject       *ao = new AVolume<int16_t>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_S16" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -589,6 +600,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<Volume_U16> aims )
 {
   AObject       *ao = new AVolume<uint16_t>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_U16" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -600,6 +612,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<Volume_S32> aims )
 {
   AObject       *ao = new AVolume<int32_t>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_S32" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -611,6 +624,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<Volume_U32> aims )
 {
   AObject       *ao = new AVolume<uint32_t>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_U32" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -622,6 +636,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<Volume_FLOAT> aims )
 {
   AObject       *ao = new AVolume<float>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_FLOAT" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -633,6 +648,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<Volume_DOUBLE> aims )
 {
   AObject       *ao = new AVolume<double>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_DOUBLE" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -644,6 +660,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<Volume_RGB> aims )
 {
   AObject       *ao = new AVolume<AimsRGB>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_RGB" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -655,6 +672,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<Volume_RGBA> aims )
 {
   AObject       *ao = new AVolume<AimsRGBA>( aims );
   ao->setName( theAnatomist->makeObjectName( "Volume_RGBA" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   ao->adjustPalette();
@@ -666,6 +684,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<AimsSurfaceTriangle> aims )
 {
   ASurface<3>	*ao = new ASurface<3>;
   ao->setSurface( aims );
+  ao->setHeaderOptions();
   ao->setName( theAnatomist->makeObjectName( "Mesh" ) );
   theAnatomist->registerObject( ao );
   return ao;
@@ -676,6 +695,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<AimsTimeSurface<2, Void> > aims )
 {
   ASurface<2>	*ao = new ASurface<2>;
   ao->setSurface( aims );
+  ao->setHeaderOptions();
   ao->setName( theAnatomist->makeObjectName( "Segments" ) );
   theAnatomist->registerObject( ao );
   return ao;
@@ -686,6 +706,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<AimsTimeSurface<4, Void> > aims )
 {
   ASurface<4>	*ao = new ASurface<4>;
   ao->setSurface( aims );
+  ao->setHeaderOptions();
   ao->setName( theAnatomist->makeObjectName( "Mesh4" ) );
   theAnatomist->registerObject( ao );
   return ao;
@@ -696,6 +717,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<BucketMap<Void> > aims )
 {
   Bucket *bck = new Bucket;
   bck->setBucket( aims );
+  bck->setHeaderOptions();
   AObject	*ao = bck;
   ao->setName( theAnatomist->makeObjectName( "Bucket" ) );
   theAnatomist->registerObject( ao );
@@ -708,6 +730,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<Graph> aims )
 {
   AGraph	*ao = new AGraph( aims, "" );
   ao->setName( theAnatomist->makeObjectName( "Graph" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   return ao;
@@ -719,6 +742,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<TimeTexture<float> > aims )
   ATexture        *ao = new ATexture;
   ao->setName( theAnatomist->makeObjectName( "Texture1d" ) );
   ao->setTexture( aims );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   return ao;
@@ -730,6 +754,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<TimeTexture<short> > aims )
   ATexture        *ao = new ATexture;
   ao->setName( theAnatomist->makeObjectName( "Texture_S16" ) );
   ao->setTexture( aims );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   return ao;
@@ -741,6 +766,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<TimeTexture<int> > aims )
   ATexture        *ao = new ATexture;
   ao->setName( theAnatomist->makeObjectName( "Texture_S32" ) );
   ao->setTexture( aims );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   return ao;
@@ -752,6 +778,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<TimeTexture<unsigned> > aims )
   ATexture        *ao = new ATexture;
   ao->setName( theAnatomist->makeObjectName( "Texture_U32" ) );
   ao->setTexture( aims );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   return ao;
@@ -764,6 +791,7 @@ AObject* AObjectConverter::anatomist( TimeTexture<Point2d> *aims )
   ATexture        *ao = new ATexture;
   ao->setName( theAnatomist->makeObjectName( "Texture_POINT2D" ) );
   ao->setTexture( rc_ptr<TimeTexture<Point2d> >( aims ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   return ao;
@@ -776,6 +804,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<TimeTexture<Point2df> > aims )
   ATexture        *ao = new ATexture;
   ao->setName( theAnatomist->makeObjectName( "Texture2d" ) );
   ao->setTexture( aims );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   ao->SetExtrema();
   return ao;
@@ -786,6 +815,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<Tree> aims )
 {
   anatomist::Hierarchy        *ao = new anatomist::Hierarchy( aims );
   ao->setName( theAnatomist->makeObjectName( "Nomenclature" ) );
+  ao->setHeaderOptions();
   theAnatomist->registerObject( ao );
   return ao;
 }
@@ -795,6 +825,7 @@ AObject* AObjectConverter::anatomist( rc_ptr<SparseOrDenseMatrix> aims )
 {
   ASparseMatrix *ao = new ASparseMatrix;
   ao->setMatrix( aims );
+  ao->setHeaderOptions();
   ao->setName( theAnatomist->makeObjectName( "SparseOrDenseMatrix" ) );
   theAnatomist->registerObject( ao );
   return ao;
