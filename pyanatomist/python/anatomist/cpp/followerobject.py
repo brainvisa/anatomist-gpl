@@ -80,7 +80,7 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
       tr = a.getTransformation( obj.getReferential(),
         self.getReferential() )
       if tr is not None:
-        bbox2 = tr.transformBoundingBox( bbox2[0], bbox2[1] )
+        bbox2 = tr.transformBoundingBox(bbox2[0][:3], bbox2[1][:3])
       if not bbox:
         bbox = bbox2
       else:
