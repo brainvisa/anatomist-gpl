@@ -1448,15 +1448,22 @@ class Anatomist(Singleton):
                 return False
             return self.internalRep > other.internalRep
 
-        def getInfos(self):
+        def getInfo(self):
             """
-            Gets informations about this object.
+            Gets information about this object.
 
-            :returns:
-              information about the object (property -> value)
-            :rtype: dictionary
+            Returns
+            -------
+            info: dictionary
+                information about the object (property -> value)
             """
             pass
+
+        def getInfos(self):
+            '''
+            Obsolete - now use getInfo()
+            '''
+            return self.getInfo()
 
         def takeRef(self):
             """
