@@ -395,7 +395,7 @@ class AtlasJsonRois(QMainWindow):
         if 'gravity_center' in aobject.attributed():
             gravity_center_position = aobject.attributed()['gravity_center']
         else:
-            bbox = aobject.boundingbox()
+            bbox = [aims.Point3df(x[:3]) for x in aobject.boundingbox()]
             gravity_center_position = bbox[1] - bbox[0]
         return gravity_center_position
 

@@ -75,22 +75,21 @@ class ObjectFollowerCube( anatomist.ASurface_2 ):
     #print 'ObjectFollowerCube.boundingbox', len( self._objects )
     bbox = []
     for obj in self._objects:
-      bbox2 = obj.boundingbox()
+      bbox2 = [aims.Point3df(x[:3]) for x in obj.boundingbox()]
       a = anatomist.Anatomist()
       tr = a.getTransformation( obj.getReferential(),
         self.getReferential() )
       if tr is not None:
-        bbox2 = tr.transformBoundingBox(bbox2[0][:3], bbox2[1][:3])
+        bbox2 = tr.transformBoundingBox(bbox2[0], bbox2[1])
       if not bbox:
         bbox = bbox2
       else:
-        bbox = [ aims.Point3df( numpy.min( [ bbox[0], bbox2[0] ],
-          axis=0 ) ),
-          aims.Point3df( numpy.max( [ bbox[1], bbox2[1] ], axis=0 ) ) ]
+        bbox = [numpy.min([bbox[0], bbox2[0]], axis=0),
+                numpy.max( [ bbox[1], bbox2[1] ], axis=0)]
         #print 'bbox:', bbox
     if not bbox:
       return ()
-    return ( bbox[0], bbox[1] )
+    return (aims.vector_FLOAT(bbox[0]), aims.vector_FLOAT(bbox[1]))
 
   def redraw( self ):
     if hasattr( self, '_redrawing' ):
