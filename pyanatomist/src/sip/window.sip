@@ -240,6 +240,7 @@ class GLWidgetManager : anatomist::View
     void setMinimumSizeHint( const QSize & );
     virtual bool positionFromCursor( int, int, Point3df & );
     virtual bool cursorFromPosition( const Point3df &, Point3df & );
+    virtual Point3df objectPositionFromWindow( const Point3df & winpos );
     virtual bool translateCursorPosition( float, float, Point3df & );
 
     virtual std::string name() const;
