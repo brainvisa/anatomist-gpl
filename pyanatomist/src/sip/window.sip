@@ -283,6 +283,7 @@ class GLWidgetManager : anatomist::View
     virtual int width() = 0;
     virtual int height() = 0;
     virtual void paintScene();
+    virtual void updateGL();
 
   private :
     GLWidgetManager( const anatomist::GLWidgetManager& );
