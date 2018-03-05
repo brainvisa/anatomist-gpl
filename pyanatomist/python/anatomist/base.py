@@ -962,79 +962,119 @@ class Anatomist(Singleton):
             w.releaseRef()
         # self.execute("CloseWindow", windows=windows)
 
-    def setMaterial(self, objects, material=None, refresh=None, ambient=None,
+    def setMaterial(self, objects, material=None, refresh=True, ambient=None,
                     diffuse=None, emission=None, specular=None, shininess=None,
-                    lighting=None,
-                    smooth_shading=None, polygon_filtering=None,
-                    depth_buffer=None,
-                    face_culling=None, polygon_mode=None, unlit_color=None,
-                    line_width=None,
-                    ghost=None, front_face=None, selectable_mode=None):
+                    lighting=None, smooth_shading=None, polygon_filtering=None,
+                    depth_buffer=None, face_culling=None, polygon_mode=None,
+                    unlit_color=None, line_width=None,
+                    ghost=None, front_face=None, selectable_mode=None,
+                    use_shader=None, shader_color_normals=None,
+                    normal_is_direction=None):
         """
         Changes objects material properties.
 
-        :param material:
-          Material characteristics, including render properties.
-          The material may be specified as a Material object, or as its various
-          properties (ambient, diffuse, etc.). If both a material parameter and
-          other properties are specified, the material is used as a base, and
-          properties are used to modify it
-        :type material: :py:class:`anatomist.base.Anatomist.Material`
+        Parameters
+        ----------
+        objects: :class:`anatomist.base.Anatomist.AObject` or list
+            objects to change material on.
 
-        :param bool refresh:
-          If *True*, force windows refreshing
+        material: :class:`anatomist.base.Anatomist.Material`
+            Material characteristics, including render properties.
+            The material may be specified as a Material object, or as its
+            various properties (ambient, diffuse, etc.). If both a material
+            parameter and other properties are specified, the material is
+            used as a base, and properties are used to modify it
 
-        :param ambient:
-        :type ambient: RGB[A] vector: float values between 0 and 1.
+        refresh: bool
+            If *True*, force windows refreshing
 
-        :param list diffuse:
-          This parameter corresponds to the "standard" notion of color
-        :type diffuse: RGB[A] vector: float values between 0 and 1.
+        ambient: list
+            RGB[A] vector: float values between 0 and 1.
 
-        :param emission:
-        :type emission: RGB[A] vector: float values between 0 and 1.
+        diffuse: list
+            RGB[A] vector: float values between 0 and 1.
+            This parameter corresponds to the "standard" notion of color
 
-        :param specular:
-        :type specular: RGB[A] vector: float values between 0 and 1.
+        emission: list
+            RGB[A] vector: float values between 0 and 1.
 
-        :param float shininess:
-          0-124
+        specular: list
+            RGB[A] vector: float values between 0 and 1.
 
-        :param boolaen lighting:
-          enables (1) or disables (0) objects lighting/shading. Setting this value to -1 goes back to the default mode (globally set at the view/scene level).
+        shininess: float
+            0-124
 
-        :param int smooth_shading:
-          (tristate: 0/1/-1) smooth or flat polygons mode
+        lighting: int
+            enables (1) or disables (0) objects lighting/shading. Setting
+            this value to -1 goes back to the default mode (globally set at
+            the view/scene level).
 
-        :param int polygon_filtering:
-          (tristate: 0/1/-1) filtering (antialiasing) of lines/polygons
+        smooth_shading: int
+            (tristate: 0/1/-1) smooth or flat polygons mode
 
-        :param int depth_buffer:
-          (tristate: 0/1/-1) enables/disables writing in the Z-buffer. You can disable it if you want to click "through" an object (but it may have strange effects on the rendering)
+        polygon_filtering: int
+            (tristate: 0/1/-1) filtering (antialiasing) of lines/polygons
 
-        :param int face_culling:
-          (tristate: 0/1/-1) don't draw polygons seen from the back side. The best is to enable it for transparent objects, and to disable it for "open" (on which both sides may be seen) and opaque meshes. For objects both open and transparent, there is no perfoect setting...
+        depth_buffer: int
+            (tristate: 0/1/-1) enables/disables writing in the Z-buffer.
+            You can disable it if you want to click "through" an object
+            (but it may have strange effects on the rendering)
 
-        :param string polygon_mode:
-          polygons rendering mode: "normal", "wireframe", "outline" (normal + wireframe), "hiddenface_wireframe" (wireframe with hidden faces), "default" (use the global view settings), "ext_outlined" (thickened external boundaries + normal rendering).
+        face_culling: int
+            (tristate: 0/1/-1) don't draw polygons seen from the back side.
+            The best is to enable it for transparent objects, and to
+            disable it for "open" (on which both sides may be seen) and
+            opaque meshes. For objects both open and transparent, there is
+            no perfoect setting...
 
-        :param unlit_color:
-          color used for lines when lighting is off. For now it only affects polygons boundaries in "outlined" or "ext_outlined" polygon modes.
-        :type unlit_color: RGB[A] vector: float values between 0 and 1.
+        polygon_mode: string
+            polygons rendering mode: "normal", "wireframe", "outline"
+            (normal + wireframe), "hiddenface_wireframe" (wireframe with
+            hidden faces), "default" (use the global view settings),
+            "ext_outlined" (thickened external boundaries + normal
+            rendering).
 
-        :param float line_width:
-          Lines thickness (meshes, segments, wireframe rendering modes). A null or negative value fallsback to default (1 in principle).
+        unlit_color: RGB[A] vector: float values between 0 and 1.
+            color used for lines when lighting is off. For now it only
+            affects polygons boundaries in "outlined" or "ext_outlined"
+            polygon modes.
 
-        :param string front_face:
-          Specifies if the mesh(es) polygons external face is the clockwise or counterclockwise side. Normally in Aims/Anatomist indirect referentials, polygons are in clockwise orientation. Values are "clockwise", "counterclockwise", or "neutral" (the default).
+        line_width: float
+            Lines thickness (meshes, segments, wireframe rendering modes).
+            A null or negative value fallsback to default (1 in principle).
 
-        :param string selectable_mode:
-          New in Anatomist 4.5.
-          Replaces the ghost property.
-          always_selectable: object is selecatble whatever its opacity.
-          ghost: object is not selectable.
-          selectable_when_opaque: object is selectable when totally opaque (this is the default in Anatomist).
-          selectable_when_not_totally_transparent: object is selectable unless opacity is zero.
+        front_face: string
+            Specifies if the mesh(es) polygons external face is the
+            clockwise or counterclockwise side. Normally in Aims/Anatomist
+            indirect referentials, polygons are in clockwise orientation.
+            Values are "clockwise", "counterclockwise", or "neutral" (the
+            default).
+
+        selectable_mode: string
+            New in Anatomist 4.5.
+            Replaces the ghost property.
+
+            **always_selectable**:
+                object is selecatble whatever its opacity.
+            **ghost**:
+                object is not selectable.
+            **selectable_when_opaque**:
+                object is selectable when totally  opaque (this is the
+                default in Anatomist).
+            **selectable_when_not_totally_transparent**:
+                object is selectable unless opacity is zero.
+
+        use_shader: int
+            enable or disable the use of OpenGL shaders for this object.
+
+        shader_color_normals: int
+            when shaders are enabled, normals can be represented as colors
+            on the object.
+
+        normal_is_direction: int
+            when shaders are enabled and shader_color_normals is set,
+            normals may be pre-calculates as mesh direction, on a "line"
+            mesh (polygons are lines, not triangles).
         """
         if material is not None:
             if ambient is None:
@@ -1067,15 +1107,25 @@ class Anatomist(Singleton):
                 front_face = material.front_face
             if selectable_mode is None:
                 selectable_mode = material.selectable_mode
+            if use_shader is None:
+                use_shader = material.use_shader
+            if shader_color_normals is None:
+                shader_color_normals = material.shader_color_normals
+            if normal_is_direction is None:
+                normal_is_direction = material.normal_is_direction
         self.execute(
             "SetMaterial", objects=self.makeList(objects), ambient=ambient,
             diffuse=diffuse, emission=emission, specular=specular,
-            shininess=shininess, refresh=refresh, lighting=lighting,
+            shininess=shininess, refresh=int(bool(refresh)), lighting=lighting,
             smooth_shading=smooth_shading,
-            polygon_filtering=polygon_filtering, depth_buffer=depth_buffer,
+            polygon_filtering=polygon_filtering,
+            depth_buffer=depth_buffer,
             face_culling=face_culling, polygon_mode=polygon_mode,
             unlit_color=unlit_color, line_width=line_width,
-            selectable_mode=selectable_mode, front_face=front_face)
+            selectable_mode=selectable_mode, front_face=front_face,
+            use_shader=use_shader,
+            shader_color_normals=shader_color_normals,
+            normal_is_direction=normal_is_direction)
 
     def setObjectPalette(self, objects, palette=None, minVal=None, maxVal=None,
                          palette2=None,  minVal2=None, maxVal2=None,
@@ -1639,7 +1689,7 @@ class Anatomist(Singleton):
 
         applyBuiltinReferential = loadReferentialFromHeader
 
-        def setMaterial(self, material=None, refresh=None, ambient=None,
+        def setMaterial(self, material=None, refresh=True, ambient=None,
                         diffuse=None, emission=None, specular=None,
                         shininess=None,
                         lighting=None, smooth_shading=None,
@@ -1648,80 +1698,120 @@ class Anatomist(Singleton):
                         polygon_mode=None,
                         unlit_color=None, line_width=None, ghost=None,
                         front_face=None,
-                        selectable_mode=None):
+                        selectable_mode=None, use_shader=None,
+                        shader_color_normals=None, normal_is_direction=None):
             """
             Changes object material properties.
 
-            :param material:
-              Material characteristics, including render properties.
-              The material may be specified as a Material object, or as its various
-              properties (ambient, diffuse, etc.). If both a material parameter and
-              other properties are specified, the material is used as a base, and
-              properties are used to modify it
-            :type material: :py:class:`anatomist.base.Anatomist.Material`
+            Parameters
+            ----------
+            material: :class:`anatomist.base.Anatomist.Material`
+                Material characteristics, including render properties.
+                The material may be specified as a Material object, or as its
+                various properties (ambient, diffuse, etc.). If both a material
+                parameter and other properties are specified, the material is
+                used as a base, and properties are used to modify it
 
-            :param bool refresh:
-              If *True*, force windows refreshing
+            refresh: bool
+                If *True*, force windows refreshing
 
-            :param ambient:
-            :type ambient: RGB[A] vector: float values between 0 and 1.
+            ambient: list
+                RGB[A] vector: float values between 0 and 1.
 
-            :param list diffuse:
-              This parameter corresponds to the "standard" notion of color
-            :type diffuse: RGB[A] vector: float values between 0 and 1.
+            diffuse: list
+                RGB[A] vector: float values between 0 and 1.
+                This parameter corresponds to the "standard" notion of color
 
-            :param emission:
-            :type emission: RGB[A] vector: float values between 0 and 1.
+            emission: list
+                RGB[A] vector: float values between 0 and 1.
 
-            :param specular:
-            :type specular: RGB[A] vector: float values between 0 and 1.
+            specular: list
+                RGB[A] vector: float values between 0 and 1.
 
-            :param float shininess:
-              0-124
+            shininess: float
+                0-124
 
-            :param boolaen lighting:
-              enables (1) or disables (0) objects lighting/shading. Setting this value to -1 goes back to the default mode (globally set at the view/scene level).
+            lighting: int
+                enables (1) or disables (0) objects lighting/shading. Setting
+                this value to -1 goes back to the default mode (globally set at
+                the view/scene level).
 
-            :param int smooth_shading:
-              (tristate: 0/1/-1) smooth or flat polygons mode
+            smooth_shading: int
+                (tristate: 0/1/-1) smooth or flat polygons mode
 
-            :param int polygon_filtering:
-              (tristate: 0/1/-1) filtering (antialiasing) of lines/polygons
+            polygon_filtering: int
+                (tristate: 0/1/-1) filtering (antialiasing) of lines/polygons
 
-            :param int depth_buffer:
-              (tristate: 0/1/-1) enables/disables writing in the Z-buffer. You can disable it if you want to click "through" an object (but it may have strange effects on the rendering)
+            depth_buffer: int
+                (tristate: 0/1/-1) enables/disables writing in the Z-buffer.
+                You can disable it if you want to click "through" an object
+                (but it may have strange effects on the rendering)
 
-            :param int face_culling:
-              (tristate: 0/1/-1) don't draw polygons seen from the back side. The best is to enable it for transparent objects, and to disable it for "open" (on which both sides may be seen) and opaque meshes. For objects both open and transparent, there is no perfoect setting...
+            face_culling: int
+                (tristate: 0/1/-1) don't draw polygons seen from the back side.
+                The best is to enable it for transparent objects, and to
+                disable it for "open" (on which both sides may be seen) and
+                opaque meshes. For objects both open and transparent, there is
+                no perfoect setting...
 
-            :param string polygon_mode:
-              polygons rendering mode: "normal", "wireframe", "outline" (normal + wireframe), "hiddenface_wireframe" (wireframe with hidden faces), "default" (use the global view settings), "ext_outlined" (thickened external boundaries + normal rendering).
+            polygon_mode: string
+                polygons rendering mode: "normal", "wireframe", "outline"
+                (normal + wireframe), "hiddenface_wireframe" (wireframe with
+                hidden faces), "default" (use the global view settings),
+                "ext_outlined" (thickened external boundaries + normal
+                rendering).
 
-            :param unlit_color:
-              color used for lines when lighting is off. For now it only affects polygons boundaries in "outlined" or "ext_outlined" polygon modes.
-            :type unlit_color: RGB[A] vector: float values between 0 and 1.
+            unlit_color: RGB[A] vector: float values between 0 and 1.
+                color used for lines when lighting is off. For now it only
+                affects polygons boundaries in "outlined" or "ext_outlined"
+                polygon modes.
 
-            :param float line_width:
-              Lines thickness (meshes, segments, wireframe rendering modes). A null or negative value fallsback to default (1 in principle).
+            line_width: float
+                Lines thickness (meshes, segments, wireframe rendering modes).
+                A null or negative value fallsback to default (1 in principle).
 
-            :param string front_face:
-              Specifies if the mesh(es) polygons external face is the clockwise or counterclockwise side. Normally in Aims/Anatomist indirect referentials, polygons are in clockwise orientation. Values are "clockwise", "counterclockwise", or "neutral" (the default).
+            front_face: string
+                Specifies if the mesh(es) polygons external face is the
+                clockwise or counterclockwise side. Normally in Aims/Anatomist
+                indirect referentials, polygons are in clockwise orientation.
+                Values are "clockwise", "counterclockwise", or "neutral" (the
+                default).
 
-            :param string selectable_mode:
-              New in Anatomist 4.5.
-              Replaces the ghost property.
-              always_selectable: object is selecatble whatever its opacity.
-              ghost: object is not selectable.
-              selectable_when_opaque: object is selectable when totally opaque (this is the default in Anatomist).
-              selectable_when_not_totally_transparent: object is selectable unless opacity is zero.
+            selectable_mode: string
+                New in Anatomist 4.5.
+                Replaces the ghost property.
 
+                **always_selectable**:
+                    object is selecatble whatever its opacity.
+                **ghost**:
+                    object is not selectable.
+                **selectable_when_opaque**:
+                    object is selectable when totally  opaque (this is the
+                    default in Anatomist).
+                **selectable_when_not_totally_transparent**:
+                    object is selectable unless opacity is zero.
+
+            use_shader: int
+                enable or disable the use of OpenGL shaders for this object.
+
+            shader_color_normals: int
+                when shaders are enabled, normals can be represented as colors
+                on the object.
+
+            normal_is_direction: int
+                when shaders are enabled and shader_color_normals is set,
+                normals may be pre-calculates as mesh direction, on a "line"
+                mesh (polygons are lines, not triangles).
             """
             self.anatomistinstance.setMaterial(
                 [self], material, refresh,
                 ambient, diffuse, emission, specular, shininess, lighting,
                 smooth_shading, polygon_filtering, depth_buffer, face_culling,
                 polygon_mode, unlit_color, line_width, ghost=None,
-                front_face=front_face, selectable_mode=selectable_mode)
+                front_face=front_face, selectable_mode=selectable_mode,
+                use_shader=use_shader,
+                shader_color_normals=shader_color_normals,
+                normal_is_direction=normal_is_direction)
 
         def setPalette(self, palette=None, minVal=None, maxVal=None,
                        palette2=None,
@@ -2519,61 +2609,95 @@ class Anatomist(Singleton):
     class Material(object):
 
         """
-        :param ambient:
-        :type ambient: RGB[A] vector: float values between 0 and 1.
+        Attributes
+        ----------
+        ambient: list
+            RGB[A] vector: float values between 0 and 1.
 
-        :param list diffuse:
-          This parameter corresponds to the "standard" notion of color
-        :type diffuse: RGB[A] vector: float values between 0 and 1.
+        diffuse: list
+            RGB[A] vector: float values between 0 and 1.
+            This parameter corresponds to the "standard" notion of color
 
-        :param emission:
-        :type emission: RGB[A] vector: float values between 0 and 1.
+        emission: list
+            RGB[A] vector: float values between 0 and 1.
 
-        :param specular:
-        :type specular: RGB[A] vector: float values between 0 and 1.
+        specular: list
+            RGB[A] vector: float values between 0 and 1.
 
-        :param float shininess:
-          0-124
+        shininess: float
+            0-124
 
-        :param boolaen lighting:
-          enables (1) or disables (0) objects lighting/shading. Setting this value to -1 goes back to the default mode (globally set at the view/scene level).
+        lighting: int
+            enables (1) or disables (0) objects lighting/shading. Setting
+            this value to -1 goes back to the default mode (globally set at
+            the view/scene level).
 
-        :param int smooth_shading:
-          (tristate: 0/1/-1) smooth or flat polygons mode
+        smooth_shading: int
+            (tristate: 0/1/-1) smooth or flat polygons mode
 
-        :param int polygon_filtering:
-          (tristate: 0/1/-1) filtering (antialiasing) of lines/polygons
+        polygon_filtering: int
+            (tristate: 0/1/-1) filtering (antialiasing) of lines/polygons
 
-        :param int depth_buffer:
-          (tristate: 0/1/-1) enables/disables writing in the Z-buffer. You can disable it if you want to click "through" an object (but it may have strange effects on the rendering)
+        depth_buffer: int
+            (tristate: 0/1/-1) enables/disables writing in the Z-buffer.
+            You can disable it if you want to click "through" an object
+            (but it may have strange effects on the rendering)
 
-        :param int face_culling:
-          (tristate: 0/1/-1) don't draw polygons seen from the back side. The best is to enable it for transparent objects, and to disable it for "open" (on which both sides may be seen) and opaque meshes. For objects both open and transparent, there is no perfoect setting...
+        face_culling: int
+            (tristate: 0/1/-1) don't draw polygons seen from the back side.
+            The best is to enable it for transparent objects, and to
+            disable it for "open" (on which both sides may be seen) and
+            opaque meshes. For objects both open and transparent, there is
+            no perfoect setting...
 
-        :param string polygon_mode:
-          polygons rendering mode: "normal", "wireframe", "outline" (normal + wireframe), "hiddenface_wireframe" (wireframe with hidden faces), "default" (use the global view settings), "ext_outlined" (thickened external boundaries + normal rendering).
+        polygon_mode: string
+            polygons rendering mode: "normal", "wireframe", "outline"
+            (normal + wireframe), "hiddenface_wireframe" (wireframe with
+            hidden faces), "default" (use the global view settings),
+            "ext_outlined" (thickened external boundaries + normal
+            rendering).
 
-        :param unlit_color:
-          color used for lines when lighting is off. For now it only affects polygons boundaries in "outlined" or "ext_outlined" polygon modes.
-        :type unlit_color: RGB[A] vector: float values between 0 and 1.
+        unlit_color: RGB[A] vector: float values between 0 and 1.
+            color used for lines when lighting is off. For now it only
+            affects polygons boundaries in "outlined" or "ext_outlined"
+            polygon modes.
 
-        :param float line_width:
-          Lines thickness (meshes, segments, wireframe rendering modes). A null or negative value fallsback to default (1 in principle).
+        line_width: float
+            Lines thickness (meshes, segments, wireframe rendering modes).
+            A null or negative value fallsback to default (1 in principle).
 
-        :param int ghost:
-          obsolete: use selectable_mode instead.
-          In ghost mode, objects are not drawn in the depth buffer
+        front_face: string
+            Specifies if the mesh(es) polygons external face is the
+            clockwise or counterclockwise side. Normally in Aims/Anatomist
+            indirect referentials, polygons are in clockwise orientation.
+            Values are "clockwise", "counterclockwise", or "neutral" (the
+            default).
 
-        :param string selectable_mode:
-          New in Anatomist 4.5.
-          Replaces the ghost property.
-          always_selectable: object is selecatble whatever its opacity.
-          ghost: object is not selectable.
-          selectable_when_opaque: object is selectable when totally opaque (this is the default in Anatomist).
-          selectable_when_not_totally_transparent: object is selectable unless opacity is zero.
+        selectable_mode: string
+            New in Anatomist 4.5.
+            Replaces the ghost property.
 
-        :param string front_face:
-          Specifies if the mesh(es) polygons external face is the clockwise or counterclockwise side. Normally in Aims/Anatomist indirect referentials, polygons are in clockwise orientation. Values are "clockwise", "counterclockwise", or "neutral" (the default).
+            **always_selectable**:
+                object is selecatble whatever its opacity.
+            **ghost**:
+                object is not selectable.
+            **selectable_when_opaque**:
+                object is selectable when totally  opaque (this is the
+                default in Anatomist).
+            **selectable_when_not_totally_transparent**:
+                object is selectable unless opacity is zero.
+
+        use_shader: int
+            enable or disable the use of OpenGL shaders for this object.
+
+        shader_color_normals: int
+            when shaders are enabled, normals can be represented as colors
+            on the object.
+
+        normal_is_direction: int
+            when shaders are enabled and shader_color_normals is set,
+            normals may be pre-calculates as mesh direction, on a "line"
+            mesh (polygons are lines, not triangles).
         """
 
         def __init__(self, ambient=None, diffuse=None, emission=None,
@@ -2581,7 +2705,8 @@ class Anatomist(Singleton):
                      smooth_shading=None, polygon_filtering=None,
                      depth_buffer=None, face_culling=None, polygon_mode=None,
                      unlit_color=None, line_width=None, ghost=None,
-                     front_face=None, selectable_mode=None):
+                     front_face=None, selectable_mode=None, use_shader=None,
+                     shader_color_normals=None, normal_is_direction=None):
             self.ambient = ambient
             self.diffuse = diffuse
             self.emission = emission
@@ -2600,6 +2725,9 @@ class Anatomist(Singleton):
             if ghost and self.selectable_mode is None:
                 self.selectable_mode = 'ghost'
             self.front_face = front_face
+            self.use_shader = use_shader
+            self.shader_color_normals = shader_color_normals
+            self.normal_is_direction = normal_is_direction
 
         def __repr__(self):
             return "{ambient: " + str(self.ambient) \
@@ -2616,4 +2744,8 @@ class Anatomist(Singleton):
                 + ", unlit_color: " + str(self.unlit_color) \
                 + ", line_width: " + str(self.line_width) \
                 + ", selectable_mode: " + str(self.selectable_mode) \
-                + ", front_face: " + str(self.front_face) + "}"
+                + ", front_face: " + str(self.front_face) \
+                + ", use_shader: " + str(self.use_shader) \
+                + ", shader_color_normals: " + str(self.shader_color_normals) \
+                + ", normal_is_direction: " + str(self.normal_is_direction) \
+                + "}"
