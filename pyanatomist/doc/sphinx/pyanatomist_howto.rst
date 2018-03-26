@@ -22,7 +22,7 @@ Apply transformations to objects
 --------------------------------
 
 When transformations information is present in the object header (such as NIFTI volume)
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 This is a way of scripting the problem of objects appearing misaligned as described in :anausr:`this FAQ topic <faq.html#two-volumes-are-registered-in-spm-but-do-not-appear-matched-in-anatomist>`
 

@@ -1160,7 +1160,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
       If *True*, *idorcpp* is returned unchanged if not recognized
 
     * returns: :py:class:`AItem` instance, or *None* (or the unchanged 
-    input if allowother is *True*)
+      input if allowother is *True*)
 
       Converted element
     """
