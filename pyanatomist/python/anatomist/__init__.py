@@ -36,9 +36,8 @@ Introduction
 ============
 This API enables to drive *Anatomist* application throught python scripts : running Anatomist, loading volumes, meshes, graphs, viewing them in windows, merging objects, changing colour palette...
 
-- organization: `NeuroSpin <http://www.neurospin.org>`_ and `IFR 49 <http://www.ifr49.org>`_
-
-- license: `CeCILL-v2 <http://www.cecill.info/licences/Licence_CeCILL_V2-en.html>`_ (GPL-compatible)
+* organization: NeuroSpin and IFR 4
+* license: `CeCILL-v2 <http://www.cecill.info/licences/Licence_CeCILL_V2-en.html>`_ (GPL-compatible)
 
 From version 4.5.1 and later, PyAnatomist work with both Python 2 (2.6 and later) and Python 3 (3.4 and later) (provided C++/python bindings have been compiled appropriately).
 
@@ -47,15 +46,15 @@ It represents Anatomist application. This class contains a number of nested clas
 
 The entry point of this API is the module api, you can import it as below :
 
-  >>> import anatomist.api as anatomist
+>>> import anatomist.api as anatomist
 
 And then create an instance of Anatomist :
 
-  >>> a=anatomist.Anatomist()
+>>> a = anatomist.Anatomist()
 
 So you can send commands to Anatomist application, for example creating a window :
 
-  >>> window=a.createWindow('3D')
+>>> window = a.createWindow('3D')
 
 
 Implementation
@@ -65,49 +64,47 @@ Several means of driving Anatomist in python scripts exist : Python bindings for
 
 **Modules organization**
 
-  - :py:mod:`anatomist.base` module contains the general interface : classes and methods that exist in all implementations. This module also provides the general API documentation.
-  - :py:mod:`anatomist.socket.api` module contains an implementation using socket communication with an Anatomist application run in another process in server mode.
-  - :py:mod:`anatomist.direct.api` module contains an implementation using sip bindings of Anatomist C++ api.
-  - :py:mod:`anatomist.threaded.api` module is a thread safe layer for the direct module. Useful if you have to use anatomist api in a multi-threaded environment.
-  - :py:mod:`anatomist.headless` module is an off-screen redirection of Anatomist display.
-  - :py:mod:`anatomist.cpp` module contains sip bindings of Anatomist C++ api. It is a low level module, only for advanced user.
-  - :doc:`pyanatomist_wip` work in progress module
+* :mod:`anatomist.base` module contains the general interface : classes and methods that exist in all implementations. This module also provides the general API documentation.
+* :mod:`anatomist.socket.api` module contains an implementation using socket communication with an Anatomist application run in another process in server mode.
+* :mod:`anatomist.direct.api` module contains an implementation using sip bindings of Anatomist C++ api.
+* :mod:`anatomist.threaded.api` module is a thread safe layer for the direct module. Useful if you have to use anatomist api in a multi-threaded environment.
+* :mod:`anatomist.headless` module is an off-screen redirection of Anatomist display.
+* :mod:`anatomist.cpp` module contains sip bindings of Anatomist C++ api. It is a low level module, only for advanced user.
+* :doc:`pyanatomist_wip` work in progress module
 
-The direct implementation provides more features as it handles  C++ binding objects : all bound features are available. Socket implementation provides features that can be expressed with Anatomist commands system, so a limited set of features. But it runs Anatomist application in a separate process so potential errors in Anatomist don't crash the application that uses the API.
+The direct implementation provides more features as it handles  C++ binding objects: all bound features are available. Socket implementation provides features that can be expressed with Anatomist commands system, so a limited set of features. But it runs Anatomist application in a separate process so potential errors in Anatomist don't crash the application that uses the API.
 
 By default, the implementation used when you import anatomist.api is the direct implementation.
 If you want to switch to another implementation, use setDefaultImplementation of this module. For example to use the socket implementation :
 
-  >>> import anatomist
-  >>> anatomist.setDefaultImplementation(anatomist.SOCKET)
-  >>> import anatomist.api as anatomist
+>>> import anatomist
+>>> anatomist.setDefaultImplementation(anatomist.SOCKET)
+>>> import anatomist.api as anatomist
 
-Another specific implementation for Brainvisa also exists : brainvisa.anatomist module in brainvisa.
+Another specific implementation for Brainvisa also exists: brainvisa.anatomist module in brainvisa.
 It enables to use brainvisa database informations on loaded objects to automatically load associated referentials and transformations.
 It uses the same api, so it is possible to switch from one implementation to the other.
 
 By default, brainvisa module uses socket implementation. This way, Brainvisa and Anatomist applications run in separated processes. and potential errors in Anatomist do not crash Brainvisa.
 
+Attributes
+----------
+SOCKET: str
+    Use this constant to load anatomist api socket implementation. See :mod:`anatomist.socket.api` module.
 
-.. data:: anatomist.SOCKET
+DIRECT: str
+  Use this constant to load anatomist api direct implementation (sip bindings). See :mod:`anatomist.direct.api` module.
 
-  type: string
+THREADED: str
+  Use this constant to load anatomist api threaded direct implementation. See :mod:`anatomist.threaded.api` module.
 
-  Use this constant to load anatomist api socket implementation. See :py:mod:`anatomist.socket.api` module.
 
-.. data:: DIRECT
+In addition to the Python APIs, the :meth:`Anatomist.execute <base.Anatomist.execute>` method of Anatomist also grants access to the :anadev:`commands system <commands.html>` which offers many functionalities, some of which have not been wrapped yet int the more "pythonic" API.
 
-  type : string
+Methods
+-------
+getDefaultImplementationModuleName
 
-  Use this constant to load anatomist api direct implementation (sip bindings). See :py:mod:`anatomist.direct.api` module.
-
-.. data:: THREADED
-
-  type: string
-
-  Use this constant to load anatomist api threaded direct implementation. See :py:mod:`anatomist.threaded.api` module.
-
-In addition to the Python APIs, the :py:meth:`Anatomist.execute <base.Anatomist.execute>` method of Anatomist also grants access to the :anatomist:`commands system <html/fr/programmation/commands.html>` which offers many functionalities, some of which have not been wrapped yet int the more "pythonic" API.
 """
 __docformat__ = 'restructuredtext en'
 
@@ -115,28 +112,33 @@ from anatomist import info
 __version__ = '.'.join((info.version_major, info.version_minor,
                         info.version_micro))
 
-SOCKET='socket'
-DIRECT='direct'
-THREADED='threaded'
+SOCKET = 'socket'
+DIRECT = 'direct'
+THREADED = 'threaded'
 
-#import os
+# import os
 #__path__ = [ os.path.join( os.path.dirname( __file__ ), 'direct' ),
-  #os.path.dirname( __file__ ) ]
+  # os.path.dirname( __file__ ) ]
 
 _implementation = DIRECT
 
-def setDefaultImplementation( impl=DIRECT ):
-  """
-  Changes the default implementation of this api. The selected implementation will be loaded on importation of anatomist.api.
-  @type impl: string
-  @param impl: implementation to set as default. Possible values are anatomist.SOCKET, anatomist.DIRECT, anatomist.THREADED. Default is direct implementation.
-  """
-  #global __path__
-  #__path__ = [ os.path.join( os.path.dirname( __file__ ), impl ),
-    #os.path.dirname( __file__ ) ]
-  global _implementation
-  _implementation = impl
+
+def setDefaultImplementation(impl=DIRECT):
+    """
+    Changes the default implementation of this api. The selected implementation will be loaded on importation of anatomist.api.
+
+    Parameters
+    ----------
+    impl: str
+        implementation to set as default. Possible values are :attr:`SOCKET`, :attr:`DIRECT`, :attr:`THREADED`. Default is direct implementation.
+    """
+    # global __path__
+    #__path__ = [ os.path.join( os.path.dirname( __file__ ), impl ),
+      # os.path.dirname( __file__ ) ]
+    global _implementation
+    _implementation = impl
+
 
 def getDefaultImplementationModuleName():
-  global _implementation
-  return 'anatomist.' + _implementation + '.api'
+    global _implementation
+    return 'anatomist.' + _implementation + '.api'
