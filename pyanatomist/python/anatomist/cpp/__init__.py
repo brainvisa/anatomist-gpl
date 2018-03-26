@@ -7,9 +7,9 @@
 #
 # This software is governed by the CeCILL license version 2 under
 # French law and abiding by the rules of distribution of free software.
-# You can  use, modify and/or redistribute the software under the 
+# You can  use, modify and/or redistribute the software under the
 # terms of the CeCILL license version 2 as circulated by CEA, CNRS
-# and INRIA at the following URL "http://www.cecill.info". 
+# and INRIA at the following URL "http://www.cecill.info".
 #
 # As a counterpart to the access to the source code and  rights to copy,
 # modify and redistribute granted by the license, users are provided only
@@ -24,8 +24,8 @@
 # therefore means  that it is reserved for developers  and  experienced
 # professionals having in-depth computer knowledge. Users are therefore
 # encouraged to load and test the software's suitability as regards their
-# requirements in conditions enabling the security of their systems and/or 
-# data to be ensured and,  more generally, to use and operate it in the 
+# requirements in conditions enabling the security of their systems and/or
+# data to be ensured and,  more generally, to use and operate it in the
 # same conditions as regards security.
 #
 # The fact that you are presently reading this means that you have had
@@ -33,14 +33,14 @@
 
 
 '''
-Low level module containing Sip bindings of Anatomist C++ API. 
+Low level module containing Sip bindings of Anatomist C++ API.
 
 Introduction
 ============
 
 This module is mostly bindings to the C++ library of Anatomist. A few classes
 have been slightly modified or rewritten, either to hide garbage or to
-appear more pythonic. 
+appear more pythonic.
 
 For typical use, this module will not be called directly but throught general API. But it can be needed for using advanced features.
 
@@ -104,7 +104,12 @@ begin with.
 
 from __future__ import print_function
 
-import os, sys, string, glob, operator, types
+import os
+import sys
+import string
+import glob
+import operator
+import types
 import numpy
 import six
 import collections
@@ -143,24 +148,24 @@ def isMappingType(item):
     return True
 
 
-path = os.path.dirname( __file__ )
+path = os.path.dirname(__file__)
 if path not in sys.path:
-  sys.path.insert( 0, path )
+    sys.path.insert(0, path)
 
 # add path for python modules lib
 if sys.platform[:3] == 'win':
-  sep = ';'
+    sep = ';'
 else:
-  sep = ':'
+    sep = ':'
 
 # PYTHONPATH. On python 2.3, it doesn't seem to be taken into account
 # when pyhton is run from a library
 path = os.getenv('PYTHONPATH')
 if path is not None:
-  for x in path.split(sep):
-    if x not in sys.path:
-      sys.path.append( x )
-  del x
+    for x in path.split(sep):
+        if x not in sys.path:
+            sys.path.append(x)
+    del x
 del path, sep
 
 from soma import aims
@@ -180,9 +185,9 @@ for sip_class in sip_classes:
     _sip_api_set = True
 
 # cleanup namespaces in Sip-generated code
-ExtendedImporter().importInModule( '', globals(), locals(), 'anatomistsip' )
-ExtendedImporter().importInModule( '', globals(), locals(), 'anatomistsip',
-  ['anatomistsip.anatomist'] )
+ExtendedImporter().importInModule('', globals(), locals(), 'anatomistsip')
+ExtendedImporter().importInModule('', globals(), locals(), 'anatomistsip',
+                                  ['anatomistsip.anatomist'])
 del ExtendedImporter
 
 from soma.qt_gui import qt_backend
@@ -190,433 +195,475 @@ qt_backend.set_qt_backend(compatible_qt5=True, pyqt_api=2)
 
 from anatomistsip import *
 
-aims.__fixsipclasses__( locals().items() )
+aims.__fixsipclasses__(locals().items())
 
 loaded_modules = []
 global _anatomist_modsloaded
 _anatomist_modsloaded = 0
 
 # update AObjectConverter class to be more flexible
-def aimsFromAnatomist( ao, options={ 'scale' : 1 } ):
-  tn = ao.objectTypeName( ao.type() )
-  # take into account wrapping case
-  if hasattr( ao, 'internalRep' ):
-    ao = ao.internalRep
-  if tn == 'VOLUME':
-    try:
-      hdr = ao.attributed()
-      if hdr:
-        dt = hdr[ 'data_type' ]
-        oc = getattr( AObjectConverter, 'aimsData_' + dt )
-        aim = oc( ao, options )
-        if not aim.isNull():
-          return aim._get()
-    except:
-      pass
-    # all this just in case data_type is not set in header
-    aim = AObjectConverter.aimsData_U8( ao, options )
-    if not aim.isNull():
-      return aim._get()
-    aim = AObjectConverter.aimsData_S16( ao, options )
-    if not aim.isNull():
-      return aim._get()
-    aim = AObjectConverter.aimsData_U16( ao, options )
-    if not aim.isNull():
-      return aim._get()
-    aim = AObjectConverter.aimsData_S32( ao, options )
-    if not aim.isNull():
-      return aim._get()
-    aim = AObjectConverter.aimsData_U32( ao, options )
-    if not aim.isNull():
-      return aim._get()
-    aim = AObjectConverter.aimsData_FLOAT( ao, options )
-    if not aim.isNull():
-      return aim._get()
-    aim = AObjectConverter.aimsData_DOUBLE( ao, options )
-    if not aim.isNull():
-      return aim._get()
-    aim = AObjectConverter.aimsData_RGB( ao, options )
-    if not aim.isNull():
-      return aim._get()
-    aim = AObjectConverter.aimsData_RGBA( ao, options )
-    if not aim.isNull():
-      return aim._get()
-  elif tn == 'SURFACE':
-    aim = AObjectConverter.aimsSurface3( ao, options )
-    if not aim.isNull():
-      return aim._get()
-    aim = AObjectConverter.aimsSurface4( ao, options )
-    if not aim.isNull():
-      return aim._get()
-    aim = AObjectConverter.aimsSurface2( ao, options )
-    if not aim.isNull():
-      return aim._get()
-  elif tn == 'BUCKET':
-    aim = AObjectConverter.aimsBucketMap_VOID( ao, options )
-    if not aim.isNull():
-      return aim._get()
-  elif tn == 'TEXTURE':
-    at = ao.attributed()
-    if not at:
-      dt = 'FLOAT'
-    else:
-      try:
-        dt = at[ 'data_type' ]
-      except:
-        dt = 'FLOAT'
-    try:
-      conv = getattr( AObjectConverter, 'aimsTexture_' + dt )
-      aim = conv( ao, options )._get()
-      return aim
-    except:
-      aim = AObjectConverter.aimsTexture_FLOAT( ao, options )
-      if not aim.isNull():
-        return aim._get()
-      aim = AObjectConverter.aimsTexture_POINT2DF( ao, options )
-      if not aim.isNull():
-        return aim._get()
-      aim = AObjectConverter.aimsTexture_S16( ao, options )
-      if not aim.isNull():
-        return aim._get()
-      aim = AObjectConverter.aimsTexture_S32( ao, options )
-      if not aim.isNull():
-        return aim._get()
-      aim = AObjectConverter.aimsTexture_U32( ao, options )
-    if aim and not aim.isNull():
-      return aim._get()
-    return None
-  elif tn == 'GRAPH':
-    aim = AObjectConverter.aimsGraph( ao, options )
-    if not aim.isNull():
-      return aim._get()
-  elif tn == 'NOMENCLATURE':
-    aim = AObjectConverter.aimsTree( ao, options )
-    if not aim.isNull():
-      return aim._get()
-  elif tn == 'SparseMatrix':
-    aim = AObjectConverter.aimsSparseMatrix( ao, options )
-    if not aim.isNull():
-      return aim._get()
-  return None
 
-AObjectConverter.aims = staticmethod( aimsFromAnatomist )
+
+def aimsFromAnatomist(ao, options={'scale': 1}):
+    tn = ao.objectTypeName(ao.type())
+    # take into account wrapping case
+    if hasattr(ao, 'internalRep'):
+        ao = ao.internalRep
+    if tn == 'VOLUME':
+        try:
+            hdr = ao.attributed()
+            if hdr:
+                dt = hdr['data_type']
+                oc = getattr(AObjectConverter, 'aimsData_' + dt)
+                aim = oc(ao, options)
+                if not aim.isNull():
+                    return aim._get()
+        except:
+            pass
+        # all this just in case data_type is not set in header
+        aim = AObjectConverter.aimsData_U8(ao, options)
+        if not aim.isNull():
+            return aim._get()
+        aim = AObjectConverter.aimsData_S16(ao, options)
+        if not aim.isNull():
+            return aim._get()
+        aim = AObjectConverter.aimsData_U16(ao, options)
+        if not aim.isNull():
+            return aim._get()
+        aim = AObjectConverter.aimsData_S32(ao, options)
+        if not aim.isNull():
+            return aim._get()
+        aim = AObjectConverter.aimsData_U32(ao, options)
+        if not aim.isNull():
+            return aim._get()
+        aim = AObjectConverter.aimsData_FLOAT(ao, options)
+        if not aim.isNull():
+            return aim._get()
+        aim = AObjectConverter.aimsData_DOUBLE(ao, options)
+        if not aim.isNull():
+            return aim._get()
+        aim = AObjectConverter.aimsData_RGB(ao, options)
+        if not aim.isNull():
+            return aim._get()
+        aim = AObjectConverter.aimsData_RGBA(ao, options)
+        if not aim.isNull():
+            return aim._get()
+    elif tn == 'SURFACE':
+        aim = AObjectConverter.aimsSurface3(ao, options)
+        if not aim.isNull():
+            return aim._get()
+        aim = AObjectConverter.aimsSurface4(ao, options)
+        if not aim.isNull():
+            return aim._get()
+        aim = AObjectConverter.aimsSurface2(ao, options)
+        if not aim.isNull():
+            return aim._get()
+    elif tn == 'BUCKET':
+        aim = AObjectConverter.aimsBucketMap_VOID(ao, options)
+        if not aim.isNull():
+            return aim._get()
+    elif tn == 'TEXTURE':
+        at = ao.attributed()
+        if not at:
+            dt = 'FLOAT'
+        else:
+            try:
+                dt = at['data_type']
+            except:
+                dt = 'FLOAT'
+        try:
+            conv = getattr(AObjectConverter, 'aimsTexture_' + dt)
+            aim = conv(ao, options)._get()
+            return aim
+        except:
+            aim = AObjectConverter.aimsTexture_FLOAT(ao, options)
+            if not aim.isNull():
+                return aim._get()
+            aim = AObjectConverter.aimsTexture_POINT2DF(ao, options)
+            if not aim.isNull():
+                return aim._get()
+            aim = AObjectConverter.aimsTexture_S16(ao, options)
+            if not aim.isNull():
+                return aim._get()
+            aim = AObjectConverter.aimsTexture_S32(ao, options)
+            if not aim.isNull():
+                return aim._get()
+            aim = AObjectConverter.aimsTexture_U32(ao, options)
+        if aim and not aim.isNull():
+            return aim._get()
+        return None
+    elif tn == 'GRAPH':
+        aim = AObjectConverter.aimsGraph(ao, options)
+        if not aim.isNull():
+            return aim._get()
+    elif tn == 'NOMENCLATURE':
+        aim = AObjectConverter.aimsTree(ao, options)
+        if not aim.isNull():
+            return aim._get()
+    elif tn == 'SparseMatrix':
+        aim = AObjectConverter.aimsSparseMatrix(ao, options)
+        if not aim.isNull():
+            return aim._get()
+    return None
+
+AObjectConverter.aims = staticmethod(aimsFromAnatomist)
 del aimsFromAnatomist
 
-def anatomistFromAims( obj ):
-  ot = type( obj ).__name__
-  if isinstance( obj, AObject ):
-    return obj
-  t = None
-  if isinstance( obj, numpy.ndarray ):
+
+def anatomistFromAims(obj):
+    ot = type(obj).__name__
+    if isinstance(obj, AObject):
+        return obj
     t = None
-    if obj.dtype is numpy.dtype( numpy.int8 ):
-      t = aims.Volume_S8
-    elif obj.dtype is numpy.dtype( numpy.uint8 ):
-      t = aims.Volume_U8
-    elif obj.dtype is numpy.dtype( numpy.int16 ):
-      t = aims.Volume_S16
-    elif obj.dtype is numpy.dtype( numpy.uint16 ):
-      t = aims.Volume_U16
-    elif obj.dtype is numpy.dtype( numpy.int_ ) \
-      or obj.dtype is numpy.dtype( numpy.int32 ):
-      t = aims.Volume_S32
-    elif obj.dtype is numpy.dtype( numpy.uint32 ):
-      t = aims.Volume_U32
-    elif obj.dtype is numpy.dtype( numpy.float32 ):
-      t = aims.Volume_FLOAT
-    elif obj.dtype is numpy.dtype( numpy.float64 ) \
-      or obj.dtype is numpy.dtype( numpy.float_ ):
-      t = aims.Volume_DOUBLE
-  if t:
-    return AObjectConverter.anatomist( t( obj ) )
-  return AObjectConverter._anatomist( obj )
+    if isinstance(obj, numpy.ndarray):
+        t = None
+        if obj.dtype is numpy.dtype(numpy.int8):
+            t = aims.Volume_S8
+        elif obj.dtype is numpy.dtype(numpy.uint8):
+            t = aims.Volume_U8
+        elif obj.dtype is numpy.dtype(numpy.int16):
+            t = aims.Volume_S16
+        elif obj.dtype is numpy.dtype(numpy.uint16):
+            t = aims.Volume_U16
+        elif obj.dtype is numpy.dtype( numpy.int_ ) \
+                or obj.dtype is numpy.dtype(numpy.int32):
+            t = aims.Volume_S32
+        elif obj.dtype is numpy.dtype(numpy.uint32):
+            t = aims.Volume_U32
+        elif obj.dtype is numpy.dtype(numpy.float32):
+            t = aims.Volume_FLOAT
+        elif obj.dtype is numpy.dtype( numpy.float64 ) \
+                or obj.dtype is numpy.dtype(numpy.float_):
+            t = aims.Volume_DOUBLE
+    if t:
+        return AObjectConverter.anatomist(t(obj))
+    return AObjectConverter._anatomist(obj)
 AObjectConverter._anatomist = AObjectConverter.anatomist
-AObjectConverter.anatomist = staticmethod( anatomistFromAims )
+AObjectConverter.anatomist = staticmethod(anatomistFromAims)
 del anatomistFromAims
 
 
 # Anatomist class: entry point to anatomist
 
-class Anatomist( AnatomistSip ):
-  '''
-  Anatomist class: entry point to anatomist
-  '''
+class Anatomist(AnatomistSip):
 
-  def __init__( self, *args ):
-    import anatomistsip, os, sys, glob, traceback
-    global _anatomist_modsloaded
-    modsloaded = _anatomist_modsloaded
-    _anatomist_modsloaded = 1
-    AnatomistSip.__init__( self, ( 'anatomist', ) + args )
-    if modsloaded:
-      return
+    '''
+    Anatomist class: entry point to anatomist
+    '''
 
-    pythonmodules = os.path.join( str( self.anatomistSharedPath() ),
-                                      'python_plugins' )
-    homemodules = os.path.join( str( self.anatomistHomePath() ), 
-                                'python_plugins' )
+    def __init__(self, *args):
+        import anatomistsip
+        import os
+        import sys
+        import glob
+        import traceback
+        global _anatomist_modsloaded
+        modsloaded = _anatomist_modsloaded
+        _anatomist_modsloaded = 1
+        AnatomistSip.__init__(self, ('anatomist', ) + args)
+        if modsloaded:
+            return
 
-    print('global modules:', pythonmodules)
-    print('home   modules:', homemodules)
+        pythonmodules = os.path.join(str(self.anatomistSharedPath()),
+                                     'python_plugins')
+        homemodules = os.path.join(str(self.anatomistHomePath()),
+                                   'python_plugins')
 
-    if sys.path[0] != homemodules:
-      sys.path.insert( 0, homemodules )
-    if sys.path[1] != pythonmodules:
-      sys.path.insert( 1, pythonmodules )
+        print('global modules:', pythonmodules)
+        print('home   modules:', homemodules)
 
-    mods = glob.glob( os.path.join( pythonmodules, '*' ) ) \
-           + glob.glob( os.path.join( homemodules, '*' ) )
-    # print('modules:', mods)
+        if sys.path[0] != homemodules:
+            sys.path.insert(0, homemodules)
+        if sys.path[1] != pythonmodules:
+            sys.path.insert(1, pythonmodules)
 
-    global loaded_modules
+        mods = glob.glob( os.path.join( pythonmodules, '*' ) ) \
+            + glob.glob(os.path.join(homemodules, '*'))
+        # print('modules:', mods)
 
-    for x in mods:
-      if os.path.basename(x).startswith('_'):
-        # don't load files starting with '_' (__init__, __pycache__...)
-        continue
-      if x[-4:] == '.pyo':
-        x = x[:-4]
-      elif x[-4:] == '.pyc':
-        x = x[:-4]
-      elif x[-3:] == '.py':
-        x = x[:-3]
-      elif not os.path.isdir( x ):
-        continue
-      #print('module:', x)
-      x = os.path.basename( x )
-      if x in loaded_modules:
-        continue
-      loaded_modules.append( x )
-      print('loading module', x)
-      try:
-        exec('import ' + x)
-      except:
-        print()
-        print('loading of module', x, 'failed:')
-        exceptionInfo = sys.exc_info()
-        e, v, t = exceptionInfo
-        tb = traceback.extract_tb( t )
-        try:
-          name = e.__name__
-        except:
-          name = str( e )
-        print(name, ':', v)
-        print('traceback:')
-        for file, line ,function, text in tb:
-          if text is None:
-            text = '?'
-          print(file, '(', line, ') in', function, ':')
-          print(text)
-        print()
-        # must explicitely delete reference to frame objects (traceback) else it creates a reference cycle and the object cannot be deleted
-        del e, v, t, tb, exceptionInfo
+        global loaded_modules
 
-    print('all python modules loaded')
+        for x in mods:
+            if os.path.basename(x).startswith('_'):
+                # don't load files starting with '_' (__init__, __pycache__...)
+                continue
+            if x[-4:] == '.pyo':
+                x = x[:-4]
+            elif x[-4:] == '.pyc':
+                x = x[:-4]
+            elif x[-3:] == '.py':
+                x = x[:-3]
+            elif not os.path.isdir(x):
+                continue
+            # print('module:', x)
+            x = os.path.basename(x)
+            if x in loaded_modules:
+                continue
+            loaded_modules.append(x)
+            print('loading module', x)
+            try:
+                exec('import ' + x)
+            except:
+                print()
+                print('loading of module', x, 'failed:')
+                exceptionInfo = sys.exc_info()
+                e, v, t = exceptionInfo
+                tb = traceback.extract_tb(t)
+                try:
+                    name = e.__name__
+                except:
+                    name = str(e)
+                print(name, ':', v)
+                print('traceback:')
+                for file, line, function, text in tb:
+                    if text is None:
+                        text = '?'
+                    print(file, '(', line, ') in', function, ':')
+                    print(text)
+                print()
+                # must explicitely delete reference to frame objects
+                # (traceback) else it creates a reference cycle and the object
+                # cannot be deleted
+                del e, v, t, tb, exceptionInfo
+
+        print('all python modules loaded')
 
 # Processor.execute
 
-def newexecute( self, *args, **kwargs ):
-  '''
-  Commands execution. It can be used in several different forms:
 
-  * execute(Command)
-  * execute(commandname, params=None, context=None)
-  * execute(commandname, context=None, **kwargs)
+def newexecute(self, *args, **kwargs):
+    '''
+    Commands execution. It can be used in several different forms:
 
-  Parameters
-  ----------
-  Command: :class:`Command` subclass
-      command to be executed
-  commandname: str
-      name of the command to executed
-  params: dict or str
-      optional parameters (default: None)
-  context: :class:`CommandContext`
-      command execution context (default: None)
-  kwargs:
-      keyword arguments which are passed to Anatomist directly in the command
+    * execute(Command)
+    * execute(commandname, params=None, context=None)
+    * execute(commandname, context=None, **kwargs)
 
-  Returns
-  -------
-  command: the executed command (or None)
-  '''
-  def replace_dict( dic, cc ):
-    for k,v in dic.items():
-      if isinstance( v, AObject ) or isinstance( v, AWindow ) \
-        or isinstance( v, Referential ) or isinstance( v, Transformation ):
-        try:
-          i = cc.id( v )
-        except:
-          i = cc.makeID( v )
-        dic[k] = i
-      elif hasattr( v, 'items' ): # operator.isMappingType( v ):
-        replace_dict( v, cc )
-      elif not isinstance(v, six.string_types) and isSequenceType(v):
-        replace_list( v, cc )
+    Parameters
+    ----------
+    Command: :class:`Command` subclass
+        command to be executed
+    commandname: str
+        name of the command to executed
+    params: dict or str
+        optional parameters (default: None)
+    context: :class:`CommandContext`
+        command execution context (default: None)
+    kwargs:
+        keyword arguments which are passed to Anatomist directly in the command
 
-  def replace_list( l, cc ):
-    k = 0
-    for v in l:
-      if isinstance( v, AObject ) or isinstance( v, AWindow )\
-        or isinstance( v, Referential ) or isinstance( v, Transformation ):
-        try:
-          i = cc.id( v )
-        except:
-          i = cc.makeID( v )
-        l[k] = i
-      elif hasattr( v, 'items' ): # operator.isMappingType( v ):
-        replace_dict( v, cc )
-      elif not isinstance(v, six.string_types) and isSequenceType(v):
-        replace_list( v, cc )
-      k += 1
+    Returns
+    -------
+    command: the executed command (or None)
+    '''
+    def replace_dict(dic, cc):
+        for k, v in dic.items():
+            if isinstance( v, AObject ) or isinstance( v, AWindow ) \
+                    or isinstance(v, Referential) or isinstance(v, Transformation):
+                try:
+                    i = cc.id(v)
+                except:
+                    i = cc.makeID(v)
+                dic[k] = i
+            elif hasattr(v, 'items'):  # operator.isMappingType( v ):
+                replace_dict(v, cc)
+            elif not isinstance(v, six.string_types) and isSequenceType(v):
+                replace_list(v, cc)
 
-  if len( args ) < 1 or len( args ) > 3:
-    raise RunTimeError( 'wrong arguments number' )
-  if type( args[0] ) is not str:
-    if len( args ) != 1:
-      raise RunTimeError( 'wrong arguments number' )
-    return self._execute( args[0] )
+    def replace_list(l, cc):
+        k = 0
+        for v in l:
+            if isinstance( v, AObject ) or isinstance( v, AWindow )\
+                    or isinstance(v, Referential) or isinstance(v, Transformation):
+                try:
+                    i = cc.id(v)
+                except:
+                    i = cc.makeID(v)
+                l[k] = i
+            elif hasattr(v, 'items'):  # operator.isMappingType( v ):
+                replace_dict(v, cc)
+            elif not isinstance(v, six.string_types) and isSequenceType(v):
+                replace_list(v, cc)
+            k += 1
 
-  dic = {}
-  cc = None
-  if len( kwargs ) != 0:
-    if len( args ) > 2:
-      raise RunTimeError( 'wrong arguments number' )
-    kw = 0
-    if len( args ) == 2:
-      cc = args[1]
-    else:
-      cc = kwargs.get( 'context' )
-      if cc is not None:
-        kw = 1
-    dic = kwargs.copy()
-    if kw:
-      del dic[ 'context' ]
-  elif len( args ) >= 2:
-    dic = args[1]
-    if len( args ) == 3:
-      cc = args[2]
-    elif len( args ) > 3:
-      raise RunTimeError( 'wrong arguments number' )
-  if not cc:
-    cc = CommandContext.defaultContext()
-  replace_dict( dic, cc )
-  return self._execute( args[0], str( dic ), cc )
+    if len(args) < 1 or len(args) > 3:
+        raise RunTimeError('wrong arguments number')
+    if type(args[0]) is not str:
+        if len(args) != 1:
+            raise RunTimeError('wrong arguments number')
+        return self._execute(args[0])
+
+    dic = {}
+    cc = None
+    if len(kwargs) != 0:
+        if len(args) > 2:
+            raise RunTimeError('wrong arguments number')
+        kw = 0
+        if len(args) == 2:
+            cc = args[1]
+        else:
+            cc = kwargs.get('context')
+            if cc is not None:
+                kw = 1
+        dic = kwargs.copy()
+        if kw:
+            del dic['context']
+    elif len(args) >= 2:
+        dic = args[1]
+        if len(args) == 3:
+            cc = args[2]
+        elif len(args) > 3:
+            raise RunTimeError('wrong arguments number')
+    if not cc:
+        cc = CommandContext.defaultContext()
+    replace_dict(dic, cc)
+    return self._execute(args[0], str(dic), cc)
 
 Processor.execute = newexecute
 del newexecute
 
 # automatically wrap creator functions in controls system
-class PyKeyActionLink( Control.KeyActionLink ):
-  def __init__( self, method ):
-    Control.KeyActionLink.__init__( self )
-    self._method = method
-  def execute( self ):
-    self._method()
-  def clone( self ):
-    return PyKeyActionLink( self._method )
 
-class PyMouseActionLink( Control.MouseActionLink ):
-  def __init__( self, method ):
-    Control.MouseActionLink.__init__( self )
-    self._method = method
-  def execute( self, x, y, globalX, globalY ):
-    self._method( x, y, globalX, globalY )
-  def clone( self ):
-    return PyMouseActionLink( self._method )
-  def action( self ):
-    return self._method.im_self
 
-class PyWheelActionLink( Control.WheelActionLink ):
-  def __init__( self, method ):
-    Control.WheelActionLink.__init__( self )
-    self._method = method
-  def execute( self, delta, x, y, globalX, globalY ):
-    self._method( delta, x, y, globalX, globalY )
-  def clone( self ):
-    return PyWheelActionLink( self._method )
+class PyKeyActionLink(Control.KeyActionLink):
 
-class PySelectionChangedActionLink( Control.SelectionChangedActionLink ):
-  def __init__( self, method ):
-    Control.SelectionChangedActionLink.__init__( self )
-    self._method = method
-  def execute( self ):
-    self._method()
-  def clone( self ):
-    return PySelectionChangedActionLink( self._method )
+    def __init__(self, method):
+        Control.KeyActionLink.__init__(self)
+        self._method = method
 
-class PyActionCreator( ActionDictionary.ActionCreatorBase ):
-  def __init__( self, function ):
-    ActionDictionary.ActionCreatorBase.__init__( self )
-    self._function = function
-  def __call__( self ):
-    return self._function()
+    def execute(self):
+        self._method()
 
-class PyControlCreator( ControlDictionary.ControlCreatorBase ):
-  def __init__( self, function ):
-    ControlDictionary.ControlCreatorBase.__init__( self )
-    self._function = function
-  def __call__( self ):
-    return self._function()
+    def clone(self):
+        return PyKeyActionLink(self._method)
+
+
+class PyMouseActionLink(Control.MouseActionLink):
+
+    def __init__(self, method):
+        Control.MouseActionLink.__init__(self)
+        self._method = method
+
+    def execute(self, x, y, globalX, globalY):
+        self._method(x, y, globalX, globalY)
+
+    def clone(self):
+        return PyMouseActionLink(self._method)
+
+    def action(self):
+        return self._method.im_self
+
+
+class PyWheelActionLink(Control.WheelActionLink):
+
+    def __init__(self, method):
+        Control.WheelActionLink.__init__(self)
+        self._method = method
+
+    def execute(self, delta, x, y, globalX, globalY):
+        self._method(delta, x, y, globalX, globalY)
+
+    def clone(self):
+        return PyWheelActionLink(self._method)
+
+
+class PySelectionChangedActionLink(Control.SelectionChangedActionLink):
+
+    def __init__(self, method):
+        Control.SelectionChangedActionLink.__init__(self)
+        self._method = method
+
+    def execute(self):
+        self._method()
+
+    def clone(self):
+        return PySelectionChangedActionLink(self._method)
+
+
+class PyActionCreator(ActionDictionary.ActionCreatorBase):
+
+    def __init__(self, function):
+        ActionDictionary.ActionCreatorBase.__init__(self)
+        self._function = function
+
+    def __call__(self):
+        return self._function()
+
+
+class PyControlCreator(ControlDictionary.ControlCreatorBase):
+
+    def __init__(self, function):
+        ControlDictionary.ControlCreatorBase.__init__(self)
+        self._function = function
+
+    def __call__(self):
+        return self._function()
 
 ControlDictionary.addControl = \
-  lambda self, name, creator, prio, allowreplace=False: \
-    self._addControl( name, PyControlCreator( creator ), prio, allowreplace )
+    lambda self, name, creator, prio, allowreplace=False: \
+    self._addControl(name, PyControlCreator(creator), prio, allowreplace)
 ActionDictionary.addAction = \
-  lambda self, name, creator: \
-    self._addAction( name, PyActionCreator( creator ) )
+    lambda self, name, creator: \
+    self._addAction(name, PyActionCreator(creator))
 
 # control subscribe functions
+
+
 def keyPressSubscribeFunction(self, key, state, func, name=''):
-  if name == '':
-    if hasattr(func, '__name__'):
-      name = func.__name__
-    elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
-      name = func.__func__.__name__
-  self._keyPressEventSubscribe(key, state, PyKeyActionLink(func), name)
+    if name == '':
+        if hasattr(func, '__name__'):
+            name = func.__name__
+        elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
+            name = func.__func__.__name__
+    self._keyPressEventSubscribe(key, state, PyKeyActionLink(func), name)
+
 
 def keyReleaseSubscribeFunction(self, key, state, func, name=''):
-  if name == '':
-    if hasattr(func, '__name__'):
-      name = func.__name__
-    elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
-      name = func.__func__.__name__
-  self._keyReleaseEventSubscribe(key, state, PyKeyActionLink(func), name)
+    if name == '':
+        if hasattr(func, '__name__'):
+            name = func.__name__
+        elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
+            name = func.__func__.__name__
+    self._keyReleaseEventSubscribe(key, state, PyKeyActionLink(func), name)
+
 
 def mousePressSubscribeFunction(self, but, state, func, name=''):
-  if name == '':
-    if hasattr(func, '__name__'):
-      name = func.__name__
-    elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
-      name = func.__func__.__name__
-  self._mousePressButtonEventSubscribe(
-    but, state, PyMouseActionLink(func), name)
+    if name == '':
+        if hasattr(func, '__name__'):
+            name = func.__name__
+        elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
+            name = func.__func__.__name__
+    self._mousePressButtonEventSubscribe(
+        but, state, PyMouseActionLink(func), name)
+
 
 def mouseReleaseSubscribeFunction(self, but, state, func, name=''):
-  if name == '':
-    if hasattr(func, '__name__'):
-      name = func.__name__
-    elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
-      name = func.__func__.__name__
-  self._mouseReleaseButtonEventSubscribe(
-    but, state, PyMouseActionLink(func), name)
+    if name == '':
+        if hasattr(func, '__name__'):
+            name = func.__name__
+        elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
+            name = func.__func__.__name__
+    self._mouseReleaseButtonEventSubscribe(
+        but, state, PyMouseActionLink(func), name)
+
 
 def mouseDoubleClickSubscribeFunction(self, but, state, func, name=''):
-  if name == '':
-    if hasattr(func, '__name__'):
-      name = func.__name__
-    elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
-      name = func.__func__.__name__
-  self._mouseDoubleClickEventSubscribe(
-    but, state, PyMouseActionLink(func), name)
+    if name == '':
+        if hasattr(func, '__name__'):
+            name = func.__name__
+        elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
+            name = func.__func__.__name__
+    self._mouseDoubleClickEventSubscribe(
+        but, state, PyMouseActionLink(func), name)
+
 
 def mouseMoveSubscribeFunction(self, but, state, func, name=''):
-  if name == '':
-    if hasattr(func, '__name__'):
-      name = func.__name__
-    elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
-      name = func.__func__.__name__
-  self._mouseMoveEventSubscribe(but, state, PyMouseActionLink(func), name)
+    if name == '':
+        if hasattr(func, '__name__'):
+            name = func.__name__
+        elif hasattr(func, '__func__') and hasattr(func.__func__, '__name__'):
+            name = func.__func__.__name__
+    self._mouseMoveEventSubscribe(but, state, PyMouseActionLink(func), name)
 
 Control.keyPressEventSubscribe = keyPressSubscribeFunction
 Control.keyReleaseEventSubscribe = keyReleaseSubscribeFunction
@@ -625,27 +672,27 @@ Control.mouseReleaseButtonEventSubscribe = mouseReleaseSubscribeFunction
 Control.mouseMoveEventSubscribe = mouseMoveSubscribeFunction
 Control.mouseDoubleClickEventSubscribe = mouseDoubleClickSubscribeFunction
 del keyPressSubscribeFunction, keyReleaseSubscribeFunction, \
-  mousePressSubscribeFunction, mouseReleaseSubscribeFunction, \
+    mousePressSubscribeFunction, mouseReleaseSubscribeFunction, \
   mouseDoubleClickSubscribeFunction, mouseMoveSubscribeFunction
 
 Control.mouseLongEventSubscribe = lambda self, but, state, startfunc, \
-                                  longfunc, endfunc, exclusive: \
-                                  self._mouseLongEventSubscribe( \
-  but, state, PyMouseActionLink( startfunc ),
-  PyMouseActionLink( longfunc ), PyMouseActionLink( endfunc ), exclusive )
+    longfunc, endfunc, exclusive: \
+                                  self._mouseLongEventSubscribe(
+                                      but, state, PyMouseActionLink(startfunc),
+                                      PyMouseActionLink(longfunc), PyMouseActionLink(endfunc), exclusive)
 Control.wheelEventSubscribe = lambda self, func: \
-                                  self._wheelEventSubscribe(
-                                  PyWheelActionLink( func ) )
+    self._wheelEventSubscribe(
+        PyWheelActionLink(func))
 Control.selectionChangedEventSubscribe = lambda self, func: \
-                                  self._selectionChangedEventSubscribe(
-                                  PySelectionChangedActionLink( func ) )
+    self._selectionChangedEventSubscribe(
+        PySelectionChangedActionLink(func))
 
-aims.convertersObjectToPython.update( { \
-  'AObject' : AObject.fromObject,
-  'PN9anatomist7AObjectE' : AObject.fromObject,
-  'N5carto10shared_ptrIN9anatomist7AObjectEEE' : AObject.fromObject,
-  'PN9anatomist7AWindowE' : AWindow.fromObject,
-} )
+aims.convertersObjectToPython.update({
+                                     'AObject': AObject.fromObject,
+                                     'PN9anatomist7AObjectE': AObject.fromObject,
+                                     'N5carto10shared_ptrIN9anatomist7AObjectEEE': AObject.fromObject,
+                                     'PN9anatomist7AWindowE': AWindow.fromObject,
+                                     })
 
 
 # Import external python modules
@@ -653,15 +700,17 @@ import mobject
 # delete things from other modules
 
 # apply changes to config properties to Anatomist internal state
+
+
 def __GlobalConfiguration_setitem__(self, param, value):
-  print('config.setitem:', param, ':', value)
-  super(GlobalConfiguration, self).__setitem__(param, value)
-  self.apply()
+    print('config.setitem:', param, ':', value)
+    super(GlobalConfiguration, self).__setitem__(param, value)
+    self.apply()
 anatomist.GlobalConfiguration.__setitem__ = __GlobalConfiguration_setitem__
 del __GlobalConfiguration_setitem__
 
 del os, string, glob
-del anatomist # , aims
+del anatomist  # , aims
 
 # -------------
 # docs
@@ -722,11 +771,10 @@ the object in Anatomist. This is generally done via the
 :meth:`AObject.setChanged` and :meth:`AObject.notifyObservers` methods.
 '''
 
-private = [ 'private', 'anatomistsip', 'AnatomistSip', 'numpy', 'operator',
-  'mobject' ]
+private = ['private', 'anatomistsip', 'AnatomistSip', 'numpy', 'operator',
+           'mobject']
 __all__ = []
 for x in dir():
-  if not x.startswith( '_' ) and x not in private:
-    __all__.append(x)
+    if not x.startswith('_') and x not in private:
+        __all__.append(x)
 del x, private
-

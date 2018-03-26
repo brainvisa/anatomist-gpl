@@ -1166,8 +1166,8 @@ class Anatomist(Singleton):
         """
         if isinstance(palette, self.APalette):
             palette = palette.name
-        cmd = dict(objects = self.makeList(objects),
-                   palette = palette, palette2 = palette2, min=minVal,
+        cmd = dict(objects=self.makeList(objects),
+                   palette=palette, palette2=palette2, min=minVal,
                    max=maxVal, min2=minVal2, max2=maxVal2, mixMethod=mixMethod,
                    linMixFactor=linMixFactor,
                    palette1Dmapping=palette1Dmapping,
