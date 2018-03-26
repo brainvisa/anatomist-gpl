@@ -37,20 +37,22 @@ Anatomist is runned in another process in server mode, it listens for requests o
 
 This is not the default implementation (except in Brainvisa). So, to use it you have to change default implementation before importing anatomist.api. 
 
-  >>> import anatomist
-  >>> anatomist.setDefaultImplementation(anatomist.SOCKET)
-  >>> import anatomist.api as anatomist 
-  >>> a=anatomist.Anatomist()
+>>> import anatomist
+>>> anatomist.setDefaultImplementation(anatomist.SOCKET)
+>>> import anatomist.api as anatomist
+>>> a=anatomist.Anatomist()
 
 It is also possible to directely load socket implementation without changing default implementation, for example if you want to use the 2 implementations in the same application :
-  >>> import anatomist.socket.api as anatomist
+
+>>> import anatomist.socket.api as anatomist
 
 This implementation is thread safe so it can be used in multi-threaded applications.
 
-Anatomist class is a Singleton as it inherits from base.Anatomist. But it redefines C{__new__} method to enable to force the creation of another instance of Anatomist. Indeed it is possible with socket implementation to start two anatomist processes that listen on two different socket ports.
+Anatomist class is a Singleton as it inherits from base.Anatomist. But it redefines the **__new__** method to enable to force the creation of another instance of Anatomist. Indeed it is possible with socket implementation to start two anatomist processes that listen on two different socket ports.
 To do this, use the constructor with forceNewInstance parameter :
-  >>> a=anatomist.Anatomist(forceNewInstance=True)
-  
+
+>>> a=anatomist.Anatomist(forceNewInstance=True)
+
 """
 
 from __future__ import print_function
@@ -70,7 +72,7 @@ import six
 from soma.qt_gui.io import Socket
 from soma.qt_gui.qtThread import QtThreadCall
 from soma.qt_gui.qt_backend.QtCore import QProcess
-from soma.qt_gui.qt_backend.QtGui import qApp
+from soma.qt_gui.qt_backend.Qt import qApp
 
 try:
   from soma import somaqt
@@ -87,29 +89,30 @@ class Anatomist(base.Anatomist):
   Interface to communicate with an Anatomist Application sending commands on a socket.
   Anatomist is launched in server mode and listens for commands arriving on a socket.
   
-  @type comm: ASocket
-  @ivar comm: socket used to communicate with anatomist application.
-  @type launched: bool
-  @ivar launched: indicates if anatomist application has been correclty launched in server mode
-  @type _requestID: int
-  @ivar _requestID: counter to generates unique id for requests to anatomist application. It is used to match request and answer. 
-  @type anaServerProcess: QProcess
-  @ivar anaServerProcess: anatomist application process
-  @type centralRef: Referential
-  @ivar centralRef: anatomist's central referential. First time it is accessed, an id is affected to the central referential.
-  @type mniTemplateRef : Referential
-  @ivar mniTempateRef: template mni referential (used by spm)
-  These two referentials and transformation between them are always loaded in anatomist.
-
-  @type anatomistExecutable: string
-  @cvar anatomistExecutable: path to anatomist executable
-  @type lock: RLock
-  @cvar lock : lock for thread safety when access to singleton instance
+  Attributes
+  ----------
+  comm: ASocket
+      socket used to communicate with anatomist application.
+  launched: bool
+      indicates if anatomist application has been correclty launched in server mode
+  _requestID: int
+      counter to generates unique id for requests to anatomist application. It is used to match request and answer.
+  anaServerProcess: QProcess
+      anatomist application process
+  centralRef: Referential
+      anatomist's central referential. First time it is accessed, an id is affected to the central referential.
+  mniTemplateRef: Referential
+      template mni referential (used by spm)
+      These two referentials and transformation between them are always loaded in anatomist.
+  anatomistExecutable: str
+      path to anatomist executable
+  lock: RLock
+      lock for thread safety when accessing the singleton instance
   """
   talairachMNIReferentialId = '803552a6-ac4d-491d-99f5-b938392b674b'
   anatomistExecutable = distutils.spawn.find_executable('anatomist')
   mainThread=None
-  
+
   def __new__(cls, *args, **kwargs):
     if kwargs.get("forceNewInstance", False):
       self=object.__new__(cls)
@@ -143,10 +146,12 @@ class Anatomist(base.Anatomist):
     """
     Set listening of this event on. So when the event occurs, the notifier's notify method is called.
     
-    @type event: string
-    @param event: name of the event to listen
-    @type notifier: Notifier
-    @param notifier: the notifier whose notify method must be called when this event occurs
+    Parameters
+    ----------
+    event: str
+        name of the event to listen
+    notifier: Notifier
+        the notifier whose notify method must be called when this event occurs
     """
     self.execute('EventFilter', filter=[event])
     # if the event occurs, notify method will be called with two parameters : the event name and a dictionary describing the event
@@ -156,8 +161,10 @@ class Anatomist(base.Anatomist):
     """
     Set listening of this event off.
     
-    @type event: string
-    @param event: name of the event to disable.
+    Parameters
+    ----------
+    event: str
+        name of the event to disable.
     """
     self.execute('EventFilter', unfilter=[event])
     self.comm.removeEventHandler(event)
@@ -168,8 +175,10 @@ class Anatomist(base.Anatomist):
   # objects creation
   def createWindowsBlock(self, nbCols=2, nbRows=None):
     """
-    :type: AWindowsBlock
-    :return: a window which can contain several AWindow
+    Returns
+    -------
+    block: AWindowsBlock
+        a window which can contain several AWindow
     """
     return self.AWindowsBlock(anatomistinstance=self, nbCols=nbCols,
       nbRows=nbRows)
@@ -178,17 +187,22 @@ class Anatomist(base.Anatomist):
     no_decoration=False, options=None):
     """
     Creates a new window and opens it.
-    @type wintype: string
-    @param wintype: type of window to open ("Axial", "Sagittal", "Coronal", "3D", "Browser", "Profile")
-    @type geometry: int vector
-    @param geometry: position on screen and size of the new window (x, y, w, h)
-    @type block: AWindowsBlock
-    @param block: a block in which the new window must be added
-    @type no_decoration: bool
-    @param no_decoration: indicates if decorations (menus, buttons) can be painted around the view.
+
+    Parameters
+    ----------
+    wintype: str
+        type of window to open ("Axial", "Sagittal", "Coronal", "3D", "Browser", "Profile")
+    geometry: int vector
+        position on screen and size of the new window (x, y, w, h)
+    block: AWindowsBlock
+        a block in which the new window must be added
+    no_decoration: bool
+        indicates if decorations (menus, buttons) can be painted around the view.
     
-    @rtype: AWindow
-    @return: the newly created window
+    Returns
+    -------
+    win: AWindow
+        the newly created window
     """
     # Create a new window
     newWindow = self.AWindow( self )
@@ -213,21 +227,25 @@ class Anatomist(base.Anatomist):
     """
     Loads an object from a file (volume, mesh, graph, texture...)
     
-    @type filename: string
-    @param filename: the file containing object data
-    @type objectName: string
-    @param objectName: object's name
-    @type restrict_object_types: dictionary
-    @param restrict_object_types: object -> accpepted types list. Ex: {'Volume' : ['S16', 'FLOAT']}
-    @type forceReload: boolean
-    @param forceReload: if True the object will be loaded even if it is already loaded in Anatomist. Otherwise, the already loaded one is returned.
-    @type duplicate: boolean
-    @param duplicate: if the object already exists, duplicate it. The original and the copy will share the same data but not display parameters as palette. If the object is not loaded yet, load it hidden and duplicate it (unable to keep the original object with default display parameters).
-    @type hidden: boolean
-    @param hidden: an idden object does not appear in Anatomist main control window.
+    Parameters
+    ----------
+    filename: str
+        the file containing object data
+    objectName: str
+        object name
+    restrict_object_types: dictionary
+        object -> accpepted types list. Ex: ``{'Volume' : ['S16', 'FLOAT']}``
+    forceReload: bool
+        if True the object will be loaded even if it is already loaded in Anatomist. Otherwise, the already loaded one is returned.
+    duplicate: bool
+        if the object already exists, duplicate it. The original and the copy will share the same data but not display parameters as palette. If the object is not loaded yet, load it hidden and duplicate it (unable to keep the original object with default display parameters).
+    hidden: bool
+        a idden object does not appear in Anatomist main control window.
 
-    @rtype: AObject
-    @return: the loaded object
+    Returns
+    -------
+    object: AObject
+        the loaded object
     """
     if not forceReload: # do not load the object if it is already loaded
       object=self.getObject(filename)
@@ -280,11 +298,15 @@ class Anatomist(base.Anatomist):
     """
     Creates a copy of source object.
     
-    @type source: AObject
-    @param source: the object to copy.
+    Parameters
+    ----------
+    source: AObject
+        the object to copy.
     
-    @rtype: AObject
-    @return: the copy. it has a reference to its source object, so original object will not be deleted since the copy exists.
+    Returns
+    -------
+    object: AObject
+        the copy. it has a reference to its source object, so original object will not be deleted since the copy exists.
     """
     newObject=self.AObject(self)
     self.execute("DuplicateObject", source=source, res_pointer=newObject, shallow=shallowCopy)
@@ -299,17 +321,21 @@ class Anatomist(base.Anatomist):
     """
     Creates a graph associated to a object (volume for example). This object initializes graph's dimensions (voxel size, extrema).
     
-    @type object: AObject
-    @param object: the new graph is based on this object
-    @type name: string
-    @param name: graph name. default is RoiArg.
-    @type syntax: string
-    @param syntax: graph syntax attribute. default is RoiArg.
-    @type filename: string
-    @param filename: filename used for saving. Default is None.
+    Parameters
+    ----------
+    object: AObject
+        the new graph is based on this object
+    name: str
+        graph name. default is RoiArg.
+    syntax: str
+        graph syntax attribute. default is RoiArg.
+    filename: str
+        filename used for saving. Default is None.
 
-    @rtype: AGraph
-    @return: the new graph object
+    Returns
+    -------
+    graph: AGraph
+        the new graph object
     """
     newGraph=self.AGraph(self)
     self.execute("CreateGraph", object=object, res_pointer=newGraph, name=name,
@@ -322,12 +348,16 @@ class Anatomist(base.Anatomist):
     """
     Loads a cursor for 3D windows from a file. Any mesh can be loaded as cursor. 
     The loaded file is added to cursor choice list in anatomist parameters.
-    
-    @type filename: string
-    @param filename: the file containing object data
-    
-    @rtype: AObject
-    @return: the loaded object
+
+    Parameters
+    ----------
+    filename: str
+        the file containing object data
+
+    Returns
+    -------
+    cursor: AObject
+        the loaded object
     """
     newObject=self.AObject(self)
     self.execute("LoadObject", filename = filename, res_pointer = newObject, as_cursor = 1)
@@ -338,16 +368,20 @@ class Anatomist(base.Anatomist):
   def fusionObjects(self, objects, method=None, ask_order=False):
     """
     Creates a multi object that contains all given objects.
-    
-    @type objects: list of AObject
-    @param objects: list of objects that must be fusionned
-    @type method: string
-    @param method: method to apply for the fusion (Fusion2DMethod...)
-    @type ask_order: boolean
-    @param ask_order: if True, asks user in what order the fusion must be processed.
-    
-    @rtype: AObject
-    @return: the newly created fusion object.
+
+    Parameters
+    ----------
+    objects: list of AObject
+        list of objects that must be fusionned
+    method: str
+        method to apply for the fusion (Fusion2DMethod...)
+    ask_order: bool
+        if True, asks user in what order the fusion must be processed.
+
+    Returns
+    -------
+    object: AObject
+        the newly created fusion object.
     """
     newObject=self.AObject(self)
     if ask_order:
@@ -374,12 +408,16 @@ class Anatomist(base.Anatomist):
     (LoadObject -> addAobject | createReferential -> assignReferential)
     In this implementation, creating a new referential is just reserving an id for it. The corresponding object will only be created
     when the referential is assigned to an object or a window.
-    
-    @type filename: string
-    @param filename: name of a file (minf file, extension .referential) containing  informations about the referential : its name and uuid
-    
-    @rtype: Referential
-    @return: the newly created referential
+
+    Parameters
+    ----------
+    filename: str
+        name of a file (minf file, extension .referential) containing  informations about the referential : its name and uuid
+
+    Returns
+    -------
+    ref: Referential
+        the newly created referential
     """
     newRef=self.Referential(self)
     self.execute("AssignReferential", ref_id = newRef, filename=filename, central_ref=0)
@@ -388,16 +426,20 @@ class Anatomist(base.Anatomist):
   def loadTransformation(self, filename, origin, destination):
     """
     Loads a transformation from a referential to another. The transformation informations are given in a file.
-    
-    @type filename: string
-    @param filename: file containing transformation informations 
-    @type origin: Referential
-    @param origin: origin of the transformation
-    @type destination: Referential
-    @param destination: coordinates' referential after applying transformation
-    
-    @rtype: Transformation
-    @return: transformation to apply to convert coordinates from one referent
+
+    Parameters
+    ----------
+    filename: str
+        file containing transformation informations
+    origin: Referential
+        origin of the transformation
+    destination: Referential
+        coordinates' referential after applying transformation
+
+    Returns
+    -------
+    trans: Transformation
+        transformation to apply to convert coordinates from one referent
     """
     newTrans=self.Transformation(self)
     self.execute("LoadTransformation", origin = origin, destination = destination, filename = filename, res_pointer = newTrans)
@@ -407,14 +449,19 @@ class Anatomist(base.Anatomist):
     """
     Creates a transformation from a referential to another. The transformation informations are given in a matrix. 
     
-    @type matrix: float vector, size 12
-    @param matrix: transformation matrix (4 lines, 3 colons ; 1st line: translation, others: rotation)
-    @type origin: Referential
-    @param origin: origin of the transformation
-    @type destination: Referential
-    @param destination: coordinates' referential after applying transformation
-    @rtype: Transformation
-    @return: transformation to apply to convert coordinates from one referent
+    Parameters
+    ----------
+    matrix: float vector, size 12
+        transformation matrix (4 lines, 3 colons ; 1st line: translation, others: rotation)
+    origin: Referential
+        origin of the transformation
+    destination: Referential
+        coordinates' referential after applying transformation
+
+    Returns
+    -------
+    trans: Transformation
+        transformation to apply to convert coordinates from one referent
     """
     newTrans=self.Transformation(self)
     self.execute("LoadTransformation", origin = origin, destination = destination, matrix = matrix, res_pointer = newTrans)
@@ -423,12 +470,16 @@ class Anatomist(base.Anatomist):
   def createPalette(self, name):
     """
     Creates an empty palette and adds it in the palettes list. 
-    
-    @type name: string
-    @param name: name of the new palette
-    
-    @rtype: APalette
-    @return: the newly created palette
+
+    Parameters
+    ----------
+    name: str
+        name of the new palette
+
+    Returns
+    -------
+    palette: APalette
+        the newly created palette
     """
     newPalette=self.APalette(name, self, name)
     self.execute("NewPalette", name = name)
@@ -437,12 +488,16 @@ class Anatomist(base.Anatomist):
   def groupObjects(self, objects):
     """
     Creates a multi object containing objects in parameters.
-    
-    @type objects: list of AObject
-    @param objects: object to put in a group
-    
-    @rtype: AObject
-    @return: the newly created multi object
+
+    Parameters
+    ----------
+    objects: list of AObject
+        object to put in a group
+
+    Returns
+    -------
+    group: AObject
+        the newly created multi object
     """
     newObject=self.AObject(self)
     self.execute("GroupObjects", objects = self.makeList(objects), res_pointer = newObject)
@@ -479,8 +534,11 @@ class Anatomist(base.Anatomist):
     """
     Returns a new APalette with name attribute = name.
     Returns None if the palette doesn't exist in Anatomist.
-    @rtype: APalette
-    @return: the named palette
+
+    Returns
+    -------
+    palette: APalette
+        the named palette
     """
     result=self.executeAndWaitAnswer("GetInfo", palettes = 1)
     names=result.get("palettes")
@@ -494,9 +552,11 @@ class Anatomist(base.Anatomist):
     """
     Gets all objects referenced in current context.
     Sends getInfo command.
-    
-    @rtype:  list of AObject
-    @return: list of existing objects
+
+    Returns
+    -------
+    objects: list of AObject
+        list of existing objects
     """
     result=self.executeAndWaitAnswer("GetInfo", objects = 1)
     objectsId=result.get("objects")
@@ -508,11 +568,16 @@ class Anatomist(base.Anatomist):
   def importObjects(self, top_level_only=False):
     """
     Gets objects importing those that are not referenced in current context. 
-    @type top_level_only: bool
-    @param top_level_only: if True imports only top-level objects (that have no parents), else all objects are imported. 
-    
-    @rtype:  list of AObject
-    @return: list of existing objects
+
+    Parameters
+    ----------
+    top_level_only: bool
+        if True imports only top-level objects (that have no parents), else all objects are imported.
+
+    Returns
+    -------
+    objects:  list of AObject
+        list of existing objects
     """
     name_objects=1
     if top_level_only:
@@ -529,11 +594,15 @@ class Anatomist(base.Anatomist):
     """
     Get the object corresponding to this filename if it is currently loaded.
     
-    @type filename: string
-    @param filename: filename of the requested object
+    Parameters
+    ----------
+    filename: str
+        filename of the requested object
     
-    @rtype: AObject
-    @return: the object if it is loaded, else returns None.
+    Returns
+    -------
+    object: AObject
+        the object if it is loaded, else returns None.
     """
     infos = self.executeAndWaitAnswer("ObjectInfo", objects_filenames='"' + filename + '"', name_children=1, name_referentials=1)
     loadedObject=None
@@ -561,8 +630,10 @@ class Anatomist(base.Anatomist):
     """
     Gets all windows referenced in current context.
     
-    @rtype: list of AWindow
-    @return: list of opened windows
+    Returns
+    -------
+    windows: list of AWindow
+        list of open windows
     """
     result=self.executeAndWaitAnswer("GetInfo", windows = 1)
     windowsId=result.get("windows")
@@ -574,9 +645,11 @@ class Anatomist(base.Anatomist):
   def importWindows(self):
     """
     Gets all windows importing those that are not referenced in current context.
-    
-    @rtype: list of AWindow
-    @return: list of opened windows
+
+    Returns
+    -------
+    windows: list of AWindow
+        list of open windows
     """
     result=self.executeAndWaitAnswer("GetInfo", windows = 1, name_windows=1)
     windowsId=result.get("windows")
@@ -589,8 +662,10 @@ class Anatomist(base.Anatomist):
     """
     Gets all referentials in current context.
     
-    @rtype: list of Referential
-    @return: list of referentials
+    Returns
+    -------
+    refs: list of Referential
+        list of referentials
     """
     result=self.executeAndWaitAnswer("GetInfo", referentials = 1)
     ids=result.get("referentials")
@@ -603,8 +678,10 @@ class Anatomist(base.Anatomist):
     """
     Gets all referentials importing those that are not referenced in current context.
     
-    @rtype: list of Referential
-    @return: list of referentials
+    Returns
+    -------
+    refs: list of Referential
+        list of referentials
     """
     # ###? recupere-t-on le referentiel central et si oui comment le reconnaitre
     result=self.executeAndWaitAnswer("GetInfo", referentials = 1, name_referentials = 1)
@@ -617,9 +694,11 @@ class Anatomist(base.Anatomist):
   def getTransformations(self):
     """
     Gets all transformations.
-    
-    @rtype: list of Transformation
-    @return: list of transformations
+
+    Returns
+    -------
+    trans: list of Transformation
+        list of transformations
     """
     result=self.executeAndWaitAnswer("GetInfo", transformations = 1)
     ids=result.get("transformations")
@@ -631,9 +710,11 @@ class Anatomist(base.Anatomist):
   def importTransformations(self):
     """
     Gets all transformations importing those that are not referenced in current context.
-    
-    @rtype: list of Transformation
-    @return: list of transformations
+
+    Returns
+    -------
+    trans: list of Transformation
+        list of transformations
     """
     result=self.executeAndWaitAnswer("GetInfo", transformations = 1, name_transformations = 1)
     ids=result.get("transformations")
@@ -644,8 +725,10 @@ class Anatomist(base.Anatomist):
 
   def getPalettes(self):
     """
-    @rtype: list of APalette
-    @return: list of palettes. 
+    Returns
+    -------
+    palettes: list of APalette
+        list of palettes.
     """
     result=self.executeAndWaitAnswer("GetInfo", palettes = 1)
     names=result.get("palettes")
@@ -656,11 +739,15 @@ class Anatomist(base.Anatomist):
  
   def getSelection(self, group=None):
     """
-    @type group: AWindowsGroup
-    @param group: get the selection in this group. If None, returns the selection in default group.
-    
-    @rtype:  list of AObject
-    @return: the list of selected objects in the group of windows
+    Parameters
+    ----------
+    group: AWindowsGroup
+        get the selection in this group. If None, returns the selection in default group.
+
+    Returns
+    -------
+    objects: list of AObject
+        the list of selected objects in the group of windows
     """
     result=self.executeAndWaitAnswer("GetInfo", name_objects=1, selections = 1)
     selections=result.get("selections")
@@ -680,29 +767,37 @@ class Anatomist(base.Anatomist):
   def linkCursorLastClickedPosition(self, ref=None):
     """
     Gives the last clicked position of the cursor. 
-    
-    @type ref: Referential
-    @param ref: if given, cursor position value will be in this referential. Else, anatomist central referential is used.
 
-    @rtype: float vector, size 3
-    @return: last position of the cursor
+    Parameters
+    ----------
+    ref: Referential
+        if given, cursor position value will be in this referential. Else, anatomist central referential is used.
+
+    Returns
+    -------
+    position: float vector, size 3
+        last position of the cursor
     """
     result=self.executeAndWaitAnswer("GetInfo", linkcursor_lastpos = 1, linkcursor_referential = ref)
     return result.get('linkcursor_position')
   
   def getAimsInfo(self):
     """
-    @rtype: string
-    @return: information about AIMS library.
+    Returns
+    -------
+    info: string
+        information about AIMS library.
     """
     result=self.executeAndWaitAnswer("GetInfo", aims_info = 1)
     return result.get('aims_info')
   
   def getCommandsList(self):
     """
-    @rtype: dict
-    @return: list of commands available in Anatomist with their parameters. 
-    dict command name -> dict parameter name -> dict attribute -> value (needed, type)
+    Returns
+    -------
+    commands: dict
+        list of commands available in Anatomist with their parameters.
+        dict command name -> dict parameter name -> dict attribute -> value (needed, type)
     """
     result=self.executeAndWaitAnswer("GetInfo", list_commands = 1)
     return result.get('commands')
@@ -710,16 +805,20 @@ class Anatomist(base.Anatomist):
   
   def getModulesInfo(self):
     """
-    @rtype: dict
-    @return: list of modules and their description. dict module name -> dict attribute -> value (description)
+    Returns
+    -------
+    info: dict
+        list of modules and their description. dict module name -> dict attribute -> value (description)
     """
     result=self.executeAndWaitAnswer("GetInfo", modules_info = 1)
     return result.get('modules')
   
   def getVersion(self):
     """
-    @rtype: string
-    @return: Anatomist version
+    Returns
+    -------
+    version: str
+        Anatomist version
     """
     result=self.executeAndWaitAnswer("GetInfo", version = 1)
     return result.get('anatomist_version')
@@ -743,9 +842,11 @@ class Anatomist(base.Anatomist):
     In this implementation, anatomist objects are not accessibles. In the commands send to Anatomist,
     objects are referenced by unique identifier. Objects defined in this module encapsulate the id of the
     corresponding Anatomist object.
-    
-    @rtype: int
-    @return: a new unused ID.
+
+    Retruns
+    -------
+    id: int
+        a new unused ID.
     """
     ids = self.executeAndWaitAnswer( 'NewId' ).get( 'ids' )
     if ids and len( ids ) >= 1:
@@ -831,13 +932,14 @@ class Anatomist(base.Anatomist):
   
   def send( self, command, **kwargs ):
       """
-      Sends a command to anatomist application. Call this method if there's no answer to get.
-      
-      @type command: string 
-      @param command: name of the command to execute. Any command that can be processed by anatomist command processor. 
-      Commands list is in http://merlin/~appli/doc/anatomist-3.1/doxygen/index.html.
-      @type kwargs: dictionary
-      @param kwargs: parameters for the command
+      Sends a command to anatomist application. Call this method if there is no answer to get.
+
+      Parameters
+      ----------
+      command: str
+          name of the command to execute. Any command that can be processed by anatomist command processor.
+      kwargs: dict
+          parameters for the command
       """
       sys.stdout.flush()
       if not self.launched:
@@ -848,14 +950,18 @@ class Anatomist(base.Anatomist):
   def createCommandMessage( self, command, **kwargs ):
       """
       Writes a command in the format requested by anatomist processor. 
-      
-      @type command: string 
-      @param command: name of the command to execute. 
-      @type kwargs: dictionary
-      @param kwargs: parameters for the command
-      
-      @rtype: string 
-      @return: a tree representing the command
+
+      Parameters
+      ----------
+      command: str
+          name of the command to execute.
+      kwargs: dict
+          parameters for the command
+
+      Returns
+      -------
+      message: str
+          a tree representing the command
       """
       cmd = "\n*BEGIN TREE EXECUTE\n*BEGIN TREE " + command + "\n"
       for ( name, value ) in kwargs.items():
@@ -877,21 +983,25 @@ class Anatomist(base.Anatomist):
               cmd += name + " " + value + "\n"
       cmd +=  "*END\n*END\n"
       return cmd
-              
+
   def executeAndWaitAnswer( self, command, timeout=100, **kwargs ):
     '''
     Executes a command in anatomist application and returns the result.
     It should be a command that can be processed by Anatomist command processor. 
     The list of available commands is in U{http://brainvisa.info/doc/anatomist/html/fr/programmation/commands.html}.
     Parameters are converted before sending the request to anatomist application.
-    
-    @type command: string 
-    @param command: name of the command to execute. 
-    @type kwargs: dictionary
-    @param kwargs: parameters for the command
 
-    @rtype: dictionary
-    @return: a dictionary describing the result of the command.
+    Parameters
+    ----------
+    command: str
+        name of the command to execute.
+    kwargs: dict
+        parameters for the command
+
+    Returns
+    -------
+    command: dict
+        a dictionary describing the result of the command.
     '''
     if not self.launched:
       raise RuntimeError(  'Anatomist is not running.'  )
@@ -911,9 +1021,11 @@ class Anatomist(base.Anatomist):
   def newRequestID( self ):
     """
     Generates a new unique id for a request to send to anatomist.
-    
-    @rtype: int
-    @return: a unique id
+
+    Retruns
+    -------
+    id: int
+        a unique id
     """
     self.lock.acquire()
     self._requestID += 1
@@ -932,19 +1044,23 @@ class Anatomist(base.Anatomist):
   class AItem(base.Anatomist.AItem):
     """
     Base class for representing an object in Anatomist application. 
-    
-    @type anatomistinstance: Anatomist
-    @ivar anatomistinstance: reference to Anatomist object which created this object.
-    Usefull because some methods defined in AItem objects will need to send a command to Anatomist application.
-    @type internalRep: object
-    @ivar internalRep: representation of this object in anatomist application. 
+
+    Attributes
+    ----------
+    anatomistinstance: Anatomist
+        reference to Anatomist object which created this object.
+        Useful because some methods defined in AItem objects will need to send a command to Anatomist application.
+    internalRep: object
+        internalRep: representation of this object in anatomist application.
     """
     def __init__( self, anatomistinstance, internalRep=None, *args, **kwargs ):
       """
-      @type anatomistinstance: Anatomist
-      @param anatomistinstance: reference to Anatomist object which created this object.
-      @type internalRep: object
-      @param internalRep: representation of this object in anatomist application. 
+      Parameters
+      ----------
+      anatomistinstance: Anatomist
+          reference to Anatomist object which created this object.
+      internalRep: object
+          representation of this object in anatomist application.
       """
       super(Anatomist.AItem, self).__init__(anatomistinstance, internalRep, *args, **kwargs)
 #      self.weakRef=True
@@ -1022,29 +1138,32 @@ class Anatomist(base.Anatomist):
     """
     Represents an object in Anatomist application.
     
-    Following informations can be obtained using ObjectInfo command :
-    @type objectType: string
-    @ivar objectType: object type. For example : volume, bucket, graph, texture...
-    @type children: list of AObject
-    @ivar children: list of objects which are children of current object (for example: nodes in a graph). Can be empty.
-    @type filename: string
-    @ivar filename: name of the file from which the object has been loaded. May be None.
-    @type name: string 
-    @ivar name: name of the object presented in Anatomist window.
-    @type copy: boolean
-    @param copy: True indicates that this object is a copy of another object, else it is the original object.
-    @type material: Material
-    @ivar material: object's material parameters
-    @type referential: Referential
-    @ivar referential: referential assigned to this object.
+    The following informations can be obtained using ObjectInfo command:
+
+    Attributes
+    ----------
+    objectType: str
+        object type. For example : volume, bucket, graph, texture...
+    children: list of AObject
+        list of objects which are children of current object (for example: nodes in a graph). Can be empty.
+    filename: str
+        name of the file from which the object has been loaded. May be None.
+    name: str
+        name of the object presented in Anatomist window.
+    copy: bool
+        True indicates that this object is a copy of another object, else it is the original object.
+    material: Material
+        object material parameters
+    referential: Referential
+        referential assigned to this object.
     """
     def __init__(self, anatomistinstance, internalRep=None, *args, **kwargs ):
       super(Anatomist.AObject, self).__init__(anatomistinstance, internalRep, *args, **kwargs)
 
     def __getattr__(self, name):
       """
-      The first time an attribute of this object is requested, it is asked to anatomist application with ObjectInfo command. It returns a dictionary containing informations about objects : 
-      {objectId -> {attributeName : attributeValue, ...},
+      The first time an attribute of this object is requested, it is asked to anatomist application with ObjectInfo command. It returns a dictionary containing informations about objects:
+      ``{objectId -> {attributeName : attributeValue, ...}``
       ...
       requestId -> id}
       """
@@ -1113,32 +1232,40 @@ class Anatomist(base.Anatomist):
           for i in ids:
             objects.append(self.anatomistinstance.AObject(self.anatomistinstance, i))
       return objects
-    
+
     def extractTexture(self, time=None):
       """
       Extract object's texture to create a new texture object.
-      
-      @type time: float
-      @param time: for temporal objects, if this parameter is mentionned the texture will be extracted at this time. if not mentionned, 
-      all times will be extracted and the texture will be a temporal object.
-      In socket implementation, it is necessary to get a new id for the texture object and to pass it to the command.
-      
-      @rtype: AObject
-      @return: the newly created texture object
+
+      Parameters
+      ----------
+      time: float
+          for temporal objects, if this parameter is mentionned the texture will be extracted at this time. if not mentionned,
+          All times will be extracted and the texture will be a temporal object.
+          In socket implementation, it is necessary to get a new id for the texture object and to pass it to the command.
+
+      Returns
+      -------
+      texture: AObject
+          the newly created texture object
       """
       tex=self.anatomistinstance.AObject(self.anatomistinstance)
       self.anatomistinstance.execute("ExtractTexture", object=self, time=time, res_pointer=tex)
       return tex
-    
+
     def generateTexture(self, dimension=1):
       """
       Generates an empty texture (value 0 everywhere) for a mesh object. 
-      
-      @type dimension: int 
-      @param dimension: texture's dimension (1 or 2)
-      
-      @rtype: AObject
-      @return: the newly created texture object
+
+      Parameters
+      ----------
+      dimension: int
+          texture dimension (1 or 2)
+
+      Returns
+      -------
+      texture: AObject
+          the newly created texture object
       """
       tex=self.anatomistinstance.AObject(self.anatomistinstance)
       self.anatomistinstance.execute("GenerateTexture", object=self, dimension=dimension, res_pointer=tex)
@@ -1155,18 +1282,22 @@ class Anatomist(base.Anatomist):
     def createNode(self, name=None, syntax=None, with_bucket=None, duplicate=True ):
       """
       Creates a new node with optionally an empty bucket inside and adds it in the graph.
-      
-      @type name: string
-      @param name: node's name. default is RoiArg.
-      @type syntax: string
-      @param syntax: node's syntax attribute. default is roi.
-      @type with_bucket: bool
-      @param with_bucket: if True, creates an empty bucket in the node and returns it with the node. default is None, so the bucket is created but not returned
-      @type duplicate: bool
-      @param duplicate: enables duplication of nodes with the same name attribute.
-      
-      @rtype: (AObject, AObject)
-      @return: (the created node, the created bucket) or only the created node if with_bucket is False
+
+      Parameters
+      ----------
+      name: str
+          node name. default is RoiArg.
+      syntax: str
+          node syntax attribute. default is roi.
+      with_bucket: bool
+          if True, creates an empty bucket in the node and returns it with the node. default is None, so the bucket is created but not returned
+      duplicate: bool
+          enables duplication of nodes with the same name attribute.
+
+      Returns
+      -------
+      elements: (AObject, AObject)
+          (the created node, the created bucket) or only the created node if with_bucket is False
       """
       node=self.anatomistinstance.AObject(self.anatomistinstance)
       bucket=None
@@ -1190,13 +1321,15 @@ class Anatomist(base.Anatomist):
   class AWindow(AItem, base.Anatomist.AWindow):
     """
     Represents an anatomist window.
-    
-    @type windowType: string
-    @ivar windowType: windows's type (axial, sagittal, ...)
-    @type group: AWindowsGroup
-    @ivar group: the group which this window belongs to.
-    @type objects: list of AObject
-    @ivar objects: the window contains these objects.
+
+    Attributes
+    ----------
+    windowType: str
+        windows type (axial, sagittal, ...)
+    group: AWindowsGroup
+        the group which this window belongs to.
+    objects: list of AObject
+        the window contains these objects.
     """
     def __init__(self, anatomistinstance, internalRep=None, *args, **kwargs ):
       super(Anatomist.AWindow, self).__init__(anatomistinstance, internalRep, *args, **kwargs)
@@ -1204,9 +1337,9 @@ class Anatomist(base.Anatomist):
     def __getattr__(self, name):
       """
       The first time an attribute of this window is requested, it is asked to anatomist application with ObjectInfo command. It returns a dictionary containing informations about objects : 
-      {objectId -> {attributeName : attributeValue, ...},
+      ``{objectId -> {attributeName : attributeValue, ...},
       ...
-      requestId -> id}
+      requestId -> id}``
       """
       if name == "windowType":
         self.windowType=None
@@ -1258,11 +1391,13 @@ class Anatomist(base.Anatomist):
   ###############################################################################
   class Referential(AItem, base.Anatomist.Referential):
     """
-    @type refUuid: string
-    @ivar refUuid: a unique id representing this referential
-    Two referential are equal if they have the same uuid.
-    @type centralRef: bool
-    @ivar centralRef: indicates if this referential represents anatomist's central referential
+    Attributes
+    ----------
+    refUuid: str
+        a unique id representing this referential.
+        Two referential are equal if they have the same uuid.
+    centralRef: bool
+        indicates if this referential represents anatomist's central referential
     """
     def __init__(self, anatomistinstance, internalRep=None, uuid=None, centralRef=False, *args, **kwargs ):
       super(Anatomist.Referential, self).__init__(anatomistinstance, internalRep, uuid, *args, **kwargs)
@@ -1286,17 +1421,21 @@ class ASocket(Socket):
     Specialized Socket to communicate with anatomist application. 
     It redefines readMessage and processMessage Socket's methods. 
     It provides a method to send a command and wait the answer. 
-    
-    @type eventCallbacks: dictionary
-    @ivar eventCallbacks: registers methods to call on messages received on the socket (message -> callback)
+
+    Attributes
+    ----------
+    eventCallbacks: dict
+        registers methods to call on messages received on the socket (message -> callback)
     """
     
     def __init__(self, anatomistinstance, host, port=None):
       """
-      @type host: string
-      @param host: socket server machine (localhost if it is current machine)
-      @type port: int
-      @param port: port that the socket server listens
+      Parameters
+      ----------
+      host: str
+          socket server machine (localhost if it is current machine)
+      port: int
+          port that the socket server listens
       """
       super(ASocket, self).__init__(host, port)
       self.eventCallbacks = {}
@@ -1307,11 +1446,16 @@ class ASocket(Socket):
       Reads a message from the socket. 
       Reads two lines : header and data parts of the message.
       the header is the command name, data is the string representation of a dictionary containing the results of that command.
-      
-      @type timeout: int
-      @param timeout: max time to wait before reading the message.
-      @rtype: tuple (string, string)
-      @return: the message received from the socket (header, data).
+
+      Parameters
+      ----------
+      timeout: int
+          max time to wait before reading the message.
+
+      Returns
+      -------
+      message: tuple (string, string)
+          the message received from the socket (header, data).
       """
       self.readLock.acquire()
       try:
@@ -1326,15 +1470,17 @@ class ASocket(Socket):
       Sends a command to Anatomist application and wait for the answer (message to read on the socket).
       A request id is affected to the command and a callback function is associated to the command with request id.
       So when a message with correponding header arrives on the socket, the callback function is called and gets the results.
-      
-      @type command: string
-      @param command: name of the command to send
-      @type msg: string
-      @param msg: message to send (command + parameters)
-      @type requestID: int
-      @param requestID: an id associated to the event to recognize a specific command
-      @type timeout: int
-      @param timeout: max time to wait before receiving the answer.
+
+      Parameters
+      ----------
+      command: str
+          name of the command to send
+      msg: str
+          message to send (command + parameters)
+      requestID: int
+          an id associated to the event to recognize a specific command
+      timeout: int
+          timeout: max time to wait before receiving the answer.
       """
       def _executeMe( self, lock, data, excep ):
         """
@@ -1484,12 +1630,15 @@ class ASocket(Socket):
       """
       Adds a callback function to handle an event. 
       (eventName, requestID) -> [handlerFunction] in eventCallbacks
-      @type eventName: string
-      @param eventName: In Anatomist it is generally the name of the command which causes message sending
-      @type handlerFunction: function
-      @param handlerFunction: the callback function to call on receiving that event
-      @type requestID: int
-      @param requestID: an id associated to the event to recognize a specific command
+
+      Parameters
+      ----------
+      eventName: str
+          In Anatomist it is generally the name of the command which causes message sending
+      handlerFunction: function
+          the callback function to call on receiving that event
+      requestID: int
+          an id associated to the event to recognize a specific command
       """
       #print "add event handler ", eventName, handlerFunction
       if eventName == 'Close': eventName = ''
@@ -1507,8 +1656,11 @@ class ASocket(Socket):
     def getCallbacks(self, header):
         """
         Thread safe acces to callbacks methods registered for that header.
-        @type header: string or tuple
-        @param header: command name or (command name, requestID)
+
+        Parameters
+        ----------
+        header: str or tuple
+            command name or (command name, requestID)
         """
         self.lock.acquire()
         try:
@@ -1520,8 +1672,11 @@ class ASocket(Socket):
     def delCallbacks(self, header):
         """
         Thread safe delete of callbacks for that header.
-        @type header: string or tuple
-        @param header: command name or (command name, requestID)
+
+        Parameters
+        ----------
+        header: string or tuple
+            command name or (command name, requestID)
         """
         self.lock.acquire()
         try:
@@ -1532,12 +1687,15 @@ class ASocket(Socket):
     def removeEventHandler( self, eventName, handlerFunction=None, requestID=None ):
       """
       Removes handler function for a specfic event.
-      @type eventName: string
-      @param eventName: In Anatomist it is generally the name of the command which causes message sending
-      @type handlerFunction: function
-      @param handlerFunction: the callback function to call on receiving that event
-      @type requestID: int
-      @param requestID: an id associated to the event to recognize a specific command
+
+      Parameters
+      ----------
+      eventName: str
+          In Anatomist it is generally the name of the command which causes message sending
+      handlerFunction: function
+          the callback function to call on receiving that event
+      requestID: int
+          an id associated to the event to recognize a specific command
       """
       if eventName == 'Close': eventName = ''
       elif eventName: eventName =  "'" + eventName +"'"
