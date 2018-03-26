@@ -44,26 +44,28 @@ appear more pythonic.
 
 For typical use, this module will not be called directly but throught general API. But it can be needed for using advanced features.
 
-The main entry point is the L{Anatomist} class which must be instantiated before any operation can be performed.
+The main entry point is the :class:`Anatomist` class which must be instantiated before any operation can be performed.
 
-  >>> import anatomist.cpp as anatomist
-  >>> a = anatomist.Anatomist()
+>>> import anatomist.cpp as anatomist
+>>> a = anatomist.Anatomist()
 
 Note that instantiating Anatomist also instantiates the
-U{Qt<http://trolltech.com>} QApplication, but does not run the Qt event loop,
+`Qt <http://www.qt.io>`_ QApplication, but does not run the Qt event loop,
 so python interactive shells are still accessible after that operation, but
 the GUI is frozen until the event loop is executed, using the following PyQt
 code:
 
-  >>> import qt
-  >>> qt.qApp.exec_loop()
+>>> # from PyQt4 import Qt
+>>> # or, to switch to the correct Qt implementation and bindings (Qt4/Qt5)
+>>> from soma.qt_gui.qt_backend import Qt
+>>> Qt.qApp.exec_loop()
 
 but then the loop does not return until the GUI application is over, so you
 should start it at the end of your code.
 
 Another comfortable alternative to the GUI loop problem in interactive
-python shells is to use U{IPython<http://ipython.scipy.org/>} with the
-C{-qthread} option: IPython is an interactive python shell with many
+python shells is to use `IPython <http://ipython.scipy.org/>`_ with the
+option ``--gui=qt``: IPython is an interactive python shell with many
 improvements, and which can run in a different thread than the GUI, so that
 the GUI can run without hanging the shell.
 
@@ -72,33 +74,32 @@ times (it is not a singleton, but contains a singleton).
 
 In addition to providing bindings to the Anatomist C++ API, the anatomist
 module also loads some python modules in anatomist: every python module
-found in the following locations are loaded:
-  - C{os.path.join( str( anatomist.Anatomist().anatomistSharedPath() ),
-                    'python_plugins' )}
-  - C{os.path.join( str( anatomist.Anatomist().anatomistHomePath() ),
-                    'python_plugins' )}
+found in the following locations are loaded::
+
+    os.path.join(str(anatomist.Anatomist().anatomistSharedPath()), 'python_plugins')
+    os.path.join(str(anatomist.Anatomist().anatomistHomePath()), 'python_plugins')
 
 Main concepts
 =============
 There are many pieces in Anatomist library, but a few are really needed to
 begin with.
 
-  - the Anatomist application, the L{Anatomist} class instance, is responsible
-    for many global variables, the application state, and the startup
-    procedure (including plugins loading). The application is used internally
-    in many functions.
-  - objects: L{AObject} class and subclasses
-  - windows: L{AWindow} class and subclasses
-  - the commands processor: a singleton L{Processor} instance obtained via
-    the application: L{Anatomist.theProcessor}(). The processor is a commands
-    interpreter for the rudimentary language of Anatomist. It is also
-    responsible of saving every command executed in the history file
-    (C{$HOME/.anatomist/history.ana}) so most of the session can be replayed.
-    Many operations are done via commands and the processor: creating windows,
-    loading objects, displaying them, etc. so this element is probably the
-    most important part of Anatomist.
-  - conversions between AIMS object and Anatomist objects: L{AObjectConverter}
-    is here to perform this task.
+* the Anatomist application, the L{Anatomist} class instance, is responsible
+  for many global variables, the application state, and the startup
+  procedure (including plugins loading). The application is used internally
+  in many functions.
+* objects: :class:`AObject` class and subclasses
+* windows: :class:`AWindow` class and subclasses
+* the commands processor: a singleton :class:`Processor` instance obtained via
+  the application: :meth:`Anatomist.theProcessor`. The processor is a commands
+  interpreter for the rudimentary language of Anatomist. It is also
+  responsible of saving every command executed in the history file
+  ``$HOME/.anatomist/history.ana`` so most of the session can be replayed.
+  Many operations are done via commands and the processor: creating windows,
+  loading objects, displaying them, etc. so this element is probably the
+  most important part of Anatomist.
+* conversions between AIMS object and Anatomist objects:
+  :class:`AObjectConverter` is here to perform this task.
 '''
 
 from __future__ import print_function
@@ -417,21 +418,27 @@ class Anatomist( AnatomistSip ):
 def newexecute( self, *args, **kwargs ):
   '''
   Commands execution. It can be used in several different forms:
-    - execute( Command )
-    - execute( commandname, params = None, context = None )
-    - execute( commandname, context = None, **kwargs )
 
-  @param Command: command to be executed
-  @type Command: L{Command} subclass
-  @param commandname: name of the command to executed
-  @type commandname: string
-  @param params: optional parameters (default: None)
-  @type params: dictionary or string
-  @param context: command execution context (default: None)
-  @type context: L{CommandContext}
-  @param kwargs: keyword arguments which are passed to Anatomist directly
-    in the command
-  @return: the executed command (or None)
+  * execute(Command)
+  * execute(commandname, params=None, context=None)
+  * execute(commandname, context=None, **kwargs)
+
+  Parameters
+  ----------
+  Command: :class:`Command` subclass
+      command to be executed
+  commandname: str
+      name of the command to executed
+  params: dict or str
+      optional parameters (default: None)
+  context: :class:`CommandContext`
+      command execution context (default: None)
+  kwargs:
+      keyword arguments which are passed to Anatomist directly in the command
+
+  Returns
+  -------
+  command: the executed command (or None)
   '''
   def replace_dict( dic, cc ):
     for k,v in dic.items():
@@ -660,45 +667,49 @@ del anatomist # , aims
 # docs
 
 Command.__doc__ = '''
-Commands are the execution units of the L{Processor}.
+Commands are the execution units of the :class:`Processor`.
 
-Commands are used as subclasses of C{Command}. They can be built either on the
-fly by the programmer, or using the commands factory via the
-L{Processor.execute}() function.
+Commands are used as subclasses of :class:`Command`. They can be built either
+on the fly by the programmer, or using the commands factory via the
+:meth:`Processor.execute` function.
 
-Never call C{Command.execute}() or C{Command.doit}() directly: only the
+Never call :meth:`Command.execute` or :meth:`Command.doit` directly: only the
 processor will do so. Once built, a command must always be executed by the
 processor:
 
-  >>> a = anatomist.Anatomist()
-  >>> c = anatomist.CreateWindowCommand( 'Axial' )
-  >>> a.theProcessor().execute( c )
+>>> a = anatomist.Anatomist()
+>>> c = anatomist.CreateWindowCommand('Axial')
+>>> a.theProcessor().execute(c)
+
+But in any case there is a more handy shortcut in the higher-level API:
+:meth:`anatomist.base.Anatomist.execute`
 
 Comamnds can be subclassed in Python. To be valid, a new command must define
-at least the L{name}() and L{doit}() methods. L{doit} will actually do the
-execution and your program may make it do anything. Later, C{read}() and
-C{write} should also be redefined to allow proper IO for this command (when
-the commands IO and factory are exported from C++ to python).
+at least the :meth:`name` and :meth:`doit` methods. :meth:`doit` will actually
+do the execution and your program may make it do anything. Later, :meth:`read`
+and :meth:`write` should also be redefined to allow proper IO for this command
+(when the commands IO and factory are exported from C++ to python).
 
-L{Command.doit}() receives no parameters (apart from C{self}). All execution
-arguments must be set in the command itself upon construction (either by the
-constructor or by setting some instance variables).
+:meth:`Command.doit` receives no parameters (apart from ``self``). All
+execution arguments must be set in the command itself upon construction (either
+by the constructor or by setting some instance variables).
 
 One important parameter which a command would often use is the
-L{CommandContext}, which specifies some IO streams for output printing and
-communication with external programs, and an identifiers set used to name and
-identify objects (in a general meaning: including windows etc.) through this
-IO strams.
+:class:`CommandContext`, which specifies some IO streams for output printing
+and communication with external programs, and an identifiers set used to name
+and identify objects (in a general meaning: including windows etc.) through
+this IO streams.
 '''
 
 AObjectConverter.__doc__ = '''
 Aims / Anatomist objects converter
 
 Only two static methods are useful in this class:
-  - L{AObjectConverter.anatomist}() converts an AIMS (or possibly other) object
-    into an Anatomist object (L{AObject} subclass), if possible
-  - L{AObjectConverter.aims}() converts an Anatomist object to an AIMS object,
-    if possible
+
+* :meth:`AObjectConverter.anatomist` converts an AIMS (or possibly other)
+  object into an Anatomist object (:class:`AObject` subclass), if possible
+* :meth:`AObjectConverter.aims` converts an Anatomist object to an AIMS object,
+  if possible
 
 Conversions are generally done by wrapping or embedding, or by extracting a
 reference to an internal object, so objects data are genrally shared between
@@ -707,8 +718,8 @@ of Anatomist objects data.
 
 After a modification through the Aims (lower level) layer API, modification
 notification must be issued to the Anatomist layer to update the display of
-the object in Anatomist. This is generally done via the L{AObject.setChanged}()
-and L{AObject.notifyObservers}() methods.
+the object in Anatomist. This is generally done via the
+:meth:`AObject.setChanged` and :meth:`AObject.notifyObservers` methods.
 '''
 
 private = [ 'private', 'anatomistsip', 'AnatomistSip', 'numpy', 'operator',
