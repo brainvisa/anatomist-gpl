@@ -273,4 +273,5 @@ docpath = os.path.join(os.path.dirname(os.path.dirname(
 
 intersphinx_mapping = {
     'soma': (os.path.join(docpath, 'soma-base-' + version + '/sphinx'), None),
+    'python': ('http://docs.python.org/%d.%d' % sys.version_info[:2], None),
 }
