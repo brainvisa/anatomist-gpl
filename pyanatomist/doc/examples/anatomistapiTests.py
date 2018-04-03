@@ -44,8 +44,10 @@ import numpy as np
 import tempfile
 
 
+
 data_directory = os.path.join(
-    os.getenv("BRAINVISA_TESTS_DIR"), "tmp_tests_brainvisa/data_for_anatomist")
+    os.getenv("BRAINVISA_TEST_RUN_DATA_DIR"), 
+    "tmp_tests_brainvisa/data_for_anatomist")
 
 
 failures = []
