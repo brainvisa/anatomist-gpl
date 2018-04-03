@@ -77,6 +77,8 @@ public:
   Point3dl labelsVolumeDimension() const;
   set_STRING mappableVertexProperties() const;
   set_STRING mappableEdgeProperties() const;
+  std::string labelProperty( bool allowDefault = true ) const;
+  void setLabelProperty( const std::string & prop );
 };
 
 };
