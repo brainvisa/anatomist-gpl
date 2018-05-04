@@ -24,6 +24,7 @@
 %Include rcptr_EventHandler.sip
 %Include module.sip
 %Include control_VOID.sip
+%Include actions.sip
 %Include set_AObjectPtr.sip
 %Include set_AWindowPtr.sip
 %Include set_ReferentialPtr.sip
