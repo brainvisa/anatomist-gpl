@@ -27,6 +27,7 @@ class Action
 #include <anatomist/window3D/trackball.h>
 #include <anatomist/window3D/control3D.h>
 #include <anatomist/window3D/transformer.h>
+#include <anatomist/window3D/labeleditaction.h>
 %End
 
 %ConvertToSubClassCode
@@ -71,6 +72,8 @@ class Action
     sipClass = sipClass_anatomist_SliceAction;
   else if( dynamic_cast<anatomist::DragObjectAction *>( sipCpp ) )
     sipClass = sipClass_anatomist_DragObjectAction;
+  else if( dynamic_cast<anatomist::LabelEditAction *>( sipCpp ) )
+    sipClass = sipClass_anatomist_LabelEditAction;
   else if(dynamic_cast<anatomist::TranslaterAction *>(sipCpp))
   {
     if (dynamic_cast<anatomist::ResizerAction *>(sipCpp))
