@@ -1528,6 +1528,14 @@ class Anatomist(Singleton):
                 return False
             return self.internalRep == other.internalRep
 
+        if sys.version_info[0] >= 3:
+            # python3 doesn't define a hash function by default
+
+            def __hash__(self):
+                # a bit dangerous since internalRep is mutable.
+                # but, welll, we never change it, do we ?
+                return id(self.internalRep)
+
         def __lt__(self, other):
             """
             Comparison operator for python3
