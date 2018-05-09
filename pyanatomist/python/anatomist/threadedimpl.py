@@ -97,14 +97,15 @@ class ThreadSafeMetaclass(type(QtCore.QObject)):
         # terminal class specific attributes, not its parents ones.
         old_dict = dict([(attName, getattr(cls, attName))
                          for attName in dir(cls)])
-        new_dict.update(get_thead_safe_dict(old_dict, True))
+        new_dict.update(get_thead_safe_dict(cls, old_dict, True))
         for attName, att in six.iteritems(new_dict):
             setattr(cls, attName, att)
 
 
-def get_thead_safe_dict(dictatt, filtered=False):
+def get_thead_safe_dict(cls, dictatt, filtered=False):
     ''' Builds thread-safe wrappers around dict elements which are methods or
-    functions, replace classes by thread-safe subclasses
+    functions, replace classes by thread-safe subclasses.
+    Methods are actually queried on the class cls through its __mro__
     '''
     new_dict = {}
     mainThread = QtThreadCall()
@@ -113,31 +114,39 @@ def get_thead_safe_dict(dictatt, filtered=False):
             # builtin methods begin with __
             # but __singleton_init__ must be called from the main thread
             orig_att = att
-            att = getattr(att, 'im_func', att)  # in case it's a method
-            if inspect.isfunction(att) or inspect.isbuiltin(att):
-                # replace this method by a thread safe call to this method
-                # Note:
-                # using getattr(classObj, attName) the attribute object types are
-                # different in python2 and python3, and in python3 we cannot
-                # distinguish between regular and static methods (both are
-                # functions,
-                # whereas class methods are methods). classObj.__dict__[attName]
-                # does not return the same thing however, and allows to determine
-                # the method type, in a python2/3 transparent way: regular methods
-                # are functions, static methods are staticmethod instances,
-                # class methods are classmethod instances.
-                if not hasattr(att, '__code__') \
-                        or att.__code__.co_filename != __file__:
-                    # avoid doing this several times
+            if inspect.ismethod(att) or inspect.isfunction(att) \
+                    or inspect.isbuiltin(att):
+                for c in cls.__mro__:
+                    # using getattr(classObj, attName) the attribute object
+                    # types are different in python2 and python3, and in
+                    # python3 we cannot distinguish between regular and static
+                    # methods (both are functions, whereas class methods are
+                    # methods).
+                    # classObj.__dict__[attName] does not return the same thing
+                    # however, and allows to determine the method type, in a
+                    # python2/3 transparent way:
+                    # regular methods are functions, static methods are
+                    # staticmethod instances, class methods are classmethod
+                    # instances.
+                    # This is why we have to walk through the class MRO
+                    # __dict__s to find the method there.
+                    if attName in c.__dict__:
+                        att = c.__dict__[attName]
+                        break
+            code = getattr(att, '__code__', None)
+            if code is None and hasattr(att, '__func__'):
+                code = att.__func__.__code__
+            if code is not None and code.co_filename != __file__:
+                # avoid doing this several times
+                if isinstance(att, classmethod):
+                    newAtt = classmethod(threadSafeCall(mainThread,
+                                                        att.__func__))
+                elif isinstance(att, staticmethod):
+                    newAtt = staticmethod(threadSafeCall(mainThread,
+                                                         att.__func__))
+                else:
                     newAtt = threadSafeCall(mainThread, att)
-                    if inspect.isfunction(orig_att) \
-                            and not inspect.ismethod(orig_att):
-                        newAtt = staticmethod(newAtt)
-                    elif inspect.ismethod(orig_att) \
-                            and (sys.version_info[0] >= 3 or
-                                 isinstance(orig_att.__self__, type)):
-                        newAtt = classmethod(newAtt)
-                    new_dict[attName] = newAtt
+                new_dict[attName] = newAtt
             elif type(att) == type:  # innner class derived from object
                 # replace this class with a thread safe class
                 if not issubclass(att, MainThreadLife):
@@ -200,4 +209,6 @@ def threadSafeCall(mainThread, func):
         a function that sends the given function's call to the main thread
     """
     import threading
-    return lambda *args, **kwargs: mainThread.call(func, *args, **kwargs)
+    f = lambda *args, **kwargs: mainThread.call(func, *args, **kwargs)
+    f.__doc__ = func.__doc__
+    return f
