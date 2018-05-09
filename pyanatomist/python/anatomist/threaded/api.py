@@ -84,6 +84,7 @@ from soma.qt_gui.qt_backend import QtCore
 import types
 import six
 
+@six.add_metaclass(anatomist.threadedimpl.ThreadSafeMetaclass)
 class Anatomist(anatomist.direct.api.Anatomist):
-    __metaclass__ = anatomist.threadedimpl.ThreadSafeMetaclass
+    pass
 
