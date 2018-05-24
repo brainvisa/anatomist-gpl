@@ -30,6 +30,8 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+from __future__ import print_function
+
 import anatomist.direct.api as anatomist
 from soma import aims
 import sip
@@ -46,11 +48,11 @@ win = c.createdWindow()
 
 # otherwise, we can retreive the new window using the context
 # (which will work if the exact command has no python binding)
-print cx.id(win)
-print cx.object(i)
+print(cx.id(win))
+print(cx.object(i))
 win2 = cx.object(i)
 
-print win2 is win
+print(win2 is win)
 
 r = aims.Reader()
 vol = r.read('irm.ima')

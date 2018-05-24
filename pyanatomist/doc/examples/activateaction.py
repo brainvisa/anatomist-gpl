@@ -36,6 +36,7 @@ Action activation works both in direct and socket APIs
 but querying the lists of available action methods is only available in
 direct mode.
 '''
+from __future__ import print_function
 
 import anatomist.direct.api as anatomist
 
@@ -57,16 +58,16 @@ w.activateAction(action_type='key_press', method='movie_next_mode')
 
 # query available actions methods
 c = w.view().controlSwitch().activeControlInstance()
-print 'in control:', c.name()
+print('in control:', c.name())
 kpmethods = c.keyPressActionLinkNames()
-print '* keyPress methods:', kpmethods
+print('* keyPress methods:', kpmethods)
 mpmethods = c.mousePressActionLinkNames()
-print '* mousePress methods:', mpmethods
+print('* mousePress methods:', mpmethods)
 
 w.setControl('SelectionControl')
 c = w.view().controlSwitch().activeControlInstance()
-print 'in control:', c.name()
+print('in control:', c.name())
 kpmethods = c.keyPressActionLinkNames()
-print '* keyPress methods:', kpmethods
+print('* keyPress methods:', kpmethods)
 mpmethods = c.mousePressActionLinkNames()
-print '* mousePress methods:', mpmethods
+print('* mousePress methods:', mpmethods)

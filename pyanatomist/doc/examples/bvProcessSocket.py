@@ -30,8 +30,11 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+from __future__ import print_function
+
 from neuroProcesses import *
-import shfjGlobals
+from brainvisa.tools import aimsGlobals
 import string
 
 name = 'Test anatomist API socket implementation'
@@ -43,7 +46,7 @@ import anatomist.api
 
 signature = Signature(
     'object_to_load', ReadDiskItem(
-        "3D Volume", shfjGlobals.anatomistVolumeFormats),
+        "3D Volume", aimsGlobals.anatomistVolumeFormats),
 )
 
 
@@ -55,9 +58,9 @@ def execution(self, context):
     # with attribute create is False, the constructor returns the existing
     # instance of anatomist or None if there isn't one.
     a = pyanatomist.Anatomist(create=False)
-    print "anatomist instance:", a
+    print("anatomist instance:", a)
     a = pyanatomist.Anatomist(create=True)
-    print "anatomist instance:", a
+    print("anatomist instance:", a)
     # register a function to be called when an object is loaded in anatomist
     a.onLoadNotifier.add(display)
     # a.onLoadNotifier.remove(display)
@@ -77,4 +80,4 @@ def execution(self, context):
 
 
 def display(event, params):
-    print "** Event ** ", event, params
+    print("** Event ** ", event, params)

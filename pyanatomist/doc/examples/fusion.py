@@ -30,6 +30,8 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+from __future__ import print_function
+
 from soma import aims
 import os
 import anatomist.direct.api as anatomist
@@ -43,7 +45,7 @@ class MyAObjectKrakboumCallback(anatomist.cpp.ObjectMenuCallback):
         anatomist.cpp.ObjectMenuCallback.__init__(self)
 
     def doit(self, objects):
-        print 'MyAObjectKrakboumCallback:', objects
+        print('MyAObjectKrakboumCallback:', objects)
 
 
 class MyAObject(anatomist.cpp.AObject):
@@ -79,14 +81,14 @@ class MyFusion(anatomist.cpp.FusionMethod):
 
     def __init__(self):
         anatomist.cpp.FusionMethod.__init__(self)
-        print "init myfusion"
+        print("init myfusion")
 
     def canFusion(self, objects):
-        print "MyFusion : canFusion"
+        print("MyFusion : canFusion")
         return 120
 
     def fusion(self, objects):
-        print "MyFusion : fusion"
+        print("MyFusion : fusion")
         return MyAObject()
 
     def ID(self):

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
@@ -32,6 +32,8 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 import anatomist.direct.api as anatomist
 from soma import aims
 from soma.aims import colormaphints
@@ -41,8 +43,7 @@ import math
 sys.path.insert(0, '.')
 
 
-# determine wheter we are using Qt4 or Qt3, and hack a little bit accordingly
-# the boolean qt4 gloabl variable will tell it for later usage
+# use the right version of Qt and of its python bindings (PyQt4/5/PySide)
 from soma.qt_gui.qt_backend import QtCore, QtGui, loadUi
 
 # do we have to run QApplication ?
@@ -64,39 +65,39 @@ class MyAction(anatomist.cpp.Action):
         return 'MyAction'
 
     def resetRadius(self):
-        print 'reset radius to 1'
+        print('reset radius to 1')
         s.setRadius(1.)
 
     def startMoveRadius(self, x, y, globx, globy):
-        print 'start move radius', x, y
+        print('start move radius', x, y)
         self._initial = (x, y)
         self._radius = s.radius()
 
     def endMoveRadius(self, x, y, globx, globy):
-        print 'end move radius', x, y
+        print('end move radius', x, y)
 
     def moveRadius(self, x, y, globx, globy):
-        print 'move radius', x, y
+        print('move radius', x, y)
         s.setRadius(math.exp(0.01 * (self._initial[1] - y)) * self._radius)
 
     def takePolygon(self, x, y, globx, globy):
-        # print 'takePolygon', x, y
+        # print('takePolygon', x, y)
 
-        print 'coucou', x, y
+        print('coucou', x, y)
 
         w = self.view().aWindow()
         obj = w.objectAtCursorPosition(x, y)
-        # print 'object:', obj
+        # print('object:', obj)
         if obj is not None:
-            print 'object:', obj, obj.name()
+            print('object:', obj, obj.name())
             poly = w.polygonAtCursorPosition(x, y, obj)
-            # print 'polygon:', poly
+            # print('polygon:', poly)
             mesh = anatomist.cpp.AObjectConverter.aims(obj)
-            # print 'mesh:', mesh
+            # print('mesh:', mesh)
             ppoly = mesh.polygon()[poly]
             vert = mesh.vertex()
-            # print ppoly[0], ppoly[1], ppoly[2]
-            # print vert[ppoly[0]], vert[ppoly[1]], vert[ppoly[2]]
+            # print(ppoly[0], ppoly[1], ppoly[2])
+            # print(vert[ppoly[0]], vert[ppoly[1]], vert[ppoly[2]])
             global selmesh, selanamesh
             if selmesh is None:
                 selmesh = aims.AimsSurfaceTriangle()

@@ -31,6 +31,8 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+from __future__ import print_function
+
 import anatomist.direct.api as anatomist
 from soma import aims
 from soma.aims import colormaphints
@@ -65,12 +67,12 @@ class TexDrawAction(anatomist.cpp.Action):
         return 'TexDrawAction'
 
     def takePolygon(self, x, y, globx, globy):
-        # print 'takePolygon', x, y
+        # print('takePolygon', x, y)
         w = self.view().aWindow()
         obj = w.objectAtCursorPosition(x, y)
 
         if obj is not None:
-            print 'object:', obj, obj.name()
+            print('object:', obj, obj.name())
             surf = None
             if obj.objectTypeName(obj.type()) == 'SURFACE':
                 surf = obj
@@ -83,9 +85,9 @@ class TexDrawAction(anatomist.cpp.Action):
                 poly = w.polygonAtCursorPosition(x, y, obj)
                 if poly == 0xffffff:  # white
                     return  # background
-                print 'polygon:', poly
+                print('polygon:', poly)
                 mesh = anatomist.cpp.AObjectConverter.aims(surf)
-                # print 'mesh:', mesh
+                # print('mesh:', mesh)
                 ppoly = mesh.polygon()[poly]
                 vert = mesh.vertex()
                 global selmesh, selanamesh
@@ -113,25 +115,25 @@ class TexDrawAction(anatomist.cpp.Action):
         a.execute('DeleteElement', elements=[id])
 
     def newtexture(self, x, y, globx, globy):
-        print 'new texture'
+        print('new texture')
         w = self.view().aWindow()
         aw = a.AWindow(a, w)
         obj = w.objectAtCursorPosition(x, y)
-        # print 'object:', obj
+        # print('object:', obj)
         if obj is not None:
             if obj.objectTypeName(obj.type()) == 'SURFACE':
                 surf = obj
                 texs = []
             # elif obj.objectTypeName( obj.type() ) == 'TEXTURED SURF.':
-                # print 'TEXTURED SURF.'
+                # print('TEXTURED SURF.')
                 # surf = [ o for o in obj if o.type() == 3 ]
                 # if len( surf ) != 1:
-                    # print 'not one mesh, but', len( surf )
+                    # print('not one mesh, but', len( surf ))
                     # return
                 # surf = surf[0]
                 # texs = [ o for o in obj if o.type() == 18 ]
                 # self._texsurf = obj
-                # print 'draw initiated'
+                # print('draw initiated')
                 # return
             else:
                 return
@@ -166,7 +168,7 @@ class TexDrawAction(anatomist.cpp.Action):
     def _startDraw(self, x, y, value):
         w = self.view().aWindow()
         obj = w.objectAtCursorPosition(x, y)
-        # print 'object:', obj
+        # print('object:', obj)
         if obj is not None:
             texs = []
             if obj.objectTypeName(obj.type()) == 'SURFACE':
@@ -225,13 +227,13 @@ class TexDrawAction(anatomist.cpp.Action):
         if poly == 0xffffff or poly < 0 or poly >= len(self._mesh.polygon()):
             return
         ppoly = self._mesh.polygon()[poly]
-        print 'poly:', poly, ppoly
+        print('poly:', poly, ppoly)
         vert = self._mesh.vertex()
         pos = aims.Point3df()
         pos = w.positionFromCursor(x, y)
-        print 'pos:', pos
+        print('pos:', pos)
         v = ppoly[numpy.argmin([(vert[p] - pos).norm() for p in ppoly])]
-        print 'vertex:', v, vert[v]
+        print('vertex:', v, vert[v])
         self._aimstex[0][v] = value
         self._tex.setChanged()
         self._tex.notifyObservers()

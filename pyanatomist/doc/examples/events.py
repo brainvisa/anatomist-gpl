@@ -29,6 +29,7 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+from __future__ import print_function
 
 import anatomist.direct.api as anatomist
 from soma import aims
@@ -39,12 +40,12 @@ a = anatomist.Anatomist()
 
 
 def clickHandler(eventName, params):
-    print 'click event: ', eventName
-    print 'LinkedCursor event contents:', params.keys()
+    print('click event: ', eventName)
+    print('LinkedCursor event contents:', params.keys())
     pos = params['position']
-    print 'pos:', pos
+    print('pos:', pos)
     win = params['window']
-    print 'window:', win
+    print('window:', win)
 
 # register the function on the cursor notifier of anatomist. It will be
 # called when the user click on a window

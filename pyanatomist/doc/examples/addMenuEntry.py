@@ -29,6 +29,9 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+from __future__ import print_function
+
 import anatomist.direct.api as anatomist
 from soma import aims
 import os
@@ -42,7 +45,7 @@ class MyCallback(anatomist.cpp.ObjectMenuCallback):
         anatomist.cpp.ObjectMenuCallback.__init__(self)
 
     def doit(self, objects):
-        print 'plop!!'
+        print('plop!!')
 
 # Store python callbacks
 callbacks_list = []
