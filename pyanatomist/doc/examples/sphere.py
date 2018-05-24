@@ -30,6 +30,9 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+from __future__ import print_function
+
 import anatomist.direct.api as anatomist
 from soma import aims
 import types
@@ -79,7 +82,7 @@ class ASphere(anatomist.cpp.ASurface_3):
 
     def setRadius(self, r):
         if r == 0:
-            print 'can\'t assign radius 0'
+            print('can\'t assign radius 0')
             return
         scl = float(r) / self._radius
         self._radius = float(r)
