@@ -551,7 +551,7 @@ class PyMouseActionLink(Control.MouseActionLink):
         return PyMouseActionLink(self._method)
 
     def action(self):
-        return self._method.im_self
+        return self._method.__self__
 
 
 class PyWheelActionLink(Control.WheelActionLink):

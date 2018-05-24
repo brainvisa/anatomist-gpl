@@ -6,9 +6,9 @@
 #
 # This software is governed by the CeCILL license version 2 under
 # French law and abiding by the rules of distribution of free software.
-# You can  use, modify and/or redistribute the software under the 
+# You can  use, modify and/or redistribute the software under the
 # terms of the CeCILL license version 2 as circulated by CEA, CNRS
-# and INRIA at the following URL "http://www.cecill.info". 
+# and INRIA at the following URL "http://www.cecill.info".
 #
 # As a counterpart to the access to the source code and  rights to copy,
 # modify and redistribute granted by the license, users are provided only
@@ -23,8 +23,8 @@
 # therefore means  that it is reserved for developers  and  experienced
 # professionals having in-depth computer knowledge. Users are therefore
 # encouraged to load and test the software's suitability as regards their
-# requirements in conditions enabling the security of their systems and/or 
-# data to be ensured and,  more generally, to use and operate it in the 
+# requirements in conditions enabling the security of their systems and/or
+# data to be ensured and,  more generally, to use and operate it in the
 # same conditions as regards security.
 #
 # The fact that you are presently reading this means that you have had
@@ -34,52 +34,51 @@ from soma import aims
 
 # load any volume as a aims.Volume_* object
 r = aims.Reader()
-vol = r.read( 'irm.ima' )
+vol = r.read('irm.ima')
 
 # initialize Anatomist
 a = anatomist.Anatomist()
 
 # convert the AimsData volume to Anatomist API
-avol = a.toAObject( vol )
+avol = a.toAObject(vol)
 
-win=a.createWindow('Axial')
+win = a.createWindow('Axial')
 
 # put volume in window
-win.addObjects( avol )
+win.addObjects(avol)
 
-##  volume change and update test
+# volume change and update test
 
 # using Numeric API
 arr = vol.arraydata()
 # we're just printing a white square in the middle of the volume
-arr[0,50:70,100:130,100:130] = 255
+arr[0, 50:70, 100:130, 100:130] = 255
 
 # update Anatomist object and its views
 avol.setChanged()
 avol.notifyObservers()
 
 
-##  fusion test
+# fusion test
 
 # have a second volume. We could have loaded another one
 # (and it would have been nicer on screen). This example also
 # shows the ability to share the volume data with multiple anatomist/aims
 # objects
-avol2 = a.toAObject( vol )
+avol2 = a.toAObject(vol)
 
 # set a different palette on the second object so we can see something
-a.setObjectPalette( avol2, 'Blue-Red-fusion')
+a.setObjectPalette(avol2, 'Blue-Red-fusion')
 
 # another view
-win2=a.createWindow( 'Axial' )
+win2 = a.createWindow('Axial')
 
-a.addObjects( avol2, win2 )
+a.addObjects(avol2, win2)
 
 # create the fusion object
-fus=a.fusionObjects([ avol, avol2 ], 'Fusion2DMethod')
+fus = a.fusionObjects([avol, avol2], 'Fusion2DMethod')
 
 # show it
-win3=a.createWindow('Sagittal' )
+win3 = a.createWindow('Sagittal')
 
-a.addObjects( fus, win3 )
-
+a.addObjects(fus, win3)

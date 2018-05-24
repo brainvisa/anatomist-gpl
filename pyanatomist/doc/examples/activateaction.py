@@ -70,4 +70,3 @@ kpmethods = c.keyPressActionLinkNames()
 print '* keyPress methods:', kpmethods
 mpmethods = c.mousePressActionLinkNames()
 print '* mousePress methods:', mpmethods
-

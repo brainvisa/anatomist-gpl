@@ -6,9 +6,9 @@
 #
 # This software is governed by the CeCILL license version 2 under
 # French law and abiding by the rules of distribution of free software.
-# You can  use, modify and/or redistribute the software under the 
+# You can  use, modify and/or redistribute the software under the
 # terms of the CeCILL license version 2 as circulated by CEA, CNRS
-# and INRIA at the following URL "http://www.cecill.info". 
+# and INRIA at the following URL "http://www.cecill.info".
 #
 # As a counterpart to the access to the source code and  rights to copy,
 # modify and redistribute granted by the license, users are provided only
@@ -23,8 +23,8 @@
 # therefore means  that it is reserved for developers  and  experienced
 # professionals having in-depth computer knowledge. Users are therefore
 # encouraged to load and test the software's suitability as regards their
-# requirements in conditions enabling the security of their systems and/or 
-# data to be ensured and,  more generally, to use and operate it in the 
+# requirements in conditions enabling the security of their systems and/or
+# data to be ensured and,  more generally, to use and operate it in the
 # same conditions as regards security.
 #
 # The fact that you are presently reading this means that you have had
@@ -36,25 +36,29 @@ from soma import aims
 a = anatomist.Anatomist()
 
 # definig a custom event handler in python:
+
+
 def clickHandler(eventName, params):
     print 'click event: ', eventName
     print 'LinkedCursor event contents:', params.keys()
-    pos=params['position']
+    pos = params['position']
     print 'pos:', pos
-    win=params['window']
+    win = params['window']
     print 'window:', win
 
-# register the function on the cursor notifier of anatomist. It will be called when the user click on a window
+# register the function on the cursor notifier of anatomist. It will be
+# called when the user click on a window
 a.onCursorNotifier.add(clickHandler)
 
 
 # definig a custom event in python
-class TotoEvent ( anatomist.cpp.OutputEvent ):
-  def __init__( self ):
+class TotoEvent (anatomist.cpp.OutputEvent):
+
+    def __init__(self):
     # we can't make a custom Object yet...
-    anatomist.cpp.OutputEvent.__init__( self, 'Toto',
-      {}, 1 )
-ev=TotoEvent()
+        anatomist.cpp.OutputEvent.__init__(self, 'Toto',
+                                           {}, 1)
+ev = TotoEvent()
 ev.send()
 
 # ...

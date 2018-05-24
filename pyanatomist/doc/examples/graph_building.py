@@ -34,43 +34,41 @@ import anatomist.direct.api as ana
 from soma import aims
 
 # create graph structure
-graph = aims.Graph( 'RoiArg' )
+graph = aims.Graph('RoiArg')
 # these are needed for internal conversions
-graph[ 'type.global.tri' ] = 'roi.global.tri'
-graph[ 'roi.global.tri' ] = 'roi roi_global.gii aims_mesh'
+graph['type.global.tri'] = 'roi.global.tri'
+graph['roi.global.tri'] = 'roi roi_global.gii aims_mesh'
 
 # create 2 nodes
-v = graph.addVertex( 'roi' )
-mesh = aims.SurfaceGenerator.sphere( [ 0, 0, 0 ], 10, 100 )
-aims.GraphManip.storeAims( graph, v, 'aims_mesh', mesh )
-v[ 'name' ] = 'sphere1'
-v = graph.addVertex( 'roi' )
-mesh = aims.SurfaceGenerator.sphere( [ 0, 0, 100 ], 10, 100 )
-aims.GraphManip.storeAims( graph, v, 'aims_mesh', mesh )
-v[ 'name' ] = 'sphere2'
+v = graph.addVertex('roi')
+mesh = aims.SurfaceGenerator.sphere([0, 0, 0], 10, 100)
+aims.GraphManip.storeAims(graph, v, 'aims_mesh', mesh)
+v['name'] = 'sphere1'
+v = graph.addVertex('roi')
+mesh = aims.SurfaceGenerator.sphere([0, 0, 100], 10, 100)
+aims.GraphManip.storeAims(graph, v, 'aims_mesh', mesh)
+v['name'] = 'sphere2'
 
 # create a corresponding nomenclature
 hie = aims.Hierarchy()
-hie.setSyntax( 'hierarchy' )
-hie[ 'graph_syntax' ] = 'RoiArg'
-n = aims.Tree( True, 'fold_name' )
-n[ 'name' ] = 'sphere1'
-n[ 'color' ] = aims.vector_S32( [ 255, 255, 0 ] )
-hie.insert( n )
-n = aims.Tree( True, 'fold_name' )
-n[ 'name' ] = 'sphere2'
-n[ 'color' ] = aims.vector_S32( [ 0, 255, 0 ] )
-hie.insert( n )
+hie.setSyntax('hierarchy')
+hie['graph_syntax'] = 'RoiArg'
+n = aims.Tree(True, 'fold_name')
+n['name'] = 'sphere1'
+n['color'] = aims.vector_S32([255, 255, 0])
+hie.insert(n)
+n = aims.Tree(True, 'fold_name')
+n['name'] = 'sphere2'
+n['color'] = aims.vector_S32([0, 255, 0])
+hie.insert(n)
 
 # create anatomist objects
 a = ana.Anatomist()
-ahie = a.toAObject( hie )
-agraph = a.toAObject( graph )
+ahie = a.toAObject(hie)
+agraph = a.toAObject(graph)
 
 # display graph
-w = a.createWindow( '3D' )
-w.addObjects( agraph, add_children=True )
-br = a.createWindow( 'Browser' )
-br.addObjects( ahie )
-
-
+w = a.createWindow('3D')
+w.addObjects(agraph, add_children=True)
+br = a.createWindow('Browser')
+br.addObjects(ahie)

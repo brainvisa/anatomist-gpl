@@ -345,7 +345,7 @@ class AnaSimpleViewer( qt.QObject ):
     self.addObject( obj )
     # set the cursot at the center of the object (actually, overcome a bug
     # in anatomist...)
-    position = ( bb[1] - bb[0] ) / 2.
+    position = (aims.Point3df(bb[1][:3]) - bb[0][:3]) / 2.
     t = a.getTransformation( obj.getReferential(),
       awindows[0].getReferential() )
     if t:
@@ -683,11 +683,11 @@ class AnaSimpleViewer( qt.QObject ):
 # instantiate the machine
 anasimple = AnaSimpleViewer()
 # connect GUI actions callbacks
-findChild(awin, 'fileOpenAction').activated.connect(anasimple.fileOpen)
-findChild(awin, 'fileExitAction').activated.connect(anasimple.closeAll)
-findChild(awin, 'editAddAction').activated.connect(anasimple.editAdd)
-findChild(awin, 'editRemoveAction').activated.connect(anasimple.editRemove)
-findChild(awin, 'editDeleteAction').activated.connect(anasimple.editDelete)
+findChild(awin, 'fileOpenAction').triggered.connect(anasimple.fileOpen)
+findChild(awin, 'fileExitAction').triggered.connect(anasimple.closeAll)
+findChild(awin, 'editAddAction').triggered.connect(anasimple.editAdd)
+findChild(awin, 'editRemoveAction').triggered.connect(anasimple.editRemove)
+findChild(awin, 'editDeleteAction').triggered.connect(anasimple.editDelete)
 findChild(awin, 'viewEnable_Volume_RenderingAction').toggled.connect(
     anasimple.enableVolumeRendering)
 # manually entered coords
