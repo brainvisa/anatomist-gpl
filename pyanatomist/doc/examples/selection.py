@@ -2,7 +2,8 @@
 import anatomist.direct.api as ana
 from soma import aims
 from soma.aims import colormaphints
-import sys, os
+import sys
+import os
 
 # determine wheter we are using Qt4 or Qt5, and hack a little bit accordingly
 from soma.qt_gui import qt_backend
@@ -10,10 +11,10 @@ from soma.qt_gui.qt_backend import QtCore, QtGui
 
 # do we have to run QApplication ?
 if QtGui.qApp.startingUp():
-  qapp = QtGui.QApplication(sys.argv)
-  runqt = True
+    qapp = QtGui.QApplication(sys.argv)
+    runqt = True
 else:
-  runqt = False
+    runqt = False
 
 # splash
 ver_short = '.'.join(ana.version.split('.')[:2])
@@ -27,7 +28,7 @@ QtGui.qApp.processEvents()
 # start the Anatomist engine, in batch mode (no main window)
 a = ana.Anatomist()
 
-#a = anatomist.Anatomist()
+# a = anatomist.Anatomist()
 
 # create a sphere mesh
 m = aims.SurfaceGenerator.sphere(aims.Point3df(0), 100, 100)
@@ -40,18 +41,18 @@ aw = a.createWindow('3D')
 a.addObjects(mesh, aw)
 
 g = a.getDefaultWindowsGroup()
-#sel = anatomist.SelectFactory.factory()
+# sel = anatomist.SelectFactory.factory()
 print 'mesh isSelected:', g.isSelected(mesh)
 print 'selecting it'
 g.setSelection(mesh)
 print "selection in default group", a.getSelection()
 print "selection de", g, g.getSelection()
 sel = g.getSelection()
-#print mesh, sel, mesh == sel[0], mesh is sel[0]
-#print 'mesh isSelected:', g.isSelected( mesh )
+# print mesh, sel, mesh == sel[0], mesh is sel[0]
+# print 'mesh isSelected:', g.isSelected( mesh )
 
 del spl
 
 # run Qt
 if runqt:
-  qapp.exec_()
+    qapp.exec_()
