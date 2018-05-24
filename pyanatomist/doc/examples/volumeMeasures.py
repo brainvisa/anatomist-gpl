@@ -1,4 +1,4 @@
-#! /bin/env python2
+#! /bin/env python
 
 #  This software and supporting documentation are distributed by
 #      Institut Federatif de Recherche 49
