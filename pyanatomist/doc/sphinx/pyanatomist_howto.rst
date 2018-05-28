@@ -13,7 +13,7 @@ Use / change Anatomist settings
 1.0
 
 Configuration options are those recognized in the configuration file.
-It is documented :anatomist:`here in the embedded help <html/en/programming/config.html>`.
+It is documented :anausr:`here <config_file.html>`.
 
 
 .. _apply_transformations:
