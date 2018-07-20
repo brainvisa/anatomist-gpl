@@ -17,6 +17,7 @@ public:
   virtual void endTrackball( int x, int y, int globalX, int globalY );
   void setCenter();
   void showRotationCenter();
+  aims::Quaternion rotation( int x, int y );
 };
 
 
