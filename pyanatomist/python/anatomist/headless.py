@@ -13,9 +13,9 @@ Other functions are used by HeadlessAnatomist implementation.
 
 from __future__ import print_function
 
-import subprocess
+import soma.subprocess
 import os
-from subprocess import Popen, check_output
+from soma.subprocess import Popen, check_output
 import atexit
 import time
 import distutils.spawn
