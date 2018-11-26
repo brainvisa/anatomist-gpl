@@ -1889,17 +1889,29 @@ class Anatomist(Singleton):
                        absoluteMode=False, zeroCentered1=None,
                        zeroCentered2=None):
             """
-            Assign a palette to object
+            Assign a palette to object, or change its characteristics (scaling
+            etc).
 
             Parameters
             ----------
             palette: Anatomist.APalette or str (name)
                 Principal palette to apply
-            minVal: float (0 - 1)
-                Palette value to assign to objects texture min value
-                (proportionally to palette's limits)
-            maxVal: float (0 - 1)
-                Palette value to assign to objects texture max value
+            minVal: float
+                Minimum object texture value mapped to the lower bound of the
+                palette, by default in relative proportional mode.
+            maxVal: float
+                Minimum object texture value mapped to the lower bound of the
+                palette.
+
+                By default minVal, maxVal, minVal2 and maxVal2 are relative
+                values expressed in proportion of object texture extrema: [0-1]
+                corresponds to the whole object dynamics. If absoluteMode is
+                True, then values are in object texture values space. The range
+                [minVal-maxVal] is mapped to the while palette, thus any value
+                below or over these extrema will get the first or last (resp.)
+                color of the palette. Values outside [0-1] may be used, meaning
+                that not all the palette colors range will be mapped to the
+                texture values.
             palette2: APalette
                 Second palette, for 2D textures
             minVal2: float (0 - 1)
