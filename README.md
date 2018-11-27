@@ -5,4 +5,4 @@ Python bindings and extra-libs to Anatomist 3D viewer
 See http://brainvisa.info/anatomist/user_doc/
 
 ## Licence
-This project is distributed under [CeCILL v2.1](http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html)
+This project is distributed under [CeCILL v2.1 licence](http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html)
