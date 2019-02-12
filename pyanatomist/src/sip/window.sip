@@ -22,6 +22,21 @@ namespace anatomist
     sipClass_anatomist_AWindow, sipTransferObj, sipIsErr, sipCppPtr );
 %End
 
+%ConvertToSubClassCode
+  sipClass = 0;
+  if( dynamic_cast<QAWindow *>( static_cast<QAWindow *>( sipCpp ) ) )
+  {
+    *sipCppRet = static_cast<QAWindow *>( sipCpp );
+    if( dynamic_cast<ControlledWindow *>( sipCpp ) )
+      if( dynamic_cast<AWindow3D *>( sipCpp ) )
+        sipClass = sipClass_AWindow3D;
+      else
+        sipClass = sipClass_ControlledWindow;
+    else
+      sipClass = sipClass_QAWindow;
+  }
+%End
+
   public:
     enum Type { CTRL_WINDOW = 100, WINDOW_2D = 101, WINDOW_3D = 102 };
     enum SubType { AXIAL_WINDOW = 200,
