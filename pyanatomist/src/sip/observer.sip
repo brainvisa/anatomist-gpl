@@ -10,6 +10,7 @@ namespace anatomist
 #include <anatomist/surface/textobject.h>
 #include <anatomist/surface/transformedobject.h>
 #include <anatomist/surface/texture.h>
+#include <anatomist/application/globalConfig.h>
 %End
 
 %TypeCode
@@ -24,7 +25,6 @@ namespace anatomist
   // std::cout << "Observable ConvertToSubClassCode: " << sipCpp << " / " << typeid( *sipCpp ).name() << std::endl;
   if( dynamic_cast<anatomist::CommandContext *>( sipCpp ) )
   {
-    // std::cout << "I'm a CommandContext: " << dynamic_cast<anatomist::CommandContext *>( sipCpp ) << std::endl;
     *sipCppRet = dynamic_cast<anatomist::CommandContext *>( sipCpp );
     sipType = sipType_anatomist_CommandContext;
   }
@@ -32,55 +32,48 @@ namespace anatomist
   {
     if( dynamic_cast<anatomist::Observable *>( sipCpp ) )
     {
-        /*
-        std::cout << "I'm an Observable: " << sipCpp << std::endl;
-        std::cout << "dcast to awindow3d: " << dynamic_cast<AWindow3D *>( sipCpp ) << std::endl;
-        std::cout << "dcast to Observable: " << dynamic_cast<anatomist::Observable *>( sipCpp ) << std::endl;
-        std::cout << "dcast to rcobject: " << dynamic_cast<carto::RCObject *>( sipCpp ) << std::endl;
-        std::cout << "dcast to awindow3d via rcobject: " << dynamic_cast<AWindow3D *>( dynamic_cast<carto::RCObject *>( sipCpp ) ) << std::endl;
-        */
-        sipType = sipType_anatomist_Observable;
-        *sipCppRet = dynamic_cast<anatomist::Observable *>( sipCpp );
-        if( dynamic_cast<anatomist::AObject *>( sipCpp ) )
+      sipType = sipType_anatomist_Observable;
+      *sipCppRet = dynamic_cast<anatomist::Observable *>( sipCpp );
+      if( dynamic_cast<anatomist::AObject *>( sipCpp ) )
+      {
+        if (dynamic_cast<anatomist::ASurface_3 *>(sipCpp))
+        sipType = sipType_anatomist_ASurface_3;
+        else if (dynamic_cast<anatomist::ASurface_2 *>(sipCpp))
+        sipType = sipType_anatomist_ASurface_2;
+        else if (dynamic_cast<anatomist::ATexture *>(sipCpp))
+        sipType = sipType_anatomist_ATexture;
+        else if (dynamic_cast<anatomist::MObject *>(sipCpp))
         {
-            // std::cout << "I'm a AObject\n";
-            if (dynamic_cast<anatomist::ASurface_3 *>(sipCpp))
-            sipType = sipType_anatomist_ASurface_3;
-            else if (dynamic_cast<anatomist::ASurface_2 *>(sipCpp))
-            sipType = sipType_anatomist_ASurface_2;
-            else if (dynamic_cast<anatomist::ATexture *>(sipCpp))
-            sipType = sipType_anatomist_ATexture;
-            else if (dynamic_cast<anatomist::MObject *>(sipCpp))
-            {
-            if (dynamic_cast<anatomist::AGraph *>(sipCpp))
-                sipType = sipType_anatomist_AGraph;
-            else if (dynamic_cast<anatomist::AGraphObject *>(sipCpp))
-                sipType = sipType_anatomist_AGraphObject;
-            else if (dynamic_cast<anatomist::ClippedObject *>(sipCpp))
-                sipType = sipType_anatomist_ClippedObject;
-            else if (dynamic_cast<anatomist::ObjectList *>(sipCpp))
-                sipType = sipType_anatomist_ObjectList;
-            else
-                sipType = sipType_anatomist_MObject;
-            }
-            else if (dynamic_cast<anatomist::SliceableObject *>(sipCpp))
-            sipType = sipType_anatomist_SliceableObject;
-            else if (dynamic_cast<anatomist::TextObject *>(sipCpp))
-            sipType = sipType_anatomist_TextObject;
-            else if (dynamic_cast<anatomist::TransformedObject *>(sipCpp))
-            sipType = sipType_anatomist_TransformedObject;
-            else
-                sipType = sipType_anatomist_AObject;
+        if (dynamic_cast<anatomist::AGraph *>(sipCpp))
+          sipType = sipType_anatomist_AGraph;
+        else if (dynamic_cast<anatomist::AGraphObject *>(sipCpp))
+          sipType = sipType_anatomist_AGraphObject;
+        else if (dynamic_cast<anatomist::ClippedObject *>(sipCpp))
+          sipType = sipType_anatomist_ClippedObject;
+        else if (dynamic_cast<anatomist::ObjectList *>(sipCpp))
+          sipType = sipType_anatomist_ObjectList;
+        else
+          sipType = sipType_anatomist_MObject;
         }
-        else if( dynamic_cast<AWindow3D *>( sipCpp ) )
-        {
-            /*
-            std::cout << "I'm a AWindow3D: " // << static_cast<AWindow3D *>( sipCpp ) << " / " 
-                << dynamic_cast<AWindow3D *>( sipCpp ) << std::endl;
-            */
-            *sipCppRet = dynamic_cast<AWindow3D *>( sipCpp );
-            sipType = sipType_AWindow3D;
-        }
+        else if (dynamic_cast<anatomist::SliceableObject *>(sipCpp))
+        sipType = sipType_anatomist_SliceableObject;
+        else if (dynamic_cast<anatomist::TextObject *>(sipCpp))
+        sipType = sipType_anatomist_TextObject;
+        else if (dynamic_cast<anatomist::TransformedObject *>(sipCpp))
+        sipType = sipType_anatomist_TransformedObject;
+        else
+          sipType = sipType_anatomist_AObject;
+      }
+      else if( dynamic_cast<AWindow3D *>( sipCpp ) )
+      {
+        *sipCppRet = dynamic_cast<AWindow3D *>( sipCpp );
+        sipType = sipType_AWindow3D;
+      }
+    }
+    else if( dynamic_cast<anatomist::GlobalConfiguration *>( sipCpp ) )
+    {
+      *sipCppRet = dynamic_cast<anatomist::GlobalConfiguration *>( sipCpp );
+      sipType = sipType_anatomist_GlobalConfiguration;
     }
   }
 
