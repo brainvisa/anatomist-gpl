@@ -15,6 +15,7 @@ public:
   virtual std::string name() const =0;
   virtual std::string description() const =0;
   virtual Tree *controlWinOptions() const;
+  void init();
 
 protected:
   virtual void objectsDeclaration();
