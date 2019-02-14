@@ -23,6 +23,7 @@ namespace anatomist
 %ConvertToSubClassCode
 
   // std::cout << "Observable ConvertToSubClassCode: " << sipCpp << " / " << typeid( *sipCpp ).name() << std::endl;
+  sipType = 0;
   if( dynamic_cast<anatomist::CommandContext *>( sipCpp ) )
   {
     *sipCppRet = dynamic_cast<anatomist::CommandContext *>( sipCpp );
