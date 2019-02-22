@@ -43,11 +43,11 @@ public:
   virtual anatomist::AIterator end();
   virtual void insert( anatomist::AObject * );
   virtual void insert( anatomist::AObject *, int pos );
-  virtual void insert( const weak_shared_ptr_AObject &, int pos = -1 );
-  virtual void insert( const rc_ptr_AObject &, int pos = -1 );
+  void insert( const weak_shared_ptr_AObject &, int pos = -1 );
+  void insert( const rc_ptr_AObject &, int pos = -1 );
   virtual anatomist::AIterator find( const anatomist::AObject * ) const;
-  virtual anatomist::AIterator find( const weak_shared_ptr_AObject & ) const;
-  virtual anatomist::AIterator find( const rc_ptr_AObject & ) const;
+  anatomist::AIterator find( const weak_shared_ptr_AObject & ) const;
+  anatomist::AIterator find( const rc_ptr_AObject & ) const;
   virtual void erase( anatomist::AIterator & );
   virtual bool CanRemove( anatomist::AObject *obj );
   int type() const;

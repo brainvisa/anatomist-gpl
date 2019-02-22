@@ -135,7 +135,7 @@ namespace anatomist
     static int 	registerObjectType (const std::string &);
     static void addObjectMenuRegistration
     ( anatomist::ObjectMenuRegistrerClass * /Transfer/ );
-    virtual void setHeaderOptions();
+    void setHeaderOptions();
     virtual void storeHeaderOptions();
     virtual carto::Object makeHeaderOptions() const;
 

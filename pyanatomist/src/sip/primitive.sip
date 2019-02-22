@@ -103,7 +103,7 @@ class GLNoExecItemList : anatomist::GLItemList
 public:
   GLNoExecItemList();
   virtual ~GLNoExecItemList();
-  virtual void callList();
+  virtual void callList() const;
 };
 
 
