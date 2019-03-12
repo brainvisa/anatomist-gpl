@@ -64,6 +64,7 @@ import sys
 import types
 import weakref
 import sys
+import numpy as np
 import six
 from anatomist.base import isSequenceType, isMappingType
 
@@ -75,7 +76,7 @@ try:
     _string_or_qstring = (basestring, QString)
 except ImportError:
     _string_or_qstring = (basestring, )
-from soma.qt_gui.qt_backend import QtCore
+from soma.qt_gui.qt_backend import QtCore, Qt
 Slot = QtCore.pyqtSlot
 
 
@@ -208,7 +209,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         self.quit()
 
     # objects creation
-    def createWindowsBlock(self, nbCols=2, nbRows=0):
+    def createWindowsBlock(self, nbCols=2, nbRows=0, widget=None):
         """
         Creates a window containing other windows.
 
@@ -220,6 +221,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             Number of columns of the windows block
         nbRows: int
             Number of rows of the windows block (exclusive with nbCols)
+        widget: QWidget (optional)
+            New in Anatomist 4.6.2, only applies to the direct implementation.
+            Existing parent widget to be used as a block
 
         Returns
         -------
@@ -228,7 +232,10 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         """
         if nbRows:
             nbCols = 0
-        return self.AWindowsBlock(self, nbCols=nbCols, nbRows=nbRows)
+        block = self.AWindowsBlock(self, nbCols=nbCols, nbRows=nbRows)
+        if widget is not None:
+            block.setWidget(widget)
+        return block
 
     def createWindow(self, wintype, geometry=[], block=None,
                      no_decoration=None, options=None):
@@ -241,10 +248,13 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             Type of window to open (``"Axial"``, ``"Sagittal"``, ``"Coronal"``, ``"3D"``, ``"Browser"``, ``"Profile"``, ...)
         geometry: int vector
             Position on screen and size of the new window (x, y, w, h)
-        block: :class:`AWindowsBlock`
-            A block in which the new window must be added
+        block: :class:`AWindowsBlock` or QWidget
+            A parent block in which the new window must be added.
+            In Anatomist 4.6.2 and later, the block may be a regular QWidget
+            (this is only OK in direct implementation mode)
         no_decoration: bool
-            Indicates if decorations (menus, buttons) can be painted around the view.
+            Indicates if decorations (menus, buttons) can be painted around the
+            view.
         options: dict
             Internal advanced options.
 
@@ -266,11 +276,17 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         if block is not None:
             # CreateWindowCommand(type, id, context, geometry, blockid, block,
             # block_columns, options)
-            bid = None
+            bwid = None
+            bid = -1
+            if isinstance(block, Qt.QWidget):
+                block = self.createWindowsBlock(widget=block)
             if block.internalWidget is not None:
-                bid = block.internalWidget.widget
+                bwid = block.internalWidget.widget
+            bid = block.getInternalRep()
+
             c = cpp.CreateWindowCommand(
-                wintype, -1, None, geometry, block.getInternalRep(), bid, block.nbCols, block.nbRows, aims.Object(options))
+                wintype, -1, None, geometry, bid, bwid, block.nbCols,
+                block.nbRows, aims.Object(options))
             self.execute(c)
             if block.internalWidget is None:
                 block.setWidget(c.block())
@@ -1133,7 +1149,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             except:
                 i = self.context.makeID(v)
             return i
-        elif isinstance(v, (basestring, int, float, dict)):
+        elif isinstance(v, (basestring, int, float, dict,
+                            np.int16, np.int32, np.int64, np.int8,
+                            np.uint16, np.uint32, np.uint64, np.uint8)):
             return v
         raise TypeError('Expecting an Anatomist object but got one of type %s'
                         % repr(type(v)))

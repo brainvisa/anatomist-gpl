@@ -59,7 +59,7 @@ public:
     virtual void 	insert (anatomist::AObject *) = 0;
     virtual anatomist::AIterator begin() = 0;
     virtual anatomist::AIterator end() = 0;
-    virtual void eraseObject( anatomist::AObject *);
+    void eraseObject( anatomist::AObject *);
 
     virtual float MinT() const /AutoGen/;
     virtual float MaxT() const /AutoGen/;

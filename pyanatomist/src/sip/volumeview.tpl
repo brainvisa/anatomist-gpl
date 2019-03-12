@@ -109,7 +109,7 @@ namespace anatomist
     virtual void setFileName( const std::string & fname );
     virtual void SetExtrema();
     virtual void adjustPalette();
-    virtual vector_FLOAT voxelSize();
+    virtual vector_FLOAT voxelSize() const;
     bool Is2DObject();
     bool textured2D();
     bool Is3DObject();

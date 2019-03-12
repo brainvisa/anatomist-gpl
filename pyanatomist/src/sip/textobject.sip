@@ -13,7 +13,7 @@ namespace anatomist
     virtual ~TextObject();
     const std::string & text() const;
     void setText( const std::string & );
-    virtual int type() const;
+    int type() const;
     virtual anatomist::GLComponent* glAPI();
     virtual bool isTransparent() const;
     void setFont( QFont *font /Transfer/ );
