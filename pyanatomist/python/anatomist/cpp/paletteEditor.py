@@ -38,6 +38,7 @@ from tempfile import mkstemp
 import anatomist.api as ana
 import os
 import sys
+import six
 
 class PaletteEditor( QtGui.QGroupBox ):
 
@@ -290,10 +291,10 @@ class PaletteEditor( QtGui.QGroupBox ):
         imbackground = QtGui.QImage( QtCore.QSize( range, int(dimy) ), 4 )
         pmbackground = QtGui.QPixmap()
         
-        for x in xrange( dimx ):
+        for x in six.moves.xrange( dimx ):
             rgb = refpal.value( int( facx * x ), 0)
         
-            for y in xrange( dimy ):
+            for y in six.moves.xrange( dimy ):
                 xpal = int(x*(maxx-minx)/dimx)
                 if xpal >= range:
                     xpal = range-1

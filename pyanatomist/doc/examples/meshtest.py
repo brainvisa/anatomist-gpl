@@ -36,12 +36,13 @@ import os
 import anatomist.direct.api as anatomist
 import sys
 from soma.qt_gui.qt_backend.QtGui import qApp
+import six
 
 # create a unit sphere of radius 1 and 500 vertices
 m = aims.SurfaceGenerator.sphere(aims.Point3df(0, 0, 0), 1, 500, False)
 
 # Multiply the sphere size by 100
-for p in xrange(m.vertex().size()):
+for p in six.moves.xrange(m.vertex().size()):
     m.vertex()[p] *= 100
 
 # Open Anatomist
@@ -63,13 +64,13 @@ a.addObjects(am, aw)
 
 # keep a copy of original vertices
 coords = [aims.Point3df(m.vertex()[i])
-          for i in xrange(len(m.vertex()))]
+          for i in six.moves.xrange(len(m.vertex()))]
 # take one vertex out of 3
-points = xrange(0, len(coords), 3)
+points = six.moves.xrange(0, len(coords), 3)
 
-for i in xrange(10):
+for i in six.moves.xrange(10):
     # shrink
-    for s in reversed(xrange(100)):
+    for s in reversed(six.moves.xrange(100)):
         for p in points:
             m.vertex()[p] = coords[p] * s / 100.
         am.setChanged()
@@ -77,7 +78,7 @@ for i in xrange(10):
         qApp.processEvents()
         time.sleep(0.01)
     # expand
-    for s in xrange(100):
+    for s in six.moves.xrange(100):
         for p in points:
             m.vertex()[p] = coords[p] * s / 100.
         am.setChanged()
