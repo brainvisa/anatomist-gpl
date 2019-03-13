@@ -39,6 +39,8 @@ from soma.aims import colormaphints
 import sys
 import os
 import math
+import six
+
 sys.path.insert(0, '.')
 
 userLevel = 4
@@ -145,7 +147,7 @@ class TexDrawAction(anatomist.cpp.Action):
                     tex = aims.TimeTexture_FLOAT()
                     t = tex[0]
                     t.reserve(nv)
-                    for i in xrange(nv):
+                    for i in six.moves.xrange(nv):
                         t.push_back(0.)
                     atex = a.toAObject(tex)
                     # atex = a.AObject( a, surf ).generateTexture()

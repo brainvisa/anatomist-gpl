@@ -44,6 +44,7 @@
 
 from soma import aims
 import anatomist.cpp as anatomist
+import six
 
 def getCenter(object):
 	""" 
@@ -59,7 +60,7 @@ def getCenter(object):
 		center = aims.Point3df( 0, 0, 0 )
 		v = object.surface().vertex()
 		
-		for i in xrange( len(v) ):
+		for i in six.moves.xrange( len(v) ):
 			center += v[i]
 		return center / len(v)
 	else:
