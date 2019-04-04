@@ -868,7 +868,7 @@ class Anatomist(base.Anatomist):
         objects are referenced by unique identifier. Objects defined in this module encapsulate the id of the
         corresponding Anatomist object.
 
-        Retruns
+        Returns
         -------
         id: int
             a new unused ID.
@@ -1013,13 +1013,15 @@ class Anatomist(base.Anatomist):
         '''
         Executes a command in anatomist application and returns the result.
         It should be a command that can be processed by Anatomist command processor.
-        The list of available commands is in U{http://brainvisa.info/doc/anatomist/html/fr/programmation/commands.html}.
+        The list of available commands is in http://brainvisa.info/doc/anatomist/html/fr/programmation/commands.html.
         Parameters are converted before sending the request to anatomist application.
 
         Parameters
         ----------
         command: str
             name of the command to execute.
+        timeout: int
+            max time before returning
         kwargs: dict
             parameters for the command
 
@@ -1048,7 +1050,7 @@ class Anatomist(base.Anatomist):
         """
         Generates a new unique id for a request to send to anatomist.
 
-        Retruns
+        Returns
         -------
         id: int
             a unique id
