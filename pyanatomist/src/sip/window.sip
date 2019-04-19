@@ -2,6 +2,8 @@
 #include <anatomist/window/colorstyle.h>
 %End
 
+%Import QtGui/QtGuimod.sip
+
 namespace anatomist
 {
 
@@ -224,7 +226,12 @@ class GLWidgetManager : anatomist::View
   public:
     virtual ~GLWidgetManager();
 
+%If ( - Qt_5_9_0 )
     QGLWidget *qglWidget ();
+%End
+%If ( Qt_5_9_0 - )
+    QOpenGLWidget *qglWidget ();
+%End
     void setPrimitives( const anatomist::GLPrimitives & );
     anatomist::GLPrimitives primitives() const;
 
@@ -293,6 +300,7 @@ class GLWidgetManager : anatomist::View
 };
 
 
+%If ( - Qt_5_9_0 )
 class QAGLWidget : QGLWidget, anatomist::GLWidgetManager
 {
 %TypeHeaderCode
@@ -321,7 +329,37 @@ class QAGLWidget : QGLWidget, anatomist::GLWidgetManager
   private :
     QAGLWidget( const QAGLWidget& );
 };
+%End
+%If ( Qt_5_9_0 - )
+class QAGLWidget : QOpenGLWidget, anatomist::GLWidgetManager
+{
+%TypeHeaderCode
+#include <anatomist/window/glwidget.h>
+#include <pyaims/vector/vector.h>
 
+%End
+
+  public:
+
+    QAGLWidget( anatomist::AWindow*, QWidget* = 0, 
+                const char* = 0, 
+                const QOpenGLWidget * = 0, Qt::WindowFlags = 0 );
+    virtual ~QAGLWidget();
+
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
+    virtual std::string name() const;
+
+  public slots:
+    virtual void updateGL();
+    virtual void saveContents();
+    virtual void recordStart();
+    virtual void recordStop();
+
+  private :
+    QAGLWidget( const QAGLWidget& );
+};
+%End
 
 class AWindow3D : ControlledWindow, anatomist::Observable
 {
