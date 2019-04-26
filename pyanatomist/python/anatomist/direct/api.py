@@ -1774,6 +1774,32 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                   ref)
             return ref
 
+        def imshow(self, width=0, height=0, figure=None, show=False):
+            '''
+            Display the 3D view rendering into a Matplotlib figure using
+            pylab.imshow(). This is useful to display static figures in a
+            widget, or use them to export in a document, or to use the
+            sphinx_gallery module for documentation.
+            '''
+            if not hasattr(self.internalRep, 'snapshotImage'):
+                raise TypeError('AWindow.to_imshow called on a non-OpenGL '
+                                'window type')
+            im = self.internalRep.snapshotImage(0, width, height)
+            aim = Anatomist.qimage_to_np(im)
+            from matplotlib import pyplot
+            pyplot.imshow(aim, figure=figure)
+            if figure is not None:
+                axes = figure.axes()
+            else:
+                axes = pyplot.axes()
+            axes.get_xaxis().set_visible(False)
+            axes.get_yaxis().set_visible(False)
+            if show:
+                if figure is not None:
+                    figure.show()
+                else:
+                    pyplot.show()
+
     #
     class AWindowsBlock(AItem, base.Anatomist.AWindowsBlock):
 
@@ -1910,3 +1936,17 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         def __init__(self, anatomistinstance, internalRep=None, *args, **kwargs):
             super(Anatomist.Transformation, self).__init__(
                 anatomistinstance, internalRep, *args, **kwargs)
+
+    @staticmethod
+    def qimage_to_np(qimage):
+        '''
+        Utility function to transorm a Qt QImage into a numpy array suitable
+        for matplotlib imshow() for instance.
+        This is a genral function which is independent from anatomist, but we
+        don't have another place to fit it in currently.
+        '''
+        w, h = qimage.width(), qimage.height()
+        aim = aim = np.asarray(qimage.bits().asarray(w * h * 4)).reshape((h, w,
+                                                                          4))
+        aim[:,:,0:3] = np.flip(aim[:,:,0:3], axis=2)
+        return aim
