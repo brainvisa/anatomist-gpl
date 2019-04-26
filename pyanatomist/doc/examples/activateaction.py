@@ -30,7 +30,11 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
-'''Action activation triggering API demo.
+'''
+Action activation triggering API demo
+=====================================
+
+Activate actions in the current control of a window.
 
 Action activation works both in direct and socket APIs
 but querying the lists of available action methods is only available in

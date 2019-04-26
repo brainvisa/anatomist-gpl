@@ -14,6 +14,7 @@
 from __future__ import print_function
 
 import sys, os
+import datetime
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -53,6 +54,17 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.inheritance_diagram',
               'sphinx.ext.autosummary',
               napoleon]
+try:
+    import sphinx_gallery
+    extensions.append('sphinx_gallery.gen_gallery')
+    sphinx_gallery_conf = {
+        'examples_dirs': '../examples',   # path to your example scripts
+        'gallery_dirs': 'auto_examples',  # path where to save gallery generated examples
+        'filename_pattern': '/(anagraphannotate)|(aimsvolumetest)|(fusion3D)\.py',
+        'ignore_pattern': r'/[^af][^/]*\.py$',
+    }
+except ImportError:
+    pass  # no gallery. Oh, well.
 
 try:
     # nbsphinx converts ipython/jupyter notebooks to sphinx docs
@@ -77,7 +89,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'PyAnatomist'
-copyright = u'2015, CEA'
+copyright = u'%d, CEA' % datetime.datetime.now().year
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

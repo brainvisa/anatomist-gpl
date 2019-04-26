@@ -32,19 +32,25 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+'''
+Build a custom simplified viewer based on Anatomist
+===================================================
+
+An even simplified version of the anasimpleviewer application, which may also be used as a programming example. Its code is in the “bin/”” directory of the binary packages.
+'''
+
 from __future__ import print_function
 import anatomist.direct.api as ana
 from soma import aims
 from soma.aims import colormaphints
 import sys
 import os
-from soma.qt_gui.qt_backend import QtCore, QtGui, loadUi
-findChild = lambda x, y: QtCore.QObject.findChild(x, QtCore.QObject, y)
-
-qapp = QtGui.QApplication(sys.argv)
+from soma.qt_gui.qt_backend import Qt, loadUi
+findChild = lambda x, y: Qt.QObject.findChild(x, Qt.QObject, y)
 
 # start the Anatomist engine, in batch mode (no main window)
 a = ana.Anatomist('-b')
+qapp = Qt.QApplication.instance()
 
 # load the anasimpleviewer GUI
 uifile = 'anasimpleviewer-qt4.ui'
@@ -66,16 +72,16 @@ fusion2d = []
 
 # vieww: parent block widget for anatomist windows
 vieww = findChild(awin, 'windows')
-viewgridlay = QtGui.QGridLayout(vieww)
+viewgridlay = Qt.QGridLayout(vieww)
 nviews = 0
 
 
 # This class holds methods for menu/actions callbacks, and utility functions
 # like load/view objects, remove/delete, etc.
-class AnaSimpleViewer(QtGui.QObject):
+class AnaSimpleViewer(Qt.QObject):
 
     def __init__(self):
-        QtGui.QObject.__init__(self)
+        Qt.QObject.__init__(self)
         self.filedialogdir = '.'
 
     def createWindow(self, wintype='Axial'):
@@ -243,7 +249,7 @@ class AnaSimpleViewer(QtGui.QObject):
     def fileOpen(self):
         '''File browser + load object(s)
         '''
-        fdialog = QtGui.QFileDialog()
+        fdialog = Qt.QFileDialog()
         fdialog.setDirectory(self.filedialogdir)
         fdialog.setFileMode(fdialog.ExistingFiles)
         res = fdialog.exec_()
@@ -282,7 +288,7 @@ class AnaSimpleViewer(QtGui.QObject):
         olist = findChild(awin, 'objectslist')
         for o in objs:
             olist.takeItem(olist.row(olist.findItems(o.name,
-                                                     QtCore.Qt.MatchExactly)[0]))
+                                                     Qt.Qt.MatchExactly)[0]))
         global aobjects
         aobjects = [o for o in aobjects if o not in objs]
         a.deleteObjects(objs)
@@ -302,11 +308,11 @@ class AnaSimpleViewer(QtGui.QObject):
 # instantiate the machine
 anasimple = AnaSimpleViewer()
 # connect GUI actions callbacks
-findChild(awin, 'fileOpenAction').activated.connect(anasimple.fileOpen)
-findChild(awin, 'fileExitAction').activated.connect(anasimple.closeAll)
-findChild(awin, 'editAddAction').activated.connect(anasimple.editAdd)
-findChild(awin, 'editRemoveAction').activated.connect(anasimple.editRemove)
-findChild(awin, 'editDeleteAction').activated.connect(anasimple.editDelete)
+findChild(awin, 'fileOpenAction').triggered.connect(anasimple.fileOpen)
+findChild(awin, 'fileExitAction').triggered.connect(anasimple.closeAll)
+findChild(awin, 'editAddAction').triggered.connect(anasimple.editAdd)
+findChild(awin, 'editRemoveAction').triggered.connect(anasimple.editRemove)
+findChild(awin, 'editDeleteAction').triggered.connect(anasimple.editDelete)
 
 # display on the whole screen
 awin.showMaximized()
@@ -316,4 +322,8 @@ a.config()['setAutomaticReferential'] = 1
 a.config()['windowSizeFactor'] = 1.
 
 # run Qt
-qapp.exec_()
+if __name__ == '__main__':
+    if 'sphinx_gallery' in sys.modules:
+        pass
+    elif qapp.startingUp():
+        qapp.exec_()

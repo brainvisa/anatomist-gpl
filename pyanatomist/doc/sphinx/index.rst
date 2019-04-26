@@ -45,6 +45,10 @@ PyAnatomist examples
 
 :doc:`pyanatomist_examples`
 
+.. ifconfig:: 'sphinx_gallery.gen_gallery' in extensions
+
+    :doc:`auto_examples/index`
+
 
 Tutorial
 --------
@@ -98,4 +102,11 @@ Table of contents
       pyanatomist_tutorial
       pyanatomist_howto
       pyanatomist_examples
+
+.. ifconfig:: 'sphinx_gallery.gen_gallery' in extensions
+
+    .. toctree::
+      :maxdepth: 3
+
+      auto_examples/index
 

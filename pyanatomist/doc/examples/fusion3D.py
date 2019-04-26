@@ -29,7 +29,18 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+'''
+Fusion3D example
+================
+
+Fusion3D (mesh + texture from a volume) in Anatomist
+'''
+
 import anatomist.api as anatomist
+# to expand the mesh bigger
+from soma import aims
+import numpy as np
 
 # initialize Anatomist
 a = anatomist.Anatomist()
@@ -37,6 +48,14 @@ a = anatomist.Anatomist()
 # load a volume in anatomist
 avol = a.loadObject('irm.ima')
 amesh = a.loadObject('test.mesh')
+
+# this is to make the mesh bigger compared to the volume size
+tr = aims.AffineTransformation3d()
+tr.fromMatrix(np.matrix([[8., 0, 0, 204.4],
+                         [0, 8., 0, 132.5],
+                         [0, 0, 8., 68.4]]))
+aims.SurfaceManip.meshTransform(amesh.toAimsObject(), tr)
+amesh.UpdateMinAndMax()
 
 # fusion the objects
 fusion = a.fusionObjects(objects=[avol, amesh], method="Fusion3DMethod")
@@ -51,3 +70,11 @@ a.addObjects([fusion], [win])
 
 # export the fusion texture in a file.
 fusion.exportTexture("fusion.tex")
+
+
+# display in matplotlib for sphinx_gallery
+import matplotlib
+matplotlib.use('agg', force=True)  # force agg
+win.imshow(show=True)
+del fusion, win, amesh, avol, tr
+
