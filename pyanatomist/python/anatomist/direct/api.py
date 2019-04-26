@@ -54,6 +54,7 @@ If the Anatomist object is created outside the main thread, you must get a threa
 >>> import anatomist.api as anatomist
 
 """
+from __future__ import print_function
 
 from anatomist import cpp
 from anatomist import base
@@ -529,7 +530,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         """
         c = cpp.LoadObjectCommand(filename, -1, "", True)
         self.execute(c)
-        o = self.typedObject(c.loadedObject())
+        if len(c.loadedObjects()) == 0:
+            raise IOError('file %s cannot be read' % filename)
+        o = self.typedObject(c.loadedObjects()[0])
         o.releaseAppRef()
         return o
 
