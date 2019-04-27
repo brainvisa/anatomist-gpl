@@ -30,6 +30,13 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+'''
+Volume manipulation
+-------------------
+
+Loading and viewing a Volume with anatomist
+'''
+
 from __future__ import print_function
 
 import anatomist.api as anatomist  # works with all implementations
@@ -49,3 +56,7 @@ a.addObjects([avol], [win])
 avol.setPalette('Blue-Red-fusion')
 
 print("object and window are not deletable since there is a reference on it. Execute 'del win' and 'del avol' to delete them.")
+
+# display in matplotlib for sphinx_gallery
+win.sphinx_gallery_snapshot()
+

@@ -30,6 +30,14 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+'''
+Graph manipulation
+------------------
+
+Loading and displaying a graph
+'''
+
 import anatomist.direct.api as anatomist
 from soma import aims
 import sys
@@ -58,10 +66,13 @@ ag.notifyObservers()
 w = a.createWindow('3D')
 w.addObjects(ag, add_graph_nodes=True)
 
+w.camera(view_quaternion=[0.5, -0.5, -0.5, 0.5])
+w.windowConfig(view_size=[642, 384])
 
-def main():
-    if runqt:
-        QtGui.qApp.exec_()
 
 if __name__ == '__main__':
-    main()
+    # display in matplotlib for sphinx_gallery
+    if w.sphinx_gallery_snapshot():
+        runqt = False
+    if runqt:
+        QtGui.qApp.exec_()

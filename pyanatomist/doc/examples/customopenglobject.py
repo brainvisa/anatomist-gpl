@@ -31,6 +31,14 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+'''
+Using OpenGL in PyAnatomist
+---------------------------
+
+Customizing OpenGL parameters for objects
+'''
+
 from soma import aims
 import anatomist.direct.api as anatomist
 from OpenGL import GL
@@ -169,3 +177,15 @@ if __name__ == '__main__':
     a.registerObject(vcube2)
     w = a.createWindow('3D')
     a.addObjects([amesh, vcube1, vcube2], [w])
+
+    import sys
+    if 'sphinx_gallery'  in sys.modules:
+        # display in matplotlib for sphinx_gallery
+        import matplotlib
+        w.camera(view_quaternion=[0.535079479217529,
+                                  0.797160744667053,
+                                  0.268512755632401,
+                                  0.0782672688364983],
+                 zoom=0.45)
+        matplotlib.use('agg', force=True)  # force agg
+        w.imshow(show=True)

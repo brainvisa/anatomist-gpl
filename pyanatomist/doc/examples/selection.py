@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 
+'''
+Selection handling
+------------------
+
+Getting selected objects
+'''
+
 from __future__ import print_function
 
 import anatomist.direct.api as ana
@@ -13,8 +20,7 @@ from soma.qt_gui import qt_backend
 from soma.qt_gui.qt_backend import QtCore, QtGui
 
 # do we have to run QApplication ?
-if QtGui.qApp.startingUp():
-    qapp = QtGui.QApplication(sys.argv)
+if not QtGui.QApplication.instance():
     runqt = True
 else:
     runqt = False
@@ -23,13 +29,15 @@ else:
 ver_short = '.'.join(ana.version.split('.')[:2])
 iconpath = os.path.join(aims.carto.Paths.globalShared(),
                         'anatomist-%s' % ver_short, 'icons')
+
+# start the Anatomist engine, in batch mode (no main window)
+a = ana.Anatomist(['-b'])
+
 pix = QtGui.QPixmap(os.path.join(iconpath, 'anatomist.png'))
 spl = QtGui.QSplashScreen(pix)
 spl.show()
 QtGui.qApp.processEvents()
 
-# start the Anatomist engine, in batch mode (no main window)
-a = ana.Anatomist()
 
 # a = anatomist.Anatomist()
 

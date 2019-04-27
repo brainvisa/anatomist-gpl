@@ -30,6 +30,16 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+'''
+Graph building
+--------------
+
+Creating a complete graph and nomenclature in Python
+'''
+
+from __future__ import print_function
+
 import anatomist.direct.api as ana
 from soma import aims
 
@@ -72,3 +82,5 @@ w = a.createWindow('3D')
 w.addObjects(agraph, add_children=True)
 br = a.createWindow('Browser')
 br.addObjects(ahie)
+
+plot = w.sphinx_gallery_snapshot()

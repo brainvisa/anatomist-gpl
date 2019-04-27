@@ -30,6 +30,14 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+'''
+Mesh manipulation
+-----------------
+
+Using a mesh and modifying it while it is displayed
+'''
+
 from soma import aims
 import time
 import os
@@ -85,3 +93,11 @@ for i in six.moves.xrange(10):
         am.notifyObservers()
         qApp.processEvents()
         time.sleep(0.01)
+
+# display in matplotlib for sphinx_gallery
+s = 0
+for p in points:
+    m.vertex()[p] = coords[p] * s / 100.
+am.setChanged()
+am.notifyObservers()
+aw.sphinx_gallery_snapshot()

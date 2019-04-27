@@ -29,6 +29,14 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+'''
+Selection by nomenclature
+-------------------------
+
+Selecting graph nodes according a nomenclature
+'''
+
 import anatomist.direct.api as anatomist
 from soma import aims
 import os
@@ -45,3 +53,12 @@ a.execute('SelectByNomenclature', names='PREFRONTAL_right', nomenclature=nom)
 
 # to unselect all
 # a.execute( 'Select' )
+
+import sys
+if 'sphinx_gallery'  in sys.modules:
+    # display in matplotlib for sphinx_gallery
+    import matplotlib
+    matplotlib.use('agg', force=True)  # force agg
+    w.camera(view_quaternion=[0.5, -0.5, -0.5, 0.5])
+    w.windowConfig(view_size=[642, 384])
+    w.imshow(show=True)

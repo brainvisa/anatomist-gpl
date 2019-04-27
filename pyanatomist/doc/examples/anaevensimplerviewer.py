@@ -37,6 +37,8 @@ Build a custom simplified viewer based on Anatomist
 ===================================================
 
 An even simplified version of the anasimpleviewer application, which may also be used as a programming example. Its code is in the “bin/”” directory of the binary packages.
+
+.. figure:: ../images/anaevensimplerviewer.png
 '''
 
 from __future__ import print_function
