@@ -1790,7 +1790,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             im = self.internalRep.snapshotImage(0, width, height)
             aim = Anatomist.qimage_to_np(im)
             from matplotlib import pyplot
-            pyplot.imshow(aim, figure=figure)
+            plot = pyplot.imshow(aim, figure=figure)
             if figure is not None:
                 axes = figure.axes()
             else:
@@ -1802,6 +1802,42 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                     figure.show()
                 else:
                     pyplot.show()
+            return plot
+
+        def sphinx_gallery_snapshot(self, width=0, height=0,
+                                    restore_backend=False):
+            '''
+            Render the view in a matplotlib AGG graph to be used by the
+            sphinx_gallery module, when building documentation examples.
+            If sphinx_gallery is not already loaded, then nothing is done
+
+            Parameters
+            ----------
+            width: int
+            height: int
+            restore_backend: bool
+                the rendering needs to set matplotlib backend to "agg"
+                temporarily. If restore_backend is True, then the former
+                backend is restored. Otherwise (the default) it is left to agg.
+                sphinx_gallery generally needs to leave it to agg when building
+                docs for multiple Anatomist examples.
+
+            Returns
+            -------
+            plot:
+                result oy pyplot.imshow(), or None if sphinx_gallery is not
+                loaded
+            '''
+            if 'sphinx_gallery' not in sys.modules:
+                return None
+            # display in matplotlib for sphinx_gallery
+            import matplotlib
+            backend = matplotlib.get_backend()
+            matplotlib.use('agg', force=True)  # force agg
+            plot = self.imshow(show=True, width=width, height=height)
+            if restore_backend:
+                matplotlib.use(backend, force=True)  # restore backend
+            return plot
 
     #
     class AWindowsBlock(AItem, base.Anatomist.AWindowsBlock):
