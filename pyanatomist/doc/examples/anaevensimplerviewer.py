@@ -47,6 +47,7 @@ from soma import aims
 from soma.aims import colormaphints
 import sys
 import os
+from soma.qt_gui import qt_backend
 from soma.qt_gui.qt_backend import Qt, loadUi
 findChild = lambda x, y: Qt.QObject.findChild(x, Qt.QObject, y)
 
@@ -152,7 +153,7 @@ class AnaSimpleViewer(Qt.QObject):
         self.addObject(obj)
         # set the cursot at the center of the object (actually, overcome a bug
         # in anatomist...)
-        position = (bb[1] - bb[0]) / 2.
+        position = (aims.Point3df(bb[1][:3])  - bb[0][:3]) / 2.
         t = a.getTransformation(obj.getReferential(),
                                 awindows[0].getReferential())
         if t:
@@ -325,7 +326,33 @@ a.config()['windowSizeFactor'] = 1.
 
 # run Qt
 if __name__ == '__main__':
-    if 'sphinx_gallery' in sys.modules:
-        pass
-    elif qapp.startingUp():
+    if not 'sphinx_gallery' in sys.modules and qapp.startingUp():
         qapp.exec_()
+    elif 'sphinx_gallery' in sys.modules:
+        # load a data
+        anasimple.loadObject('irm.ima')
+        # snapshot to matplotlib
+        import matplotlib
+        backend = matplotlib.get_backend()
+        matplotlib.use('agg', force=True)  # force agg
+        # ensure renderings are done
+        #print('##### ici ######', file=sys.stderr)
+        for w in awindows:
+            #w.snapshotImage()
+            #print('##### snap win', w, file=sys.stderr)
+            w.sphinx_gallery_snapshot()
+        del w
+        #import time
+        #for i in range(4):
+            #time.sleep(1)
+            #Qt.QApplication.instance().processEvents()
+        #awin.grab().save('/tmp/snap.jpg')
+        #print('snapshots done', file=sys.stderr)
+        from matplotlib import pyplot
+        #pyplot.close()
+        qt_backend.imshow_widget(awin, show=True)
+        #matplotlib.use(backend, force=True)  # restore backend
+
+
+del anasimple, vieww, viewgridlay, awin, awindows, fusion2d, aobjects
+print('### OK ###', file=sys.stderr)

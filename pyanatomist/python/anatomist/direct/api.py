@@ -60,6 +60,7 @@ from anatomist import cpp
 from anatomist import base
 import operator
 from soma import aims
+from soma.qt_gui import qt_backend
 import os
 import sys
 import types
@@ -1788,7 +1789,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                 raise TypeError('AWindow.to_imshow called on a non-OpenGL '
                                 'window type')
             im = self.internalRep.snapshotImage(0, width, height)
-            aim = Anatomist.qimage_to_np(im)
+            aim = qt_backend.qimage_to_np(im)
             from matplotlib import pyplot
             plot = pyplot.imshow(aim, figure=figure)
             if figure is not None:
@@ -1976,16 +1977,3 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             super(Anatomist.Transformation, self).__init__(
                 anatomistinstance, internalRep, *args, **kwargs)
 
-    @staticmethod
-    def qimage_to_np(qimage):
-        '''
-        Utility function to transorm a Qt QImage into a numpy array suitable
-        for matplotlib imshow() for instance.
-        This is a genral function which is independent from anatomist, but we
-        don't have another place to fit it in currently.
-        '''
-        w, h = qimage.width(), qimage.height()
-        aim = aim = np.asarray(qimage.bits().asarray(w * h * 4)).reshape((h, w,
-                                                                          4))
-        aim[:,:,0:3] = np.flip(aim[:,:,0:3], axis=2)
-        return aim

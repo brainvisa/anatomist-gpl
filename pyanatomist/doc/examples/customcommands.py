@@ -61,8 +61,7 @@ win2 = cx.object(i)
 
 print(win2 is win)
 
-r = aims.Reader()
-vol = r.read('irm.ima')
+vol = aims.read('irm.ima')
 avol = a.toAObject(vol)
 
 # keywords / real objects test

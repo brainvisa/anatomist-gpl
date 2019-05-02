@@ -60,7 +60,7 @@ try:
     sphinx_gallery_conf = {
         'examples_dirs': '../examples',   # path to your example scripts
         'gallery_dirs': 'auto_examples',  # path where to save gallery generated examples
-        'filename_pattern': '/(anagraphannotate)|(aimsvolumetest)|(control)|(customopenglobject)|(ellipsoid)|(fusion3D)|(graph)|(graph_building)|(meshtest)|(nomenclatureselection)|(volumetest)\.py',
+        'filename_pattern': '/(anagraphannotate)|(aimsvolumetest)|(anaevensimplerviewer)|(control)|(customopenglobject)|(ellipsoid)|(fusion3D)|(graph)|(graph_building)|(meshtest)|(nomenclatureselection)|(selection)|(volumetest)\.py',
         #'ignore_pattern': r'/[^abcefgmnst][^/]*\.py$',
     }
 except ImportError:

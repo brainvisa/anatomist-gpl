@@ -39,7 +39,7 @@ Loading and viewing a Volume with anatomist
 
 from __future__ import print_function
 
-import anatomist.api as anatomist  # works with all implementations
+import anatomist.api  as anatomist  # works with all implementations
 
 # initialize Anatomist
 a = anatomist.Anatomist()
@@ -59,4 +59,7 @@ print("object and window are not deletable since there is a reference on it. Exe
 
 # display in matplotlib for sphinx_gallery
 win.sphinx_gallery_snapshot()
+import sys
+if 'sphinx_gallery' in sys.modules:
+    del win, avol
 
