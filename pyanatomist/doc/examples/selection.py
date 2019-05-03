@@ -53,5 +53,6 @@ if runqt:
     qapp.exec_()
 elif 'sphinx_gallery' in sys.modules:
     aw.sphinx_gallery_snapshot()
-del aw, mesh, m, g, sel
+if runqt or 'sphinx_gallery' in sys.modules:
+    del aw, mesh, m, g, sel
 

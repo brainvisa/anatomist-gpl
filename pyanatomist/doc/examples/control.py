@@ -147,8 +147,7 @@ class MyControl(anatomist.cpp.Control):
 a = anatomist.Anatomist()
 qapp = QtGui.QApplication.instance()
 pix = QtGui.QPixmap('control.xpm')
-anatomist.cpp.IconDictionary.instance().addIcon('MyControl',
-                                                pix)
+anatomist.cpp.IconDictionary.instance().addIcon('MyControl', pix)
 ad = anatomist.cpp.ActionDictionary.instance()
 ad.addAction('MyAction', lambda: MyAction())
 cd = anatomist.cpp.ControlDictionary.instance()
@@ -170,3 +169,5 @@ if 'sphinx_gallery'  in sys.modules:
 # run Qt
 if runqt:
     qapp.exec_()
+if runqt or 'sphinx_gallery'  in sys.modules:
+    del aw, selanamesh, selmesh, s, ad, cd, cm, pix

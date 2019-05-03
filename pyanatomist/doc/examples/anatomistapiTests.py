@@ -489,7 +489,8 @@ def testBase():
 
 
 interactive = True
-if len(sys.argv) >= 2 and "-b" in sys.argv[1:] or "--batch" in sys.argv[1:]:
+if len(sys.argv) >= 2 and "-b" in sys.argv[1:] or "--batch" in sys.argv[1:] \
+        or 'sphinx_gallery' in sys.modules:
     interactive = False
 
 print("\n****  TEST ANATOMIST API DIRECT IMPLEMENTATION ****\n")

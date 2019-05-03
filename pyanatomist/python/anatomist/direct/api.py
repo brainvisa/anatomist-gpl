@@ -1045,9 +1045,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             insert objects as this order number
         """
         bObjects = self.convertParamsToObjects(objects)
-        print('bObjects:', repr(bObjects))
         bWindows = self.convertParamsToObjects(windows)
-        print('bWindows:', repr(bWindows))
         c = cpp.AddObjectCommand(
             self.makeList(bObjects), self.makeList(bWindows),
           add_children, add_graph_nodes, add_graph_relations, temporary, position)
@@ -1836,10 +1834,10 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             # display in matplotlib for sphinx_gallery
             import matplotlib
             backend = matplotlib.get_backend()
-            matplotlib.use('agg', force=True)  # force agg
+            matplotlib.use('agg', warn=False, force=True)  # force agg
             plot = self.imshow(show=True, width=width, height=height)
             if restore_backend:
-                matplotlib.use(backend, force=True)  # restore backend
+                matplotlib.use(backend, warn=False, force=True)  # restore backend
             return plot
 
     #

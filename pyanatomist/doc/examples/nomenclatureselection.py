@@ -39,7 +39,11 @@ Selecting graph nodes according a nomenclature
 
 import anatomist.direct.api as anatomist
 from soma import aims
+from soma.qt_gui.qt_backend import Qt
 import os
+import sys
+
+runloop = Qt.QApplication.instance() is None
 
 a = anatomist.Anatomist()
 sh = aims.carto.Paths.shfjShared()
@@ -54,11 +58,15 @@ a.execute('SelectByNomenclature', names='PREFRONTAL_right', nomenclature=nom)
 # to unselect all
 # a.execute( 'Select' )
 
-import sys
-if 'sphinx_gallery'  in sys.modules:
+if 'sphinx_gallery' in sys.modules:
     # display in matplotlib for sphinx_gallery
-    import matplotlib
-    matplotlib.use('agg', force=True)  # force agg
     w.camera(view_quaternion=[0.5, -0.5, -0.5, 0.5])
     w.windowConfig(view_size=[642, 384])
-    w.imshow(show=True)
+    w.sphinx_gallery_snapshot()
+    runloop = False
+
+if runloop:
+    Qt.QApplication.instance().exec_()
+if runloop or 'sphinx_gallery'  in sys.modules:
+    del w, graph, nom
+

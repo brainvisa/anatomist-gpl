@@ -44,6 +44,7 @@ import sys
 from soma.qt_gui import qt_backend
 qt_backend.set_qt_backend(compatible_qt5=True)
 from soma.qt_gui.qt_backend import QtGui
+import sys
 
 if QtGui.qApp.startingUp():
     runqt = True
@@ -76,3 +77,6 @@ if __name__ == '__main__':
         runqt = False
     if runqt:
         QtGui.qApp.exec_()
+    if runqt or 'sphinx_gallery' in sys.modules:
+        del w, x, ag, g
+

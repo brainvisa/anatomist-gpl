@@ -40,7 +40,13 @@ Fusion3D (mesh + texture from a volume) in Anatomist
 import anatomist.api  as anatomist
 # to expand the mesh bigger
 from soma import aims
+from soma.qt_gui.qt_backend import Qt
 import numpy as np
+import sys
+
+runloop = False
+if Qt.QApplication.instance() is None:
+    runloop = True
 
 # initialize Anatomist
 a = anatomist.Anatomist()
@@ -76,5 +82,9 @@ fusion.exportTexture("fusion.tex")
 import matplotlib
 matplotlib.use('agg', force=True)  # force agg
 win.imshow(show=True)
-del fusion, win, amesh, avol, tr
+
+if runloop and 'sphinx_gallery' not in sys.modules:
+    Qt.QApplication.instance().exec_()
+if runloop or 'sphinx_gallery' in sys.modules:
+    del fusion, win, amesh, avol, tr
 

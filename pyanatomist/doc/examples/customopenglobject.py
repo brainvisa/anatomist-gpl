@@ -41,6 +41,7 @@ Customizing OpenGL parameters for objects
 
 from soma import aims
 import anatomist.direct.api as anatomist
+from soma.qt_gui.qt_backend import Qt
 from OpenGL import GL
 import types
 
@@ -163,8 +164,10 @@ class WinViewMesh (anatomist.cpp.ASurface_3):
 
 # ---
 if __name__ == '__main__':
+    runloop = False
+    if Qt.QApplication.instance() is None:
+        runloop = True
     a = anatomist.Anatomist()
-    r = aims.Reader()
     mesh = aims.SurfaceGenerator.sphere((0, 0, 0), 1., 200)
     amesh = anatomist.cpp.AObjectConverter.anatomist(mesh)
     cube1 = aims.SurfaceGenerator.cube((0, 0, 0), 0.5, False)
@@ -179,7 +182,7 @@ if __name__ == '__main__':
     a.addObjects([amesh, vcube1, vcube2], [w])
 
     import sys
-    if 'sphinx_gallery'  in sys.modules:
+    if 'sphinx_gallery' in sys.modules:
         # display in matplotlib for sphinx_gallery
         import matplotlib
         w.camera(view_quaternion=[0.535079479217529,
@@ -189,3 +192,9 @@ if __name__ == '__main__':
                  zoom=0.45)
         matplotlib.use('agg', force=True)  # force agg
         w.imshow(show=True)
+        runloop = False
+
+    if runloop:
+        Qt.QApplication.instance().exec_()
+    if runloop or 'sphinx_gallery' in sys.modules:
+        del w, amesh, vcube1, vcube2, cube1, cube2, mesh

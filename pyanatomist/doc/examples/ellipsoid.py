@@ -138,3 +138,4 @@ if __name__ == '__main__':
             QtGui.qApp.processEvents()
             time.sleep(0.01)
 
+    del aw, asphere, mesh

@@ -153,10 +153,11 @@ if 'sphinx_gallery' in sys.modules:
                               0.571941733360291],
              zoom=0.8187)
     # display in matplotlib for sphinx_gallery
-    import matplotlib
-    matplotlib.use('agg', force=True)  # force agg
-    w.imshow(show=True)
+    w.sphinx_gallery_snapshot()
     runloop = False
 
 if runloop:
     qapp.exec_()
+
+if runloop or 'sphinx_gallery' in sys.modules:
+    del w, nomenclature, agraph, graph, objects, labels, elements, colors

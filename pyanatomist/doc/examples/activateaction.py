@@ -43,6 +43,12 @@ direct mode.
 from __future__ import print_function
 
 import anatomist.direct.api as anatomist
+from soma.qt_gui.qt_backend import Qt
+import sys
+
+runloop = False
+if Qt.QApplication.instance() is None:
+    runloop = True
 
 a = anatomist.Anatomist()
 
@@ -75,3 +81,9 @@ kpmethods = c.keyPressActionLinkNames()
 print('* keyPress methods:', kpmethods)
 mpmethods = c.mousePressActionLinkNames()
 print('* mousePress methods:', mpmethods)
+
+if runloop  # and 'sphinx_gallery' not in sys.modules:
+    Qt.QApplication.instance().exec_()
+# if runloop or 'sphinx_gallery' in sys.modules:
+    del c, w, vol, kpmethods, mpmethods
+

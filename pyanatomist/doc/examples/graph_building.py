@@ -42,6 +42,8 @@ from __future__ import print_function
 
 import anatomist.direct.api as ana
 from soma import aims
+from soma.qt_gui.qt_backend import Qt
+import sys
 
 # create graph structure
 graph = aims.Graph('RoiArg')
@@ -72,6 +74,8 @@ n['name'] = 'sphere2'
 n['color'] = aims.vector_S32([0, 255, 0])
 hie.insert(n)
 
+runloop = Qt.QApplication.instance() is not None
+
 # create anatomist objects
 a = ana.Anatomist()
 ahie = a.toAObject(hie)
@@ -83,4 +87,10 @@ w.addObjects(agraph, add_children=True)
 br = a.createWindow('Browser')
 br.addObjects(ahie)
 
-plot = w.sphinx_gallery_snapshot()
+w.sphinx_gallery_snapshot()
+
+if runloop and 'sphinx_gallery' not in sys.modules:
+    Qt.QApplication.instance().exec_()
+if runloop or 'sphinx_gallery' in sys.modules:
+    del w, agraph, ahie, v, graph, hie, n
+
