@@ -38,7 +38,7 @@ Build a custom simplified viewer based on Anatomist
 
 An even simplified version of the anasimpleviewer application, which may also be used as a programming example. Its code is in the “bin/”” directory of the binary packages.
 
-.. figure:: ../images/anaevensimplerviewer.png
+.. .. figure:: ../images/anaevensimplerviewer.png
 '''
 
 from __future__ import print_function
@@ -51,9 +51,13 @@ from soma.qt_gui import qt_backend
 from soma.qt_gui.qt_backend import Qt, loadUi
 findChild = lambda x, y: Qt.QObject.findChild(x, Qt.QObject, y)
 
+if Qt.QApplication.instance() is None:
+    run_qt = True
+else:
+    run_qt = False
+
 # start the Anatomist engine, in batch mode (no main window)
 a = ana.Anatomist('-b')
-qapp = Qt.QApplication.instance()
 
 # load the anasimpleviewer GUI
 uifile = 'anasimpleviewer-qt4.ui'
@@ -89,22 +93,18 @@ class AnaSimpleViewer(Qt.QObject):
 
     def createWindow(self, wintype='Axial'):
         '''Opens a new window in the windows grid layout.
-        The new window will be set in MNI referential, and have no menu/toolbars.
+        The new window will be set in MNI referential, and have no
+        menu/toolbars.
         '''
         global vieww, nviews
-        c = ana.cpp.CreateWindowCommand(wintype, -1, None, [], 1, vieww, 2, 0,
-                                        {'__syntax__': 'dictionary', 'no_decoration': 1, 'hidden': 1})
-        a.execute(c)
-        w = a.AWindow(a, c.createdWindow())
-        c.createdWindow().setAcceptDrops(False)
         x = nviews % 2
         y = nviews / 2
         nviews += 1
-        # in Qt4, the widget must not have a parent before calling
-        w.setParent(None)
+
+        w = a.createWindow(wintype, no_decoration=True, options={'hidden': 1})
+        w.setAcceptDrops(False)
         viewgridlay.addWidget(w.getInternalRep(), x, y)
-        # make ref-counting work on python side
-        w.releaseAppRef()
+
         # keep it in anasimpleviewer list of windows
         awindows.append(w)
         a.assignReferential(a.mniTemplateRef, w)
@@ -300,10 +300,12 @@ class AnaSimpleViewer(Qt.QObject):
         '''Exit'''
         print("Exiting")
         global vieww, awindows, fusion2d, aobjects, anasimple
-        del vieww
+        global awin, viewgridlay
+        del viewgridlay, vieww
         del anasimple
         del awindows, fusion2d, aobjects
         awin.close()
+        del awin
         a = ana.Anatomist()
         a.close()
 
@@ -326,33 +328,41 @@ a.config()['windowSizeFactor'] = 1.
 
 # run Qt
 if __name__ == '__main__':
-    if not 'sphinx_gallery' in sys.modules and qapp.startingUp():
-        qapp.exec_()
+    #run_qt = False
+    if not 'sphinx_gallery' in sys.modules and run_qt:
+        Qt.QApplication.instance().exec_()
     elif 'sphinx_gallery' in sys.modules:
         # load a data
+        awin.showNormal()
+        awin.resize(1000, 700) # control the size of the snapshot
         anasimple.loadObject('irm.ima')
+        # these 2 events ensure things are actually drawn
+        Qt.QApplication.instance().processEvents()
+        Qt.QApplication.instance().processEvents()
+        # snapshot the whole widget
+        ws = awin.grab()
+        # openGl areas are not rendered in the snapshot, we have to make them
+        # by hand
+        p = Qt.QPainter(ws)
+        for w in awindows:
+            s = w.snapshotImage()
+            # draw the GL rendering into the image (pixmap)
+            p.drawImage(w.mapTo(awin, Qt.QPoint(0, 0)), s)
+        del w, s, p
         # snapshot to matplotlib
         import matplotlib
-        backend = matplotlib.get_backend()
-        matplotlib.use('agg', force=True)  # force agg
-        # ensure renderings are done
-        #print('##### ici ######', file=sys.stderr)
-        for w in awindows:
-            #w.snapshotImage()
-            #print('##### snap win', w, file=sys.stderr)
-            w.sphinx_gallery_snapshot()
-        del w
-        #import time
-        #for i in range(4):
-            #time.sleep(1)
-            #Qt.QApplication.instance().processEvents()
-        #awin.grab().save('/tmp/snap.jpg')
-        #print('snapshots done', file=sys.stderr)
+        #backend = matplotlib.get_backend()
+        matplotlib.use('agg', force=True, warn=False)  # force agg
         from matplotlib import pyplot
-        #pyplot.close()
-        qt_backend.imshow_widget(awin, show=True)
+        im = qt_backend.qimage_to_np(ws)
+        plot = pyplot.imshow(im)
+        axes = pyplot.axes()
+        axes.get_xaxis().set_visible(False)
+        axes.get_yaxis().set_visible(False)
+        pyplot.show()
         #matplotlib.use(backend, force=True)  # restore backend
 
 
-del anasimple, vieww, viewgridlay, awin, awindows, fusion2d, aobjects
-print('### OK ###', file=sys.stderr)
+if run_qt or 'sphinx_gallery' in sys.modules:
+    anasimple.closeAll()
+

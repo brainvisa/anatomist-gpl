@@ -345,7 +345,7 @@ a.addObjects([s], [aw])
 a.execute('SetControl', windows=[aw], control='TexDrawControl')
 
 QtGui.QMessageBox.information(
-    None, 'texture drawing', '1. put a mesh in a 3D view\n2.select the "Mickey" control\n3. ctrl+right click on the mesh to create an empty texture or initiate the drawinf session\n4. draw on the mesh using the mouse left button\n   ctrl+left button erases', QtGui.QMessageBox.Ok)
+    None, 'texture drawing', '1. put a mesh in a 3D view\n2.select the "Mickey" control\n3. ctrl+right click on the mesh to create an empty texture or initiate the drawing session\n4. draw on the mesh using the mouse left button\n   ctrl+left button erases', QtGui.QMessageBox.Ok)
 
 # run Qt
 if runqt:
