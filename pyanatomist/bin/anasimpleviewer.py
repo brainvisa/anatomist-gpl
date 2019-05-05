@@ -247,11 +247,8 @@ class AnaSimpleViewer(qt.QObject):
         of a buf in volume rendering in direct referentials), will be assigned
         the custom control, and have no menu/toolbars.
         '''
-        c = ana.cpp.CreateWindowCommand(wintype, -1, None, [], 1, vieww, 2, 0,
-                                        {'__syntax__': 'dictionary', 'no_decoration': 1, 'hidden': 1})
-        a.execute(c)
-        w = a.AWindow(a, c.createdWindow())
-        c.createdWindow().setAcceptDrops(False)
+        w = a.createWindow(wintype, no_decoration=True, options={'hidden': 1})
+        w.setAcceptDrops(False)
         # insert in grid layout
         x = 0
         y = 0
@@ -268,11 +265,8 @@ class AnaSimpleViewer(qt.QObject):
                     break
         # in Qt4, the widget must not have a parent before calling
         # layout.addWidget
-        w.setParent(None)
         viewgridlay.addWidget(w.getInternalRep(), x, y)
         self._winlayouts[x][y] = 1
-        # make ref-counting work on python side
-        w.releaseAppRef()
         # keep it in anasimpleviewer list of windows
         awindows.append(w)
         # set custom control
@@ -584,12 +578,20 @@ class AnaSimpleViewer(qt.QObject):
     def closeAll(self):
         '''Exit'''
         print("Exiting")
-        global vieww, viewgridlay, awindows, fusion2d, aobjects, anasimple, volrender, awin
+        global vieww, viewgridlay, awindows, fusion2d, aobjects, anasimple, volrender, awin, fdialog
+        # remove windows from their parent to prevent them to be brutally
+        # deleted by Qt.
+        for w in awindows:
+            w.hide()
+            viewgridlay.removeWidget(w.internalRep._get())
+            w.setParent(None)
+        del w
         del vieww, viewgridlay
         del anasimple
         del awindows, fusion2d, volrender, aobjects
         awin.close()
         del awin
+        del fdialog
         a = ana.Anatomist()
         a.close()
 
@@ -745,4 +747,4 @@ if runqt:
     qapp.exec_()
 
 # cleanup before exiting
-del fdialog
+anasimple.closeAll()
