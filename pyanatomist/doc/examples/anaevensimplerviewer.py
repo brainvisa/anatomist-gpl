@@ -301,6 +301,13 @@ class AnaSimpleViewer(Qt.QObject):
         print("Exiting")
         global vieww, awindows, fusion2d, aobjects, anasimple
         global awin, viewgridlay
+        # remove windows from their parent to prevent them to be brutally
+        # deleted by Qt.
+        for w in awindows:
+            w.hide()
+            viewgridlay.removeWidget(w.internalRep._get())
+            w.setParent(None)
+        del w
         del viewgridlay, vieww
         del anasimple
         del awindows, fusion2d, aobjects
@@ -363,6 +370,6 @@ if __name__ == '__main__':
         #matplotlib.use(backend, force=True)  # restore backend
 
 
-if run_qt or 'sphinx_gallery' in sys.modules:
-    anasimple.closeAll()
+    if run_qt or 'sphinx_gallery' in sys.modules:
+        anasimple.closeAll()
 
