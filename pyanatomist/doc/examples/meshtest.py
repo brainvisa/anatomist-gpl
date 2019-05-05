@@ -30,12 +30,22 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+'''
+Mesh manipulation
+-----------------
+
+Using a mesh and modifying it while it is displayed
+'''
+
 from soma import aims
 import time
 import os
 import anatomist.direct.api as anatomist
 import sys
 from soma.qt_gui.qt_backend.QtGui import qApp
+from soma.qt_gui.qt_backend import Qt
+import sys
 import six
 
 # create a unit sphere of radius 1 and 500 vertices
@@ -44,6 +54,8 @@ m = aims.SurfaceGenerator.sphere(aims.Point3df(0, 0, 0), 1, 500, False)
 # Multiply the sphere size by 100
 for p in six.moves.xrange(m.vertex().size()):
     m.vertex()[p] *= 100
+
+runloop = Qt.QApplication.instance() is None
 
 # Open Anatomist
 a = anatomist.Anatomist()
@@ -85,3 +97,17 @@ for i in six.moves.xrange(10):
         am.notifyObservers()
         qApp.processEvents()
         time.sleep(0.01)
+
+# display in matplotlib for sphinx_gallery
+s = 0
+for p in points:
+    m.vertex()[p] = coords[p] * s / 100.
+am.setChanged()
+am.notifyObservers()
+if aw.sphinx_gallery_snapshot():
+    runloop = False
+if runloop:
+    Qt.QApplication.instance().exec_()
+if runloop or 'sphinx_gallery' in sys.modules:
+    del aw, am, m
+

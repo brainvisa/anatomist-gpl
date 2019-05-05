@@ -1,6 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+'''
+3D Text annotations on a graph
+==============================
+
+Display graph labels as 3D text annotations. This code is somewhat equivalent to what happens using the 'A' key in selection control mode (actually this is an ancestor of the module which has been incorporated in Anatomist).
+'''
+
+from __future__ import print_function
+
 import anatomist.direct.api as ana
 from soma import aims
 import os
@@ -55,10 +64,10 @@ def makelabel(label, gc, pos, color, props):
 
 runloop = False
 if QtGui.QApplication.startingUp():
-    qapp = QtGui.QApplication(sys.argv)
     runloop = True
 
 a = ana.Anatomist()
+qapp = QtGui.QApplication.instance()
 share = aims.carto.Paths.globalShared()
 nomenclname = os.path.join(aims.carto.Paths.shfjShared(), 'nomenclature',
                            'hierarchy', 'sulcal_root_colors.hie')
@@ -77,6 +86,7 @@ w.addObjects(agraph, add_graph_nodes=True)
 # lgraph = a.toAObject( lgraphaims )
 
 bbox = agraph.boundingbox()
+bbox = (aims.Point3df(bbox[0][:3]), aims.Point3df(bbox[1][:3]))
 props = Props()
 props.center = (bbox[0] + bbox[1]) / 2
 
@@ -135,5 +145,19 @@ del alines
 labels = a.groupObjects(objects)
 w.addObjects(labels, add_children=True)
 
+if 'sphinx_gallery' in sys.modules:
+    w.windowConfig(view_size=[907, 568])
+    w.camera(view_quaternion=[0.520213842391968,
+                              -0.42516353726387,
+                              -0.470633894205093,
+                              0.571941733360291],
+             zoom=0.8187)
+    # display in matplotlib for sphinx_gallery
+    w.sphinx_gallery_snapshot()
+    runloop = False
+
 if runloop:
     qapp.exec_()
+
+if runloop or 'sphinx_gallery' in sys.modules:
+    del w, nomenclature, agraph, graph, objects, labels, elements, colors

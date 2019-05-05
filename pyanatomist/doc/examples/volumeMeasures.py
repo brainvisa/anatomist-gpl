@@ -31,6 +31,14 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+'''
+Measurements on a volume
+------------------------
+
+Complete example with a specific graphical interface that embeds an Anatomist window and a matplotlib widget. Shows a 4D volume and a curve of the values in a selected voxel or the mean of values in a selected region.
+'''
+
 import sys
 import os
 import weakref

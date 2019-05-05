@@ -43,7 +43,13 @@ How to
 PyAnatomist examples
 --------------------
 
-:doc:`pyanatomist_examples`
+.. ifconfig:: 'sphinx_gallery.gen_gallery' not in extensions
+
+    :doc:`pyanatomist_examples`
+
+.. ifconfig:: 'sphinx_gallery.gen_gallery' in extensions
+
+    :doc:`auto_examples/index`
 
 
 Tutorial
@@ -80,8 +86,8 @@ Table of contents
       pyanatomist_headless
       pyanatomist_wip
       pyanatomist_tutorial_nb
+      pyanatomist_pyaims_tutorial
       pyanatomist_howto
-      pyanatomist_examples
 
 .. ifconfig:: 'nbsphinx' not in extensions
 
@@ -96,6 +102,20 @@ Table of contents
       pyanatomist_headless
       pyanatomist_wip
       pyanatomist_tutorial
+      pyanatomist_pyaims_tutorial
       pyanatomist_howto
+
+.. ifconfig:: 'sphinx_gallery.gen_gallery' in extensions
+
+    .. toctree::
+      :maxdepth: 3
+
+      auto_examples/index
+
+.. ifconfig:: 'sphinx_gallery.gen_gallery' not in extensions
+
+    .. toctree::
+      :maxdepth: 3
+
       pyanatomist_examples
 

@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 
+'''
+Selection handling
+------------------
+
+Getting selected objects
+'''
+
 from __future__ import print_function
 
 import anatomist.direct.api as ana
@@ -13,25 +20,13 @@ from soma.qt_gui import qt_backend
 from soma.qt_gui.qt_backend import QtCore, QtGui
 
 # do we have to run QApplication ?
-if QtGui.qApp.startingUp():
-    qapp = QtGui.QApplication(sys.argv)
+if not QtGui.QApplication.instance() and 'sphinx_gallery' not in sys.modules:
     runqt = True
 else:
     runqt = False
 
-# splash
-ver_short = '.'.join(ana.version.split('.')[:2])
-iconpath = os.path.join(aims.carto.Paths.globalShared(),
-                        'anatomist-%s' % ver_short, 'icons')
-pix = QtGui.QPixmap(os.path.join(iconpath, 'anatomist.png'))
-spl = QtGui.QSplashScreen(pix)
-spl.show()
-QtGui.qApp.processEvents()
-
 # start the Anatomist engine, in batch mode (no main window)
-a = ana.Anatomist()
-
-# a = anatomist.Anatomist()
+a = ana.Anatomist('-b')
 
 # create a sphere mesh
 m = aims.SurfaceGenerator.sphere(aims.Point3df(0), 100, 100)
@@ -44,18 +39,20 @@ aw = a.createWindow('3D')
 a.addObjects(mesh, aw)
 
 g = a.getDefaultWindowsGroup()
-# sel = anatomist.SelectFactory.factory()
 print('mesh isSelected:', g.isSelected(mesh))
 print('selecting it')
 g.setSelection(mesh)
 print("selection in default group", a.getSelection())
-print("selection de", g, g.getSelection())
+print("selection of", g, g.getSelection())
 sel = g.getSelection()
 # print(mesh, sel, mesh == sel[0], mesh is sel[0])
 # print('mesh isSelected:', g.isSelected( mesh ))
 
-del spl
-
 # run Qt
 if runqt:
     qapp.exec_()
+elif 'sphinx_gallery' in sys.modules:
+    aw.sphinx_gallery_snapshot()
+if runqt or 'sphinx_gallery' in sys.modules:
+    del aw, mesh, m, g, sel
+

@@ -31,6 +31,14 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+'''
+Texture drawing
+---------------
+
+Drawing ROI on a mesh in a texture. Of course the SurfPaint module allows to do  it with much richer features, but this example demonstrates how to code the basics of it in a relatively small program.
+'''
+
 from __future__ import print_function
 
 import anatomist.direct.api as anatomist
@@ -50,8 +58,7 @@ from soma.qt_gui.qt_backend import QtCore, QtGui
 from soma.qt_gui.qt_backend import loadUi
 
 # do we have to run QApplication ?
-if QtGui.qApp.startingUp():
-    qapp = QtGui.QApplication(sys.argv)
+if QtGui.QApplication.instance() is None:
     runqt = True
 else:
     runqt = False
@@ -320,6 +327,7 @@ class TexDrawControl(anatomist.cpp.Control):
 # a.addObjects( [ s ], [ aw ] )
 
 a = anatomist.Anatomist()
+qapp = QtGui.QApplication.instance()
 
 pix = QtGui.QPixmap('control.xpm')
 anatomist.cpp.IconDictionary.instance().addIcon('TexDrawControl',
@@ -337,7 +345,7 @@ a.addObjects([s], [aw])
 a.execute('SetControl', windows=[aw], control='TexDrawControl')
 
 QtGui.QMessageBox.information(
-    None, 'texture drawing', '1. put a mesh in a 3D view\n2.select the "Mickey" control\n3. ctrl+right click on the mesh to create an empty texture or initiate the drawinf session\n4. draw on the mesh using the mouse left button\n   ctrl+left button erases', QtGui.QMessageBox.Ok)
+    None, 'texture drawing', '1. put a mesh in a 3D view\n2.select the "Mickey" control\n3. ctrl+right click on the mesh to create an empty texture or initiate the drawing session\n4. draw on the mesh using the mouse left button\n   ctrl+left button erases', QtGui.QMessageBox.Ok)
 
 # run Qt
 if runqt:

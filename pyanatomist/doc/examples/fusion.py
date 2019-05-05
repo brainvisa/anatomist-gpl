@@ -30,6 +30,14 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+'''
+Custom fusion example
+=====================
+
+Creating a new custom fusion type in Anatomist
+'''
+
 from __future__ import print_function
 
 from soma import aims
@@ -63,6 +71,7 @@ class MyAObject(anatomist.cpp.AObject):
         self.setReferential(a.centralReferential())
 
     def optionTree(self):
+        # set new option menus on this new object type
         if MyAObject._menus is None:
             m = anatomist.cpp.ObjectMenu()
             krak = MyAObjectKrakboumCallback()

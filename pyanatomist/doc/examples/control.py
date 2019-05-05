@@ -32,6 +32,14 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 # -*- coding: utf-8 -*-
+
+'''
+Custom controls example
+-----------------------
+
+Plugging new conrols / actions in Anatomist views
+'''
+
 from __future__ import print_function
 
 import anatomist.direct.api as anatomist
@@ -48,7 +56,6 @@ from soma.qt_gui.qt_backend import QtCore, QtGui, loadUi
 
 # do we have to run QApplication ?
 if QtGui.qApp.startingUp():
-    qapp = QtGui.QApplication(sys.argv)
     runqt = True
 else:
     runqt = False
@@ -138,9 +145,9 @@ class MyControl(anatomist.cpp.Control):
                                             pool.action('MyAction').takePolygon)
 
 a = anatomist.Anatomist()
+qapp = QtGui.QApplication.instance()
 pix = QtGui.QPixmap('control.xpm')
-anatomist.cpp.IconDictionary.instance().addIcon('MyControl',
-                                                pix)
+anatomist.cpp.IconDictionary.instance().addIcon('MyControl', pix)
 ad = anatomist.cpp.ActionDictionary.instance()
 ad.addAction('MyAction', lambda: MyAction())
 cd = anatomist.cpp.ControlDictionary.instance()
@@ -153,6 +160,14 @@ a.registerObject(s)
 aw = a.createWindow('3D')
 a.addObjects([s], [aw])
 
+if 'sphinx_gallery'  in sys.modules:
+    # display in matplotlib for sphinx_gallery
+    import matplotlib
+    matplotlib.use('agg', force=True)  # force agg
+    aw.imshow(show=True)
+    runqt = False
 # run Qt
 if runqt:
     qapp.exec_()
+if runqt or 'sphinx_gallery'  in sys.modules:
+    del aw, selanamesh, selmesh, s, ad, cd, cm, pix

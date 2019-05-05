@@ -33,7 +33,9 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 """
-Anatomist api tests.
+Anatomist api tests
+===================
+
 This example uses data of i2bm platform.
 """
 from __future__ import print_function
@@ -45,7 +47,7 @@ import tempfile
 
 
 data_directory = os.path.join(
-    os.getenv("BRAINVISA_TEST_RUN_DATA_DIR"),
+    os.environ.get("BRAINVISA_TEST_RUN_DATA_DIR", ""),
     "tmp_tests_brainvisa/data_for_anatomist")
 
 
@@ -487,7 +489,8 @@ def testBase():
 
 
 interactive = True
-if len(sys.argv) >= 2 and "-b" in sys.argv[1:] or "--batch" in sys.argv[1:]:
+if len(sys.argv) >= 2 and "-b" in sys.argv[1:] or "--batch" in sys.argv[1:] \
+        or 'sphinx_gallery' in sys.modules:
     interactive = False
 
 print("\n****  TEST ANATOMIST API DIRECT IMPLEMENTATION ****\n")

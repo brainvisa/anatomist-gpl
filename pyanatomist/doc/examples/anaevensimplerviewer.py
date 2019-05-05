@@ -32,16 +32,29 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+'''
+Build a custom simplified viewer based on Anatomist
+===================================================
+
+An even simplified version of the anasimpleviewer application, which may also be used as a programming example. Its code is in the “bin/”” directory of the binary packages.
+
+.. .. figure:: ../images/anaevensimplerviewer.png
+'''
+
 from __future__ import print_function
 import anatomist.direct.api as ana
 from soma import aims
 from soma.aims import colormaphints
 import sys
 import os
-from soma.qt_gui.qt_backend import QtCore, QtGui, loadUi
-findChild = lambda x, y: QtCore.QObject.findChild(x, QtCore.QObject, y)
+from soma.qt_gui import qt_backend
+from soma.qt_gui.qt_backend import Qt, loadUi
+findChild = lambda x, y: Qt.QObject.findChild(x, Qt.QObject, y)
 
-qapp = QtGui.QApplication(sys.argv)
+if Qt.QApplication.instance() is None:
+    run_qt = True
+else:
+    run_qt = False
 
 # start the Anatomist engine, in batch mode (no main window)
 a = ana.Anatomist('-b')
@@ -66,36 +79,32 @@ fusion2d = []
 
 # vieww: parent block widget for anatomist windows
 vieww = findChild(awin, 'windows')
-viewgridlay = QtGui.QGridLayout(vieww)
+viewgridlay = Qt.QGridLayout(vieww)
 nviews = 0
 
 
 # This class holds methods for menu/actions callbacks, and utility functions
 # like load/view objects, remove/delete, etc.
-class AnaSimpleViewer(QtGui.QObject):
+class AnaSimpleViewer(Qt.QObject):
 
     def __init__(self):
-        QtGui.QObject.__init__(self)
+        Qt.QObject.__init__(self)
         self.filedialogdir = '.'
 
     def createWindow(self, wintype='Axial'):
         '''Opens a new window in the windows grid layout.
-        The new window will be set in MNI referential, and have no menu/toolbars.
+        The new window will be set in MNI referential, and have no
+        menu/toolbars.
         '''
         global vieww, nviews
-        c = ana.cpp.CreateWindowCommand(wintype, -1, None, [], 1, vieww, 2, 0,
-                                        {'__syntax__': 'dictionary', 'no_decoration': 1, 'hidden': 1})
-        a.execute(c)
-        w = a.AWindow(a, c.createdWindow())
-        c.createdWindow().setAcceptDrops(False)
         x = nviews % 2
         y = nviews / 2
         nviews += 1
-        # in Qt4, the widget must not have a parent before calling
-        w.setParent(None)
+
+        w = a.createWindow(wintype, no_decoration=True, options={'hidden': 1})
+        w.setAcceptDrops(False)
         viewgridlay.addWidget(w.getInternalRep(), x, y)
-        # make ref-counting work on python side
-        w.releaseAppRef()
+
         # keep it in anasimpleviewer list of windows
         awindows.append(w)
         a.assignReferential(a.mniTemplateRef, w)
@@ -144,7 +153,7 @@ class AnaSimpleViewer(QtGui.QObject):
         self.addObject(obj)
         # set the cursot at the center of the object (actually, overcome a bug
         # in anatomist...)
-        position = (bb[1] - bb[0]) / 2.
+        position = (aims.Point3df(bb[1][:3])  - bb[0][:3]) / 2.
         t = a.getTransformation(obj.getReferential(),
                                 awindows[0].getReferential())
         if t:
@@ -243,7 +252,7 @@ class AnaSimpleViewer(QtGui.QObject):
     def fileOpen(self):
         '''File browser + load object(s)
         '''
-        fdialog = QtGui.QFileDialog()
+        fdialog = Qt.QFileDialog()
         fdialog.setDirectory(self.filedialogdir)
         fdialog.setFileMode(fdialog.ExistingFiles)
         res = fdialog.exec_()
@@ -282,7 +291,7 @@ class AnaSimpleViewer(QtGui.QObject):
         olist = findChild(awin, 'objectslist')
         for o in objs:
             olist.takeItem(olist.row(olist.findItems(o.name,
-                                                     QtCore.Qt.MatchExactly)[0]))
+                                                     Qt.Qt.MatchExactly)[0]))
         global aobjects
         aobjects = [o for o in aobjects if o not in objs]
         a.deleteObjects(objs)
@@ -291,10 +300,12 @@ class AnaSimpleViewer(QtGui.QObject):
         '''Exit'''
         print("Exiting")
         global vieww, awindows, fusion2d, aobjects, anasimple
-        del vieww
+        global awin, viewgridlay
+        del viewgridlay, vieww
         del anasimple
         del awindows, fusion2d, aobjects
         awin.close()
+        del awin
         a = ana.Anatomist()
         a.close()
 
@@ -302,11 +313,11 @@ class AnaSimpleViewer(QtGui.QObject):
 # instantiate the machine
 anasimple = AnaSimpleViewer()
 # connect GUI actions callbacks
-findChild(awin, 'fileOpenAction').activated.connect(anasimple.fileOpen)
-findChild(awin, 'fileExitAction').activated.connect(anasimple.closeAll)
-findChild(awin, 'editAddAction').activated.connect(anasimple.editAdd)
-findChild(awin, 'editRemoveAction').activated.connect(anasimple.editRemove)
-findChild(awin, 'editDeleteAction').activated.connect(anasimple.editDelete)
+findChild(awin, 'fileOpenAction').triggered.connect(anasimple.fileOpen)
+findChild(awin, 'fileExitAction').triggered.connect(anasimple.closeAll)
+findChild(awin, 'editAddAction').triggered.connect(anasimple.editAdd)
+findChild(awin, 'editRemoveAction').triggered.connect(anasimple.editRemove)
+findChild(awin, 'editDeleteAction').triggered.connect(anasimple.editDelete)
 
 # display on the whole screen
 awin.showMaximized()
@@ -316,4 +327,42 @@ a.config()['setAutomaticReferential'] = 1
 a.config()['windowSizeFactor'] = 1.
 
 # run Qt
-qapp.exec_()
+if __name__ == '__main__':
+    #run_qt = False
+    if not 'sphinx_gallery' in sys.modules and run_qt:
+        Qt.QApplication.instance().exec_()
+    elif 'sphinx_gallery' in sys.modules:
+        # load a data
+        awin.showNormal()
+        awin.resize(1000, 700) # control the size of the snapshot
+        anasimple.loadObject('irm.ima')
+        # these 2 events ensure things are actually drawn
+        Qt.QApplication.instance().processEvents()
+        Qt.QApplication.instance().processEvents()
+        # snapshot the whole widget
+        ws = awin.grab()
+        # openGl areas are not rendered in the snapshot, we have to make them
+        # by hand
+        p = Qt.QPainter(ws)
+        for w in awindows:
+            s = w.snapshotImage()
+            # draw the GL rendering into the image (pixmap)
+            p.drawImage(w.mapTo(awin, Qt.QPoint(0, 0)), s)
+        del w, s, p
+        # snapshot to matplotlib
+        import matplotlib
+        #backend = matplotlib.get_backend()
+        matplotlib.use('agg', force=True, warn=False)  # force agg
+        from matplotlib import pyplot
+        im = qt_backend.qimage_to_np(ws)
+        plot = pyplot.imshow(im)
+        axes = pyplot.axes()
+        axes.get_xaxis().set_visible(False)
+        axes.get_yaxis().set_visible(False)
+        pyplot.show()
+        #matplotlib.use(backend, force=True)  # restore backend
+
+
+if run_qt or 'sphinx_gallery' in sys.modules:
+    anasimple.closeAll()
+

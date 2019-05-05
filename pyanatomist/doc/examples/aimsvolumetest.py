@@ -29,12 +29,25 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+'''
+AIMS / Anatomist volume manipulation
+====================================
+
+Loading, handling and viewing a Volume with aims and anatomist
+'''
+
 import anatomist.direct.api as anatomist
 from soma import aims
+from soma.qt_gui.qt_backend import Qt
+import sys
 
 # load any volume as a aims.Volume_* object
-r = aims.Reader()
-vol = r.read('irm.ima')
+vol = aims.read('irm.ima')
+
+runloop = False
+if Qt.QApplication.instance() is None:
+    runloop = True
 
 # initialize Anatomist
 a = anatomist.Anatomist()
@@ -82,3 +95,12 @@ fus = a.fusionObjects([avol, avol2], 'Fusion2DMethod')
 win3 = a.createWindow('Sagittal')
 
 a.addObjects(fus, win3)
+
+
+# display in matplotlib for sphinx_gallery
+win3.sphinx_gallery_snapshot()
+if runloop and 'sphinx_gallery' not in sys.modules:
+    Qt.QApplication.instance().exec_()
+if runloop or 'sphinx_gallery' in sys.modules:
+    del win, win2, win3, fus, avol, arr, avol2
+

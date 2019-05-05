@@ -14,6 +14,7 @@
 from __future__ import print_function
 
 import sys, os
+import datetime
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -54,6 +55,61 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.autosummary',
               napoleon]
 
+global exit_status
+exit_status = 0
+#global SafeSystemExit
+
+try:
+    import sphinx_gallery
+    extensions.append('sphinx_gallery.gen_gallery')
+    sphinx_gallery_conf = {
+        'examples_dirs': '../examples',   # path to your example scripts
+        'gallery_dirs': 'auto_examples',  # path where to save gallery generated examples
+        'filename_pattern': '/(anagraphannotate)|(aimsvolumetest)|(anaevensimplerviewer)|(control)|(customopenglobject)|(ellipsoid)|(fusion3D)|(graph)|(graph_building)|(meshtest)|(nomenclatureselection)|(selection)|(volumetest)\.py',
+        #'ignore_pattern': r'/[^abcefgmnst][^/]*\.py$',
+    }
+    # capture exit to avoid crash on exit cleanup
+
+    #class SafeSystemExit(SystemExit):
+        #def __init__(self, *args, **kwargs):
+            #print('#### SafeSystemExit:', args, kwargs, file=sys.stderr)
+            #global exit_status
+            #exit_status = args[0]
+
+    def handle_exception(app, opts, exception, stderr=sys.stderr):
+        print('#### handle_exception:', exception, '#####', file=sys.stderr)
+        global exit_status
+        exit_status = 1
+        from sphinx import cmdline
+        cmdline.handle_exception_bak(app, opts, exception, stderr=sys.stderr)
+
+    def exit():
+        import sys
+        ei = sys.exc_info()
+        print('######## exit:', ei, '########', file=sys.stderr)
+        #if ei == (None, None, None):
+            #status = 0
+        #else:
+            #status = 1
+        global exit_status
+        status = exit_status
+        #if status is None:
+            #status = 0
+        #if not isinstance(status, int):
+            #status = 1
+        print('######## exit:', status, '########', file=sys.stderr)
+        os._exit(status)
+
+    import atexit
+    #SystemExit = SafeSystemExit
+    #sys.SystemExit = SafeSystemExit
+    from sphinx import cmdline
+    cmdline.handle_exception_bak = cmdline.handle_exception
+    cmdline.handle_exception = handle_exception
+    atexit.register(exit)
+except ImportError:
+    pass  # no gallery. Oh, well.
+
 try:
     # nbsphinx converts ipython/jupyter notebooks to sphinx docs
     import nbsphinx
@@ -77,7 +133,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'PyAnatomist'
-copyright = u'2015, CEA'
+copyright = u'%d, CEA' % datetime.datetime.now().year
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

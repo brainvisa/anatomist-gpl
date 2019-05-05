@@ -54,11 +54,13 @@ If the Anatomist object is created outside the main thread, you must get a threa
 >>> import anatomist.api as anatomist
 
 """
+from __future__ import print_function
 
 from anatomist import cpp
 from anatomist import base
 import operator
 from soma import aims
+from soma.qt_gui import qt_backend
 import os
 import sys
 import types
@@ -529,7 +531,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         """
         c = cpp.LoadObjectCommand(filename, -1, "", True)
         self.execute(c)
-        o = self.typedObject(c.loadedObject())
+        if len(c.loadedObjects()) == 0:
+            raise IOError('file %s cannot be read' % filename)
+        o = self.typedObject(c.loadedObjects()[0])
         o.releaseAppRef()
         return o
 
@@ -1774,6 +1778,68 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                   ref)
             return ref
 
+        def imshow(self, width=0, height=0, figure=None, show=False):
+            '''
+            Display the 3D view rendering into a Matplotlib figure using
+            pylab.imshow(). This is useful to display static figures in a
+            widget, or use them to export in a document, or to use the
+            sphinx_gallery module for documentation.
+            '''
+            if not hasattr(self.internalRep, 'snapshotImage'):
+                raise TypeError('AWindow.to_imshow called on a non-OpenGL '
+                                'window type')
+            im = self.internalRep.snapshotImage(0, width, height)
+            aim = qt_backend.qimage_to_np(im)
+            from matplotlib import pyplot
+            plot = pyplot.imshow(aim, figure=figure)
+            if figure is not None:
+                axes = figure.axes()
+            else:
+                axes = pyplot.axes()
+            axes.get_xaxis().set_visible(False)
+            axes.get_yaxis().set_visible(False)
+            if show:
+                if figure is not None:
+                    figure.show()
+                else:
+                    pyplot.show()
+            return plot
+
+        def sphinx_gallery_snapshot(self, width=0, height=0,
+                                    restore_backend=False):
+            '''
+            Render the view in a matplotlib AGG graph to be used by the
+            sphinx_gallery module, when building documentation examples.
+            If sphinx_gallery is not already loaded, then nothing is done
+
+            Parameters
+            ----------
+            width: int
+            height: int
+            restore_backend: bool
+                the rendering needs to set matplotlib backend to "agg"
+                temporarily. If restore_backend is True, then the former
+                backend is restored. Otherwise (the default) it is left to agg.
+                sphinx_gallery generally needs to leave it to agg when building
+                docs for multiple Anatomist examples.
+
+            Returns
+            -------
+            plot:
+                result oy pyplot.imshow(), or None if sphinx_gallery is not
+                loaded
+            '''
+            if 'sphinx_gallery' not in sys.modules:
+                return None
+            # display in matplotlib for sphinx_gallery
+            import matplotlib
+            backend = matplotlib.get_backend()
+            matplotlib.use('agg', warn=False, force=True)  # force agg
+            plot = self.imshow(show=True, width=width, height=height)
+            if restore_backend:
+                matplotlib.use(backend, warn=False, force=True)  # restore backend
+            return plot
+
     #
     class AWindowsBlock(AItem, base.Anatomist.AWindowsBlock):
 
@@ -1910,3 +1976,4 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         def __init__(self, anatomistinstance, internalRep=None, *args, **kwargs):
             super(Anatomist.Transformation, self).__init__(
                 anatomistinstance, internalRep, *args, **kwargs)
+

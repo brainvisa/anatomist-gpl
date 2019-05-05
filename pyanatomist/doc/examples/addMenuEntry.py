@@ -30,6 +30,11 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+'''
+Adding custom menus in an object options
+========================================
+'''
+
 from __future__ import print_function
 
 import anatomist.direct.api as anatomist
@@ -70,6 +75,6 @@ addMenuEntryToOptionTree(ag)
 
 
 if __name__ == '__main__':
-    import qt
-    if qt.QApplication.startingUp():
-        qt.qApp.exec_loop()
+    from soma.qt_gui.qt_backend import Qt
+    if Qt.QApplication.startingUp():
+        Qt.qApp.exec_()

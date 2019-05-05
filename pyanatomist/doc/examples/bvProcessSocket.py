@@ -31,6 +31,13 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+'''
+Using PyAnatomist in BrainVisa
+------------------------------
+
+This example shows how to use Anatomist from a BrainVisa process, and get events from Anatomist even when it is run through a socket connection.
+'''
+
 from __future__ import print_function
 
 from neuroProcesses import *

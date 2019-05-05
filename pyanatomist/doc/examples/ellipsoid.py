@@ -31,6 +31,14 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+
+'''
+Ellipsoid example
+-----------------
+
+Updating the size and shape of an object interactively
+'''
+
 from soma import aims
 import anatomist.direct.api as anatomist
 import time
@@ -111,9 +119,23 @@ if __name__ == '__main__':
     angles = numpy.array([0., 0., 0.])
     scaling = numpy.array([1., 1., 1., 0.])
     translate = numpy.array([0, 0, 0, 1])
-    while a.getControlWindow().isVisible():
-        transform(mesh, angles, scaling, translate)
+    if 'sphinx_gallery' in sys.modules:
+        for i in range(90):
+            transform(mesh, angles, scaling, translate)
         asphere.setChanged()
         asphere.notifyObservers()
         QtGui.qApp.processEvents()
-        time.sleep(0.01)
+        # display in matplotlib for sphinx_gallery
+        import matplotlib
+        matplotlib.use('agg', force=True)  # force agg
+        aw.imshow(show=True)
+
+    else:
+        while a.getControlWindow().isVisible():
+            transform(mesh, angles, scaling, translate)
+            asphere.setChanged()
+            asphere.notifyObservers()
+            QtGui.qApp.processEvents()
+            time.sleep(0.01)
+
+    del aw, asphere, mesh

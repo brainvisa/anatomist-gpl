@@ -30,7 +30,11 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
-'''Action activation triggering API demo.
+'''
+Action activation triggering API demo
+=====================================
+
+Activate actions in the current control of a window.
 
 Action activation works both in direct and socket APIs
 but querying the lists of available action methods is only available in
@@ -39,6 +43,12 @@ direct mode.
 from __future__ import print_function
 
 import anatomist.direct.api as anatomist
+from soma.qt_gui.qt_backend import Qt
+import sys
+
+runloop = False
+if Qt.QApplication.instance() is None:
+    runloop = True
 
 a = anatomist.Anatomist()
 
@@ -71,3 +81,9 @@ kpmethods = c.keyPressActionLinkNames()
 print('* keyPress methods:', kpmethods)
 mpmethods = c.mousePressActionLinkNames()
 print('* mousePress methods:', mpmethods)
+
+if runloop  # and 'sphinx_gallery' not in sys.modules:
+    Qt.QApplication.instance().exec_()
+# if runloop or 'sphinx_gallery' in sys.modules:
+    del c, w, vol, kpmethods, mpmethods
+
