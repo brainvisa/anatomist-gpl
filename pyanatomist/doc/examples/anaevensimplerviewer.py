@@ -347,7 +347,10 @@ if __name__ == '__main__':
         Qt.QApplication.instance().processEvents()
         Qt.QApplication.instance().processEvents()
         # snapshot the whole widget
-        ws = awin.grab()
+        if Qt.QT_VERSION >= 0x050000:
+            ws = awin.grab()  # Qt5 only
+        else:
+            ws = Qt.QPixmap.grabWidget(awin)  # Qt4 only
         # openGl areas are not rendered in the snapshot, we have to make them
         # by hand
         p = Qt.QPainter(ws)
