@@ -57,7 +57,6 @@ extensions = ['sphinx.ext.autodoc',
 
 global exit_status
 exit_status = 0
-#global SafeSystemExit
 
 try:
     import sphinx_gallery
@@ -68,16 +67,10 @@ try:
         'filename_pattern': '/(anagraphannotate)|(aimsvolumetest)|(anaevensimplerviewer)|(control)|(customopenglobject)|(ellipsoid)|(fusion3D)|(graph)|(graph_building)|(meshtest)|(nomenclatureselection)|(selection)|(volumetest)\.py',
         #'ignore_pattern': r'/[^abcefgmnst][^/]*\.py$',
     }
+
     # capture exit to avoid crash on exit cleanup
-
-    #class SafeSystemExit(SystemExit):
-        #def __init__(self, *args, **kwargs):
-            #print('#### SafeSystemExit:', args, kwargs, file=sys.stderr)
-            #global exit_status
-            #exit_status = args[0]
-
     def handle_exception(app, opts, exception, stderr=sys.stderr):
-        print('#### handle_exception:', exception, '#####', file=sys.stderr)
+        # print('#### handle_exception:', exception, '#####', file=sys.stderr)
         global exit_status
         exit_status = 1
         from sphinx import cmdline
@@ -85,28 +78,22 @@ try:
 
     def exit():
         import sys
-        ei = sys.exc_info()
-        print('######## exit:', ei, '########', file=sys.stderr)
-        #if ei == (None, None, None):
-            #status = 0
-        #else:
-            #status = 1
         global exit_status
         status = exit_status
-        #if status is None:
-            #status = 0
-        #if not isinstance(status, int):
-            #status = 1
-        print('######## exit:', status, '########', file=sys.stderr)
+        # print('######## exit:', status, '########', file=sys.stderr)
         os._exit(status)
 
     import atexit
-    #SystemExit = SafeSystemExit
-    #sys.SystemExit = SafeSystemExit
     from sphinx import cmdline
+    # hack sphinx.cmdline.handle_exception to keep track of an error,
+    # in order to exit with the correct exit code
     cmdline.handle_exception_bak = cmdline.handle_exception
     cmdline.handle_exception = handle_exception
     atexit.register(exit)
+    # neutralize Anatomist.close() to avoid cleanup while some python variables
+    # remain somewhere
+    import anatomist.direct.api as ana
+    ana.Anatomist.close = lambda self: None
 except ImportError:
     pass  # no gallery. Oh, well.
 

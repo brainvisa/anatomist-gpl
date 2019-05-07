@@ -41,7 +41,12 @@ from __future__ import print_function
 
 import anatomist.direct.api as anatomist
 from soma import aims
+from soma.qt_gui.qt_backend import Qt
 import sip
+import sys
+
+run_loop = Qt.QApplication.instance() is None \
+    and 'sphinx_gallery' not in sys.modules
 
 a = anatomist.Anatomist()
 
@@ -63,6 +68,14 @@ print(win2 is win)
 
 vol = aims.read('irm.ima')
 avol = a.toAObject(vol)
+avol.releaseAppRef()
 
 # keywords / real objects test
 a.execute('AddObject', objects=[avol], windows=[win])
+
+if run_loop:
+    Qt.QApplication.instance().exec_
+
+if run_loop or 'sphinx_gallery' not in sys.modules:
+    del win, win2, avol, vol, cx, i
+

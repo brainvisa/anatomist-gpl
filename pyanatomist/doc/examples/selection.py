@@ -31,6 +31,7 @@ a = ana.Anatomist('-b')
 # create a sphere mesh
 m = aims.SurfaceGenerator.sphere(aims.Point3df(0), 100, 100)
 mesh = a.toAObject(m)
+mesh.releaseAppRef()
 
 # Create a new 3D window in Anatomist
 aw = a.createWindow('3D')
