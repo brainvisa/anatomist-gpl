@@ -54,6 +54,7 @@ a = anatomist.Anatomist()
 
 # convert the AimsData volume to Anatomist API
 avol = a.toAObject(vol)
+avol.releaseAppRef()
 
 win = a.createWindow('Axial')
 
@@ -79,6 +80,7 @@ avol.notifyObservers()
 # shows the ability to share the volume data with multiple anatomist/aims
 # objects
 avol2 = a.toAObject(vol)
+avol2.releaseAppRef()
 
 # set a different palette on the second object so we can see something
 a.setObjectPalette(avol2, 'Blue-Red-fusion')

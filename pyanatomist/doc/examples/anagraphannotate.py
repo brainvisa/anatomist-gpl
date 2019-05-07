@@ -80,6 +80,7 @@ graph = aims.read(graphname)
 if graph.has_key('label_property'):
     labelatt = graph['label_property']
 agraph = a.toAObject(graph)
+agraph.releaseAppRef()
 w = a.createWindow('3D')
 w.addObjects(agraph, add_graph_nodes=True)
 # lgraphaims = aims.Graph( 'labelsGraph' )
@@ -143,6 +144,7 @@ alines.setMaterial(diffuse=[0, 0, 0, 1])
 objects.append(alines)
 del alines
 labels = a.groupObjects(objects)
+labels.releaseAppRef()
 w.addObjects(labels, add_children=True)
 
 if 'sphinx_gallery' in sys.modules:

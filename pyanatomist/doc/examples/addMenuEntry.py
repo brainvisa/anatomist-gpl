@@ -71,6 +71,7 @@ def addMenuEntryToOptionTree(object):
 # Create a dummy AGraph and add plop menu entry
 g = aims.Graph('dummy')
 ag = a.toAObject(g)
+ag.releaseAppRef()
 addMenuEntryToOptionTree(ag)
 
 
@@ -78,3 +79,4 @@ if __name__ == '__main__':
     from soma.qt_gui.qt_backend import Qt
     if Qt.QApplication.startingUp():
         Qt.qApp.exec_()
+        del ag, g, callbacks_list

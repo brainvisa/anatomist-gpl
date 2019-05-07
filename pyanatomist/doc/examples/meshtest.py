@@ -62,6 +62,7 @@ a = anatomist.Anatomist()
 
 # Put the mesh in anatomist
 am = a.toAObject(m)
+am.releaseAppRef()
 
 # Create a new 3D window in Anatomist
 aw = a.createWindow('3D')

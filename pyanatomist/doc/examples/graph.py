@@ -54,6 +54,7 @@ g = aims.read('Rbase.arg')
 a = anatomist.Anatomist()
 
 ag = a.toAObject(g)
+ag.releaseAppRef()
 for x in g.vertices():
     x['toto'] = 12.3
 

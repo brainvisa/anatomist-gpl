@@ -157,6 +157,7 @@ class TexDrawAction(anatomist.cpp.Action):
                     for i in six.moves.xrange(nv):
                         t.push_back(0.)
                     atex = a.toAObject(tex)
+                    atex.releaseAppRef()
                     # atex = a.AObject( a, surf ).generateTexture()
                     texs.append(atex)
                     # ...
@@ -350,3 +351,4 @@ QtGui.QMessageBox.information(
 # run Qt
 if runqt:
     qapp.exec_()
+    del ad, cm, aw, s, pix

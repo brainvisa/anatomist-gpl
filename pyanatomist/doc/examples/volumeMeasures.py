@@ -121,6 +121,7 @@ class MeasuresWindow(QSplitter):
 
         # convert the AimsData volume to Anatomist API
         avol = self.anatomist.toAObject(self.volume)
+        avol.releaseAppRef()
         # put volume in window
         self.aWindow.addObjects(avol)
 
@@ -210,6 +211,7 @@ class MeasuresWindow(QSplitter):
                 maskIterator.text = text
                 # convert the BucketMap to Anatomist API
                 maskIterator.bucket = self.anatomist.toAObject(bucket)
+                maskIterator.bucket.releaseAppRef()
                 maskIterator.bucket.setName(
                     str(self.roiList.item(index).text()))
                 maskIterator.bucket.setChanged()

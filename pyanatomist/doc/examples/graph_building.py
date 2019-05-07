@@ -79,7 +79,9 @@ runloop = Qt.QApplication.instance() is not None
 # create anatomist objects
 a = ana.Anatomist()
 ahie = a.toAObject(hie)
+ahie.releaseAppRef()
 agraph = a.toAObject(graph)
+agraph.releaseAppRef()
 
 # display graph
 w = a.createWindow('3D')
@@ -92,5 +94,5 @@ w.sphinx_gallery_snapshot()
 if runloop and 'sphinx_gallery' not in sys.modules:
     Qt.QApplication.instance().exec_()
 if runloop or 'sphinx_gallery' in sys.modules:
-    del w, agraph, ahie, v, graph, hie, n
+    del w, br, agraph, ahie, v, graph, hie, n
 

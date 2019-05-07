@@ -108,6 +108,7 @@ def transform(mesh, angles, scaling, translate):
 
 mesh = aims.SurfaceGenerator.sphere(aims.Point3df(0, 0, 0), 1, 500)
 asphere = a.toAObject(mesh)
+asphere.releaseAppRef()
 aw = a.createWindow('3D')
 aw.setHasCursor(0)
 a.addObjects([asphere], [aw])
