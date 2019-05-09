@@ -73,6 +73,8 @@ try:
         # print('#### handle_exception:', exception, '#####', file=sys.stderr)
         global exit_status
         exit_status = 1
+        #import traceback
+        #traceback.print_exc()
         from sphinx import cmdline
         cmdline.handle_exception_bak(app, opts, exception, stderr=sys.stderr)
 
@@ -80,7 +82,7 @@ try:
         import sys
         global exit_status
         status = exit_status
-        # print('######## exit:', status, '########', file=sys.stderr)
+        #print('######## exit:', status, '########', file=sys.stderr)
         os._exit(status)
 
     import atexit
@@ -94,6 +96,12 @@ try:
     # remain somewhere
     import anatomist.direct.api as ana
     ana.Anatomist.close = lambda self: None
+    # instantiate a headless anatomist in order to build docs without a
+    # graphical environment
+    import anatomist.headless as hana
+    hana.HeadlessAnatomist()
+    import matplotlib
+    matplotlib.use('agg', force=True, warn=False)
 except ImportError:
     pass  # no gallery. Oh, well.
 
