@@ -59,49 +59,54 @@ global exit_status
 exit_status = 0
 
 try:
-    import sphinx_gallery
-    extensions.append('sphinx_gallery.gen_gallery')
-    sphinx_gallery_conf = {
-        'examples_dirs': '../examples',   # path to your example scripts
-        'gallery_dirs': 'auto_examples',  # path where to save gallery generated examples
-        'filename_pattern': '/(anagraphannotate)|(aimsvolumetest)|(anaevensimplerviewer)|(control)|(customopenglobject)|(ellipsoid)|(fusion3D)|(graph)|(graph_building)|(meshtest)|(nomenclatureselection)|(selection)|(volumetest)\.py',
-        #'ignore_pattern': r'/[^abcefgmnst][^/]*\.py$',
-    }
-
-    # capture exit to avoid crash on exit cleanup
-    def handle_exception(app, opts, exception, stderr=sys.stderr):
-        # print('#### handle_exception:', exception, '#####', file=sys.stderr)
-        global exit_status
-        exit_status = 1
-        #import traceback
-        #traceback.print_exc()
-        from sphinx import cmdline
-        cmdline.handle_exception_bak(app, opts, exception, stderr=sys.stderr)
-
-    def exit():
-        import sys
-        global exit_status
-        status = exit_status
-        #print('######## exit:', status, '########', file=sys.stderr)
-        os._exit(status)
-
-    import atexit
-    from sphinx import cmdline
-    # hack sphinx.cmdline.handle_exception to keep track of an error,
-    # in order to exit with the correct exit code
-    cmdline.handle_exception_bak = cmdline.handle_exception
-    cmdline.handle_exception = handle_exception
-    atexit.register(exit)
-    # neutralize Anatomist.close() to avoid cleanup while some python variables
-    # remain somewhere
-    import anatomist.direct.api as ana
-    ana.Anatomist.close = lambda self: None
-    # instantiate a headless anatomist in order to build docs without a
-    # graphical environment
-    import anatomist.headless as hana
-    hana.HeadlessAnatomist()
     import matplotlib
-    matplotlib.use('agg', force=True, warn=False)
+    import inspect
+    # spinx-gallery will be usable with anatomist only if matplotlib.use
+    # has the "force" parameter because we need to switch the backend.
+    if 'force' in inspect.getargspec(matplotlib.use).args:
+        import sphinx_gallery
+        extensions.append('sphinx_gallery.gen_gallery')
+        sphinx_gallery_conf = {
+            'examples_dirs': '../examples',   # path to your example scripts
+            'gallery_dirs': 'auto_examples',  # path where to save gallery generated examples
+            'filename_pattern': '/(anagraphannotate)|(aimsvolumetest)|(anaevensimplerviewer)|(control)|(customopenglobject)|(ellipsoid)|(fusion3D)|(graph)|(graph_building)|(meshtest)|(nomenclatureselection)|(selection)|(volumetest)\.py',
+            #'ignore_pattern': r'/[^abcefgmnst][^/]*\.py$',
+        }
+
+        # capture exit to avoid crash on exit cleanup
+        def handle_exception(app, opts, exception, stderr=sys.stderr):
+            # print('#### handle_exception:', exception, '#####', file=sys.stderr)
+            global exit_status
+            exit_status = 1
+            #import traceback
+            #traceback.print_exc()
+            from sphinx import cmdline
+            cmdline.handle_exception_bak(app, opts, exception,
+                                         stderr=sys.stderr)
+
+        def exit():
+            import sys
+            global exit_status
+            status = exit_status
+            #print('######## exit:', status, '########', file=sys.stderr)
+            os._exit(status)
+
+        import atexit
+        from sphinx import cmdline
+        # hack sphinx.cmdline.handle_exception to keep track of an error,
+        # in order to exit with the correct exit code
+        cmdline.handle_exception_bak = cmdline.handle_exception
+        cmdline.handle_exception = handle_exception
+        atexit.register(exit)
+        # neutralize Anatomist.close() to avoid cleanup while some
+        # python variables remain somewhere
+        import anatomist.direct.api as ana
+        ana.Anatomist.close = lambda self: None
+        # instantiate a headless anatomist in order to build docs without a
+        # graphical environment
+        import anatomist.headless as hana
+        hana.HeadlessAnatomist()
+        matplotlib.use('agg', force=True, warn=False)
 except ImportError:
     pass  # no gallery. Oh, well.
 
