@@ -369,7 +369,7 @@ if __name__ == '__main__':
         axes = pyplot.axes()
         axes.get_xaxis().set_visible(False)
         axes.get_yaxis().set_visible(False)
-        pyplot.show()
+        pyplot.show(block=False)
         #matplotlib.use(backend, force=True)  # restore backend
 
 
