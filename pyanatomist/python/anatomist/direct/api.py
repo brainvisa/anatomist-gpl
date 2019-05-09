@@ -1802,7 +1802,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                 if figure is not None:
                     figure.show()
                 else:
-                    pyplot.show()
+                    pyplot.show(block=False)
             return plot
 
         def sphinx_gallery_snapshot(self, width=0, height=0,
