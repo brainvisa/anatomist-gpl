@@ -66,10 +66,19 @@ try:
     if 'force' in inspect.getargspec(matplotlib.use).args:
         import sphinx_gallery
         extensions.append('sphinx_gallery.gen_gallery')
+        gallery_examples = ['anagraphannotate', 'aimsvolumetest',
+                            'anaevensimplerviewer', 'control', 'ellipsoid',
+                            'fusion3D', 'graph', 'graph_building', 'meshtest',
+                            'nomenclatureselection', 'selection', 'volumetest']
+        try:
+            import OpenGL
+            gallery_examples.append('customopenglobject')
+        except:
+            pass # no OpenGL module: don't run this one
         sphinx_gallery_conf = {
             'examples_dirs': '../examples',   # path to your example scripts
             'gallery_dirs': 'auto_examples',  # path where to save gallery generated examples
-            'filename_pattern': '/(anagraphannotate)|(aimsvolumetest)|(anaevensimplerviewer)|(control)|(customopenglobject)|(ellipsoid)|(fusion3D)|(graph)|(graph_building)|(meshtest)|(nomenclatureselection)|(selection)|(volumetest)\.py',
+            'filename_pattern': '/(%s)\.py' % ')|('.join(gallery_examples),
             #'ignore_pattern': r'/[^abcefgmnst][^/]*\.py$',
         }
 
