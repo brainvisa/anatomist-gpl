@@ -109,12 +109,12 @@ try:
         atexit.register(exit)
         # neutralize Anatomist.close() to avoid cleanup while some
         # python variables remain somewhere
-        import anatomist.direct.api as ana
-        ana.Anatomist.close = lambda self: None
         # instantiate a headless anatomist in order to build docs without a
         # graphical environment
         import anatomist.headless as hana
         hana.HeadlessAnatomist()
+        import anatomist.direct.api as ana
+        ana.Anatomist.close = lambda self: None
         matplotlib.use('agg', force=True, warn=False)
 except ImportError:
     pass  # no gallery. Oh, well.
