@@ -34,12 +34,14 @@ def setup_virtualGL():
     .. warning::
         If the current process has already used some libraries (libX11? libGL
         certainly), setting VirtualGL libs afterwards may cause segfaults and
-        program crashes. So it is not safe to use it unless you are sure to to
+        program crashes. So it is not safe to use it unless you are sure to do
         it straight at the beginning of the program, prior to importing many
         modules.
 
         Unfortunately, I don't know how to test it.
     '''
+    if os.environ.get('VGL_ISACTIVE') == '1':
+        return True
     try:
         preload = ['libdlfaker']
         # vglrun may use either librrfaker or libvglfaker depending on its
@@ -162,20 +164,45 @@ def find_mesa():
     return None
 
 
-def terminate_xvfb():
-    global xvfb
-    global original_display
-    if xvfb:
-        xvfb.terminate()
-        xvfb.wait()
-        xvfb = None
-        if original_display:
-            os.environ['DISPLAY'] = original_display
-        else:
-            del os.environ['DISPLAY']
+#def terminate_xvfb():
+    #global xvfb
+    #global original_display
+    #if xvfb:
+        #xvfb.terminate()
+        #xvfb.wait()
+        #xvfb = None
+        #if original_display:
+            #os.environ['DISPLAY'] = original_display
+        #else:
+            #del os.environ['DISPLAY']
 
 
-def setup_headless(allow_virtualgl=True):
+class PrCtlError(Exception):
+    pass
+
+def on_parent_exit(signame):
+    """
+    Return a function to be run in a child process which will trigger SIGNAME
+    to be sent when the parent process dies
+
+    found on https://gist.github.com/evansd/2346614
+    """
+    import signal
+    from ctypes import cdll
+
+    # Constant taken from http://linux.die.net/include/linux/prctl.h
+    PR_SET_PDEATHSIG = 1
+
+    signum = getattr(signal, signame)
+    def set_parent_exit_signal():
+        # http://linux.die.net/man/2/prctl
+        result = cdll['libc.so.6'].prctl(PR_SET_PDEATHSIG, signum)
+        if result != 0:
+            raise PrCtlError('prctl failed with error code %s' % result)
+    return set_parent_exit_signal
+
+
+def setup_headless(allow_virtualgl=True, force_virtualgl=True):
     ''' Sets up a headless virtual X server and tunes the current process
     libraries to use it appropriately.
 
@@ -197,6 +224,11 @@ def setup_headless(allow_virtualgl=True):
         If False, VirtualGL will not be attempted. Default is True.
         Use it if you experience crashes in your programs: it probably means
         that some incompatible libraries have alrealy been loaded.
+    force_virtualgl: bool (optional)
+        only meaningful if allow_virtualgl is True. If force_virtualgl True,
+        virtualGL will be attempted even if the X server advertises a GLX
+        extension. This is useful when GLX is present but does not work when
+        OpenGL is used.
     '''
     global xvfb
     global original_display
@@ -231,7 +263,8 @@ def setup_headless(allow_virtualgl=True):
         else:
             raise RuntimeError('Too many X servers')
         xvfb = Popen(['Xvfb', '-screen', '0', '1280x1024x24',
-                      '+extension', 'GLX', ':%d' % display])
+                      '+extension', 'GLX', ':%d' % display],
+                     preexec_fn=on_parent_exit('SIGINT'))
 
         original_display = os.environ.get('DISPLAY', None)
         os.environ['DISPLAY'] = ':%d' % display
@@ -244,7 +277,8 @@ def setup_headless(allow_virtualgl=True):
                 print('OpenGL lib already loaded. Using Xvfb will not be '
                       'possible.')
 
-        if not glx and not gl_libs and allow_virtualgl and qtapp is None:
+        if (not glx or force_virtualgl) and not gl_libs and allow_virtualgl \
+                and qtapp is None:
             # try VirtualGL
             vgl = distutils.spawn.find_executable('vglrun')
             if vgl:
@@ -276,7 +310,8 @@ def setup_headless(allow_virtualgl=True):
                 xvfb.terminate()
                 xvfb.wait()
                 xvfb = Popen(['Xvfb', '-screen', '0', '1280x1024x24',
-                              '+extension', 'GLX', ':%d' % display])
+                              '+extension', 'GLX', ':%d' % display],
+                             preexec_fn=on_parent_exit('SIGINT'))
                 #self.mesa_lib = mesa_lib
                 glx = test_glx(xdpyinfo_cmd)
                 if glx:
@@ -308,8 +343,10 @@ def setup_headless(allow_virtualgl=True):
                 raise RuntimeError('GLX extension missing')
         print('Headless Anatomist running in normal (non-headless) mode')
 
-    if xvfb is not None:
-        atexit.register(terminate_xvfb)
+    # this is not needed any longer, since on_parent_exit() is passed to
+    # Popen
+    #if xvfb is not None:
+        #atexit.register(terminate_xvfb)
 
 
 def HeadlessAnatomist(*args, **kwargs):
@@ -329,7 +366,7 @@ def HeadlessAnatomist(*args, **kwargs):
     To overcome this, HeadlessAnatomist will automatically attempt to use
     VirtualGL (http://www.virtualgl.org), but:
 
-    * whole application OpenGL rendering will be redirected through
+    * all application OpenGL rendering will be redirected through
       VirtualGL, OpenGL calls will be modified.
 
     * VirtualGL deports the rendering to a working X server, thus this one
@@ -375,10 +412,15 @@ def HeadlessAnatomist(*args, **kwargs):
     Parameters are passed to Anatomist constructor, except the following
     keyword arguments:
 
-    allow_virtualgl: bool (optional)
+    allow_virtualgl: bool (optional, default: True)
         If False, VirtualGL will not be attempted. Default is True.
         Use it if you experience crashes in your programs: it probably means
         that some incompatible libraries have alrealy been loaded.
+    force_virtualgl: bool (optional, default: True)
+        only meaningful if allow_virtualgl is True. If force_virtualgl True,
+        virtualGL will be attempted even if the X server advertises a GLX
+        extension. This is useful when GLX is present but does not work when
+        OpenGL is used.
     '''
 
     global hanatomist
@@ -386,11 +428,17 @@ def HeadlessAnatomist(*args, **kwargs):
         return hanatomist
 
     allow_virtualgl = True
+    force_virtualgl = True
     if 'allow_virtualgl' in kwargs:
         allow_virtualgl = kwargs['allow_virtualgl']
         kwargs = dict(kwargs)
         del kwargs['allow_virtualgl']
-    setup_headless(allow_virtualgl=allow_virtualgl)
+    if 'force_virtualgl' in kwargs:
+        force_virtualgl = kwargs['force_virtualgl']
+        kwargs = dict(kwargs)
+        del kwargs['force_virtualgl']
+    setup_headless(allow_virtualgl=allow_virtualgl,
+                   force_virtualgl=force_virtualgl)
 
     from anatomist.api import Anatomist
 
