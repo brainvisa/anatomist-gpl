@@ -13,14 +13,19 @@ Other functions are used by HeadlessAnatomist implementation.
 
 from __future__ import print_function
 
-import soma.subprocess
+from soma import subprocess
 import os
-from soma.subprocess import Popen, check_output
+from soma.subprocess import Popen, check_output, call
 import atexit
 import time
 import distutils.spawn
 import ctypes
 import sys
+if sys.version_info[0] >= 3:
+    # python3
+    from io import StringIO
+else:
+    from cStringIO import StringIO
 
 xvfb = None
 original_display = None
@@ -60,23 +65,64 @@ def setup_virtualGL():
     return True
 
 
-def test_glx(xdpyinfo_cmd, timeout=5.):
+def test_glx(glxinfo_cmd=None, xdpyinfo_cmd=None, timeout=5.):
     ''' Test the presence of the GLX module in the X server, by running
-    xdpyinfo command
+    glxinfo or xdpyinfo command
 
     Parameters
     ----------
+    glxinfo_cmd: str or list
+        glxinfo command: may be a string ('glxinfo') or a list, which allows
+        running it through a wrapper, ex: ['vglrun', 'glxinfo']
     xdpyinfo_cmd: str or list
         xdpyinfo command: may be a string ('xdpyinfo') or a list, which allows
-        running it through a wrapper, ex: ['vglrun', 'xdpyinfo']
+        running it through a wrapper, ex: ['vglrun', 'xdpyinfo']. xdpyinfo is
+        only used if glxinfo is not present, and can produce an inaccurate
+        result (some xvfb servers advertise a GLX extension which does not
+        work in fact).
     timeout: float (optional)
         try several times to connect the X server while waiting for it to
         startup. If 0, try only once and return.
 
     Returns
     -------
-    True if GLX is found, False otherwise.
+    2 if GLX is recognized trough glxinfo (trustable), 1 if GLX is recognized
+    through xdpyinfo (not always trustable), 0 otherwise.
     '''
+    if glxinfo_cmd is None:
+        glxinfo_cmd = distutils.spawn.find_executable('glxinfo')
+    if glxinfo_cmd not in (None, []):
+        glxinfo = ''
+        #glxinfo = StringIO()
+        t0 = time.time()
+        t1 = 0
+        while glxinfo == '' and t1 <= timeout:
+            process = Popen(glxinfo_cmd, stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE)
+            try:
+                glxinfo, glxerr = process.communicate(timeout=5)
+            except TimeoutExpired:
+                process.kill()
+                glxinfo, glxerr = process.communicate()
+                raise subprocess.TimeoutExpired(process.args, 5,
+                                                output=glxinfo)
+            retcode = process.poll()
+
+            if retcode != 0:
+                if 'unable to open display' not in glxerr:
+                    # failed for another reason: probably GLX is not working
+                    break
+                time.sleep(0.01)
+                t1 = time.time() - t0
+        if glxinfo != '' or t1 > timeout:
+            if ' GLX Visuals' not in glxinfo:
+                return 0
+            else:
+                return 2
+
+    # here glxinfo has not been used or is not working
+    if xdpyinfo_cmd is None:
+        xdpyinfo_cmd = distutils.spawn.find_executable('xdpyinfo')
     dpyinfo = ''
     t0 = time.time()
     t1 = 0
@@ -87,9 +133,9 @@ def test_glx(xdpyinfo_cmd, timeout=5.):
             time.sleep(0.01)
             t1 = time.time() - t0
     if 'GLX' not in dpyinfo:
-        return False
+        return 0
     else:
-        return True
+        return 1
 
 
 def test_opengl(pid=None, verbose=False):
@@ -202,7 +248,7 @@ def on_parent_exit(signame):
     return set_parent_exit_signal
 
 
-def setup_headless(allow_virtualgl=True, force_virtualgl=True):
+def setup_headless(allow_virtualgl=True, force_virtualgl=False):
     ''' Sets up a headless virtual X server and tunes the current process
     libraries to use it appropriately.
 
@@ -247,10 +293,11 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=True):
               'possible.')
         return
     use_xvfb = True
+    glxinfo_cmd = distutils.spawn.find_executable('glxinfo')
     xdpyinfo_cmd = distutils.spawn.find_executable('xdpyinfo')
-    if not xdpyinfo_cmd:
-        # not a X client, probably not Linux
-        use_xvfb = False
+    #if not xdpyinfo_cmd:
+        ## not a X client, probably not Linux
+        #use_xvfb = False
     xvfb_cmd = distutils.spawn.find_executable('Xvfb')
     if not xvfb_cmd:
         use_xvfb = False
@@ -266,10 +313,11 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=True):
                       '+extension', 'GLX', ':%d' % display],
                      preexec_fn=on_parent_exit('SIGINT'))
 
+
         original_display = os.environ.get('DISPLAY', None)
         os.environ['DISPLAY'] = ':%d' % display
 
-        glx = test_glx(xdpyinfo_cmd)
+        glx = test_glx(glxinfo_cmd=glxinfo_cmd, xdpyinfo_cmd=xdpyinfo_cmd)
         gl_libs = set()
         if not glx:
             gl_libs = test_opengl(verbose=True)
@@ -277,13 +325,20 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=True):
                 print('OpenGL lib already loaded. Using Xvfb will not be '
                       'possible.')
 
-        if (not glx or force_virtualgl) and not gl_libs and allow_virtualgl \
+        if (glx < 2 or force_virtualgl) and not gl_libs and allow_virtualgl \
                 and qtapp is None:
             # try VirtualGL
             vgl = distutils.spawn.find_executable('vglrun')
             if vgl:
                 print('VirtualGL found.')
-                if test_glx([vgl, xdpyinfo_cmd], 0):
+                vglglxinfo_cmd = None
+                vglxdpyinfo_cmd = None
+                if glxinfo_cmd:
+                    vglglxinfo_cmd = [vgl, glxinfo_cmd]
+                if xdpyinfo_cmd:
+                    vglxdpyinfo_cmd = [vgl, xdpyinfo_cmd]
+                if test_glx(glxinfo_cmd=vglglxinfo_cmd,
+                            xdpyinfo_cmd=vglxdpyinfo_cmd, timeout=0):
                     print('VirtualGL should work.')
 
                     glx = setup_virtualGL()
@@ -313,7 +368,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=True):
                               '+extension', 'GLX', ':%d' % display],
                              preexec_fn=on_parent_exit('SIGINT'))
                 #self.mesa_lib = mesa_lib
-                glx = test_glx(xdpyinfo_cmd)
+                glx = test_glx(glxinfo_cmd, xdpyinfo_cmd)
                 if glx:
                     print('Running using Mesa software OpenGL: performance '
                           'will be slow. To get faster results, and if X '
@@ -338,7 +393,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=True):
 
     if not use_xvfb:
         if xdpyinfo_cmd:
-            glx = test_glx(xdpyinfo_cmd, 0)
+            glx = test_glx(glxinfo_cmd, xdpyinfo_cmd, 0)
             if not glx:
                 raise RuntimeError('GLX extension missing')
         print('Headless Anatomist running in normal (non-headless) mode')
@@ -416,11 +471,12 @@ def HeadlessAnatomist(*args, **kwargs):
         If False, VirtualGL will not be attempted. Default is True.
         Use it if you experience crashes in your programs: it probably means
         that some incompatible libraries have alrealy been loaded.
-    force_virtualgl: bool (optional, default: True)
+    force_virtualgl: bool (optional, default: False)
         only meaningful if allow_virtualgl is True. If force_virtualgl True,
         virtualGL will be attempted even if the X server advertises a GLX
-        extension. This is useful when GLX is present but does not work when
-        OpenGL is used.
+        extension through the xdpyinfo command (if glxinfo is OK, then this
+        command is trusted). This is useful when GLX is present but does not
+        work when OpenGL is used.
     '''
 
     global hanatomist
@@ -428,7 +484,7 @@ def HeadlessAnatomist(*args, **kwargs):
         return hanatomist
 
     allow_virtualgl = True
-    force_virtualgl = True
+    force_virtualgl = False
     if 'allow_virtualgl' in kwargs:
         allow_virtualgl = kwargs['allow_virtualgl']
         kwargs = dict(kwargs)
