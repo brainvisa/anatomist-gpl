@@ -58,12 +58,25 @@ extensions = ['sphinx.ext.autodoc',
 global exit_status
 exit_status = 0
 
+def matplotlib_use(backend, warn=True, force=False):
+    ''' hack to call matplotlib.use() forcing warn=False and force=True,
+    because in some mpl versions (1.3.1) sometimes the backend appears to be
+    reset mysteriously to 'Agg' (with capital 'A') while sphinx-gallery expects
+    'agg' (with lowercase 'a'), which causes a mismatch, then aborts the
+    whole documentation process.
+    '''
+    matplotlib.use_bak(backend, warn=False, force=True)
+
 try:
     import matplotlib
     import inspect
     # spinx-gallery will be usable with anatomist only if matplotlib.use
     # has the "force" parameter because we need to switch the backend.
     if 'force' in inspect.getargspec(matplotlib.use).args:
+        # hack matplotlob.use()
+        matplotlib.use_bak = matplotlib.use
+        matplotlib.use = matplotlib_use
+
         import sphinx_gallery
         extensions.append('sphinx_gallery.gen_gallery')
         gallery_examples = ['anagraphannotate', 'aimsvolumetest',
