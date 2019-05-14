@@ -72,7 +72,9 @@ try:
     import inspect
     # spinx-gallery will be usable with anatomist only if matplotlib.use
     # has the "force" parameter because we need to switch the backend.
-    if 'force' in inspect.getargspec(matplotlib.use).args:
+    if not sys.platform.startswith('win') \
+            and not sys.plaform.startswith('darwin') \
+            and 'force' in inspect.getargspec(matplotlib.use).args:
         # hack matplotlob.use()
         matplotlib.use_bak = matplotlib.use
         matplotlib.use = matplotlib_use
