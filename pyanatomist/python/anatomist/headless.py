@@ -174,8 +174,8 @@ def test_qapp():
     mods = ('PyQt4.QtGui', 'PyQt5.QtGui', 'PySide.QtGui')
     for mod in mods:
         if mod in sys.modules:
-            from soma.qt_gui.qt_backend import QtGui
-            if QtGui.QApplication.instance() is not None:
+            from soma.qt_gui.qt_backend import Qt
+            if Qt.QApplication.instance() is not None:
                 return 'QApp'
             return 'QtGui'
     return None
