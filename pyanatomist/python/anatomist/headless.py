@@ -108,8 +108,10 @@ def test_glx(glxinfo_cmd=None, xdpyinfo_cmd=None, timeout=5.):
                                                 output=glxinfo)
             retcode = process.poll()
 
+            if sys.version_info[0] >= 3:
+                glxinfo = glxinfo.decode('utf-8')
             if retcode != 0:
-                if 'unable to open display' not in glxerr:
+                if 'unable to open display' not in glxerr.decode('utf-8'):
                     # failed for another reason: probably GLX is not working
                     break
                 time.sleep(0.01)
