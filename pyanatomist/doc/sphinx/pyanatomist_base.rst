@@ -2,6 +2,7 @@ Common base API
 +++++++++++++++
 
 .. inheritance-diagram:: anatomist.base.Anatomist
+  :parts: 1
 
 .. automodule:: anatomist.base
   :members:
