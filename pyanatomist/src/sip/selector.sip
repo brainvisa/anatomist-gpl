@@ -20,6 +20,7 @@ public:
     HColor();
     //HColor( float, float, float, float=1., bool=false );
     bool operator== ( const anatomist::SelectFactory::HColor & ) const;
+    bool operator!= ( const anatomist::SelectFactory::HColor & ) const;
     float r;
     float g;
     float b;
