@@ -54,10 +54,6 @@ from soma.qt_gui.qt_backend import uic
 from soma.qt_gui.qt_backend.uic import loadUi
 import six
 
-if sys.version_info[0] >= 3:
-    six.text_type = str
-
-
 uifile = 'anasimpleviewer-qt4.ui'
 findChild = lambda x, y: QtCore.QObject.findChild(x, QtCore.QObject, y)
 
