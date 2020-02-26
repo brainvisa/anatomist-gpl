@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 
+from __future__ import absolute_import
 import sys
 from anatomist.atlas_viewer import AtlasJsonRois
 from soma.qt_gui.qt_backend.QtGui import QApplication

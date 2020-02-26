@@ -37,6 +37,7 @@ AIMS / Anatomist volume manipulation
 Loading, handling and viewing a Volume with aims and anatomist
 '''
 
+from __future__ import absolute_import
 import anatomist.direct.api as anatomist
 from soma import aims
 from soma.qt_gui.qt_backend import Qt

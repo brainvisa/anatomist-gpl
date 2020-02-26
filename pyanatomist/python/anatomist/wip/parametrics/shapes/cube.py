@@ -41,6 +41,7 @@
 #
 #########################################################################
 
+from __future__ import absolute_import
 import operator
 from soma import aims
 import anatomist.cpp as anatomist

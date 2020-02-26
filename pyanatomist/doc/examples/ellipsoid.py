@@ -39,11 +39,13 @@ Ellipsoid example
 Updating the size and shape of an object interactively
 '''
 
+from __future__ import absolute_import
 from soma import aims
 import anatomist.direct.api as anatomist
 import time
 import numpy
 import sys
+from six.moves import range
 
 
 a = anatomist.Anatomist()

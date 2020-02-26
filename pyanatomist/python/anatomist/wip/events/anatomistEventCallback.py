@@ -41,6 +41,7 @@
 #
 #########################################################################
 
+from __future__ import absolute_import
 import anatomist.cpp as anatomist
 from soma.functiontools import partial
 

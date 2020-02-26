@@ -56,6 +56,7 @@ If the Anatomist object is created outside the main thread, you must get a threa
 """
 from __future__ import print_function
 
+from __future__ import absolute_import
 from anatomist import cpp
 from anatomist import base
 import operator
@@ -70,14 +71,11 @@ import numpy as np
 import six
 from anatomist.base import isSequenceType, isMappingType
 
-if sys.version_info[0] >= 3:
-    basestring = str
-
 try:
     from soma.qt_gui.qt_backend.QtCore import QString
-    _string_or_qstring = (basestring, QString)
+    _string_or_qstring = (six.string_types, QString)
 except ImportError:
-    _string_or_qstring = (basestring, )
+    _string_or_qstring = (six.string_types, )
 from soma.qt_gui.qt_backend import QtCore, Qt
 Slot = QtCore.pyqtSlot
 
@@ -736,8 +734,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         while l:
             c = l.pop()
             done.add(c)
-            m += filter(lambda x: not x.startswith('_') and x not in m,
-                        c.__dict__.keys())
+            m += [x for x in list(c.__dict__.keys()) if not x.startswith('_') and x not in m]
             cl = getattr(c, '__bases__', None)
             if not cl:
                 cl = getattr(c, '__class__', None)
@@ -745,7 +742,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                     continue
                 else:
                     cl = [cl]
-            l += filter(lambda x: x not in done, cl)
+            l += [x for x in cl if x not in done]
         return m
 
     def getPalette(self, name):
@@ -1153,7 +1150,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             except:
                 i = self.context.makeID(v)
             return i
-        elif isinstance(v, (basestring, int, float, dict,
+        elif isinstance(v, (six.string_types, int, float, dict,
                             np.int16, np.int32, np.int64, np.int8,
                             np.uint16, np.uint32, np.uint64, np.uint8)):
             return v
@@ -1193,7 +1190,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         objects: dict or list
             Converted elements
         """
-        if not isinstance(params, basestring) \
+        if not isinstance(params, six.string_types) \
                 and isSequenceType(params):
             return [self.convertSingleObjectParamsToObjects(i) for i in params]
         else:
@@ -1220,7 +1217,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         """
         if isinstance(idorcpp, base.Anatomist.AItem):
             return idorcpp
-        if convertIDs and type(idorcpp) is types.IntType:
+        if convertIDs and type(idorcpp) is int:
             try:
                 o = self.context.object(idorcpp)
             except:
@@ -1442,8 +1439,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             while l:
                 c = l.pop()
                 done.add(c)
-                m += filter(lambda x: not x.startswith('_') and x not in m,
-                            c.__dict__.keys())
+                m += [x for x in list(c.__dict__.keys()) if not x.startswith('_') and x not in m]
                 cl = getattr(c, '__bases__', None)
                 if not cl:
                     cl = getattr(c, '__class__', None)
@@ -1451,7 +1447,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                         continue
                     else:
                         cl = [cl]
-                l += filter(lambda x: x not in done, cl)
+                l += [x for x in cl if x not in done]
             return m
 
     #

@@ -39,6 +39,7 @@ Several implementations exist depending on the mean of driving Anatomist (Sip bi
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 from soma.notification import ObservableNotifier
 from soma.singleton import Singleton
 from soma.functiontools import partial
@@ -48,9 +49,6 @@ import threading
 import collections
 import sys
 import six
-
-if sys.version_info[0] >= 3:
-    basestring = str
 
 
 def isSequenceType(item):
@@ -1376,7 +1374,7 @@ class Anatomist(Singleton):
         """
         if isinstance(item, Anatomist.AItem):
             return item.getInternalRep()
-        elif isinstance(item, (basestring, int, float, dict)):
+        elif isinstance(item, (six.string_types, int, float, dict)):
             return item
         raise TypeError('Expecting an Anatomist object but got one of type %s'
                         % repr(type(item)))
@@ -1398,7 +1396,7 @@ class Anatomist(Singleton):
         elements: dict or list
             Converted elements
         """
-        if not isinstance( params, basestring ) \
+        if not isinstance( params, six.string_types ) \
                 and isSequenceType(params):
             return [self.convertSingleObjectParamsToIDs(i) for i in params]
         else:

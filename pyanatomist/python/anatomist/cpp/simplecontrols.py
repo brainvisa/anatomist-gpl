@@ -31,9 +31,11 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+from __future__ import absolute_import
 import anatomist.cpp as anatomist
 from soma.qt_gui.qt_backend import QtCore, QtGui
 import os
+import six
 
 '''Simplified controls useful to avoid complex interactions.
 When you need them in a custom application, you need to register them first in the ControlManager. They are already registered in the action/control dictionaries.
@@ -113,7 +115,7 @@ class Simple2DControl( anatomist.Control ):
 
   def doAlsoOnDeselect( self, pool ):
     a = anatomist.Anatomist('-b')
-    for k,ac in self.myActions.iteritems():
+    for k,ac in six.iteritems(self.myActions):
       if isinstance( a, anatomist.MovieAction ) and a.isRunning():
         a.startOrStop()
       if isinstance( a, anatomist.ContinuousTrackball ):

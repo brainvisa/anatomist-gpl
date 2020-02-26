@@ -39,6 +39,7 @@ Loading and viewing a Volume with anatomist
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import anatomist.api  as anatomist  # works with all implementations
 
 # initialize Anatomist

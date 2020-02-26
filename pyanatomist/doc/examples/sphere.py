@@ -40,9 +40,10 @@ Subclassing Anatomist objects
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import anatomist.direct.api as anatomist
 from soma import aims
-import types
+import six
 
 
 class ASphere(anatomist.cpp.ASurface_3):
@@ -51,7 +52,7 @@ class ASphere(anatomist.cpp.ASurface_3):
         self._center = aims.Point3df(0, 0, 0)
         self._radius = 100
         if mesh is not None:
-            if type(mesh) is types.StringType:
+            if type(mesh) is six.string_types:
                 # mesh is a filename: read it
                 anatomist.cpp.ASurface_3.__init__(self, mesh)
                 r = aims.Reader()

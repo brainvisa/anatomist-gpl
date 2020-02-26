@@ -14,6 +14,7 @@ public:
 
   virtual void doit( const set_AObjectPtr & ) = 0;
   virtual bool operator == ( const anatomist::ObjectMenuCallback & ) const;
+  virtual bool operator != ( const anatomist::ObjectMenuCallback & ) const;
 };
 
 

@@ -10,12 +10,14 @@ Display graph labels as 3D text annotations. This code is somewhat equivalent to
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import anatomist.direct.api as ana
 from soma import aims
 import os
 import numpy
 import sys
 from soma.qt_gui.qt_backend import QtGui
+import six
 
 byvertex = False
 
@@ -37,7 +39,7 @@ def makelabel(label, gc, pos, color, props):
     to.setName('label: ' + label)
     a.registerObject(to, False)
     a.releaseObject(to)
-    if colors.has_key(label):
+    if label in colors:
         color = colors[label]
     if props.usespheres:
         sph = aims.SurfaceGenerator.icosphere(gc, 2, 50)
@@ -77,7 +79,7 @@ labelatt = 'name'
 
 nomenclature = a.loadObject(nomenclname)
 graph = aims.read(graphname)
-if graph.has_key('label_property'):
+if 'label_property' in graph:
     labelatt = graph['label_property']
 agraph = a.toAObject(graph)
 agraph.releaseAppRef()
@@ -101,11 +103,11 @@ elements = {}
 colors = {}
 
 for v in graph.vertices():
-    if v.has_key('gravity_center') and v.has_key(labelatt):
+    if 'gravity_center' in v and labelatt in v:
         gc = aims.Point3df(numpy.array(v['gravity_center']) * vs)
         label = v[labelatt]
         if label != 'unknown':
-            if not elements.has_key(label):
+            if label not in elements:
                 elem = [aims.Point3df(0, 0, 0), 0.]
                 elements[label] = elem
             else:
@@ -114,7 +116,7 @@ for v in graph.vertices():
             elem[0] += gc * sz
             elem[1] += sz
             color = [0, 0, 0, 1]
-            if v.has_key('ana_object'):
+            if 'ana_object' in v:
                 av = v['ana_object']
                 color = av.GetMaterial().genericDescription()['diffuse']
                 colors[label] = color
@@ -124,10 +126,10 @@ for v in graph.vertices():
 
 
 if not byvertex:
-    for label, elem in elements.iteritems():
+    for label, elem in six.iteritems(elements):
         gc = elem[0] / elem[1]
         pos = gc + (gc - props.center).normalize() * size
-        if colors.has_key(label):
+        if label in colors:
             color = colors[label]
         else:
             color = [0, 0, 0, 1]

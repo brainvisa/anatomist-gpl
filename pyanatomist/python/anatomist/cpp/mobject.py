@@ -34,6 +34,7 @@
 The anatomist module allows access to the Anatomist library in python.
 '''
 
+from __future__ import absolute_import
 import sys
 anatomist = sys.modules[ 'anatomist.cpp' ]
 # Iterator (doesn't work when implemented in SIP so far)
@@ -53,7 +54,7 @@ class MIterator:
             object = getattr(self, '_object', None)
             if iterator is not None and object is not None \
                     and iterator != object.end():
-                return iterator.next()
+                return next(iterator)
             else:
                 raise StopIteration('iterator outside bounds')
     else:
@@ -62,7 +63,7 @@ class MIterator:
             object = getattr(self, '_object', None)
             if iterator is not None and object is not None \
                     and iterator != object.end():
-                return iterator.next()
+                return next(iterator)
             else:
                 raise StopIteration('iterator outside bounds')
 

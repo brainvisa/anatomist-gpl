@@ -37,6 +37,7 @@ Selection by nomenclature
 Selecting graph nodes according a nomenclature
 '''
 
+from __future__ import absolute_import
 import anatomist.direct.api as anatomist
 from soma import aims
 from soma.qt_gui.qt_backend import Qt
