@@ -57,6 +57,7 @@ To do this, use the constructor with forceNewInstance parameter :
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 from anatomist import base
 from soma.html import htmlEscape
 
@@ -74,6 +75,7 @@ from soma.qt_gui.io import Socket
 from soma.qt_gui.qtThread import QtThreadCall
 from soma.qt_gui.qt_backend.QtCore import QProcess
 from soma.qt_gui.qt_backend.Qt import qApp
+from six.moves import map
 
 try:
     from soma import somaqt
@@ -635,7 +637,7 @@ class Anatomist(base.Anatomist):
                     orig = True
                     break
             if not orig:
-                oid, oInfos = infos.items()[0]
+                oid, oInfos = list(infos.items())[0]
             loadedObject = self.AObject(self, oid)
             loadedObject.objectType = oInfos.get('objectType')
             ids = oInfos.get('children')
@@ -996,7 +998,7 @@ class Anatomist(base.Anatomist):
                 elif hasattr(value, 'items') and hasattr(value, 'has_key'):
                     # special case of dictionaries: they should convert to
                     # carto Trees, and have the __syntax__ property first
-                    if value.has_key('__syntax__'):
+                    if '__syntax__' in value:
                         v2 = "{ '__syntax__' : " + repr( value[ '__syntax__' ] ) \
                             + ', '
                     else:
@@ -1641,7 +1643,7 @@ class ASocket(Socket):
                 # (those with a request_id) to unlock them
                 self.lock.acquire()
                 try:
-                    callbacks = self.eventCallbacks.items()
+                    callbacks = list(self.eventCallbacks.items())
                 finally:
                     self.lock.release()
                 for x, y in callbacks:
@@ -1801,7 +1803,7 @@ class ASocket(Socket):
     def close(self):
         # flush callbacks and send them all an exception before closing
         excep = RuntimeError('Connection closed')
-        callbacks = self.eventCallbacks.items()
+        callbacks = list(self.eventCallbacks.items())
         for x, y in callbacks:
             if isinstance(x, tuple):
                 for function in y:

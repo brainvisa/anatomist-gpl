@@ -1,4 +1,5 @@
 
+from __future__ import absolute_import
 from anatomist.capsul import Anatomist3DWindowProcess
 from traits.api import File
 import unittest

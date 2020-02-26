@@ -42,6 +42,7 @@ An even simplified version of the anasimpleviewer application, which may also be
 '''
 
 from __future__ import print_function
+from __future__ import absolute_import
 import anatomist.direct.api as ana
 from soma import aims
 from soma.aims import colormaphints
@@ -49,6 +50,8 @@ import sys
 import os
 from soma.qt_gui import qt_backend
 from soma.qt_gui.qt_backend import Qt, loadUi
+import six
+from six.moves import zip
 findChild = lambda x, y: Qt.QObject.findChild(x, Qt.QObject, y)
 
 if Qt.QApplication.instance() is None:
@@ -61,7 +64,7 @@ a = ana.Anatomist('-b')
 
 # load the anasimpleviewer GUI
 uifile = 'anasimpleviewer-qt4.ui'
-anasimpleviewerdir = os.path.join(unicode(a.anatomistSharedPath()),
+anasimpleviewerdir = os.path.join(six.text_type(a.anatomistSharedPath()),
                                   'anasimpleviewer')
 cwd = os.getcwd()
 # PyQt4 uic doesn' seem to allow specifying the directory when looking for
@@ -260,7 +263,7 @@ class AnaSimpleViewer(Qt.QObject):
             fnames = fdialog.selectedFiles()
             self.filedialogdir = fdialog.directory()
             for fname in fnames:
-                self.loadObject(unicode(fname))
+                self.loadObject(six.text_type(fname))
 
     def selectedObjects(self):
         '''list of objects selected in the list box on the upper left panel
@@ -268,7 +271,7 @@ class AnaSimpleViewer(Qt.QObject):
         olist = findChild(awin, 'objectslist')
         sobjs = []
         for o in olist.selectedItems():
-            sobjs.append(unicode(o.text()).strip('\0'))
+            sobjs.append(six.text_type(o.text()).strip('\0'))
         return [o for o in aobjects if o.name in sobjs]
 
     def editAdd(self):

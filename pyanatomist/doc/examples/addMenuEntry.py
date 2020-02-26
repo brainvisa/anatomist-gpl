@@ -37,6 +37,7 @@ Adding custom menus in an object options
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import anatomist.direct.api as anatomist
 from soma import aims
 import os

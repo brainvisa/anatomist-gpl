@@ -38,6 +38,7 @@ Graph manipulation
 Loading and displaying a graph
 '''
 
+from __future__ import absolute_import
 import anatomist.direct.api as anatomist
 from soma import aims
 import sys

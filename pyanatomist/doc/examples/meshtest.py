@@ -38,6 +38,7 @@ Mesh manipulation
 Using a mesh and modifying it while it is displayed
 '''
 
+from __future__ import absolute_import
 from soma import aims
 import time
 import os

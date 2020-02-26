@@ -39,6 +39,7 @@ Measurements on a volume
 Complete example with a specific graphical interface that embeds an Anatomist window and a matplotlib widget. Shows a 4D volume and a curve of the values in a selected voxel or the mean of values in a selected region.
 '''
 
+from __future__ import absolute_import
 import sys
 import os
 import weakref
@@ -51,6 +52,9 @@ from soma.qt_gui.qt_backend.QtGui import QSplitter, QListWidget, QTextEdit, \
 from soma import aims
 
 from soma.qt_gui import qt_backend
+import six
+from six.moves import zip
+from functools import reduce
 qt_backend.init_matplotlib_backend()
 import matplotlib
 import numpy
@@ -85,7 +89,7 @@ class MeasuresWindow(QSplitter):
                 maskIterator = roiIterator.maskIterator().get()
                 maskIterator.bucket = None
                 self.maskIterators.append(maskIterator)
-                roiIterator.next()
+                next(roiIterator)
             self.selectedBucket = None
             self.roiList.currentRowChanged.connect(self.regionSelected)
         else:
@@ -171,13 +175,13 @@ class MeasuresWindow(QSplitter):
         if index >= 0:
             text = '<html><body>\n'
             text += '<h2>' + \
-                unicode(self.roiList.item(index).text()) + '</h2>\n'
+                six.text_type(self.roiList.item(index).text()) + '</h2>\n'
 
             maskIterator = self.maskIterators[index]
             if maskIterator.bucket is None:
                 roiCenter = aims.Point3df(0, 0, 0)
                 bucket = aims.BucketMap_VOID()
-                bucket.setSizeXYZT(*maskIterator.voxelSize().items() + (1,))
+                bucket.setSizeXYZT(*list(maskIterator.voxelSize().items()) + (1,))
                 maskIterator.restart()
                 valid = 0
                 invalid = 0
@@ -197,7 +201,7 @@ class MeasuresWindow(QSplitter):
                         valid += 1
                     else:
                         invalid += 1
-                    maskIterator.next()
+                    next(maskIterator)
                 text += '<b>valid points:</b> ' + str(valid) + '<br/>\n'
                 text += '<b>invalid points:</b> ' + str(invalid) + '<br/>\n'
                 if valid:

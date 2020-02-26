@@ -39,6 +39,7 @@ Using the commands interpreter in a generic way
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import anatomist.direct.api as anatomist
 from soma import aims
 from soma.qt_gui.qt_backend import Qt

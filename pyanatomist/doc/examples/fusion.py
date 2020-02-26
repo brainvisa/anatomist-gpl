@@ -40,6 +40,7 @@ Creating a new custom fusion type in Anatomist
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 from soma import aims
 import os
 import anatomist.direct.api as anatomist

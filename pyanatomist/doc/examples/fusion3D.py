@@ -37,6 +37,7 @@ Fusion3D example
 Fusion3D (mesh + texture from a volume) in Anatomist
 '''
 
+from __future__ import absolute_import
 import anatomist.api  as anatomist
 # to expand the mesh bigger
 from soma import aims

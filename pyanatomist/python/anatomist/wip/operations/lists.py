@@ -41,7 +41,10 @@
 #       wrappings.
 #
 #########################################################################
+from __future__ import absolute_import
 import operator
+from six.moves import zip
+from functools import reduce
 
 def compare(list1, list2, comparator = operator.eq): 
 	""" 

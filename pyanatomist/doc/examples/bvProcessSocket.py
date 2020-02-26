@@ -40,6 +40,7 @@ This example shows how to use Anatomist from a BrainVisa process, and get events
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 from neuroProcesses import *
 from brainvisa.tools import aimsGlobals
 import string

@@ -5,6 +5,7 @@ import os
 from capsul.api import InteractiveProcess
 from traits.api import File, Enum, Int
 import math
+from six.moves import range
 
 class AnatomistSceneProcess(InteractiveProcess):
     '''

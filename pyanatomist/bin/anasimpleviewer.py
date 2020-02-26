@@ -33,6 +33,7 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
 from __future__ import print_function
+from __future__ import absolute_import
 import anatomist.direct.api as ana
 from soma import aims
 from soma.aims import colormaphints
@@ -43,6 +44,7 @@ from optparse import OptionParser
 # determine wheter we are using Qt4 or Qt5, and hack a little bit accordingly
 # the boolean qt4 gloabl variable will tell it for later usage
 from soma.qt_gui import qt_backend
+from six.moves import zip
 qt_backend.set_qt_backend(compatible_qt5=True)
 from soma.qt_gui.qt_backend import QtCore, QtGui
 if not hasattr(QtCore, 'Slot'):
@@ -51,10 +53,6 @@ qt = QtGui
 from soma.qt_gui.qt_backend import uic
 from soma.qt_gui.qt_backend.uic import loadUi
 import six
-
-if sys.version_info[0] >= 3:
-    unicode = str
-
 
 uifile = 'anasimpleviewer-qt4.ui'
 findChild = lambda x, y: QtCore.QObject.findChild(x, QtCore.QObject, y)
@@ -135,7 +133,7 @@ if options.left_mode:
 
 # load the anasimpleviewer GUI
 anasimpleviewerdir = os.path.join(
-    unicode(a.anatomistSharedPath()),
+    six.text_type(a.anatomistSharedPath()),
   'anasimpleviewer')
 cwd = os.getcwd()
 # PyQt4 uic doesn' seem to allow specifying the directory when looking for
@@ -538,8 +536,8 @@ class AnaSimpleViewer(qt.QObject):
         if res:
             fnames = fdialog.selectedFiles()
             for fname in fnames:
-                print(unicode(fname))
-                self.loadObject(unicode(fname))
+                print(six.text_type(fname))
+                self.loadObject(six.text_type(fname))
 
     def selectedObjects(self):
         '''list of objects selected in the list box on the upper left panel
@@ -547,7 +545,7 @@ class AnaSimpleViewer(qt.QObject):
         olist = findChild(awin, 'objectslist')
         sobjs = []
         for o in olist.selectedItems():
-            sobjs.append(unicode(o.text()).strip('\0'))
+            sobjs.append(six.text_type(o.text()).strip('\0'))
         return [o for o in aobjects if o.name in sobjs]
 
     def editAdd(self):

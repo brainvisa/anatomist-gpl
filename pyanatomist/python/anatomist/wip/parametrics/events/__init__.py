@@ -29,6 +29,7 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+from __future__ import absolute_import
 from anatomist.wip.parametrics.events.translate_anatomistevent            import  Translate_AnatomistEvent 
 from anatomist.wip.parametrics.events.scale_anatomistevent                import  Scale_AnatomistEvent 
 

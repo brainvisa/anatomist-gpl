@@ -40,6 +40,7 @@ Creating a complete graph and nomenclature in Python
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import anatomist.direct.api as ana
 from soma import aims
 from soma.qt_gui.qt_backend import Qt
