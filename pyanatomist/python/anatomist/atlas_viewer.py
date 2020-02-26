@@ -4,6 +4,7 @@
 """
 """
 
+from __future__ import absolute_import
 import sys
 import json
 import gc  # use in "SelectionAtlasAction"
@@ -14,6 +15,8 @@ from anatomist import cpp
 import anatomist.direct.api as anatomist
 
 from soma.qt_gui import qt_backend
+import six
+from six.moves import range
 qt_backend.set_qt_backend(compatible_qt5=True)
 from soma.qt_gui.qt_backend.QtWidgets import QLineEdit, QPushButton
 from soma.qt_gui.qt_backend.QtWidgets import QMainWindow, QApplication
@@ -288,7 +291,7 @@ class AtlasJsonRois(QMainWindow):
     def changeConvention(self):
         """This method aims is to change the display convention (Radiological/Neurological) """
         a = anatomist.Anatomist('-b')
-        if 'axialConvention' in a.config().keys():
+        if 'axialConvention' in list(a.config().keys()):
             del a.config()['axialConvention']
             self.statusBar().showMessage("Display convention : Radiological")
         else:
@@ -433,7 +436,7 @@ class AtlasJsonRois(QMainWindow):
         # We have to distinguish if the action is about checking or simple
         # selection
         if item is not None:
-            if item in self.tree.memory_checked_dict.keys():
+            if item in list(self.tree.memory_checked_dict.keys()):
                 if item.checkState(0) != self.tree.memory_checked_dict[item]:
                     self.tree.createMemoryCheckedDict()
                     # the item's checkstate has changed
@@ -537,10 +540,10 @@ class AtlasJsonRois(QMainWindow):
         if item is not None and item.text(1):
             if item.checkState(0) == 2:
                 #??Why it's not already the case?
-                if str(item.text(1)) in self.clust_dict.keys():
+                if str(item.text(1)) in list(self.clust_dict.keys()):
                     clust_list.extend(self.clust_dict[str(item.text(1))])
                 #??Why it's not already the case?
-                    if str(item.text(1)) in toggle_clust_dict.keys():
+                    if str(item.text(1)) in list(toggle_clust_dict.keys()):
                         del toggle_clust_dict[str(item.text(1))]
         else:
 
@@ -550,7 +553,7 @@ class AtlasJsonRois(QMainWindow):
                     for r in range(n.childCount()):
                         # It necessary if the JSON data contains bad label
                         # values
-                        if str(n.child(r).text(1)) in self.clust_dict.keys():
+                        if str(n.child(r).text(1)) in list(self.clust_dict.keys()):
                             clust_list.extend(
                                 self.clust_dict[str(n.child(r).text(1))])
                             if str(n.child(r).text(1)) in toggle_clust_dict:
@@ -559,9 +562,9 @@ class AtlasJsonRois(QMainWindow):
 
                         # It necessary if the JSON data contains bad label
                         # values
-                    if str(n.text(1)) in self.clust_dict.keys():
+                    if str(n.text(1)) in list(self.clust_dict.keys()):
                         clust_list.extend(self.clust_dict[str(n.text(1))])
-                        if str(n.text(1)) in toggle_clust_dict.keys():
+                        if str(n.text(1)) in list(toggle_clust_dict.keys()):
                             del toggle_clust_dict[str(n.text(1))]
         return [clust_list, toggle_clust_dict]
 #______________________________________________________________________________
@@ -794,7 +797,7 @@ class TreeRois:
         elif tree_item.checkState(0) == 2:
             text = tree_item.text(0)
             if _use_qstring:
-                text = unicode(text)
+                text = six.text_type(text)
             if 'R_' in text or 'L_' in text \
                     or text.endswith('_left') or text.endswith('_right'):
                 parent_existing_in_list = False

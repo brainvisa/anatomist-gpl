@@ -40,6 +40,7 @@ The function :func:`getThreadSafeClass` enables to create a thread safe class ba
 The ThreadSafeMetaclass metaclass ensures that inherited classes will also be thread safe.
 """
 
+from __future__ import absolute_import
 import sys
 import types
 from soma.qt_gui.qtThread import QtThreadCall, MainThreadLife

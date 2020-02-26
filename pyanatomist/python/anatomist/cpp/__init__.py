@@ -104,6 +104,7 @@ begin with.
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import os
 import sys
 import string
@@ -195,7 +196,7 @@ qt_backend.set_qt_backend(compatible_qt5=True, pyqt_api=2)
 
 from anatomistsip import *
 
-aims.__fixsipclasses__(locals().items())
+aims.__fixsipclasses__(list(locals().items()))
 
 loaded_modules = []
 global _anatomist_modsloaded
@@ -696,7 +697,7 @@ aims.convertersObjectToPython.update({
 
 
 # Import external python modules
-import mobject
+from . import mobject
 # delete things from other modules
 
 # apply changes to config properties to Anatomist internal state

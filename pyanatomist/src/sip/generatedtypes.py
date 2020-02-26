@@ -34,7 +34,7 @@ numtypes = [ 'unsigned char', 'short', 'unsigned short', 'int',
               'unsigned', 'float', 'double' ]
 basetypes = numtypes + [ 'AimsRGB', 'AimsRGBA' ]
 matrix = []
-for z in [ map( lambda y: (x,y), basetypes ) for x in basetypes ]:
+for z in [ [(x,y) for y in basetypes] for x in basetypes ]:
   matrix += z
 
 todo = { 'rcptr' : [ 'anatomist::EventHandler', 'anatomist::Unserializer',

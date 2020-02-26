@@ -39,11 +39,12 @@ Using OpenGL in PyAnatomist
 Customizing OpenGL parameters for objects
 '''
 
+from __future__ import absolute_import
 from soma import aims
 import anatomist.direct.api as anatomist
 from soma.qt_gui.qt_backend import Qt
 from OpenGL import GL
-import types
+import six
 
 
 class VolRender(anatomist.cpp.ObjectVector, anatomist.cpp.GLComponent):
@@ -61,7 +62,7 @@ class WinViewMesh (anatomist.cpp.ASurface_3):
 
     def __init__(self, mesh, followorientation=True, followposition=False):
         if mesh is not None:
-            if type(mesh) is types.StringType:
+            if type(mesh) is six.string_types:
                 # mesh is a filename: read it
                 anatomist.cpp.ASurface_3.__init__(self, mesh)
                 r = aims.Reader()

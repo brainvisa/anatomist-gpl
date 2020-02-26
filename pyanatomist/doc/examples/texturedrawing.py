@@ -41,6 +41,7 @@ Drawing ROI on a mesh in a texture. Of course the SurfPaint module allows to do 
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import anatomist.direct.api as anatomist
 from soma import aims
 from soma.aims import colormaphints

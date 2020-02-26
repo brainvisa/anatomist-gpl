@@ -9,6 +9,7 @@ Getting selected objects
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import anatomist.direct.api as ana
 from soma import aims
 from soma.aims import colormaphints

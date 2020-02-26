@@ -75,6 +75,7 @@ To manage this problem we use wrapper objects which will delegate the destructio
 """
 from __future__ import print_function
 
+from __future__ import absolute_import
 from anatomist import cpp
 import anatomist.threadedimpl
 import anatomist.direct.api

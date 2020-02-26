@@ -31,10 +31,12 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 from __future__ import print_function
+from __future__ import absolute_import
 import sys, os
 import numpy
 from optparse import OptionParser
 from PIL import Image
+from six.moves import range
 
 def create_cmd(images, (nx, ny), sizes, (bbx, bby)):
 	args = ''

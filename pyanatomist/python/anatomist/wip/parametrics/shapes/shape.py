@@ -40,6 +40,7 @@
 # 	This file contains Shape class
 #
 #########################################################################
+from __future__ import absolute_import
 import anatomist.cpp as anatomist
 
 

@@ -13,6 +13,7 @@ Other functions are used by HeadlessAnatomist implementation.
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 from soma import subprocess
 import os
 from soma.subprocess import Popen, check_output, call
@@ -21,11 +22,8 @@ import time
 import distutils.spawn
 import ctypes
 import sys
-if sys.version_info[0] >= 3:
-    # python3
-    from io import StringIO
-else:
-    from cStringIO import StringIO
+from six.moves import range
+from io import StringIO
 
 xvfb = None
 original_display = None

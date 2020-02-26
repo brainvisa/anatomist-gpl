@@ -39,6 +39,7 @@ Catching click events and plugging a callback
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import anatomist.direct.api as anatomist
 from soma import aims
 
@@ -49,7 +50,7 @@ a = anatomist.Anatomist()
 
 def clickHandler(eventName, params):
     print('click event: ', eventName)
-    print('LinkedCursor event contents:', params.keys())
+    print('LinkedCursor event contents:', list(params.keys()))
     pos = params['position']
     print('pos:', pos)
     win = params['window']
