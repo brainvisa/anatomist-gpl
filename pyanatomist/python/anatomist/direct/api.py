@@ -734,8 +734,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         while l:
             c = l.pop()
             done.add(c)
-            m += filter(lambda x: not x.startswith('_') and x not in m,
-                        c.__dict__.keys())
+            m += [x for x in list(c.__dict__.keys()) if not x.startswith('_') and x not in m]
             cl = getattr(c, '__bases__', None)
             if not cl:
                 cl = getattr(c, '__class__', None)
@@ -743,7 +742,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                     continue
                 else:
                     cl = [cl]
-            l += filter(lambda x: x not in done, cl)
+            l += [x for x in cl if x not in done]
         return m
 
     def getPalette(self, name):
@@ -1440,8 +1439,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             while l:
                 c = l.pop()
                 done.add(c)
-                m += filter(lambda x: not x.startswith('_') and x not in m,
-                            c.__dict__.keys())
+                m += [x for x in list(c.__dict__.keys()) if not x.startswith('_') and x not in m]
                 cl = getattr(c, '__bases__', None)
                 if not cl:
                     cl = getattr(c, '__class__', None)
@@ -1449,7 +1447,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                         continue
                     else:
                         cl = [cl]
-                l += filter(lambda x: x not in done, cl)
+                l += [x for x in cl if x not in done]
             return m
 
     #

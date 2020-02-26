@@ -38,7 +38,9 @@ from optparse import OptionParser
 from PIL import Image
 from six.moves import range
 
-def create_cmd(images, (nx, ny), sizes, (bbx, bby)):
+def create_cmd(images, n_xy, sizes, bb_xy):
+	(nx, ny) = n_xy
+	(bbx, bby) = bb_xy
 	args = ''
 	px = 0
 	ind = 0
