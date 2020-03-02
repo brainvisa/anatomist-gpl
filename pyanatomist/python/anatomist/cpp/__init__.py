@@ -152,22 +152,7 @@ def isMappingType(item):
 path = os.path.dirname(__file__)
 if path not in sys.path:
     sys.path.insert(0, path)
-
-# add path for python modules lib
-if sys.platform[:3] == 'win':
-    sep = ';'
-else:
-    sep = ':'
-
-# PYTHONPATH. On python 2.3, it doesn't seem to be taken into account
-# when pyhton is run from a library
-path = os.getenv('PYTHONPATH')
-if path is not None:
-    for x in path.split(sep):
-        if x not in sys.path:
-            sys.path.append(x)
-    del x
-del path, sep
+del path
 
 from soma import aims
 from soma.importer import ExtendedImporter
