@@ -48,24 +48,14 @@ class MIterator:
     def __iter__(self):
         return self
 
-    if sys.version_info[0] >= 3:
-        def __next__(self):
-            iterator = getattr(self, '_iterator', None)
-            object = getattr(self, '_object', None)
-            if iterator is not None and object is not None \
-                    and iterator != object.end():
-                return iterator.next()
-            else:
-                raise StopIteration('iterator outside bounds')
-    else:
-        def next(self):
-            iterator = getattr(self, '_iterator', None)
-            object = getattr(self, '_object', None)
-            if iterator is not None and object is not None \
-                    and iterator != object.end():
-                return iterator.next()
-            else:
-                raise StopIteration('iterator outside bounds')
+    def __next__(self):
+        iterator = getattr(self, '_iterator', None)
+        object = getattr(self, '_object', None)
+        if iterator is not None and object is not None \
+           and iterator != object.end():
+            return next(iterator)
+        else:
+            raise StopIteration('iterator outside bounds')
 
 def newiter(self):
     return MIterator(self)

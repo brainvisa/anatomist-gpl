@@ -20,7 +20,7 @@ public:
     bool operator == ( const anatomist::AIterator & ) const;
     bool operator != ( const anatomist::AIterator & ) const;
 
-    anatomist::AObject * next();
+    anatomist::AObject * __next__();
 %MethodCode
     sipRes = **sipCpp;
     if( !sipRes )
