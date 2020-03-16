@@ -1492,7 +1492,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                 return self.objectType
             elif name == "children":
                 objects = []
-                if issubclass(type(self.getInternalRep()), cpp.MObject):  # if internalRep is a multi object, it is iterable and can have children
+                # if internalRep is a multi object, it is iterable and can have
+                # children
+                if isinstance(self.getInternalRep(), cpp.MObject):
                     for c in self.getInternalRep():
                         objects.append(self.anatomistinstance.typedObject(c))
                 return objects

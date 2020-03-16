@@ -37,8 +37,9 @@ The anatomist module allows access to the Anatomist library in python.
 from __future__ import absolute_import
 import sys
 anatomist = sys.modules[ 'anatomist.cpp' ]
-# Iterator (doesn't work when implemented in SIP so far)
 
+# Iterator a Python iterator on top of AIterator (we did not manage to
+# implement AIterator.__next__ correctly in SIP so far).
 class MIterator:
     def __init__( self, object ):
         if object is not None:
@@ -48,24 +49,16 @@ class MIterator:
     def __iter__(self):
         return self
 
-    if sys.version_info[0] >= 3:
-        def __next__(self):
-            iterator = getattr(self, '_iterator', None)
-            object = getattr(self, '_object', None)
-            if iterator is not None and object is not None \
-                    and iterator != object.end():
-                return iterator.next()
-            else:
-                raise StopIteration('iterator outside bounds')
-    else:
-        def next(self):
-            iterator = getattr(self, '_iterator', None)
-            object = getattr(self, '_object', None)
-            if iterator is not None and object is not None \
-                    and iterator != object.end():
-                return iterator.next()
-            else:
-                raise StopIteration('iterator outside bounds')
+    def __next__(self):
+        iterator = getattr(self, '_iterator', None)
+        object = getattr(self, '_object', None)
+        if iterator is not None and object is not None \
+           and iterator != object.end():
+            return iterator.next()  # do not replace with next(iterator)
+        else:
+            raise StopIteration('iterator outside bounds')
+
+    next = __next__  # Python 2 compatibility
 
 def newiter(self):
     return MIterator(self)

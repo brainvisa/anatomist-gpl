@@ -32,10 +32,12 @@ public:
       ++(*sipCpp);
 %End
 
-   anatomist::AIterator* __iter__() /Factory/;
-%MethodCode
-   sipRes = new anatomist::AIterator( *sipCpp );
-%End
+// This method should be commented out as long as this is not a proper iterator
+// in the Python sense. See pyanatomist/python/anatomist/cpp/mobject.py.
+//    anatomist::AIterator* __iter__() /Factory/;
+// %MethodCode
+//    sipRes = new anatomist::AIterator( *sipCpp );
+// %End
 };
 
 class MObject : anatomist::AObject /Abstract/
@@ -98,10 +100,14 @@ public:
     }
 %End
 
-    anatomist::AIterator *__iter__() /Factory/;
-%MethodCode
-    sipRes = new anatomist::AIterator( sipCpp->begin() );
-%End
+// At the moment __iter__ is patched in plain Python (see
+// pyanatomist/python/anatomist/cpp/mobject.py), because AIterator is not a
+// proper iterator in the Python sense.
+//
+//     anatomist::AIterator *__iter__() /Factory/;
+// %MethodCode
+//     sipRes = new anatomist::AIterator( sipCpp->begin() );
+// %End
 };
 
 };

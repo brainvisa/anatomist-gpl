@@ -196,7 +196,7 @@ qt_backend.set_qt_backend(compatible_qt5=True, pyqt_api=2)
 
 from anatomistsip import *
 
-aims.__fixsipclasses__(list(locals().items()))
+aims.__fixsipclasses__(list(globals().items()))
 
 loaded_modules = []
 global _anatomist_modsloaded
