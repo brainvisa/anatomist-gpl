@@ -40,7 +40,7 @@ anatomist = sys.modules[ 'anatomist.cpp' ]
 
 # Iterator a Python iterator on top of AIterator (we did not manage to
 # implement AIterator.__next__ correctly in SIP so far).
-class MIterator:
+class MIterator(object):
     def __init__( self, object ):
         if object is not None:
             self._object = object

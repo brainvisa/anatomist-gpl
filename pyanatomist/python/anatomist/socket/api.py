@@ -83,7 +83,7 @@ except:
     # the somaqt module is not present: either the PyQt bug (present in 4.10.0)
     # is fixed, or there might be some instabilities in QProcess instantiation
     # in multi-threaded contexts
-    class somaqt:
+    class somaqt(object):
         makeQProcess = QProcess
 
 

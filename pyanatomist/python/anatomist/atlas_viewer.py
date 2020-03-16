@@ -600,7 +600,7 @@ class AtlasJsonRois(QMainWindow):
 #------------------------------------------------------------------------------
 
 
-class TreeRois:
+class TreeRois(object):
 
     def __init__(self, json_dict, nomenclature=None):
         # Initialization of Tree creation
