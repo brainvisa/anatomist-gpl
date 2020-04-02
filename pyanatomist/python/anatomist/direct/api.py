@@ -1413,7 +1413,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             values which contain C++ instances to their corresponding wrapper in
             the Anatomist.direct implementation: AObject, AWindow, Referential,
             Transformation instances are converted.
-            Drawback: all return values which are lists or dictionaries are copied.
+            Drawback: all return values which are lists or dictionaries are
+            copied.
             '''
             try:
                 return super(base.Anatomist.AItem, self).__getattr__(name)
@@ -1535,6 +1536,12 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             if not hasattr(other, 'getInternalRep'):
                 return False
             return self.getInternalRep() == other.getInternalRep()
+
+        def __hash__(self):
+            # needs overriding in python3, since:
+            # "a class that overrides __eq__() and does not define __hash__()
+            #  will have its __hash__() implicitly set to None"
+            return base.Anatomist.AItem.__hash__(self)
 
         def extractTexture(self, time=-1):
             """
