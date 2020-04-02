@@ -2667,6 +2667,12 @@ class Anatomist(Singleton):
                 return False
             return self.refUuid == other.refUuid
 
+        def __hash__(self):
+            # needs overriding in python3, since:
+            # "a class that overrides __eq__() and does not define __hash__()
+            #  will have its __hash__() implicitly set to None"
+            return AItem.__hash__(self)
+
         def __lt__(self, other):
             if not isinstance(other, Anatomist.Referential):
                 return False

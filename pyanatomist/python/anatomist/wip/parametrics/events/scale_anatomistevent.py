@@ -33,7 +33,7 @@
 from __future__ import absolute_import
 from soma.functiontools import partial
 
-class Scale_AnatomistEvent :
+class Scale_AnatomistEvent(object) :
 	
 	def __init__( self, objectsCallable ):
 		""" 

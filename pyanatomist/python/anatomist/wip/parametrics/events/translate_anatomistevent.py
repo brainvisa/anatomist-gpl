@@ -36,7 +36,7 @@ import qt
 from soma import aims
 from soma.functiontools import partial
 
-class Translate_AnatomistEvent :
+class Translate_AnatomistEvent(object) :
 	
 	def __init__( self, objectsCallable ):
 		""" 
