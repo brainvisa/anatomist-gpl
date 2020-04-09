@@ -47,14 +47,9 @@ from soma.qt_gui import qt_backend
 from six.moves import zip
 qt_backend.set_qt_backend(compatible_qt5=True)
 from soma.qt_gui.qt_backend import QtCore, QtGui, Qt
-if not hasattr(QtCore, 'Slot'):
-    QtCore.Slot = QtCore.pyqtSlot  # compatibility with PySide
-qt = QtGui
 from soma.qt_gui.qt_backend import uic
 from soma.qt_gui.qt_backend.uic import loadUi
 import six
-
-findChild = lambda x, y: QtCore.QObject.findChild(x, QtCore.QObject, y)
 
 parser = OptionParser(
     description='A simplified version of Anatomist for quick viewing')
@@ -89,12 +84,8 @@ spl = Qt.QSplashScreen(pix)
 spl.show()
 Qt.qApp.processEvents()
 
-# start the Anatomist engine, in batch mode (no main window)
-a = ana.Anatomist('-b')
-
 # define another control where rotation is with the left mouse button
 # (useful for touch devices)
-
 
 class LeftSimple3DControl(Simple2DControl):
 
@@ -118,35 +109,22 @@ class LeftSimple3DControl(Simple2DControl):
         self.mousePressButtonEventSubscribe(key.MiddleButton, NoModifier,
                                             pool.action('LinkAction').execLink)
 
-registerSimpleControls()
-iconpath = os.path.join(str(a.anatomistSharedPath()), 'icons')
-pix = QtGui.QPixmap(os.path.join(iconpath, 'simple3Dcontrol.png'))
-ana.cpp.IconDictionary.instance().addIcon('LeftSimple3DControl', pix)
-del pix, iconpath
-cd = ana.cpp.ControlDictionary.instance()
-cd.addControl('LeftSimple3DControl', LeftSimple3DControl, 25)
 
-control_3d_type = 'Simple3DControl'
-if options.left_mode:
-    control_3d_type = 'LeftSimple3DControl'
-
-# global variables: lists of windows, objects, a fusion2d with a number of
-# volumes in it, and a volume rendering object + clipping
-fdialog = Qt.QFileDialog()
-fdialog.setDirectory(os.getcwd())
-awindows = []
-aobjects = []
-fusion2d = []
-volrender = None
-
-
-# This class holds methods for menu/actions callbacks, and utility functions
-# like load/view objects, remove/delete, etc.
 class AnaSimpleViewer(Qt.QObject):
+    '''
+    This class holds methods for menu/actions callbacks, and utility functions
+    like load/view objects, remove/delete, etc.
+    '''
 
-    def __init__(self):
+    _global_handlers_initialized = False
+
+    def __init__(self, init_global_handlers=True):
         Qt.QObject.__init__(self)
 
+        if init_global_handlers:
+            self.init_global_handlers()
+
+        a = ana.Anatomist('-b')
         uifile = 'anasimpleviewer-qt4.ui'
         # load the anasimpleviewer GUI
         anasimpleviewerdir = os.path.join(
@@ -162,6 +140,8 @@ class AnaSimpleViewer(Qt.QObject):
         self.awin = awin
 
         # connect GUI actions callbacks
+        findChild = lambda x, y: Qt.QObject.findChild(x, QtCore.QObject, y)
+
         findChild(awin, 'fileOpenAction').triggered.connect(self.fileOpen)
         findChild(awin, 'fileExitAction').triggered.connect(self.closeAll)
         findChild(awin, 'editAddAction').triggered.connect(self.editAdd)
@@ -188,8 +168,8 @@ class AnaSimpleViewer(Qt.QObject):
         findChild(awin,
                   'coordTEdit').editingFinished.connect(self.coordsChanged)
 
-        awin.dropEvent = lambda awin, event: anasimple.dropEvent(awin, event)
-        awin.dragEnterEvent = lambda awin, event: anasimple.dragEnterEvent(
+        awin.dropEvent = lambda awin, event: self.dropEvent(awin, event)
+        awin.dragEnterEvent = lambda awin, event: self.dragEnterEvent(
             awin, event)
         awin.setAcceptDrops(True)
 
@@ -202,12 +182,47 @@ class AnaSimpleViewer(Qt.QObject):
         # vieww: parent widget for anatomist windows
         vieww = findChild(awin, 'windows')
         self.viewgridlay = Qt.QGridLayout(vieww)
+        self.fdialog = None
+        self.awindows = []
+        self.aobjects = []
+        self.fusion2d = []
+        self.volrender = None
+        self.control_3d_type = 'Simple3DControl'
+
+    def init_global_handlers(self):
+        if not AnaSimpleViewer._global_handlers_initialized:
+
+            registerSimpleControls()
+            a = ana.Anatomist('-b')
+            iconpath = os.path.join(str(a.anatomistSharedPath()), 'icons')
+            pix = Qt.QPixmap(os.path.join(iconpath, 'simple3Dcontrol.png'))
+            ana.cpp.IconDictionary.instance().addIcon('LeftSimple3DControl', pix)
+            del pix, iconpath
+            cd = ana.cpp.ControlDictionary.instance()
+            cd.addControl('LeftSimple3DControl', LeftSimple3DControl, 25)
+
+            # tweak: override some user config options
+            a.config()['setAutomaticReferential'] = 1
+            a.config()['windowSizeFactor'] = 1.
+
+            # register controls
+            cm = ana.cpp.ControlManager.instance()
+            cm.addControl('QAGLWidget3D', '', 'Simple2DControl')
+            cm.addControl('QAGLWidget3D', '', 'LeftSimple3DControl')
+            print('controls registered.')
+
+            del cm
+
+            a.setGraphParams(label_attribute='label')
+
+            AnaSimpleViewer._global_handlers_initialized = True
 
     def clickHandler(self, eventName, params):
         '''Callback for linked cursor. In volume rendering mode, it will sync the
         VR slice to the linked cursor.
         It also updates the volumes values view
         '''
+        a = ana.Anatomist('-b')
         pos = params['position']
         win = params['window']
         wref = win.getReferential()
@@ -217,6 +232,9 @@ class AnaSimpleViewer(Qt.QObject):
             pos2 = tr.transform(pos[:3])
         else:
             pos2 = pos
+
+        findChild = lambda x, y: Qt.QObject.findChild(x, QtCore.QObject, y)
+
         x = findChild(self.awin, 'coordXEdit')
         x.setText('%8.3f' % pos2[0])
         y = findChild(self.awin, 'coordYEdit')
@@ -233,11 +251,11 @@ class AnaSimpleViewer(Qt.QObject):
         # (we don't use the same widget type in Qt3 and Qt4)
         valbox.setColumnCount(2)
         valbox.setHorizontalHeaderLabels(['Volume:', 'Value:'])
-        if len(fusion2d) > 1:
-            valbox.setRowCount(len(fusion2d) - 1)
-            valbox.setVerticalHeaderLabels([''] * (len(fusion2d) - 1))
+        if len(self.fusion2d) > 1:
+            valbox.setRowCount(len(self.fusion2d) - 1)
+            valbox.setVerticalHeaderLabels([''] * (len(self.fusion2d) - 1))
         i = 0
-        for obj in fusion2d[1:]:
+        for obj in self.fusion2d[1:]:
             # retreive volume value in its own coords system
             aimsv = ana.cpp.AObjectConverter.aims(obj)
             oref = obj.getReferential()
@@ -264,8 +282,8 @@ class AnaSimpleViewer(Qt.QObject):
         valbox.resizeColumnsToContents()
 
         # update volume rendering when it is enabled
-        if self._vrenabled and len(volrender) >= 1:
-            clip = volrender[0]
+        if self._vrenabled and len(self.volrender) >= 1:
+            clip = self.volrender[0]
             t = a.getTransformation(win.getReferential(),
                                     clip.getReferential())
             if t is not None:
@@ -279,6 +297,7 @@ class AnaSimpleViewer(Qt.QObject):
         of a buf in volume rendering in direct referentials), will be assigned
         the custom control, and have no menu/toolbars.
         '''
+        a = ana.Anatomist('-b')
         w = a.createWindow(wintype, no_decoration=True, options={'hidden': 1})
         w.setAcceptDrops(False)
         # insert in grid layout
@@ -300,10 +319,10 @@ class AnaSimpleViewer(Qt.QObject):
         self.viewgridlay.addWidget(w.getInternalRep(), x, y)
         self._winlayouts[x][y] = 1
         # keep it in anasimpleviewer list of windows
-        awindows.append(w)
+        self.awindows.append(w)
         # set custom control
         if wintype == '3D':
-            a.execute('SetControl', windows=[w], control=control_3d_type)
+            a.execute('SetControl', windows=[w], control=self.control_3d_type)
         else:
             a.execute('SetControl', windows=[w], control='Simple2DControl')
             a.assignReferential(a.mniTemplateRef, w)
@@ -324,6 +343,7 @@ class AnaSimpleViewer(Qt.QObject):
     def loadObject(self, fname):
         '''Load an object and display it in all anasimpleviewer windows
         '''
+        a = ana.Anatomist('-b')
         obj = a.loadObject(fname)
         self.registerObject(obj)
         # c = ana.cpp.LoadObjectCommand( fname, -1, "", False,
@@ -333,6 +353,7 @@ class AnaSimpleViewer(Qt.QObject):
 
     @QtCore.Slot('anatomist::AObject *', 'const std::string &')
     def objectLoaded(self, obj, filename):
+        a = ana.Anatomist('-b')
         if not obj:
             return
         o = a.AObject(a, obj)
@@ -352,9 +373,11 @@ class AnaSimpleViewer(Qt.QObject):
     def registerObject(self, obj):
         '''Register an object in anasimpleviewer objects list, and display it
         '''
-        findChild(self.awin, 'objectslist').addItem(obj.name)
+        a = ana.Anatomist('-b')
+        Qt.QObject.findChild(self.awin, QtCore.QObject,
+                             'objectslist').addItem(obj.name)
         # keep it in the global list
-        aobjects.append(obj)
+        self.aobjects.append(obj)
         if obj.objectType == 'VOLUME':
             # volume are checked for possible adequate colormaps
             hints = colormaphints.checkVolume(
@@ -365,13 +388,13 @@ class AnaSimpleViewer(Qt.QObject):
             # not a viewable object
             return
         # create the 4 windows if they don't exist
-        if len(awindows) == 0:
+        if len(self.awindows) == 0:
             self.createWindow('Coronal')
             self.createWindow('Axial')
             self.createWindow('Sagittal')
             self.createWindow('3D')
             # set a cool angle of view for 3D
-            a.execute('Camera', windows=[awindows[-1]],
+            a.execute('Camera', windows=[self.awindows[-1]],
                       view_quaternion=[0.404603, 0.143829, 0.316813, 0.845718])
         # view obj in these views
         self.addObject(obj)
@@ -379,30 +402,30 @@ class AnaSimpleViewer(Qt.QObject):
         # in anatomist...)
         position = (aims.Point3df(bb[1][:3]) - bb[0][:3]) / 2.
         t = a.getTransformation(obj.getReferential(),
-                                awindows[0].getReferential())
+                                self.awindows[0].getReferential())
         if t:
             position = t.transform(position)
-        a.execute('LinkedCursor', window=awindows[0], position=position)
+        a.execute('LinkedCursor', window=self.awindows[0], position=position)
 
     def _displayVolume(self, obj, opts={}):
         '''Display a volume or a Fusion2D in all windows.
         If volume rendering is allowed, 3D views will display a clipped volume
         rendering of the object.
         '''
+        a = ana.Anatomist('-b')
         if self._vrenabled:
-            wins = [x for x in awindows if x.subtype() != 0]
+            wins = [x for x in self.awindows if x.subtype() != 0]
             if len(wins) != 0:
                 a.addObjects(obj, wins, **opts)
-            wins = [x for x in awindows if x.subtype() == 0]
+            wins = [x for x in self.awindows if x.subtype() == 0]
             if len(wins) == 0:
                 return
             vr = a.fusionObjects([obj], method='VolumeRenderingFusionMethod')
             clip = a.fusionObjects([vr], method='FusionClipMethod')
-            global volrender
-            volrender = [clip, vr]
+            self.volrender = [clip, vr]
             a.addObjects(clip, wins, **opts)
         else:
-            a.addObjects(obj, awindows, **opts)
+            a.addObjects(obj, self.awindows, **opts)
 
     def addVolume(self, obj, opts={}):
         '''Display a volume in all windows.
@@ -412,28 +435,28 @@ class AnaSimpleViewer(Qt.QObject):
         rendering of either the single volume (if only one is present), or of the
         2D fusion.
         '''
-        global fusion2d, volrender
-        if obj in fusion2d:
+        a = ana.Anatomist('-b')
+        if obj in self.fusion2d:
             return
         hasvr = False
-        if volrender:
+        if self.volrender:
             # delete the previous volume rendering
-            a.deleteObjects(volrender)
+            a.deleteObjects(self.volrender)
             hasvr = True
-            volrender = None
-        if len(fusion2d) == 0:
+            self.volrender = None
+        if len(self.fusion2d) == 0:
             # only one object
-            fusion2d = [None, obj]
+            self.fusion2d = [None, obj]
         else:
             # several objects: fusion them
-            fusobjs = fusion2d[1:] + [obj]
+            fusobjs = self.fusion2d[1:] + [obj]
             f2d = a.fusionObjects(fusobjs, method='Fusion2DMethod')
-            if fusion2d[0] is not None:
+            if self.fusion2d[0] is not None:
                 # destroy the previous fusion
-                a.deleteObjects(fusion2d[0])
+                a.deleteObjects(self.fusion2d[0])
             else:
-                a.removeObjects(fusion2d[1], awindows)
-            fusion2d = [f2d] + fusobjs
+                a.removeObjects(self.fusion2d[1], self.awindows)
+            self.fusion2d = [f2d] + fusobjs
             # repalette( fusobjs )
             obj = f2d
         if obj.objectType == 'VOLUME':
@@ -457,26 +480,26 @@ class AnaSimpleViewer(Qt.QObject):
     def removeVolume(self, obj, opts={}):
         '''Hides a volume from views (low-level function: use removeObject)
         '''
-        global fusion2d, volrender
-        if obj in fusion2d:
+        a = ana.Anatomist('-b')
+        if obj in self.fusion2d:
             hasvr = False
-            if volrender:
-                a.deleteObjects(volrender)
-                volrender = None
+            if self.volrender:
+                a.deleteObjects(self.volrender)
+                self.volrender = None
                 hasvr = True
-            fusobjs = [o for o in fusion2d[1:] if o != obj]
+            fusobjs = [o for o in self.fusion2d[1:] if o != obj]
             if len(fusobjs) >= 2:
                 f2d = a.fusionObjects(fusobjs, method='Fusion2DMethod')
             else:
                 f2d = None
-            if fusion2d[0] is not None:
-                a.deleteObjects(fusion2d[0])
+            if self.fusion2d[0] is not None:
+                a.deleteObjects(self.fusion2d[0])
             else:
-                a.removeObjects(fusion2d[1], awindows)
+                a.removeObjects(self.fusion2d[1], self.awindows)
             if len(fusobjs) == 0:
-                fusion2d = []
+                self.fusion2d = []
             else:
-                fusion2d = [f2d] + fusobjs
+                self.fusion2d = [f2d] + fusobjs
             # repalette( fusobjs )
             if f2d:
                 obj = f2d
@@ -513,26 +536,29 @@ class AnaSimpleViewer(Qt.QObject):
         return len(self.meshes2d) % len(colors)
 
     def addMesh(self, obj, opts):
+        a = ana.Anatomist('-b')
         mesh2d = a.fusionObjects([obj.getInternalRep()],
                                  method='Fusion2DMeshMethod')
         color = self.get_new_mesh2d_color()
         self.meshes2d[obj.getInternalRep()] = (mesh2d, color)
         mesh2d.setMaterial(diffuse=color)
         mesh2d.releaseAppRef()
-        windows_2d = [w for w in awindows if w.subtype() in
+        windows_2d = [w for w in self.awindows if w.subtype() in
                       (w.AXIAL_WINDOW, w.CORONAL_WINDOW, w.SAGITTAL_WINDOW)]
-        windows_3d = [w for w in awindows if w not in windows_2d]
+        windows_3d = [w for w in self.awindows if w not in windows_2d]
         a.addObjects(mesh2d, windows_2d)
         a.addObjects(obj, windows_3d)
 
     def removeMesh(self, obj):
+        a = ana.Anatomist('-b')
         mesh2d, col = self.meshes2d[obj.getInternalRep()]
-        a.removeObjects([obj, mesh2d], awindows)
+        a.removeObjects([obj, mesh2d], self.awindows)
         del self.meshes2d[obj.getInternalRep()]
 
     def addObject(self, obj):
         '''Display an object in all windows
         '''
+        a = ana.Anatomist('-b')
         opts = {}
         if obj.objectType == 'VOLUME':
             # volumes have a specific function since several volumes have to be
@@ -544,31 +570,35 @@ class AnaSimpleViewer(Qt.QObject):
             return
         elif obj.objectType == 'GRAPH':
             opts['add_graph_nodes'] = 1
-        a.addObjects(obj, awindows, **opts)
+        a.addObjects(obj, self.awindows, **opts)
 
     def removeObject(self, obj):
         '''Hides an object from views
         '''
+        a = ana.Anatomist('-b')
         if obj.objectType == 'VOLUME':
             self.removeVolume(obj)
         elif obj.objectType == 'SURFACE':
             self.removeMesh(obj)
         else:
-            a.removeObjects(obj, awindows, remove_children=True)
+            a.removeObjects(obj, self.awindows, remove_children=True)
 
     def fileOpen(self):
         '''File browser + load object(s)
         '''
-        global fdialog
-        fd2 = fdialog
-        fdialog = Qt.QFileDialog()
-        fdialog.setFileMode(fdialog.ExistingFiles)
-        fdialog.setDirectory(fd2.directory())
-        fdialog.setHistory(fd2.history())
-        fdialog.show()
-        res = fdialog.exec_()
+        if not self.fdialog:
+            self.fdialog = Qt.QFileDialog()
+            self.fdialog.setDirectory(os.getcwd())
+        else:
+            fd2 = self.fdialog
+            self.fdialog = Qt.QFileDialog()
+            self.fdialog.setFileMode(self.fdialog.ExistingFiles)
+            self.fdialog.setDirectory(fd2.directory())
+            self.fdialog.setHistory(fd2.history())
+        self.fdialog.show()
+        res = self.fdialog.exec_()
         if res:
-            fnames = fdialog.selectedFiles()
+            fnames = self.fdialog.selectedFiles()
             for fname in fnames:
                 print(six.text_type(fname))
                 self.loadObject(six.text_type(fname))
@@ -576,11 +606,11 @@ class AnaSimpleViewer(Qt.QObject):
     def selectedObjects(self):
         '''list of objects selected in the list box on the upper left panel
         '''
-        olist = findChild(self.awin, 'objectslist')
+        olist = Qt.QObject.findChild(self.awin, QtCore.QObject, 'objectslist')
         sobjs = []
         for o in olist.selectedItems():
             sobjs.append(six.text_type(o.text()).strip('\0'))
-        return [o for o in aobjects if o.name in sobjs]
+        return [o for o in self.aobjects if o.name in sobjs]
 
     def editAdd(self):
         '''Display selected objects'''
@@ -596,67 +626,70 @@ class AnaSimpleViewer(Qt.QObject):
 
     def editDelete(self):
         '''Delete selected objects'''
+        a = ana.Anatomist('-b')
         objs = self.selectedObjects()
         for o in objs:
             self.removeObject(o)
-        olist = findChild(self.awin, 'objectslist')
+        olist = Qt.QObject.findChild(self.awin, QtCore.QObject, 'objectslist')
         for o in objs:
             olist.takeItem(olist.row(olist.findItems(o.name,
                                                      QtCore.Qt.MatchExactly)[0]))
-        global aobjects
-        aobjects = [o for o in aobjects if o not in objs]
+        self.aobjects = [o for o in self.aobjects if o not in objs]
         a.deleteObjects(objs)
 
     def closeAll(self):
         '''Exit'''
         print("Exiting")
-        global awindows, fusion2d, aobjects, anasimple, volrender, fdialog
+        a = ana.Anatomist('-b')
         # remove windows from their parent to prevent them to be brutally
         # deleted by Qt.
-        for w in awindows:
+        w = None
+        for w in self.awindows:
             w.hide()
             self.viewgridlay.removeWidget(w.internalRep._get())
             w.setParent(None)
         del w
+        self.awindows = []
         self.viewgridlay = None
-        del anasimple
-        del awindows, fusion2d, volrender, aobjects
+        self.volrender = None
+        self.fusion2d = []
+        self.aobjects = []
         self.awin.close()
         self.awin = None
-        del fdialog
+        del self.fdialog
         a = ana.Anatomist()
         a.close()
 
     def stopVolumeRendering(self):
         '''Disable volume rendering: show a slice instead'''
-        global volrender
-        if not volrender:
+        a = ana.Anatomist('-b')
+        if not self.volrender:
             return
-        a.deleteObjects(volrender)
-        volrender = None
-        if len(fusion2d) != 0:
-            if fusion2d[0] is not None:
-                obj = fusion2d[0]
+        a.deleteObjects(self.volrender)
+        self.volrender = None
+        if len(self.fusion2d) != 0:
+            if self.fusion2d[0] is not None:
+                obj = self.fusion2d[0]
             else:
-                obj = fusion2d[1]
-        wins = [w for w in awindows if w.subtype() == 0]
+                obj = self.fusion2d[1]
+        wins = [w for w in self.awindows if w.subtype() == 0]
         a.addObjects(obj, wins)
 
     def startVolumeRendering(self):
         '''Enable volume rendering in 3D views'''
-        if len(fusion2d) == 0:
+        a = ana.Anatomist('-b')
+        if len(self.fusion2d) == 0:
             return
-        if fusion2d[0] is not None:
-            obj = fusion2d[0]
+        if self.fusion2d[0] is not None:
+            obj = self.fusion2d[0]
         else:
-            obj = fusion2d[1]
-        wins = [x for x in awindows if x.subtype() == 0]
+            obj = self.fusion2d[1]
+        wins = [x for x in self.awindows if x.subtype() == 0]
         if len(wins) == 0:
             return
         vr = a.fusionObjects([obj], method='VolumeRenderingFusionMethod')
         clip = a.fusionObjects([vr], method='FusionClipMethod')
-        global volrender
-        volrender = [clip, vr]
+        self.volrender = [clip, vr]
         a.removeObjects(obj, wins)
         a.addObjects(clip, wins)
 
@@ -671,19 +704,21 @@ class AnaSimpleViewer(Qt.QObject):
     def coordsChanged(self):
         '''set the cursor on the position entered in the coords fields
         '''
-        if len(awindows) == 0:
+        a = ana.Anatomist('-b')
+        if len(self.awindows) == 0:
             return
+        findChild = lambda x, y: Qt.QObject.findChild(x, QtCore.QObject, y)
         pos = [findChild(self.awin, 'coordXEdit').text().toFloat()[0],
                findChild(self.awin, 'coordYEdit').text().toFloat()[0],
                findChild(self.awin, 'coordZEdit').text().toFloat()[0],
                ]
         # take coords transformation into account
         tr = a.getTransformation(
-            a.mniTemplateRef, awindows[0].getReferential())
+            a.mniTemplateRef, self.awindows[0].getReferential())
         if tr is not None:
             pos = tr.transform(pos)
         t = findChild(self.awin, 'coordTEdit').text().toFloat()[0]
-        a.execute('LinkedCursor', window=awindows[0], position=pos[:3] + [t])
+        a.execute('LinkedCursor', window=self.awindows[0], position=pos[:3] + [t])
 
     def dragEnterEvent(self, win, event):
         x = ana.cpp.QAObjectDrag.canDecode( event ) \
@@ -694,11 +729,12 @@ class AnaSimpleViewer(Qt.QObject):
             event.reject()
 
     def dropEvent(self, win, event):
+        a = ana.Anatomist('-b')
         o = ana.cpp.set_AObjectPtr()
         if ana.cpp.QAObjectDrag.decode(event, o):
             for obj in o:
                 ob = a.AObject(o)
-                if ob not in aobjects:
+                if ob not in self.aobjects:
                     self.registerObject(ob)
                 else:
                     self.addObject(ob)
@@ -708,11 +744,11 @@ class AnaSimpleViewer(Qt.QObject):
             things = ana.cpp.QAObjectDrag.decodeURI(event)
             if things is not None:
                 for obj in things[0]:
-                    objnames = [x.fileName() for x in aobjects]
+                    objnames = [x.fileName() for x in self.aobjects]
                     if obj not in objnames:
                         self.loadObject(obj)
                     else:
-                        o = [x for x in aobjects if x.fileName() == obj][0]
+                        o = [x for x in self.aobjects if x.fileName() == obj][0]
                         self.addObject(o)
                 # TODO: things[1]: .ana scripts
                 event.accept()
@@ -723,25 +759,15 @@ class AnaSimpleViewer(Qt.QObject):
 # instantiate the machine
 anasimple = AnaSimpleViewer()
 
+if options.left_mode:
+    anasimple.control_3d_type = 'LeftSimple3DControl'
+
 # display on the whole screen
 anasimple.awin.showMaximized()
 # remove the splash
 spl.finish(anasimple.awin)
 del spl
 
-# tweak: override some user config options
-a.config()['setAutomaticReferential'] = 1
-a.config()['windowSizeFactor'] = 1.
-
-# register controls
-cm = ana.cpp.ControlManager.instance()
-cm.addControl('QAGLWidget3D', '', 'Simple2DControl')
-cm.addControl('QAGLWidget3D', '', 'LeftSimple3DControl')
-print('controls registered.')
-
-del cm
-
-a.setGraphParams(label_attribute='label')
 
 for i in options.input + args:
     anasimple.loadObject(i)
@@ -752,3 +778,5 @@ if runqt:
 
 # cleanup before exiting
 anasimple.closeAll()
+del anasimple
+
