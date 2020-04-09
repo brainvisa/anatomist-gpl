@@ -55,13 +55,13 @@ import six
 # since they do instantiate Anatomist for registry to work.
 from anatomist.cpp.simplecontrols import Simple2DControl, Simple3DControl, \
     registerSimpleControls
-from anatomist.cpp.palettecontrastaction import PaletteContrastAction
 
-
-# define another control where rotation is with the left mouse button
-# (useful for touch devices)
 
 class LeftSimple3DControl(Simple2DControl):
+    '''
+    define another control where rotation is with the left mouse button
+    (useful for touch devices)
+    '''
 
     def __init__(self, prio=25, name='Simple3DControl'):
         Simple2DControl.__init__(self, prio, name)
@@ -86,8 +86,25 @@ class LeftSimple3DControl(Simple2DControl):
 
 class AnaSimpleViewer(Qt.QObject):
     '''
-    This class holds methods for menu/actions callbacks, and utility functions
-    like load/view objects, remove/delete, etc.
+    AnaSimpleViewer is a "simple viewer" application and widget, which can be
+    used using the "anasimpleviewer.py" command, or included in a custom widget
+    as a library module.
+
+    It includes an objects list and 4 3D views (anatomist windows). Objects
+    loaded are added in all views, and can be hidden or shown using the "add"
+    and "remove" buttons.
+
+    The AnaSimpleViewer class holds methods for menu/actions callbacks, and
+    utility functions like load/view objects, remove/delete, etc.
+
+    It is a QObject, but not a QWidget. The widget can be accessed as the
+    ``awidget`` attribute in the AnaSimpleViewer instance.
+
+    As it is more intended to be used as a complete application, and it is
+    simpler to handle in Anatomist, some global Anatomist config variables and
+    controls may be set within AnaSimpleViewer. This is done optionally using
+    the :meth:`init_global_handlers` method, which is called by the constructor
+    if the argument `init_global_handlers` is not set to False when calling it.
     '''
 
     _global_handlers_initialized = False
@@ -111,7 +128,7 @@ class AnaSimpleViewer(Qt.QObject):
         os.chdir(anasimpleviewerdir)
         awin = loadUi(os.path.join(anasimpleviewerdir, uifile))
         os.chdir(cwd)
-        self.awin = awin
+        self.awidget = awin
 
         # connect GUI actions callbacks
         findChild = lambda x, y: Qt.QObject.findChild(x, QtCore.QObject, y)
@@ -164,6 +181,9 @@ class AnaSimpleViewer(Qt.QObject):
         self.control_3d_type = 'Simple3DControl'
 
     def init_global_handlers(self):
+        '''
+        Set some global controls / settings in Anatomist application object
+        '''
         if not AnaSimpleViewer._global_handlers_initialized:
 
             registerSimpleControls()
@@ -192,8 +212,8 @@ class AnaSimpleViewer(Qt.QObject):
             AnaSimpleViewer._global_handlers_initialized = True
 
     def clickHandler(self, eventName, params):
-        '''Callback for linked cursor. In volume rendering mode, it will sync the
-        VR slice to the linked cursor.
+        '''Callback for linked cursor. In volume rendering mode, it will sync
+        the VR slice to the linked cursor.
         It also updates the volumes values view
         '''
         a = ana.Anatomist('-b')
@@ -209,18 +229,18 @@ class AnaSimpleViewer(Qt.QObject):
 
         findChild = lambda x, y: Qt.QObject.findChild(x, QtCore.QObject, y)
 
-        x = findChild(self.awin, 'coordXEdit')
+        x = findChild(self.awidget, 'coordXEdit')
         x.setText('%8.3f' % pos2[0])
-        y = findChild(self.awin, 'coordYEdit')
+        y = findChild(self.awidget, 'coordYEdit')
         y.setText('%8.3f' % pos2[1])
-        z = findChild(self.awin, 'coordZEdit')
+        z = findChild(self.awidget, 'coordZEdit')
         z.setText('%8.3f' % pos2[2])
-        t = findChild(self.awin, 'coordTEdit')
+        t = findChild(self.awidget, 'coordTEdit')
         if len(pos) < 4:
             pos = pos[:3] + [0]
         t.setText('%8.3f' % pos[3])
         # display volumes values at the given position
-        valbox = findChild(self.awin, 'volumesBox')
+        valbox = findChild(self.awidget, 'volumesBox')
         valbox.clear()
         # (we don't use the same widget type in Qt3 and Qt4)
         valbox.setColumnCount(2)
@@ -267,9 +287,9 @@ class AnaSimpleViewer(Qt.QObject):
 
     def createWindow(self, wintype='Axial'):
         '''Opens a new window in the windows grid layout.
-        The new window will be set in MNI referential (except 3D for now because
-        of a buf in volume rendering in direct referentials), will be assigned
-        the custom control, and have no menu/toolbars.
+        The new window will be set in MNI referential (except 3D for now
+        because of a buf in volume rendering in direct referentials), will be
+        assigned the custom control, and have no menu/toolbars.
         '''
         a = ana.Anatomist('-b')
         w = a.createWindow(wintype, no_decoration=True, options={'hidden': 1})
@@ -348,7 +368,7 @@ class AnaSimpleViewer(Qt.QObject):
         '''Register an object in anasimpleviewer objects list, and display it
         '''
         a = ana.Anatomist('-b')
-        Qt.QObject.findChild(self.awin, QtCore.QObject,
+        Qt.QObject.findChild(self.awidget, QtCore.QObject,
                              'objectslist').addItem(obj.name)
         # keep it in the global list
         self.aobjects.append(obj)
@@ -403,11 +423,11 @@ class AnaSimpleViewer(Qt.QObject):
 
     def addVolume(self, obj, opts={}):
         '''Display a volume in all windows.
-        If several volumes are displayed, a Fusion2D will be built to wrap all of
-        them.
+        If several volumes are displayed, a Fusion2D will be built to wrap all
+        of them.
         If volume rendering is allowed, 3D views will display a clipped volume
-        rendering of either the single volume (if only one is present), or of the
-        2D fusion.
+        rendering of either the single volume (if only one is present), or of
+        the 2D fusion.
         '''
         a = ana.Anatomist('-b')
         if obj in self.fusion2d:
@@ -580,7 +600,8 @@ class AnaSimpleViewer(Qt.QObject):
     def selectedObjects(self):
         '''list of objects selected in the list box on the upper left panel
         '''
-        olist = Qt.QObject.findChild(self.awin, QtCore.QObject, 'objectslist')
+        olist = Qt.QObject.findChild(self.awidget, QtCore.QObject,
+                                     'objectslist')
         sobjs = []
         for o in olist.selectedItems():
             sobjs.append(six.text_type(o.text()).strip('\0'))
@@ -604,10 +625,11 @@ class AnaSimpleViewer(Qt.QObject):
         objs = self.selectedObjects()
         for o in objs:
             self.removeObject(o)
-        olist = Qt.QObject.findChild(self.awin, QtCore.QObject, 'objectslist')
+        olist = Qt.QObject.findChild(self.awidget, QtCore.QObject,
+                                     'objectslist')
         for o in objs:
-            olist.takeItem(olist.row(olist.findItems(o.name,
-                                                     QtCore.Qt.MatchExactly)[0]))
+            olist.takeItem(olist.row(olist.findItems(
+                o.name, QtCore.Qt.MatchExactly)[0]))
         self.aobjects = [o for o in self.aobjects if o not in objs]
         a.deleteObjects(objs)
 
@@ -628,8 +650,8 @@ class AnaSimpleViewer(Qt.QObject):
         self.volrender = None
         self.fusion2d = []
         self.aobjects = []
-        self.awin.close()
-        self.awin = None
+        self.awidget.close()
+        self.awidget = None
         del self.fdialog
         a = ana.Anatomist()
         a.close()
@@ -682,16 +704,16 @@ class AnaSimpleViewer(Qt.QObject):
         if len(self.awindows) == 0:
             return
         findChild = lambda x, y: Qt.QObject.findChild(x, QtCore.QObject, y)
-        pos = [findChild(self.awin, 'coordXEdit').text().toFloat()[0],
-               findChild(self.awin, 'coordYEdit').text().toFloat()[0],
-               findChild(self.awin, 'coordZEdit').text().toFloat()[0],
+        pos = [findChild(self.awidget, 'coordXEdit').text().toFloat()[0],
+               findChild(self.awidget, 'coordYEdit').text().toFloat()[0],
+               findChild(self.awidget, 'coordZEdit').text().toFloat()[0],
                ]
         # take coords transformation into account
         tr = a.getTransformation(
             a.mniTemplateRef, self.awindows[0].getReferential())
         if tr is not None:
             pos = tr.transform(pos)
-        t = findChild(self.awin, 'coordTEdit').text().toFloat()[0]
+        t = findChild(self.awidget, 'coordTEdit').text().toFloat()[0]
         a.execute('LinkedCursor', window=self.awindows[0], position=pos[:3] + [t])
 
     def dragEnterEvent(self, win, event):
