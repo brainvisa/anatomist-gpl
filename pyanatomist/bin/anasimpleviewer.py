@@ -46,7 +46,7 @@ from optparse import OptionParser
 from soma.qt_gui import qt_backend
 from six.moves import zip
 qt_backend.set_qt_backend(compatible_qt5=True)
-from soma.qt_gui.qt_backend import QtCore, QtGui
+from soma.qt_gui.qt_backend import QtCore, QtGui, Qt
 if not hasattr(QtCore, 'Slot'):
     QtCore.Slot = QtCore.pyqtSlot  # compatibility with PySide
 qt = QtGui
@@ -54,7 +54,6 @@ from soma.qt_gui.qt_backend import uic
 from soma.qt_gui.qt_backend.uic import loadUi
 import six
 
-uifile = 'anasimpleviewer-qt4.ui'
 findChild = lambda x, y: QtCore.QObject.findChild(x, QtCore.QObject, y)
 
 parser = OptionParser(
@@ -68,8 +67,8 @@ parser.add_option('-l', '--left', dest='left_mode', action='store_true',
 (options, args) = parser.parse_args()
 
 # do we have to run QApplication ?
-if qt.qApp.startingUp():
-    qapp = qt.QApplication(args)
+if Qt.qApp.startingUp():
+    qapp = Qt.QApplication(args)
     runqt = True
 else:
     runqt = False
@@ -81,14 +80,14 @@ from anatomist.cpp.simplecontrols import Simple2DControl, Simple3DControl, \
 from anatomist.cpp.palettecontrastaction import PaletteContrastAction
 
 # splash
-pix = qt.QPixmap(os.path.expandvars(os.path.join(
+pix = Qt.QPixmap(os.path.expandvars(os.path.join(
                                     aims.carto.Paths.globalShared(),
                                     'anatomist-%s/icons/anatomist.png'
                                     % '.'.join(
                                     [str(x) for x in aims.version()]))))
-spl = qt.QSplashScreen(pix)
+spl = Qt.QSplashScreen(pix)
 spl.show()
-qt.qApp.processEvents()
+Qt.qApp.processEvents()
 
 # start the Anatomist engine, in batch mode (no main window)
 a = ana.Anatomist('-b')
@@ -131,43 +130,78 @@ control_3d_type = 'Simple3DControl'
 if options.left_mode:
     control_3d_type = 'LeftSimple3DControl'
 
-# load the anasimpleviewer GUI
-anasimpleviewerdir = os.path.join(
-    six.text_type(a.anatomistSharedPath()),
-  'anasimpleviewer')
-cwd = os.getcwd()
-# PyQt4 uic doesn' seem to allow specifying the directory when looking for
-# icon files: we have no other choice than globally changing the working
-# directory
-os.chdir(anasimpleviewerdir)
-awin = loadUi(os.path.join(anasimpleviewerdir, uifile))
-os.chdir(cwd)
-
 # global variables: lists of windows, objects, a fusion2d with a number of
 # volumes in it, and a volume rendering object + clipping
-fdialog = qt.QFileDialog()
+fdialog = Qt.QFileDialog()
 fdialog.setDirectory(os.getcwd())
 awindows = []
 aobjects = []
 fusion2d = []
 volrender = None
 
-# vieww: parent widget for anatomist windows
-vieww = findChild(awin, 'windows')
-viewgridlay = qt.QGridLayout(vieww)
-
 
 # This class holds methods for menu/actions callbacks, and utility functions
 # like load/view objects, remove/delete, etc.
-class AnaSimpleViewer(qt.QObject):
+class AnaSimpleViewer(Qt.QObject):
 
     def __init__(self):
-        qt.QObject.__init__(self)
+        Qt.QObject.__init__(self)
+
+        uifile = 'anasimpleviewer-qt4.ui'
+        # load the anasimpleviewer GUI
+        anasimpleviewerdir = os.path.join(
+            six.text_type(a.anatomistSharedPath()),
+            'anasimpleviewer')
+        cwd = os.getcwd()
+        # PyQt4 uic doesn' seem to allow specifying the directory when
+        # looking for icon files: we have no other choice than globally
+        # changing the working directory
+        os.chdir(anasimpleviewerdir)
+        awin = loadUi(os.path.join(anasimpleviewerdir, uifile))
+        os.chdir(cwd)
+        self.awin = awin
+
+        # connect GUI actions callbacks
+        findChild(awin, 'fileOpenAction').triggered.connect(self.fileOpen)
+        findChild(awin, 'fileExitAction').triggered.connect(self.closeAll)
+        findChild(awin, 'editAddAction').triggered.connect(self.editAdd)
+        findChild(awin, 'editRemoveAction').triggered.connect(self.editRemove)
+        findChild(awin, 'editDeleteAction').triggered.connect(self.editDelete)
+        findChild(awin, 'viewEnable_Volume_RenderingAction').toggled.connect(
+            self.enableVolumeRendering)
+        # manually entered coords
+        le = findChild(awin, 'coordXEdit')
+        le.setValidator(Qt.QDoubleValidator(le))
+        le = findChild(awin, 'coordYEdit')
+        le.setValidator(Qt.QDoubleValidator(le))
+        le = findChild(awin, 'coordZEdit')
+        le.setValidator(Qt.QDoubleValidator(le))
+        le = findChild(awin, 'coordTEdit')
+        le.setValidator(Qt.QDoubleValidator(le))
+        del le
+        findChild(awin,
+                  'coordXEdit').editingFinished.connect(self.coordsChanged)
+        findChild(awin,
+                  'coordYEdit').editingFinished.connect(self.coordsChanged)
+        findChild(awin,
+                  'coordZEdit').editingFinished.connect(self.coordsChanged)
+        findChild(awin,
+                  'coordTEdit').editingFinished.connect(self.coordsChanged)
+
+        awin.dropEvent = lambda awin, event: anasimple.dropEvent(awin, event)
+        awin.dragEnterEvent = lambda awin, event: anasimple.dragEnterEvent(
+            awin, event)
+        awin.setAcceptDrops(True)
+
         self._vrenabled = False
         self.meshes2d = {}
         # register the function on the cursor notifier of anatomist. It will be
         # called when the user clicks on a window
         a.onCursorNotifier.add(self.clickHandler)
+
+        # vieww: parent widget for anatomist windows
+        vieww = findChild(awin, 'windows')
+        self.viewgridlay = Qt.QGridLayout(vieww)
 
     def clickHandler(self, eventName, params):
         '''Callback for linked cursor. In volume rendering mode, it will sync the
@@ -183,18 +217,18 @@ class AnaSimpleViewer(qt.QObject):
             pos2 = tr.transform(pos[:3])
         else:
             pos2 = pos
-        x = findChild(awin, 'coordXEdit')
+        x = findChild(self.awin, 'coordXEdit')
         x.setText('%8.3f' % pos2[0])
-        y = findChild(awin, 'coordYEdit')
+        y = findChild(self.awin, 'coordYEdit')
         y.setText('%8.3f' % pos2[1])
-        z = findChild(awin, 'coordZEdit')
+        z = findChild(self.awin, 'coordZEdit')
         z.setText('%8.3f' % pos2[2])
-        t = findChild(awin, 'coordTEdit')
+        t = findChild(self.awin, 'coordTEdit')
         if len(pos) < 4:
             pos = pos[:3] + [0]
         t.setText('%8.3f' % pos[3])
         # display volumes values at the given position
-        valbox = findChild(awin, 'volumesBox')
+        valbox = findChild(self.awin, 'volumesBox')
         valbox.clear()
         # (we don't use the same widget type in Qt3 and Qt4)
         valbox.setColumnCount(2)
@@ -215,7 +249,7 @@ class AnaSimpleViewer(qt.QObject):
             vs = obj.voxelSize()
             pos2 = [int(round(x / y)) for x, y in zip(pos2, vs)]
             # pos2 in in voxels, in obj coords system
-            newItem = qt.QTableWidgetItem(obj.name)
+            newItem = Qt.QTableWidgetItem(obj.name)
             valbox.setItem(i, 0, newItem)
             # check bounds
             if pos2[0] >= 0 and pos2[1] >= 0 and pos2[2] >= 0 and pos[3] >= 0 \
@@ -224,7 +258,7 @@ class AnaSimpleViewer(qt.QObject):
                 txt = str(aimsv.value(*pos2))
             else:
                 txt = ''
-            newitem = qt.QTableWidgetItem(txt)
+            newitem = Qt.QTableWidgetItem(txt)
             valbox.setItem(i, 1, newitem)
             i += 1
         valbox.resizeColumnsToContents()
@@ -263,7 +297,7 @@ class AnaSimpleViewer(qt.QObject):
                     break
         # in Qt4, the widget must not have a parent before calling
         # layout.addWidget
-        viewgridlay.addWidget(w.getInternalRep(), x, y)
+        self.viewgridlay.addWidget(w.getInternalRep(), x, y)
         self._winlayouts[x][y] = 1
         # keep it in anasimpleviewer list of windows
         awindows.append(w)
@@ -318,7 +352,7 @@ class AnaSimpleViewer(qt.QObject):
     def registerObject(self, obj):
         '''Register an object in anasimpleviewer objects list, and display it
         '''
-        findChild(awin, 'objectslist').addItem(obj.name)
+        findChild(self.awin, 'objectslist').addItem(obj.name)
         # keep it in the global list
         aobjects.append(obj)
         if obj.objectType == 'VOLUME':
@@ -527,7 +561,7 @@ class AnaSimpleViewer(qt.QObject):
         '''
         global fdialog
         fd2 = fdialog
-        fdialog = qt.QFileDialog()
+        fdialog = Qt.QFileDialog()
         fdialog.setFileMode(fdialog.ExistingFiles)
         fdialog.setDirectory(fd2.directory())
         fdialog.setHistory(fd2.history())
@@ -542,7 +576,7 @@ class AnaSimpleViewer(qt.QObject):
     def selectedObjects(self):
         '''list of objects selected in the list box on the upper left panel
         '''
-        olist = findChild(awin, 'objectslist')
+        olist = findChild(self.awin, 'objectslist')
         sobjs = []
         for o in olist.selectedItems():
             sobjs.append(six.text_type(o.text()).strip('\0'))
@@ -565,7 +599,7 @@ class AnaSimpleViewer(qt.QObject):
         objs = self.selectedObjects()
         for o in objs:
             self.removeObject(o)
-        olist = findChild(awin, 'objectslist')
+        olist = findChild(self.awin, 'objectslist')
         for o in objs:
             olist.takeItem(olist.row(olist.findItems(o.name,
                                                      QtCore.Qt.MatchExactly)[0]))
@@ -576,19 +610,19 @@ class AnaSimpleViewer(qt.QObject):
     def closeAll(self):
         '''Exit'''
         print("Exiting")
-        global vieww, viewgridlay, awindows, fusion2d, aobjects, anasimple, volrender, awin, fdialog
+        global awindows, fusion2d, aobjects, anasimple, volrender, fdialog
         # remove windows from their parent to prevent them to be brutally
         # deleted by Qt.
         for w in awindows:
             w.hide()
-            viewgridlay.removeWidget(w.internalRep._get())
+            self.viewgridlay.removeWidget(w.internalRep._get())
             w.setParent(None)
         del w
-        del vieww, viewgridlay
+        self.viewgridlay = None
         del anasimple
         del awindows, fusion2d, volrender, aobjects
-        awin.close()
-        del awin
+        self.awin.close()
+        self.awin = None
         del fdialog
         a = ana.Anatomist()
         a.close()
@@ -639,16 +673,16 @@ class AnaSimpleViewer(qt.QObject):
         '''
         if len(awindows) == 0:
             return
-        pos = [findChild(awin, 'coordXEdit').text().toFloat()[0],
-               findChild(awin, 'coordYEdit').text().toFloat()[0],
-               findChild(awin, 'coordZEdit').text().toFloat()[0],
+        pos = [findChild(self.awin, 'coordXEdit').text().toFloat()[0],
+               findChild(self.awin, 'coordYEdit').text().toFloat()[0],
+               findChild(self.awin, 'coordZEdit').text().toFloat()[0],
                ]
         # take coords transformation into account
         tr = a.getTransformation(
             a.mniTemplateRef, awindows[0].getReferential())
         if tr is not None:
             pos = tr.transform(pos)
-        t = findChild(awin, 'coordTEdit').text().toFloat()[0]
+        t = findChild(self.awin, 'coordTEdit').text().toFloat()[0]
         a.execute('LinkedCursor', window=awindows[0], position=pos[:3] + [t])
 
     def dragEnterEvent(self, win, event):
@@ -688,39 +722,11 @@ class AnaSimpleViewer(qt.QObject):
 
 # instantiate the machine
 anasimple = AnaSimpleViewer()
-# connect GUI actions callbacks
-findChild(awin, 'fileOpenAction').triggered.connect(anasimple.fileOpen)
-findChild(awin, 'fileExitAction').triggered.connect(anasimple.closeAll)
-findChild(awin, 'editAddAction').triggered.connect(anasimple.editAdd)
-findChild(awin, 'editRemoveAction').triggered.connect(anasimple.editRemove)
-findChild(awin, 'editDeleteAction').triggered.connect(anasimple.editDelete)
-findChild(awin, 'viewEnable_Volume_RenderingAction').toggled.connect(
-    anasimple.enableVolumeRendering)
-# manually entered coords
-le = findChild(awin, 'coordXEdit')
-le.setValidator(qt.QDoubleValidator(le))
-le = findChild(awin, 'coordYEdit')
-le.setValidator(qt.QDoubleValidator(le))
-le = findChild(awin, 'coordZEdit')
-le.setValidator(qt.QDoubleValidator(le))
-le = findChild(awin, 'coordTEdit')
-le.setValidator(qt.QDoubleValidator(le))
-del le
-findChild(awin, 'coordXEdit').editingFinished.connect(anasimple.coordsChanged)
-findChild(awin, 'coordYEdit').editingFinished.connect(anasimple.coordsChanged)
-findChild(awin, 'coordZEdit').editingFinished.connect(anasimple.coordsChanged)
-findChild(awin, 'coordTEdit').editingFinished.connect(anasimple.coordsChanged)
-
-awin.dropEvent = lambda awin, event: anasimple.dropEvent(awin, event)
-awin.dragEnterEvent = lambda awin, event: anasimple.dragEnterEvent(
-    awin, event)
-awin.setAcceptDrops(True)
-
 
 # display on the whole screen
-awin.showMaximized()
+anasimple.awin.showMaximized()
 # remove the splash
-spl.finish(awin)
+spl.finish(anasimple.awin)
 del spl
 
 # tweak: override some user config options
