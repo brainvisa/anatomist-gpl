@@ -586,9 +586,9 @@ class AnaSimpleViewer(Qt.QObject):
         else:
             fd2 = self.fdialog
             self.fdialog = Qt.QFileDialog()
-            self.fdialog.setFileMode(self.fdialog.ExistingFiles)
             self.fdialog.setDirectory(fd2.directory())
             self.fdialog.setHistory(fd2.history())
+        self.fdialog.setFileMode(self.fdialog.ExistingFiles)
         self.fdialog.show()
         res = self.fdialog.exec_()
         if res:

@@ -90,9 +90,9 @@ if options.left_mode:
     anasimple.control_3d_type = 'LeftSimple3DControl'
 
 # display on the whole screen
-anasimple.awin.showMaximized()
+anasimple.awidget.showMaximized()
 # remove the splash
-spl.finish(anasimple.awin)
+spl.finish(anasimple.awidget)
 del spl
 
 
