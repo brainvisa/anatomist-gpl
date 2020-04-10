@@ -198,6 +198,8 @@ class AnaSimpleViewer(Qt.QObject):
             # tweak: override some user config options
             a.config()['setAutomaticReferential'] = 1
             a.config()['windowSizeFactor'] = 1.
+            a.config()['axialConvention'] = 'neuro'
+            a.config()['commonScannerBasedReferential'] = 1
 
             # register controls
             cm = ana.cpp.ControlManager.instance()
@@ -397,6 +399,34 @@ class AnaSimpleViewer(Qt.QObject):
         position = (aims.Point3df(bb[1][:3]) - bb[0][:3]) / 2.
         t = a.getTransformation(obj.getReferential(),
                                 self.awindows[0].getReferential())
+        if not t and obj.getReferential() != self.awindows[0].getReferential():
+            # try to find a scanner-based ref and connect it to MNI
+            sbref = [r for r in a.getReferentials()
+                     if r.uuid() == aims.StandardReferentials.
+                          commonScannerBasedReferentialID()]
+            if sbref:
+                sbref = sbref[0]
+                t2 = a.getTransformation(obj.getReferential(), sbref)
+                if t2:
+                    a.execute(
+                        'LoadTransformation', origin=sbref,
+                        destination=a.mniTemplateRef,
+                        matrix=[0, 0, 0,
+                                1, 0, 0,
+                                0, 1, 0,
+                                0, 0, 1])
+                else:
+                    # otherwise we will assume the object is in the central
+                    # referential.
+                    a.execute(
+                        'LoadTransformation', origin=obj.getReferential(),
+                        destination=a.centralRef,
+                        matrix=[0, 0, 0,
+                                1, 0, 0,
+                                0, 1, 0,
+                                0, 0, 1])
+                t = a.getTransformation(obj.getReferential(),
+                                        self.awindows[0].getReferential())
         if t:
             position = t.transform(position)
         a.execute('LinkedCursor', window=self.awindows[0], position=position)
