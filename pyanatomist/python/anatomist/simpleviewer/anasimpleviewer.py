@@ -621,8 +621,13 @@ class AnaSimpleViewer(Qt.QObject):
 
     def editDelete(self):
         '''Delete selected objects'''
-        a = ana.Anatomist('-b')
         objs = self.selectedObjects()
+        self.deleteObjects(objs)
+
+    def deleteObjects(self, objs):
+        '''Delete the given objects
+        '''
+        a = ana.Anatomist('-b')
         for o in objs:
             self.removeObject(o)
         olist = Qt.QObject.findChild(self.awidget, QtCore.QObject,
@@ -632,6 +637,13 @@ class AnaSimpleViewer(Qt.QObject):
                 o.name, QtCore.Qt.MatchExactly)[0]))
         self.aobjects = [o for o in self.aobjects if o not in objs]
         a.deleteObjects(objs)
+
+    def deleteObjectsFromFiles(self, files):
+        '''Delete the given objects given by their file names
+        '''
+        a = ana.Anatomist('-b')
+        objs = [o for o in a.getObjects() if o.filename in files]
+        self.deleteObjects(objs)
 
     def closeAll(self):
         '''Exit'''
