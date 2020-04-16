@@ -140,6 +140,8 @@ class AnaSimpleViewer(Qt.QObject):
         findChild(awin, 'editDeleteAction').triggered.connect(self.editDelete)
         findChild(awin, 'viewEnable_Volume_RenderingAction').toggled.connect(
             self.enableVolumeRendering)
+        findChild(awin, 'viewOpen_Anatomist_main_window').triggered.connect(
+            self.open_anatomist_main_window)
         # manually entered coords
         le = findChild(awin, 'coordXEdit')
         le.setValidator(Qt.QDoubleValidator(le))
@@ -397,9 +399,27 @@ class AnaSimpleViewer(Qt.QObject):
         # set the cursot at the center of the object (actually, overcome a bug
         # in anatomist...)
         position = (aims.Point3df(bb[1][:3]) - bb[0][:3]) / 2.
-        t = a.getTransformation(obj.getReferential(),
-                                self.awindows[0].getReferential())
-        if not t and obj.getReferential() != self.awindows[0].getReferential():
+        wrefs = [w.getReferential() for w in self.awindows]
+        srefs = set([r.uuid() for r in wrefs])
+        if len(srefs) != 1:
+            # not all windows in the same ref
+            if aims.StandardReferentials.mniTemplateReferentialID() in srefs:
+                wref_id = aims.StandardReferentials.mniTemplateReferentialID()
+                wref = [r for r in wrefs if r.uuid() == wref_id][0]
+            elif aims.StandardReferentials.acPcReferentialID() in srefs:
+                wref = a.centralReferential()
+            elif aims.StandardReferentials.commonScannerBasedReferentialID() \
+                    in srefs:
+                wref_id = \
+                    aims.StandardReferentials.commonScannerBasedReferentialID()
+                wref = [r for r in wrefs if r.uuid() == wref_id][0]
+            else:
+                wref = wrefs[0]
+            for w in self.awindows:
+                w.setReferential(wref)
+
+        t = a.getTransformation(obj.getReferential(), wref)
+        if not t and obj.getReferential() != wref:
             # try to find a scanner-based ref and connect it to MNI
             sbref = [r for r in a.getReferentials()
                      if r.uuid() == aims.StandardReferentials.
@@ -430,6 +450,8 @@ class AnaSimpleViewer(Qt.QObject):
         if t:
             position = t.transform(position)
         a.execute('LinkedCursor', window=self.awindows[0], position=position)
+        for w in self.awindows:
+            w.focusView()
 
     def _displayVolume(self, obj, opts={}):
         '''Display a volume or a Fusion2D in all windows.
@@ -738,6 +760,15 @@ class AnaSimpleViewer(Qt.QObject):
             self.startVolumeRendering()
         else:
             self.stopVolumeRendering()
+
+    def open_anatomist_main_window(self):
+        a = ana.Anatomist()
+        cw = a.getControlWindow()
+        a.execute('CreateControlWindow')
+        if not cw:
+            anacontrolmenu = sys.modules.get('anacontrolmenu')
+            if anacontrolmenu:
+                anacontrolmenu.add_gui_menus()
 
     def coordsChanged(self):
         '''set the cursor on the position entered in the coords fields
