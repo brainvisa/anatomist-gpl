@@ -417,6 +417,8 @@ class AnaSimpleViewer(Qt.QObject):
                 wref = wrefs[0]
             for w in self.awindows:
                 w.setReferential(wref)
+        else:
+            wref = wrefs[0]
 
         t = a.getTransformation(obj.getReferential(), wref)
         if not t and obj.getReferential() != wref:
