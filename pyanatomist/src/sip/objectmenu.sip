@@ -111,5 +111,21 @@ public:
   static void graphUseDefaultLabelProperty( const set_AObjectPtr & obj );
 };
 
+
+  class OptionMatcher
+  {
+%TypeHeaderCode
+#include <anatomist/object/optionMatcher.h>
+%End
+
+%TypeCode
+#include <anatomist/selection/qSelMenu.h>
+%End
+
+  public:
+    static void commonOptions( const set_AObjectPtr &, Tree & tr );
+    static QMenu* popupMenu( const set_AObjectPtr & ol, Tree & tr ) /Factory/;
+  };
+
 };
 
