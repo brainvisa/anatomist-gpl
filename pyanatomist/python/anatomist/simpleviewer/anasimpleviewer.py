@@ -160,6 +160,9 @@ class AnaSimpleViewer(Qt.QObject):
                   'coordZEdit').editingFinished.connect(self.coordsChanged)
         findChild(awin,
                   'coordTEdit').editingFinished.connect(self.coordsChanged)
+        objects_list = findChild(self.awidget, 'objectslist')
+        objects_list.setContextMenuPolicy(Qt.Qt.CustomContextMenu)
+        objects_list.customContextMenuRequested.connect(self.popup_objects)
 
         awin.dropEvent = lambda awin, event: self.dropEvent(awin, event)
         awin.dragEnterEvent = lambda awin, event: self.dragEnterEvent(
@@ -825,5 +828,17 @@ class AnaSimpleViewer(Qt.QObject):
                 event.accept()
                 return
         event.reject()
+
+    def popup_objects(self):
+        print('popup_objects')
+        sel = self.selectedObjects()
+        print(sel)
+        t = aims.Tree()
+        osel = [o.getInternalRep() for o in sel]
+        options = ana.cpp.OptionMatcher.commonOptions(osel, t)
+        menu = ana.cpp.OptionMatcher.popupMenu(osel, t)
+        menu.exec_(Qt.QCursor.pos())
+
+
 
 
