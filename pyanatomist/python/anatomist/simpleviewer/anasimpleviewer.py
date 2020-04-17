@@ -779,16 +779,16 @@ class AnaSimpleViewer(Qt.QObject):
         if len(self.awindows) == 0:
             return
         findChild = lambda x, y: Qt.QObject.findChild(x, QtCore.QObject, y)
-        pos = [findChild(self.awidget, 'coordXEdit').text().toFloat()[0],
-               findChild(self.awidget, 'coordYEdit').text().toFloat()[0],
-               findChild(self.awidget, 'coordZEdit').text().toFloat()[0],
+        pos = [float(findChild(self.awidget, 'coordXEdit').text()),
+               float(findChild(self.awidget, 'coordYEdit').text()),
+               float(findChild(self.awidget, 'coordZEdit').text()),
                ]
         # take coords transformation into account
         tr = a.getTransformation(
             a.mniTemplateRef, self.awindows[0].getReferential())
         if tr is not None:
             pos = tr.transform(pos)
-        t = findChild(self.awidget, 'coordTEdit').text().toFloat()[0]
+        t = float(findChild(self.awidget, 'coordTEdit').text())
         a.execute('LinkedCursor', window=self.awindows[0], position=pos[:3] + [t])
 
     def dragEnterEvent(self, win, event):
