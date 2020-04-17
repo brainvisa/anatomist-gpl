@@ -830,14 +830,31 @@ class AnaSimpleViewer(Qt.QObject):
         event.reject()
 
     def popup_objects(self):
-        print('popup_objects')
+        '''
+        Right-click popup on objects list
+        '''
         sel = self.selectedObjects()
-        print(sel)
+        if len(sel) == 0:
+            return
         t = aims.Tree()
         osel = [o.getInternalRep() for o in sel]
         options = ana.cpp.OptionMatcher.commonOptions(osel, t)
         menu = ana.cpp.OptionMatcher.popupMenu(osel, t)
+        prop = menu.addAction('Object properties')
+        prop.triggered.connect(self.object_properties)
         menu.exec_(Qt.QCursor.pos())
+
+    def object_properties(self):
+        '''
+        Display selected objects properties in a browser window
+        '''
+        a = ana.Anatomist('-b')
+        if not hasattr(self, 'browser') or not self.browser \
+                or self.browser.isNull() or not self.browser.isVisible():
+            self.browser = a.createWindow('Browser')
+        else:
+            self.browser.removeObjects(self.browser.Objects())
+        self.browser.addObjects(self.selectedObjects())
 
 
 
