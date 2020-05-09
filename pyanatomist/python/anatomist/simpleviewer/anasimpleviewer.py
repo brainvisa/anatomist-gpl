@@ -215,7 +215,9 @@ class AnaSimpleViewer(Qt.QObject):
             a = ana.Anatomist('-b')
             iconpath = os.path.join(str(a.anatomistSharedPath()), 'icons')
             pix = Qt.QPixmap(os.path.join(iconpath, 'simple3Dcontrol.png'))
-            ana.cpp.IconDictionary.instance().addIcon('LeftSimple3DControl', pix)
+            ana.cpp.IconDictionary.instance().addIcon(
+                'LeftSimple3DControl', pix)
+            ana.cpp.IconDictionary.instance().addIcon('VolRenderControl', pix)
             del pix, iconpath
             cd = ana.cpp.ControlDictionary.instance()
             cd.addControl('LeftSimple3DControl', LeftSimple3DControl, 25)
