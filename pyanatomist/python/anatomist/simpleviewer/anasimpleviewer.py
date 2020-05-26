@@ -370,7 +370,8 @@ class AnaSimpleViewer(Qt.QObject):
         '''
         a = ana.Anatomist('-b')
         obj = a.loadObject(fname)
-        self.registerObject(obj)
+        if obj:
+            self.registerObject(obj)
         # c = ana.cpp.LoadObjectCommand( fname, -1, "", False,
             #{ 'asynchonous' : True } )
         # c.objectLoaded.connect( self.objectLoaded )
