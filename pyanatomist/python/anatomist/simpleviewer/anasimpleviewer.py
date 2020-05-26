@@ -63,25 +63,45 @@ class LeftSimple3DControl(Simple2DControl):
     (useful for touch devices)
     '''
 
-    def __init__(self, prio=25, name='Simple3DControl'):
-        Simple2DControl.__init__(self, prio, name)
+    def __init__(self, prio=25, name='LeftSimple3DControl'):
+        super(LeftSimple3DControl, self).__init__(prio, name)
 
     def eventAutoSubscription(self, pool):
         key = QtCore.Qt
         NoModifier = key.NoModifier
         ShiftModifier = key.ShiftModifier
         ControlModifier = key.ControlModifier
-        Simple2DControl.eventAutoSubscription(self, pool)
+        super(LeftSimple3DControl, self).eventAutoSubscription(pool)
         self.mouseLongEventUnsubscribe(key.LeftButton, NoModifier)
         self.mouseLongEventSubscribe(
             key.LeftButton, NoModifier,
           pool.action('ContinuousTrackball').beginTrackball,
           pool.action('ContinuousTrackball').moveTrackball,
           pool.action('ContinuousTrackball').endTrackball, True)
-        self.keyPressEventSubscribe(key.Key_Space, ControlModifier,
-                                    pool.action("ContinuousTrackball").startOrStop)
+        self.keyPressEventSubscribe(
+            key.Key_Space, ControlModifier,
+            pool.action("ContinuousTrackball").startOrStop)
         self.mousePressButtonEventSubscribe(key.MiddleButton, NoModifier,
                                             pool.action('LinkAction').execLink)
+
+
+class VolRenderControl(LeftSimple3DControl):
+    '''
+    define another control where cut slice rotation is with the middle mouse
+    button
+    '''
+
+    def __init__(self, prio=25, name='VolRenderControl'):
+        super(VolRenderControl, self).__init__(prio, name)
+
+    def eventAutoSubscription(self, pool):
+        super(VolRenderControl, self).eventAutoSubscription(pool)
+        self.mouseLongEventUnsubscribe(Qt.Qt.MiddleButton, Qt.Qt.NoModifier)
+        self.mouseLongEventSubscribe(
+            Qt.Qt.MiddleButton, Qt.Qt.NoModifier,
+          pool.action('TrackCutAction').beginTrackball,
+          pool.action('TrackCutAction').moveTrackball,
+          pool.action('TrackCutAction').endTrackball, True)
 
 
 class AnaSimpleViewer(Qt.QObject):
@@ -183,7 +203,7 @@ class AnaSimpleViewer(Qt.QObject):
         self.aobjects = []
         self.fusion2d = []
         self.volrender = None
-        self.control_3d_type = 'Simple3DControl'
+        self.control_3d_type = 'LeftSimple3DControl'
 
     def init_global_handlers(self):
         '''
@@ -195,10 +215,13 @@ class AnaSimpleViewer(Qt.QObject):
             a = ana.Anatomist('-b')
             iconpath = os.path.join(str(a.anatomistSharedPath()), 'icons')
             pix = Qt.QPixmap(os.path.join(iconpath, 'simple3Dcontrol.png'))
-            ana.cpp.IconDictionary.instance().addIcon('LeftSimple3DControl', pix)
+            ana.cpp.IconDictionary.instance().addIcon(
+                'LeftSimple3DControl', pix)
+            ana.cpp.IconDictionary.instance().addIcon('VolRenderControl', pix)
             del pix, iconpath
             cd = ana.cpp.ControlDictionary.instance()
             cd.addControl('LeftSimple3DControl', LeftSimple3DControl, 25)
+            cd.addControl('VolRenderControl', VolRenderControl, 25)
 
             # tweak: override some user config options
             a.config()['setAutomaticReferential'] = 1
@@ -210,6 +233,7 @@ class AnaSimpleViewer(Qt.QObject):
             cm = ana.cpp.ControlManager.instance()
             cm.addControl('QAGLWidget3D', '', 'Simple2DControl')
             cm.addControl('QAGLWidget3D', '', 'LeftSimple3DControl')
+            cm.addControl('QAGLWidget3D', '', 'VolRenderControl')
             print('controls registered.')
 
             del cm
@@ -346,7 +370,8 @@ class AnaSimpleViewer(Qt.QObject):
         '''
         a = ana.Anatomist('-b')
         obj = a.loadObject(fname)
-        self.registerObject(obj)
+        if obj:
+            self.registerObject(obj)
         # c = ana.cpp.LoadObjectCommand( fname, -1, "", False,
             #{ 'asynchonous' : True } )
         # c.objectLoaded.connect( self.objectLoaded )
@@ -739,6 +764,8 @@ class AnaSimpleViewer(Qt.QObject):
                 obj = self.fusion2d[1]
         wins = [w for w in self.awindows if w.subtype() == 0]
         a.addObjects(obj, wins)
+        self.control_3d_type = 'LeftSimple3DControl'
+        a.execute('SetControl', windows=wins, control=self.control_3d_type)
 
     def startVolumeRendering(self):
         '''Enable volume rendering in 3D views'''
@@ -757,6 +784,8 @@ class AnaSimpleViewer(Qt.QObject):
         self.volrender = [clip, vr]
         a.removeObjects(obj, wins)
         a.addObjects(clip, wins)
+        self.control_3d_type = 'VolRenderControl'
+        a.execute('SetControl', windows=wins, control=self.control_3d_type)
 
     def enableVolumeRendering(self, on):
         '''Enable/disable volume rendering in 3D views'''

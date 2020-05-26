@@ -81,6 +81,51 @@ public:
 };
 
 
+class TrackCutAction : anatomist::Trackball
+{
+%TypeHeaderCode
+#include <anatomist/window3D/trackcut.h>
+%End
+
+public:
+
+  TrackCutAction();
+  TrackCutAction( const anatomist::TrackCutAction & a );
+  virtual ~TrackCutAction();
+
+  virtual std::string name() const;
+
+  virtual void beginTrackball( int x, int y, int globalX, int globalY );
+  virtual void moveTrackball( int x, int y, int globalX, int globalY );
+  virtual void endTrackball( int x, int y, int globalX, int globalY );
+
+  void axialSlice();
+  void coronalSlice();
+  void sagittalSlice();
+  void setSlice( const aims::Quaternion & q );
+
+};
+
+
+class CutSliceAction : anatomist::Action
+{
+%TypeHeaderCode
+#include <anatomist/window3D/trackcut.h>
+%End
+
+public:
+  CutSliceAction();
+  CutSliceAction( const anatomist::CutSliceAction & a );
+  virtual ~CutSliceAction();
+
+  virtual std::string name() const;
+
+  virtual void beginTrack( int x, int y, int globalX, int globalY );
+  virtual void moveTrack( int x, int y, int globalX, int globalY );
+  virtual void endTrack( int, int, int, int );
+};
+
+
 class WindowActions : anatomist::Action
 {
 %TypeHeaderCode
