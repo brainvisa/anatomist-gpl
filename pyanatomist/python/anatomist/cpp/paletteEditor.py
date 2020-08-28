@@ -302,7 +302,7 @@ class PaletteEditor( QtGui.QGroupBox ):
                 
                 imbackground.setPixel( xpal, y, QtGui.qRgb( rgb.red(), rgb.green(), rgb.blue() ) )
                 
-        if cmp( QtCore.QT_VERSION_STR , '4.7' ) == -1:
+        if QtCore.QT_VERSION_STR < '4.7':
             pmbackground = QtGui.QPixmap.fromImage( imbackground )
         else:
             pmbackground.convertFromImage( imbackground )
