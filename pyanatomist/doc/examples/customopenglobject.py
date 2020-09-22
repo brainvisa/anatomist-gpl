@@ -163,6 +163,7 @@ class WinViewMesh (anatomist.cpp.ASurface_3):
         GL.glPopMatrix()
         GL.glEndList()
 
+
 # ---
 if __name__ == '__main__':
     runloop = False

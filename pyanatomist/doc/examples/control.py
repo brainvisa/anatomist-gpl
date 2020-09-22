@@ -145,6 +145,7 @@ class MyControl(anatomist.cpp.Control):
         self.mousePressButtonEventSubscribe(key.RightButton, NoModifier,
                                             pool.action('MyAction').takePolygon)
 
+
 a = anatomist.Anatomist()
 qapp = QtGui.QApplication.instance()
 pix = QtGui.QPixmap('control.xpm')
@@ -161,7 +162,7 @@ a.registerObject(s)
 aw = a.createWindow('3D')
 a.addObjects([s], [aw])
 
-if 'sphinx_gallery'  in sys.modules:
+if 'sphinx_gallery' in sys.modules:
     # display in matplotlib for sphinx_gallery
     import matplotlib
     matplotlib.use('agg', force=True)  # force agg
@@ -170,5 +171,5 @@ if 'sphinx_gallery'  in sys.modules:
 # run Qt
 if runqt:
     qapp.exec_()
-if runqt or 'sphinx_gallery'  in sys.modules:
+if runqt or 'sphinx_gallery' in sys.modules:
     del aw, selanamesh, selmesh, s, ad, cd, cm, pix

@@ -74,7 +74,6 @@ class TestSingleViewer(unittest.TestCase):
         viewer.output_height = 1500
         self.viewer = viewer
 
-
     def test_class_user_parameters(self):
         viewer = self.viewer
         items = viewer()
@@ -114,6 +113,3 @@ def test():
 
 if __name__ == "__main__":
     test()
-
-
-

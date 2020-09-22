@@ -58,5 +58,6 @@ def main(args):
     r = app.exec_()
     return r
 
+
 if __name__ == "__main__":
     main(sys.argv)

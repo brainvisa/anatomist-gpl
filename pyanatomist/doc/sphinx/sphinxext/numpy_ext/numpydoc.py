@@ -17,7 +17,10 @@ It will:
 """
 from __future__ import division, absolute_import, print_function
 
-import os, sys, re, pydoc
+import os
+import sys
+import re
+import pydoc
 import sphinx
 import inspect
 import collections
@@ -31,26 +34,28 @@ from sphinx.util.compat import Directive
 
 sixu = six.u
 
+
 def mangle_docstrings(app, what, name, obj, options, lines,
                       reference_offset=[0]):
 
     cfg = dict(use_plots=app.config.numpydoc_use_plots,
                show_class_members=app.config.numpydoc_show_class_members,
                class_members_toctree=app.config.numpydoc_class_members_toctree,
-              )
+               )
 
     if what == 'module':
         # Strip top title
         title_re = re.compile(sixu('^\\s*[#*=]{4,}\\n[a-z0-9 -]+\\n[#*=]{4,}\\s*'),
-                              re.I|re.S)
-        lines[:] = title_re.sub(sixu(''), sixu("\n").join(lines)).split(sixu("\n"))
+                              re.I | re.S)
+        lines[:] = title_re.sub(sixu(''), sixu(
+            "\n").join(lines)).split(sixu("\n"))
     else:
         doc = get_doc_object(obj, what, sixu("\n").join(lines), config=cfg)
         doc = six.text_type(doc)
         lines[:] = doc.split(sixu("\n"))
 
     if app.config.numpydoc_edit_link and hasattr(obj, '__name__') and \
-           obj.__name__:
+            obj.__name__:
         if hasattr(obj, '__module__'):
             v = dict(full_name=sixu("%s.%s") % (obj.__module__, obj.__name__))
         else:
@@ -83,24 +88,28 @@ def mangle_docstrings(app, what, name, obj, options, lines,
 
     reference_offset[0] += len(references)
 
+
 def mangle_signature(app, what, name, obj, options, sig, retann):
     # Do not try to inspect classes that don't define `__init__`
     if (inspect.isclass(obj) and
         (not hasattr(obj, '__init__') or
-        'initializes x; see ' in pydoc.getdoc(obj.__init__))):
+         'initializes x; see ' in pydoc.getdoc(obj.__init__))):
         return '', ''
 
-    if not (isinstance(obj, collections.Callable) or hasattr(obj, '__argspec_is_invalid_')): return
-    if not hasattr(obj, '__doc__'): return
+    if not (isinstance(obj, collections.Callable) or hasattr(obj, '__argspec_is_invalid_')):
+        return
+    if not hasattr(obj, '__doc__'):
+        return
 
     doc = SphinxDocString(pydoc.getdoc(obj))
     if doc['Signature']:
         sig = re.sub(sixu("^[^(]*"), sixu(""), doc['Signature'])
         return sig, sixu('')
 
+
 def setup(app, get_doc_object_=get_doc_object):
     if not hasattr(app, 'add_config_value'):
-        return # probably called by nose, better bail out
+        return  # probably called by nose, better bail out
 
     global get_doc_object
     get_doc_object = get_doc_object_
@@ -120,9 +129,11 @@ def setup(app, get_doc_object_=get_doc_object):
 # Docstring-mangling domains
 #------------------------------------------------------------------------------
 
+
 from docutils.statemachine import ViewList
 from sphinx.domains.c import CDomain
 from sphinx.domains.python import PythonDomain
+
 
 class ManglingDomainBase(object):
     directive_mangling_map = {}
@@ -135,6 +146,7 @@ class ManglingDomainBase(object):
         for name, objtype in list(self.directive_mangling_map.items()):
             self.directives[name] = wrap_mangling_directive(
                 self.directives[name], objtype)
+
 
 class NumpyPythonDomain(ManglingDomainBase, PythonDomain):
     name = 'np'
@@ -149,6 +161,7 @@ class NumpyPythonDomain(ManglingDomainBase, PythonDomain):
     }
     indices = []
 
+
 class NumpyCDomain(ManglingDomainBase, CDomain):
     name = 'np-c'
     directive_mangling_map = {
@@ -158,6 +171,7 @@ class NumpyCDomain(ManglingDomainBase, CDomain):
         'type': 'class',
         'var': 'object',
     }
+
 
 def wrap_mangling_directive(base_directive, objtype):
     class directive(base_directive):

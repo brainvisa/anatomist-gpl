@@ -14,24 +14,26 @@
 from __future__ import print_function
 
 from __future__ import absolute_import
-import sys, os
+import sys
+import os
 import datetime
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.append(os.path.abspath('.'))
+# sys.path.append(os.path.abspath('.'))
 try:
-  import matplotlib
-  sys.path.append( os.path.abspath( os.path.join( os.path.dirname( os.path.dirname( matplotlib.__file__ ) ), 'sphinx', 'ext' ) ) )
+    import matplotlib
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(
+        os.path.dirname(matplotlib.__file__)), 'sphinx', 'ext')))
 except Exception as e:
-  print('warning:', e)
+    print('warning:', e)
 from soma import aims
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0,os.path.abspath('sphinxext'))
+sys.path.insert(0, os.path.abspath('sphinxext'))
 
 # -- General configuration -----------------------------------------------------
 
@@ -59,6 +61,7 @@ extensions = ['sphinx.ext.autodoc',
 global exit_status
 exit_status = 0
 
+
 def matplotlib_use(backend, warn=True, force=False):
     ''' hack to call matplotlib.use() forcing warn=False and force=True,
     because in some mpl versions (1.3.1) sometimes the backend appears to be
@@ -67,6 +70,7 @@ def matplotlib_use(backend, warn=True, force=False):
     whole documentation process.
     '''
     matplotlib.use_bak(backend, warn=False, force=True)
+
 
 try:
     import matplotlib
@@ -90,7 +94,7 @@ try:
             import OpenGL
             gallery_examples.append('customopenglobject')
         except:
-            pass # no OpenGL module: don't run this one
+            pass  # no OpenGL module: don't run this one
         sphinx_gallery_conf = {
             'examples_dirs': '../examples',   # path to your example scripts
             'gallery_dirs': 'auto_examples',  # path where to save gallery generated examples
@@ -104,7 +108,7 @@ try:
             global exit_status
             exit_status = 1
             #import traceback
-            #traceback.print_exc()
+            # traceback.print_exc()
             from sphinx import cmdline
             cmdline.handle_exception_bak(app, opts, exception,
                                          stderr=sys.stderr)
@@ -113,7 +117,7 @@ try:
             import sys
             global exit_status
             status = exit_status
-            #print('######## exit:', status, '########', file=sys.stderr)
+            # print('######## exit:', status, '########', file=sys.stderr)
             os._exit(status)
 
         import atexit
@@ -165,7 +169,7 @@ copyright = u'%d, CEA' % datetime.datetime.now().year
 # built documents.
 #
 # The short X.Y version.
-version = '.'.join( [ str(x) for x in aims.version() ] )
+version = '.'.join([str(x) for x in aims.version()])
 # The full version, including alpha/beta/rc tags.
 release = aims.versionString()
 
@@ -192,7 +196,7 @@ exclude_patterns = ['examples',
                     "_themes/scikit-learn/static/ML_MAPS_README.rst",
                     '_build',
                     '**.ipynb_checkpoints'] \
-                   + templates_path
+    + templates_path
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None
@@ -224,7 +228,7 @@ html_theme = 'default'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_theme_options = {  }
+html_theme_options = {}
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
@@ -262,7 +266,8 @@ html_static_path = ['_static']
 
 # Custom sidebar templates, maps document names to template names.
 # html_sidebars = { '**' : [ 'relations.html' ], }
-html_sidebars = { '**' : ['download.html', 'localtoc.html', 'globaltoc.html', 'relations.html',  'sourcelink.html', 'searchbox.html' ], }
+html_sidebars = {'**': ['download.html', 'localtoc.html', 'globaltoc.html',
+                        'relations.html',  'sourcelink.html', 'searchbox.html'], }
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
@@ -303,8 +308,8 @@ htmlhelp_basename = 'pyanatomistdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'pyanatomist.tex', u'PyAnatomist Documentation',
-   u'someone', 'manual'),
+    ('index', 'pyanatomist.tex', u'PyAnatomist Documentation',
+     u'someone', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -327,27 +332,27 @@ latex_documents = [
 autoclass_content = "both"
 
 extlinks = {
-  'anatomist': ('../../anatomist-' + version + '/%s',
-    'anatomist '),
-  'anadox': ('../../anatomist-' + version + '/doxygen/%s',
-    'anadox '),
-  'anausr': ('../../anatomist-' + version + '/user_doc/%s',
-    'anausr '),
-  'anadev': ('../../anatomist-' + version + '/dev_doc/%s',
-    'anadev '),
-  'aimsdox': ('../../aimsdata-' + version + '/doxygen/%s',
-    'aimsdox '),
-  'aimsdata' : ('../../aimsdata-' + version + '/%s', 'aimsdata '),
-  'pyaims': ('../../pyaims-' + version + '/sphinx/%s',
-    'pyaims '),
-  'soma': ('../../soma-base-' + version + '/sphinx/%s',
-    'soma '),
-  'cartobdox' : ('../../cartobase-' + version + '/doxygen/%s',
-  'cartobdox '),
-  'cartoddox' : ('../../cartodata-' + version + '/doxygen/%s',
-  'cartoddox '),
-  'graphdox' : ('../../graph-' + version + '/doxygen/%s',
-  'graphdox '),
+    'anatomist': ('../../anatomist-' + version + '/%s',
+                  'anatomist '),
+    'anadox': ('../../anatomist-' + version + '/doxygen/%s',
+               'anadox '),
+    'anausr': ('../../anatomist-' + version + '/user_doc/%s',
+               'anausr '),
+    'anadev': ('../../anatomist-' + version + '/dev_doc/%s',
+               'anadev '),
+    'aimsdox': ('../../aimsdata-' + version + '/doxygen/%s',
+                'aimsdox '),
+    'aimsdata': ('../../aimsdata-' + version + '/%s', 'aimsdata '),
+    'pyaims': ('../../pyaims-' + version + '/sphinx/%s',
+               'pyaims '),
+    'soma': ('../../soma-base-' + version + '/sphinx/%s',
+             'soma '),
+    'cartobdox': ('../../cartobase-' + version + '/doxygen/%s',
+                  'cartobdox '),
+    'cartoddox': ('../../cartodata-' + version + '/doxygen/%s',
+                  'cartoddox '),
+    'graphdox': ('../../graph-' + version + '/doxygen/%s',
+                 'graphdox '),
 }
 
 import soma

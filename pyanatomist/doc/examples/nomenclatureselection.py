@@ -68,6 +68,5 @@ if 'sphinx_gallery' in sys.modules:
 
 if runloop:
     Qt.QApplication.instance().exec_()
-if runloop or 'sphinx_gallery'  in sys.modules:
+if runloop or 'sphinx_gallery' in sys.modules:
     del w, graph, nom
-

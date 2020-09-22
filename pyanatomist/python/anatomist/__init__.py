@@ -119,7 +119,7 @@ THREADED = 'threaded'
 
 # import os
 #__path__ = [ os.path.join( os.path.dirname( __file__ ), 'direct' ),
-  # os.path.dirname( __file__ ) ]
+# os.path.dirname( __file__ ) ]
 
 _implementation = DIRECT
 
@@ -135,7 +135,7 @@ def setDefaultImplementation(impl=DIRECT):
     """
     # global __path__
     #__path__ = [ os.path.join( os.path.dirname( __file__ ), impl ),
-      # os.path.dirname( __file__ ) ]
+    # os.path.dirname( __file__ ) ]
     global _implementation
     _implementation = impl
 

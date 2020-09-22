@@ -7,6 +7,7 @@ from traits.api import File, Enum, Int
 import math
 from six.moves import range
 
+
 class AnatomistSceneProcess(InteractiveProcess):
     '''
     Base class for all viewers and snapshot generators. All derived 
@@ -48,15 +49,15 @@ class AnatomistSceneProcess(InteractiveProcess):
         return self._anatomist
 
     def create_anatomist_view(self):
-         '''
-         This method must be defined in derived classes. It is
-         responsible for the creation of the Anatomist scene. The 
-         value returned by the method is a dictionary with two items :
-         'objects' that contains the list of created Anatomist objects 
-         and 'windows' that contains the list of anatomist windows created
-         by this method.
-         '''
-         raise NotImplementedError()
+        '''
+        This method must be defined in derived classes. It is
+        responsible for the creation of the Anatomist scene. The 
+        value returned by the method is a dictionary with two items :
+        'objects' that contains the list of created Anatomist objects 
+        and 'windows' that contains the list of anatomist windows created
+        by this method.
+        '''
+        raise NotImplementedError()
 
     def snapshot(self, view_objects):
         '''
@@ -69,7 +70,7 @@ class AnatomistSceneProcess(InteractiveProcess):
         if windows:
             from soma.qt_gui.qt_backend import QtGui
             # still needed until fixed in Anatomist C++ lib
-            #QtGui.qApp.processEvents()
+            # QtGui.qApp.processEvents()
             windows[0].snapshot(self.output, self.output_width,
                                 self.output_height)
 
@@ -109,7 +110,7 @@ class Anatomist3DWindowProcess(AnatomistSceneProcess):
                                  'given id (%d)' % self.reuse_window)
         else:
             window = self.anatomist.createWindow(self.window_type,
-                                                 options={'hidden':True})
+                                                 options={'hidden': True})
         return window
 
 
@@ -200,4 +201,3 @@ class AnatomistMultipleViewsProcess(AnatomistSceneProcess):
             del painter
 
             out_image.save(self.output)
-

@@ -103,8 +103,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     """
 
     def __singleton_init__(self, *args, **kwargs):
-    # call C++ constructor now with all arguments, otherwise it will be called
-    # via Singleton.__init__ without arguments.
+        # call C++ constructor now with all arguments, otherwise it will be called
+        # via Singleton.__init__ without arguments.
         cpp.Anatomist.__init__(self, *args, **kwargs)
         super(Anatomist, self).__singleton_init__(*args, **kwargs)
         from soma.qt_gui.qt_backend import QtGui
@@ -140,11 +140,11 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             """
             eventName = event.eventType()
             data = event.contents()
-                                  # event content is a GenericObject, it
-                                  # contains values associated with keys as a
-                                  # dictionary. But the values are
-                                  # GenericObject too, no python objects. So it
-                                  # must be converted in python.
+            # event content is a GenericObject, it
+            # contains values associated with keys as a
+            # dictionary. But the values are
+            # GenericObject too, no python objects. So it
+            # must be converted in python.
             dataDict = {}
             for k in data.keys():  # get all parameters in a dictionary, except private parameters (beginning with _)
                 if k[0] != "_":
@@ -293,7 +293,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         else:
             c = cpp.CreateWindowCommand(
                 wintype, -1, None, geometry, 0,  None, 0, 0,
-              aims.Object(options))
+                aims.Object(options))
             self.execute(c)
         # use a WeakShared reference type because AWindows are also QWidgets,
         # which can have parents, and can be destroyed by parent widgets within
@@ -336,7 +336,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                 files = [filename, filename + '.minf']
                 for f in files:
                     if os.path.exists(f):
-                        if os.stat(f).st_mtime >= object.loadDate:  # reload it if the file has been modified since last load
+                        # reload it if the file has been modified since last load
+                        if os.stat(f).st_mtime >= object.loadDate:
                             self.reloadObjects([object])
                             break
                 if duplicate:
@@ -734,7 +735,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         while l:
             c = l.pop()
             done.add(c)
-            m += [x for x in list(c.__dict__.keys()) if not x.startswith('_') and x not in m]
+            m += [x for x in list(c.__dict__.keys())
+                  if not x.startswith('_') and x not in m]
             cl = getattr(c, '__bases__', None)
             if not cl:
                 cl = getattr(c, '__class__', None)
@@ -1045,7 +1047,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         bWindows = self.convertParamsToObjects(windows)
         c = cpp.AddObjectCommand(
             self.makeList(bObjects), self.makeList(bWindows),
-          add_children, add_graph_nodes, add_graph_relations, temporary, position)
+            add_children, add_graph_nodes, add_graph_relations, temporary, position)
         self.execute(c)
 
     def removeObjects(self, objects, windows, remove_children=False):
@@ -1063,7 +1065,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         bWindows = self.convertParamsToObjects(windows)
         c = cpp.RemoveObjectCommand(
             self.makeList(bObjects), self.makeList(bWindows),
-          int(remove_children))
+            int(remove_children))
         self.execute(c)
 
     def assignReferential(self, referential, elements):
@@ -1440,7 +1442,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             while l:
                 c = l.pop()
                 done.add(c)
-                m += [x for x in list(c.__dict__.keys()) if not x.startswith('_') and x not in m]
+                m += [x for x in list(c.__dict__.keys())
+                      if not x.startswith('_') and x not in m]
                 cl = getattr(c, '__bases__', None)
                 if not cl:
                     cl = getattr(c, '__class__', None)
@@ -1529,7 +1532,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
         def _getAttributeNames(self):
             return ['objectType', 'children', 'filename', 'name', 'copy',
-                    'loadDate', 'material', 'referential' ] \
+                    'loadDate', 'material', 'referential'] \
                 + Anatomist.AItem._getAttributeNames(self)
 
         def __eq__(self, other):
@@ -1676,7 +1679,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                 no_duplicate = 1
             self.anatomistinstance.execute(
                 "AddNode", graph=self, res_pointer=nodeId,
-                                           name=name, with_bucket=with_bucket, res_bucket=bucketId, no_duplicate=no_duplicate)
+                name=name, with_bucket=with_bucket, res_bucket=bucketId, no_duplicate=no_duplicate)
             node = self.anatomistinstance.typedObject(
                 self.anatomistinstance.context.object(nodeId))
             if bucketId is not None:
@@ -1743,7 +1746,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                 return Anatomist.AItem.__getattr__(self, name)
 
         def _getAttributeNames(self):
-            return [ 'windowType', 'group', 'objects' ] + \
+            return ['windowType', 'group', 'objects'] + \
                 Anatomist.AItem._getAttributeNames(self)
 
         def takeRef(self):
@@ -1780,7 +1783,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             if ref is not None:
                 return self.anatomistinstance.Referential(
                     self.anatomistinstance,
-                  ref)
+                    ref)
             return ref
 
         def imshow(self, width=0, height=0, figure=None, show=False):
@@ -1842,7 +1845,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             matplotlib.use('agg', warn=False, force=True)  # force agg
             plot = self.imshow(show=True, width=width, height=height)
             if restore_backend:
-                matplotlib.use(backend, warn=False, force=True)  # restore backend
+                # restore backend
+                matplotlib.use(backend, warn=False, force=True)
             return plot
 
     #
@@ -1904,7 +1908,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                 else:
                     self.internalWidget = self.WidgetProxy(
                         self.anatomistinstance,
-                      self.internalRep, w)
+                        self.internalRep, w)
                     self._widgets[self.internalWidget] = None
 
         def widgetProxy(self):
@@ -1981,4 +1985,3 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         def __init__(self, anatomistinstance, internalRep=None, *args, **kwargs):
             super(Anatomist.Transformation, self).__init__(
                 anatomistinstance, internalRep, *args, **kwargs)
-

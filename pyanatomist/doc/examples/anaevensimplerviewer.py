@@ -52,7 +52,10 @@ from soma.qt_gui import qt_backend
 from soma.qt_gui.qt_backend import Qt, loadUi
 import six
 from six.moves import zip
-findChild = lambda x, y: Qt.QObject.findChild(x, Qt.QObject, y)
+
+
+def findChild(x, y): return Qt.QObject.findChild(x, Qt.QObject, y)
+
 
 if Qt.QApplication.instance() is None:
     run_qt = True
@@ -156,7 +159,7 @@ class AnaSimpleViewer(Qt.QObject):
         self.addObject(obj)
         # set the cursot at the center of the object (actually, overcome a bug
         # in anatomist...)
-        position = (aims.Point3df(bb[1][:3])  - bb[0][:3]) / 2.
+        position = (aims.Point3df(bb[1][:3]) - bb[0][:3]) / 2.
         t = a.getTransformation(obj.getReferential(),
                                 awindows[0].getReferential())
         if t:
@@ -344,7 +347,7 @@ if __name__ == '__main__':
     elif 'sphinx_gallery' in sys.modules:
         # load a data
         awin.showNormal()
-        awin.resize(1000, 700) # control the size of the snapshot
+        awin.resize(1000, 700)  # control the size of the snapshot
         anasimple.loadObject('irm.ima')
         # these 2 events ensure things are actually drawn
         Qt.QApplication.instance().processEvents()
@@ -373,9 +376,7 @@ if __name__ == '__main__':
         axes.get_xaxis().set_visible(False)
         axes.get_yaxis().set_visible(False)
         pyplot.show(block=False)
-        #matplotlib.use(backend, force=True)  # restore backend
-
+        # matplotlib.use(backend, force=True)  # restore backend
 
     if run_qt or 'sphinx_gallery' in sys.modules:
         anasimple.closeAll()
-

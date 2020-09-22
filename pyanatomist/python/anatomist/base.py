@@ -887,7 +887,7 @@ class Anatomist(Singleton):
                 windows.append(e)
         self.execute(
             "AssignReferential", ref_id=referential, objects=objects,
-          windows=windows, central_ref=referential.centralRef)
+            windows=windows, central_ref=referential.centralRef)
 
     def loadReferentialFromHeader(self, objects):
         """
@@ -1396,7 +1396,7 @@ class Anatomist(Singleton):
         elements: dict or list
             Converted elements
         """
-        if not isinstance( params, six.string_types ) \
+        if not isinstance(params, six.string_types) \
                 and isSequenceType(params):
             return [self.convertSingleObjectParamsToIDs(i) for i in params]
         else:
@@ -1713,7 +1713,7 @@ class Anatomist(Singleton):
             """
             self.anatomistinstance.addObjects(
                 [self], windows, temporary=temporary,
-                                              position=position)
+                position=position)
 
         def removeFromWindows(self, windows):
             """
@@ -2049,7 +2049,6 @@ class Anatomist(Singleton):
             """
             pass
 
-
     class AWindow(AItem):
 
         """
@@ -2120,9 +2119,9 @@ class Anatomist(Singleton):
             self.anatomistinstance.removeObjects(objects, [self])
 
         def camera(
-            self, zoom=None, observer_position=None, view_quaternion=None,
-          slice_quaternion=None, force_redraw=None, cursor_position=None,
-          boundingbox_min=None, boundingbox_max=None, slice_orientation=None):
+                self, zoom=None, observer_position=None, view_quaternion=None,
+                slice_quaternion=None, force_redraw=None, cursor_position=None,
+                boundingbox_min=None, boundingbox_max=None, slice_orientation=None):
             """
             Sets the point of view, zoom, cursor position for a 3D window.
 
@@ -2469,19 +2468,19 @@ class Anatomist(Singleton):
             self.rnRows = 0
             self.anatomistinstance.execute(
                 'WindowBlock', block=self.internalRep,
-              block_columns=nCol)
+                block_columns=nCol)
 
         def setRows(self, nRow):
             self.nbRows = nRow
             self.nbCols = 0
             self.anatomistinstance.execute(
                 'WindowBlock', block=self.internalRep,
-              block_rows=nRow)
+                block_rows=nRow)
 
         def arrangeInRect(self, widthHeightRatio=1.):
             self.anatomistinstance.execute(
                 'WindowBlock', block=self.internalRep,
-              make_rectangle=1, rectangle_ratio=widthHeightRatio)
+                make_rectangle=1, rectangle_ratio=widthHeightRatio)
 
     #
     class AWindowsGroup(AItem):

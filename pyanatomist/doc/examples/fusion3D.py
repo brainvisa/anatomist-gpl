@@ -38,7 +38,7 @@ Fusion3D (mesh + texture from a volume) in Anatomist
 '''
 
 from __future__ import absolute_import
-import anatomist.api  as anatomist
+import anatomist.api as anatomist
 # to expand the mesh bigger
 from soma import aims
 from soma.qt_gui.qt_backend import Qt
@@ -88,4 +88,3 @@ if runloop and 'sphinx_gallery' not in sys.modules:
     Qt.QApplication.instance().exec_()
 if runloop or 'sphinx_gallery' in sys.modules:
     del fusion, win, amesh, avol, tr
-

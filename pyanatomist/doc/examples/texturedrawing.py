@@ -138,8 +138,8 @@ class TexDrawAction(anatomist.cpp.Action):
                 # print('TEXTURED SURF.')
                 # surf = [ o for o in obj if o.type() == 3 ]
                 # if len( surf ) != 1:
-                    # print('not one mesh, but', len( surf ))
-                    # return
+                # print('not one mesh, but', len( surf ))
+                # return
                 # surf = surf[0]
                 # texs = [ o for o in obj if o.type() == 18 ]
                 # self._texsurf = obj
@@ -187,7 +187,7 @@ class TexDrawAction(anatomist.cpp.Action):
                 p = obj.parents()
                 found = False
                 for o in p:
-                    if o.objectTypeName( o.type() ) == 'TEXTURED SURF.' \
+                    if o.objectTypeName(o.type()) == 'TEXTURED SURF.' \
                             and w.hasObject(o):
                         texs = [ob for ob in o if ob.type() == 18]
                         self._texsurf = o
@@ -263,25 +263,25 @@ class TexDrawControl(anatomist.cpp.Control):
         AltModifier = key.AltModifier
         self.mouseLongEventSubscribe(
             key.LeftButton, NoModifier,
-          pool.action('TexDrawAction').startDraw,
-          pool.action('TexDrawAction').moveDraw,
-          pool.action('TexDrawAction').endDraw,
-          False)
+            pool.action('TexDrawAction').startDraw,
+            pool.action('TexDrawAction').moveDraw,
+            pool.action('TexDrawAction').endDraw,
+            False)
         self.mouseLongEventSubscribe(
             key.LeftButton, NoModifier,
-          pool.action('TexDrawAction').startDraw,
-          pool.action('TexDrawAction').moveDraw,
-          pool.action('TexDrawAction').endDraw,
-          False)
+            pool.action('TexDrawAction').startDraw,
+            pool.action('TexDrawAction').moveDraw,
+            pool.action('TexDrawAction').endDraw,
+            False)
         self.mouseLongEventSubscribe(
             key.LeftButton, ControlModifier,
-          pool.action('TexDrawAction').startErase,
-          pool.action('TexDrawAction').erase,
-          pool.action('TexDrawAction').endDraw,
-          False)
+            pool.action('TexDrawAction').startErase,
+            pool.action('TexDrawAction').erase,
+            pool.action('TexDrawAction').endDraw,
+            False)
         self.mousePressButtonEventSubscribe(
             key.RightButton, ControlModifier,
-          pool.action('TexDrawAction').newtexture)
+            pool.action('TexDrawAction').newtexture)
         # polygon picking
         self.mousePressButtonEventSubscribe(key.RightButton, NoModifier,
                                             pool.action('TexDrawAction').takePolygon)
@@ -299,15 +299,15 @@ class TexDrawControl(anatomist.cpp.Control):
                                     pool.action("Trackball").showRotationCenter)
         self.mouseLongEventSubscribe(key.MidButton, ControlModifier,
                                      pool.action(
-                                     "Translate3DAction").beginTranslate,
+                                         "Translate3DAction").beginTranslate,
                                      pool.action(
                                          "Translate3DAction").moveTranslate,
                                      pool.action("Translate3DAction").endTranslate, True)
         self.mouseLongEventSubscribe(
             key.MidButton, NoModifier,
-          pool.action('ContinuousTrackball').beginTrackball,
-          pool.action('ContinuousTrackball').moveTrackball,
-          pool.action('ContinuousTrackball').endTrackball, True)
+            pool.action('ContinuousTrackball').beginTrackball,
+            pool.action('ContinuousTrackball').moveTrackball,
+            pool.action('ContinuousTrackball').endTrackball, True)
         self.keyPressEventSubscribe(key.Key_Space, ControlModifier,
                                     pool.action("ContinuousTrackball").startOrStop)
 

@@ -6,9 +6,9 @@
 #
 # This software is governed by the CeCILL license version 2 under
 # French law and abiding by the rules of distribution of free software.
-# You can  use, modify and/or redistribute the software under the 
+# You can  use, modify and/or redistribute the software under the
 # terms of the CeCILL license version 2 as circulated by CEA, CNRS
-# and INRIA at the following URL "http://www.cecill.info". 
+# and INRIA at the following URL "http://www.cecill.info".
 #
 # As a counterpart to the access to the source code and  rights to copy,
 # modify and redistribute granted by the license, users are provided only
@@ -23,8 +23,8 @@
 # therefore means  that it is reserved for developers  and  experienced
 # professionals having in-depth computer knowledge. Users are therefore
 # encouraged to load and test the software's suitability as regards their
-# requirements in conditions enabling the security of their systems and/or 
-# data to be ensured and,  more generally, to use and operate it in the 
+# requirements in conditions enabling the security of their systems and/or
+# data to be ensured and,  more generally, to use and operate it in the
 # same conditions as regards security.
 #
 # The fact that you are presently reading this means that you have had
@@ -46,98 +46,103 @@ from soma import aims
 import anatomist.cpp as anatomist
 
 from soma.signature.api \
-  import Signature, HasSignature, Unicode, Sequence, Number
-from soma.aimsalgo                          import BucketMapSampler_FLOAT_3
-from soma.wip.aimsalgo.samplables           import SuperQuadricSamplable
-from soma.wip.aims.signature                import Point3d
+    import Signature, HasSignature, Unicode, Sequence, Number
+from soma.aimsalgo import BucketMapSampler_FLOAT_3
+from soma.wip.aimsalgo.samplables import SuperQuadricSamplable
+from soma.wip.aims.signature import Point3d
 from anatomist.wip.parametrics.shapes.shape import Shape
 
-class SuperQuadric( HasSignature, Shape ):
-	signature = Signature(
-	'name', Unicode(),
-	'coefficients', Sequence(Number),
-	'start', Point3d(),
-	'resolution', Point3d(),
-	'sizes', Point3d(),
-	)
-	
-	def __init__( self, coefficients = [0], start = None, sizes = None, resolution = aims.Point3df(1), name = "SuperQuadric"):
-		""" 
-		Constructor of the Quadric object		
-		"""
-		
-		# Initialize parent types
-		HasSignature.__init__( self )
-		Shape.__init__( self, name )
 
-		self.viewedBucketMap = anatomist.AObjectConverter.anatomist( aims.BucketMap_VOID() )
-		self.bucketMap = anatomist.AObjectConverter.aims( self.viewedBucketMap )
-		self.insert( self.viewedBucketMap )
-		self.resetShape( coefficients, start, sizes, resolution )
-		self.resetVizualisation( )
+class SuperQuadric(HasSignature, Shape):
+    signature = Signature(
+        'name', Unicode(),
+        'coefficients', Sequence(Number),
+        'start', Point3d(),
+        'resolution', Point3d(),
+        'sizes', Point3d(),
+    )
 
-		# Register events
-		#self.onAttributeChange( 'name', self._nameChanged )
-		#self.onAttributeChange( 'start', self._visualizationChanged )
-		#self.onAttributeChange( 'resolution', self._visualizationChanged )
-		#self.onAttributeChange( 'sizes', self._visualizationChanged )
-		#self.onAttributeChange( 'coefficients', self._visualizationChanged )
+    def __init__(self, coefficients=[0], start=None, sizes=None, resolution=aims.Point3df(1), name="SuperQuadric"):
+        """ 
+        Constructor of the Quadric object		
+        """
 
-	def resetShape( self, coefficients, start = None, sizes = None, resolution = None, displayEquation = False ) :
-		self.sampler = BucketMapSampler_FLOAT_3()
-		self.setCoefficients( coefficients, start, sizes, resolution, displayEquation )
-	
-	def resetVizualisation( self ) :
-		"""
-		Reset the vizualisation for the current parametric Shape.
-		"""
-		self.viewedBucketMap.setInternalsChanged()
-		self.viewedBucketMap.notifyObservers()
+        # Initialize parent types
+        HasSignature.__init__(self)
+        Shape.__init__(self, name)
 
-	def setCoefficients( self, coefficients, start = None, sizes = None, resolution = None, displayEquation = False ) :
+        self.viewedBucketMap = anatomist.AObjectConverter.anatomist(
+            aims.BucketMap_VOID())
+        self.bucketMap = anatomist.AObjectConverter.aims(self.viewedBucketMap)
+        self.insert(self.viewedBucketMap)
+        self.resetShape(coefficients, start, sizes, resolution)
+        self.resetVizualisation()
 
-		# Reset internal objects
-		self.samplable = SuperQuadricSamplable( coefficients )
+        # Register events
+        #self.onAttributeChange( 'name', self._nameChanged )
+        #self.onAttributeChange( 'start', self._visualizationChanged )
+        #self.onAttributeChange( 'resolution', self._visualizationChanged )
+        #self.onAttributeChange( 'sizes', self._visualizationChanged )
+        #self.onAttributeChange( 'coefficients', self._visualizationChanged )
 
-		# Reset internal attribute values
-		if ( start is not None ) :
-			self.start = start
-		else :
-			self.start = aims.Point3df(0, 0, 0)
+    def resetShape(self, coefficients, start=None, sizes=None, resolution=None, displayEquation=False):
+        self.sampler = BucketMapSampler_FLOAT_3()
+        self.setCoefficients(coefficients, start, sizes,
+                             resolution, displayEquation)
 
-		if ( sizes is not None ) :
-			self.sizes = sizes
-		else :
-			self.sizes = self.samplable.getBoundingBoxSizes()
+    def resetVizualisation(self):
+        """
+        Reset the vizualisation for the current parametric Shape.
+        """
+        self.viewedBucketMap.setInternalsChanged()
+        self.viewedBucketMap.notifyObservers()
 
-		if ( resolution is not None ) :
-			self.resolution = resolution
+    def setCoefficients(self, coefficients, start=None, sizes=None, resolution=None, displayEquation=False):
 
-		if ( self.samplable.isChecked() ) :
-			
-			sampled = self.sampler.sample(self.samplable, self.start, self.sizes, self.resolution)
-			self.lastProcessedBucketMap = sampled.getPython().get()
-			
-			# Update internal bucketMaps
-			self.bucketMap[ self.bucketMap.size() ] = self.lastProcessedBucketMap[0]
-		else :
-			self.lastProcessedBucketMap = aims.BucketMap_VOID()
+        # Reset internal objects
+        self.samplable = SuperQuadricSamplable(coefficients)
 
-		if ( displayEquation ) :
-			# Display the new equation
-			pass
-				
-	def getCoefficients( self ) :
-		return self.samplable._coefficients
-		
-	def getBucketMap( self ) :
-		return self.bucketMap
-	
-	def displayEquation( self ) :
-		pass
+        # Reset internal attribute values
+        if (start is not None):
+            self.start = start
+        else:
+            self.start = aims.Point3df(0, 0, 0)
 
-	def translate( self, translation ) :
-		pass
-	
-	def scale( self, scale ) :
-		pass
+        if (sizes is not None):
+            self.sizes = sizes
+        else:
+            self.sizes = self.samplable.getBoundingBoxSizes()
+
+        if (resolution is not None):
+            self.resolution = resolution
+
+        if (self.samplable.isChecked()):
+
+            sampled = self.sampler.sample(
+                self.samplable, self.start, self.sizes, self.resolution)
+            self.lastProcessedBucketMap = sampled.getPython().get()
+
+            # Update internal bucketMaps
+            self.bucketMap[self.bucketMap.size(
+            )] = self.lastProcessedBucketMap[0]
+        else:
+            self.lastProcessedBucketMap = aims.BucketMap_VOID()
+
+        if (displayEquation):
+            # Display the new equation
+            pass
+
+    def getCoefficients(self):
+        return self.samplable._coefficients
+
+    def getBucketMap(self):
+        return self.bucketMap
+
+    def displayEquation(self):
+        pass
+
+    def translate(self, translation):
+        pass
+
+    def scale(self, scale):
+        pass

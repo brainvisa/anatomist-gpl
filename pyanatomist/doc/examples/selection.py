@@ -57,4 +57,3 @@ elif 'sphinx_gallery' in sys.modules:
     aw.sphinx_gallery_snapshot()
 if runqt or 'sphinx_gallery' in sys.modules:
     del aw, mesh, m, g, sel
-

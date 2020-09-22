@@ -41,127 +41,132 @@ import six
 When you need them in a custom application, you need to register them first in the ControlManager. They are already registered in the action/control dictionaries.
 '''
 
-class ResetFOVAction( anatomist.Action ):
-  def name( self ):
-    return 'ResetFOVAction'
 
-  def resetFOV( self ):
-    self.view().aWindow().focusView()
+class ResetFOVAction(anatomist.Action):
+    def name(self):
+        return 'ResetFOVAction'
+
+    def resetFOV(self):
+        self.view().aWindow().focusView()
 
 
-class Simple2DControl( anatomist.Control ):
-  '''Simplified control for 2D views'''
+class Simple2DControl(anatomist.Control):
+    '''Simplified control for 2D views'''
 
-  def __init__( self, prio = 25, name='Simple2DControl' ):
-    anatomist.Control.__init__( self, prio, name )
+    def __init__(self, prio=25, name='Simple2DControl'):
+        anatomist.Control.__init__(self, prio, name)
 
-  def eventAutoSubscription( self, pool ):
-    key = QtCore.Qt
-    NoModifier = key.NoModifier
-    ShiftModifier = key.ShiftModifier
-    ControlModifier = key.ControlModifier
-    AltModifier = key.AltModifier
-    self.mouseLongEventSubscribe( key.LeftButton, NoModifier,
-      pool.action( 'LinkAction' ).execLink,
-      pool.action( 'LinkAction' ).execLink,
-      pool.action( 'LinkAction' ).endLink, True )
-    self.mouseLongEventSubscribe( key.MidButton, ShiftModifier,
-      pool.action( "Zoom3DAction" ).beginZoom,
-      pool.action( "Zoom3DAction" ).moveZoom,
-      pool.action( "Zoom3DAction" ).endZoom, True )
-    self.wheelEventSubscribe( pool.action( "Zoom3DAction" ).zoomWheel )
-    self.keyPressEventSubscribe( key.Key_C, ControlModifier,
-      pool.action( "Trackball" ).setCenter )
-    self.keyPressEventSubscribe( key.Key_C, AltModifier,
-      pool.action( "Trackball" ).showRotationCenter )
-    self.mouseLongEventSubscribe( key.MidButton, ControlModifier,
-      pool.action( "Translate3DAction" ).beginTranslate,
-      pool.action( "Translate3DAction" ).moveTranslate,
-      pool.action( "Translate3DAction" ).endTranslate, True )
-    self.keyPressEventSubscribe( key.Key_PageUp, NoModifier,
-      pool.action( "SliceAction" ).previousSlice )
-    self.keyPressEventSubscribe( key.Key_PageDown, NoModifier,
-      pool.action( "SliceAction" ).nextSlice )
-    self.keyPressEventSubscribe( key.Key_PageUp, ShiftModifier,
-      pool.action( "SliceAction" ).previousTime )
-    self.keyPressEventSubscribe( key.Key_PageDown, ShiftModifier,
-      pool.action( "SliceAction" ).nextTime )
-    self.keyPressEventSubscribe( key.Key_L, ControlModifier,
-      pool.action( "SliceAction" ).toggleLinkedOnSlider )
-    self.keyPressEventSubscribe( key.Key_Space, NoModifier,
-      pool.action( "MovieAction" ).startOrStop )
-    self.keyPressEventSubscribe( key.Key_S, ControlModifier,
-      pool.action( "MovieAction" ).sliceOn )
-    self.keyPressEventSubscribe( key.Key_T, ControlModifier,
-      pool.action( "MovieAction" ).timeOn )
-    self.keyPressEventSubscribe( key.Key_M, ControlModifier,
-      pool.action( "MovieAction" ).nextMode )
-    self.keyPressEventSubscribe( key.Key_Plus, NoModifier,
-      pool.action( "MovieAction" ).increaseSpeed )
-    self.keyPressEventSubscribe( key.Key_Plus, ShiftModifier,
-      pool.action( "MovieAction" ).increaseSpeed )
-    self.keyPressEventSubscribe( key.Key_Minus, NoModifier,
-      pool.action( "MovieAction" ).decreaseSpeed )
-    self.myActions = { "MovieAction" : pool.action( "MovieAction" ),
-      "ContinuousTrackball" : pool.action( "ContinuousTrackball" ) }
-    self.mouseLongEventSubscribe( key.RightButton, NoModifier,
-      pool.action( 'PaletteContrastAction' ).startContrast,
-      pool.action( 'PaletteContrastAction' ).moveContrast,
-      pool.action( 'PaletteContrastAction' ).stopContrast, True )
-    self.keyPressEventSubscribe( key.Key_C, NoModifier,
-      pool.action( "PaletteContrastAction" ).resetPalette )
-    self.keyPressEventSubscribe( key.Key_Home, NoModifier,
-      pool.action( "ResetFOVAction" ).resetFOV )
+    def eventAutoSubscription(self, pool):
+        key = QtCore.Qt
+        NoModifier = key.NoModifier
+        ShiftModifier = key.ShiftModifier
+        ControlModifier = key.ControlModifier
+        AltModifier = key.AltModifier
+        self.mouseLongEventSubscribe(key.LeftButton, NoModifier,
+                                     pool.action('LinkAction').execLink,
+                                     pool.action('LinkAction').execLink,
+                                     pool.action('LinkAction').endLink, True)
+        self.mouseLongEventSubscribe(key.MidButton, ShiftModifier,
+                                     pool.action("Zoom3DAction").beginZoom,
+                                     pool.action("Zoom3DAction").moveZoom,
+                                     pool.action("Zoom3DAction").endZoom, True)
+        self.wheelEventSubscribe(pool.action("Zoom3DAction").zoomWheel)
+        self.keyPressEventSubscribe(key.Key_C, ControlModifier,
+                                    pool.action("Trackball").setCenter)
+        self.keyPressEventSubscribe(key.Key_C, AltModifier,
+                                    pool.action("Trackball").showRotationCenter)
+        self.mouseLongEventSubscribe(key.MidButton, ControlModifier,
+                                     pool.action(
+                                         "Translate3DAction").beginTranslate,
+                                     pool.action(
+                                         "Translate3DAction").moveTranslate,
+                                     pool.action("Translate3DAction").endTranslate, True)
+        self.keyPressEventSubscribe(key.Key_PageUp, NoModifier,
+                                    pool.action("SliceAction").previousSlice)
+        self.keyPressEventSubscribe(key.Key_PageDown, NoModifier,
+                                    pool.action("SliceAction").nextSlice)
+        self.keyPressEventSubscribe(key.Key_PageUp, ShiftModifier,
+                                    pool.action("SliceAction").previousTime)
+        self.keyPressEventSubscribe(key.Key_PageDown, ShiftModifier,
+                                    pool.action("SliceAction").nextTime)
+        self.keyPressEventSubscribe(key.Key_L, ControlModifier,
+                                    pool.action("SliceAction").toggleLinkedOnSlider)
+        self.keyPressEventSubscribe(key.Key_Space, NoModifier,
+                                    pool.action("MovieAction").startOrStop)
+        self.keyPressEventSubscribe(key.Key_S, ControlModifier,
+                                    pool.action("MovieAction").sliceOn)
+        self.keyPressEventSubscribe(key.Key_T, ControlModifier,
+                                    pool.action("MovieAction").timeOn)
+        self.keyPressEventSubscribe(key.Key_M, ControlModifier,
+                                    pool.action("MovieAction").nextMode)
+        self.keyPressEventSubscribe(key.Key_Plus, NoModifier,
+                                    pool.action("MovieAction").increaseSpeed)
+        self.keyPressEventSubscribe(key.Key_Plus, ShiftModifier,
+                                    pool.action("MovieAction").increaseSpeed)
+        self.keyPressEventSubscribe(key.Key_Minus, NoModifier,
+                                    pool.action("MovieAction").decreaseSpeed)
+        self.myActions = {"MovieAction": pool.action("MovieAction"),
+                          "ContinuousTrackball": pool.action("ContinuousTrackball")}
+        self.mouseLongEventSubscribe(key.RightButton, NoModifier,
+                                     pool.action(
+                                         'PaletteContrastAction').startContrast,
+                                     pool.action(
+                                         'PaletteContrastAction').moveContrast,
+                                     pool.action('PaletteContrastAction').stopContrast, True)
+        self.keyPressEventSubscribe(key.Key_C, NoModifier,
+                                    pool.action("PaletteContrastAction").resetPalette)
+        self.keyPressEventSubscribe(key.Key_Home, NoModifier,
+                                    pool.action("ResetFOVAction").resetFOV)
 
-  def doAlsoOnDeselect( self, pool ):
-    a = anatomist.Anatomist('-b')
-    for k,ac in six.iteritems(self.myActions):
-      if isinstance( a, anatomist.MovieAction ) and a.isRunning():
-        a.startOrStop()
-      if isinstance( a, anatomist.ContinuousTrackball ):
-        a.stop()
+    def doAlsoOnDeselect(self, pool):
+        a = anatomist.Anatomist('-b')
+        for k, ac in six.iteritems(self.myActions):
+            if isinstance(a, anatomist.MovieAction) and a.isRunning():
+                a.startOrStop()
+            if isinstance(a, anatomist.ContinuousTrackball):
+                a.stop()
 
-class Simple3DControl( Simple2DControl ):
-  '''Simplified control for 3D views: still allow rotation using mouse mid button
-  '''
 
-  def __init__( self, prio = 26, name='Simple3DControl' ):
-    Simple2DControl.__init__( self, prio, name )
+class Simple3DControl(Simple2DControl):
+    '''Simplified control for 3D views: still allow rotation using mouse mid button
+    '''
 
-  def eventAutoSubscription( self, pool ):
-    key = QtCore.Qt
-    NoModifier = key.NoModifier
-    ShiftModifier = key.ShiftModifier
-    ControlModifier = key.ControlModifier
-    Simple2DControl.eventAutoSubscription( self, pool )
-    self.mouseLongEventSubscribe ( \
-      key.MidButton, NoModifier,
-      pool.action( 'ContinuousTrackball' ).beginTrackball,
-      pool.action( 'ContinuousTrackball' ).moveTrackball,
-      pool.action( 'ContinuousTrackball' ).endTrackball, True )
-    self.keyPressEventSubscribe( key.Key_Space, ControlModifier,
-      pool.action( "ContinuousTrackball" ).startOrStop )
+    def __init__(self, prio=26, name='Simple3DControl'):
+        Simple2DControl.__init__(self, prio, name)
+
+    def eventAutoSubscription(self, pool):
+        key = QtCore.Qt
+        NoModifier = key.NoModifier
+        ShiftModifier = key.ShiftModifier
+        ControlModifier = key.ControlModifier
+        Simple2DControl.eventAutoSubscription(self, pool)
+        self.mouseLongEventSubscribe(
+            key.MidButton, NoModifier,
+            pool.action('ContinuousTrackball').beginTrackball,
+            pool.action('ContinuousTrackball').moveTrackball,
+            pool.action('ContinuousTrackball').endTrackball, True)
+        self.keyPressEventSubscribe(key.Key_Space, ControlModifier,
+                                    pool.action("ContinuousTrackball").startOrStop)
 
 
 def registerSimpleControls():
-  ''' register actions and controls'''
-  a = anatomist.Anatomist( '-b' )
-  iconpath = os.path.join( str( a.anatomistSharedPath() ), 'icons' )
-  pix = QtGui.QPixmap( os.path.join( iconpath, 'simple2Dcontrol.png' ) )
-  anatomist.IconDictionary.instance().addIcon( 'Simple2DControl', pix )
-  pix = QtGui.QPixmap( os.path.join( iconpath, 'simple3Dcontrol.png' ) )
-  anatomist.IconDictionary.instance().addIcon( 'Simple3DControl', pix )
+    ''' register actions and controls'''
+    a = anatomist.Anatomist('-b')
+    iconpath = os.path.join(str(a.anatomistSharedPath()), 'icons')
+    pix = QtGui.QPixmap(os.path.join(iconpath, 'simple2Dcontrol.png'))
+    anatomist.IconDictionary.instance().addIcon('Simple2DControl', pix)
+    pix = QtGui.QPixmap(os.path.join(iconpath, 'simple3Dcontrol.png'))
+    anatomist.IconDictionary.instance().addIcon('Simple3DControl', pix)
 
-  del pix, iconpath, a #, os, QtGui
+    del pix, iconpath, a  # , os, QtGui
 
-  ad = anatomist.ActionDictionary.instance()
-  ad.addAction( 'ResetFOVAction', ResetFOVAction )
-  cd = anatomist.ControlDictionary.instance()
-  cd.addControl( 'Simple2DControl', Simple2DControl, 25 )
-  cd.addControl( 'Simple3DControl', Simple3DControl, 26 )
-  #cm = anatomist.ControlManager.instance()
-  #cm.addControl( 'QAGLWidget3D', '', 'Simple2DControl' )
-  #cm.addControl( 'QAGLWidget3D', '', 'Simple3DControl' )
+    ad = anatomist.ActionDictionary.instance()
+    ad.addAction('ResetFOVAction', ResetFOVAction)
+    cd = anatomist.ControlDictionary.instance()
+    cd.addControl('Simple2DControl', Simple2DControl, 25)
+    cd.addControl('Simple3DControl', Simple3DControl, 26)
+    #cm = anatomist.ControlManager.instance()
+    #cm.addControl( 'QAGLWidget3D', '', 'Simple2DControl' )
+    #cm.addControl( 'QAGLWidget3D', '', 'Simple3DControl' )
 
-  del cd, ad
-
+    del cd, ad
