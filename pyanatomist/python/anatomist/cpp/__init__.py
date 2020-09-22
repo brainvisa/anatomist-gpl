@@ -307,6 +307,7 @@ def aimsFromAnatomist(ao, options={'scale': 1}):
             return aim._get()
     return None
 
+
 AObjectConverter.aims = staticmethod(aimsFromAnatomist)
 del aimsFromAnatomist
 
@@ -326,19 +327,21 @@ def anatomistFromAims(obj):
             t = aims.Volume_S16
         elif obj.dtype is numpy.dtype(numpy.uint16):
             t = aims.Volume_U16
-        elif obj.dtype is numpy.dtype( numpy.int_ ) \
+        elif obj.dtype is numpy.dtype(numpy.int_) \
                 or obj.dtype is numpy.dtype(numpy.int32):
             t = aims.Volume_S32
         elif obj.dtype is numpy.dtype(numpy.uint32):
             t = aims.Volume_U32
         elif obj.dtype is numpy.dtype(numpy.float32):
             t = aims.Volume_FLOAT
-        elif obj.dtype is numpy.dtype( numpy.float64 ) \
+        elif obj.dtype is numpy.dtype(numpy.float64) \
                 or obj.dtype is numpy.dtype(numpy.float_):
             t = aims.Volume_DOUBLE
     if t:
         return AObjectConverter.anatomist(t(obj))
     return AObjectConverter._anatomist(obj)
+
+
 AObjectConverter._anatomist = AObjectConverter.anatomist
 AObjectConverter.anatomist = staticmethod(anatomistFromAims)
 del anatomistFromAims
@@ -378,7 +381,7 @@ class Anatomist(AnatomistSip):
         if sys.path[1] != pythonmodules:
             sys.path.insert(1, pythonmodules)
 
-        mods = glob.glob( os.path.join( pythonmodules, '*' ) ) \
+        mods = glob.glob(os.path.join(pythonmodules, '*')) \
             + glob.glob(os.path.join(homemodules, '*'))
         # print('modules:', mods)
 
@@ -459,7 +462,7 @@ def newexecute(self, *args, **kwargs):
     '''
     def replace_dict(dic, cc):
         for k, v in dic.items():
-            if isinstance( v, AObject ) or isinstance( v, AWindow ) \
+            if isinstance(v, AObject) or isinstance(v, AWindow) \
                     or isinstance(v, Referential) or isinstance(v, Transformation):
                 try:
                     i = cc.id(v)
@@ -474,7 +477,7 @@ def newexecute(self, *args, **kwargs):
     def replace_list(l, cc):
         k = 0
         for v in l:
-            if isinstance( v, AObject ) or isinstance( v, AWindow )\
+            if isinstance(v, AObject) or isinstance(v, AWindow)\
                     or isinstance(v, Referential) or isinstance(v, Transformation):
                 try:
                     i = cc.id(v)
@@ -519,6 +522,7 @@ def newexecute(self, *args, **kwargs):
         cc = CommandContext.defaultContext()
     replace_dict(dic, cc)
     return self._execute(args[0], str(dic), cc)
+
 
 Processor.execute = newexecute
 del newexecute
@@ -600,6 +604,7 @@ class PyControlCreator(ControlDictionary.ControlCreatorBase):
     def __call__(self):
         return self._function()
 
+
 ControlDictionary.addControl = \
     lambda self, name, creator, prio, allowreplace=False: \
     self._addControl(name, PyControlCreator(creator), prio, allowreplace)
@@ -666,6 +671,7 @@ def mouseMoveSubscribeFunction(self, but, state, func, name=''):
             name = func.__func__.__name__
     self._mouseMoveEventSubscribe(but, state, PyMouseActionLink(func), name)
 
+
 Control.keyPressEventSubscribe = keyPressSubscribeFunction
 Control.keyReleaseEventSubscribe = keyReleaseSubscribeFunction
 Control.mousePressButtonEventSubscribe = mousePressSubscribeFunction
@@ -674,13 +680,13 @@ Control.mouseMoveEventSubscribe = mouseMoveSubscribeFunction
 Control.mouseDoubleClickEventSubscribe = mouseDoubleClickSubscribeFunction
 del keyPressSubscribeFunction, keyReleaseSubscribeFunction, \
     mousePressSubscribeFunction, mouseReleaseSubscribeFunction, \
-  mouseDoubleClickSubscribeFunction, mouseMoveSubscribeFunction
+    mouseDoubleClickSubscribeFunction, mouseMoveSubscribeFunction
 
 Control.mouseLongEventSubscribe = lambda self, but, state, startfunc, \
     longfunc, endfunc, exclusive: \
-                                  self._mouseLongEventSubscribe(
-                                      but, state, PyMouseActionLink(startfunc),
-                                      PyMouseActionLink(longfunc), PyMouseActionLink(endfunc), exclusive)
+    self._mouseLongEventSubscribe(
+        but, state, PyMouseActionLink(startfunc),
+        PyMouseActionLink(longfunc), PyMouseActionLink(endfunc), exclusive)
 Control.wheelEventSubscribe = lambda self, func: \
     self._wheelEventSubscribe(
         PyWheelActionLink(func))
@@ -707,6 +713,8 @@ def __GlobalConfiguration_setitem__(self, param, value):
     print('config.setitem:', param, ':', value)
     super(GlobalConfiguration, self).__setitem__(param, value)
     self.apply()
+
+
 anatomist.GlobalConfiguration.__setitem__ = __GlobalConfiguration_setitem__
 del __GlobalConfiguration_setitem__
 

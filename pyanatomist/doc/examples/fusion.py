@@ -107,6 +107,7 @@ class MyFusion(anatomist.cpp.FusionMethod):
     def orderingMatters(self):
         return False
 
+
 # Register MyFusion
 anatomist.cpp.FusionFactory.registerMethod(MyFusion())
 
@@ -114,6 +115,6 @@ anatomist.cpp.FusionFactory.registerMethod(MyFusion())
 obj = a.loadObject('test.mesh')
 
 # if __name__ == '__main__' :
-    # import qt
-    # if qt.QApplication.startingUp():
-        # qt.qApp.exec_loop()
+# import qt
+# if qt.QApplication.startingUp():
+# qt.qApp.exec_loop()

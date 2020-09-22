@@ -112,4 +112,3 @@ if runloop:
     Qt.QApplication.instance().exec_()
 if runloop or 'sphinx_gallery' in sys.modules:
     del aw, am, m
-

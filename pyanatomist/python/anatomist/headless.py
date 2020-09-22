@@ -210,21 +210,22 @@ def find_mesa():
     return None
 
 
-#def terminate_xvfb():
+# def terminate_xvfb():
     #global xvfb
     #global original_display
-    #if xvfb:
-        #xvfb.terminate()
-        #xvfb.wait()
-        #xvfb = None
-        #if original_display:
-            #os.environ['DISPLAY'] = original_display
-        #else:
-            #del os.environ['DISPLAY']
+    # if xvfb:
+    # xvfb.terminate()
+    # xvfb.wait()
+    #xvfb = None
+    # if original_display:
+    #os.environ['DISPLAY'] = original_display
+    # else:
+    #del os.environ['DISPLAY']
 
 
 class PrCtlError(Exception):
     pass
+
 
 def on_parent_exit(signame):
     """
@@ -240,6 +241,7 @@ def on_parent_exit(signame):
     PR_SET_PDEATHSIG = 1
 
     signum = getattr(signal, signame)
+
     def set_parent_exit_signal():
         # http://linux.die.net/man/2/prctl
         result = cdll['libc.so.6'].prctl(PR_SET_PDEATHSIG, signum)
@@ -295,9 +297,9 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=False):
     use_xvfb = True
     glxinfo_cmd = distutils.spawn.find_executable('glxinfo')
     xdpyinfo_cmd = distutils.spawn.find_executable('xdpyinfo')
-    #if not xdpyinfo_cmd:
-        ## not a X client, probably not Linux
-        #use_xvfb = False
+    # if not xdpyinfo_cmd:
+    # not a X client, probably not Linux
+    #use_xvfb = False
     xvfb_cmd = distutils.spawn.find_executable('Xvfb')
     if not xvfb_cmd:
         use_xvfb = False
@@ -312,7 +314,6 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=False):
         xvfb = Popen(['Xvfb', '-screen', '0', '1280x1024x24',
                       '+extension', 'GLX', ':%d' % display],
                      preexec_fn=on_parent_exit('SIGINT'))
-
 
         original_display = os.environ.get('DISPLAY', None)
         os.environ['DISPLAY'] = ':%d' % display
@@ -349,7 +350,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=False):
                     else:
                         print('But VirtualGL could not be loaded...')
 
-                    #test_opengl(verbose=True)
+                    # test_opengl(verbose=True)
 
         if not glx and not gl_libs:
             # try Mesa, if found
@@ -360,7 +361,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=False):
                 os.environ['LD_PRELOAD'] = mesa
                 os.environ['LD_LIBRARY_PATH'] \
                     = os.path.dirname(mesa) + ':' \
-                        + os.getenv('LD_LIBRARY_PATH')
+                    + os.getenv('LD_LIBRARY_PATH')
                 # re-run Xvfb using new path
                 xvfb.terminate()
                 xvfb.wait()
@@ -400,8 +401,8 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=False):
 
     # this is not needed any longer, since on_parent_exit() is passed to
     # Popen
-    #if xvfb is not None:
-        #atexit.register(terminate_xvfb)
+    # if xvfb is not None:
+        # atexit.register(terminate_xvfb)
 
 
 def HeadlessAnatomist(*args, **kwargs):
@@ -498,17 +499,17 @@ def HeadlessAnatomist(*args, **kwargs):
 
     from anatomist.api import Anatomist
 
-    #def __del__ana(self):
-        #atexit._exithandlers.remove((terminate_xvfb, (), {}))
-        #terminate_xvfb()
+    # def __del__ana(self):
+    #atexit._exithandlers.remove((terminate_xvfb, (), {}))
+    # terminate_xvfb()
 
-    #def createWindow_ana(self, wintype, **kwargs):
-        #options = kwargs.get('options', {})
-        #if 'hidden' not in options:
-            #options['hidden'] = True
-            #kwargs = dict(kwargs)
-            #kwargs['options'] = options
-        #return self._old_createWindow(wintype, **kwargs)
+    # def createWindow_ana(self, wintype, **kwargs):
+    #options = kwargs.get('options', {})
+    # if 'hidden' not in options:
+    #options['hidden'] = True
+    #kwargs = dict(kwargs)
+    #kwargs['options'] = options
+    # return self._old_createWindow(wintype, **kwargs)
 
     hanatomist = Anatomist()
     #Anatomist.__del__ = __del__ana
@@ -516,4 +517,3 @@ def HeadlessAnatomist(*args, **kwargs):
     #Anatomist.createWindow = createWindow_ana
 
     return hanatomist
-

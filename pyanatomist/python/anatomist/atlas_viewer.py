@@ -88,7 +88,7 @@ class AtlasJsonRois(QMainWindow):
         toolbar = QToolBar('View toolbar')
         icondir = os.path.expandvars(os.path.join(
                                      aims.carto.Paths.globalShared(), 'anatomist-%s' % '.'.join(
-                                     [str(x) for x in aims.version()]), 'icons', 'atlas_viewer'))
+                                         [str(x) for x in aims.version()]), 'icons', 'atlas_viewer'))
         self.open_json = QAction(
             QIcon(os.path.join(icondir, 'Open_icon.png')), 'open JSON', self)
         toolbar.addAction(self.open_json)
@@ -595,7 +595,7 @@ class AtlasJsonRois(QMainWindow):
             centers the window on the screen.'''
         resolution = QDesktopWidget().screenGeometry()
         self.move((resolution.width() / 2) - (self.frameSize().width() / 2),
-                 (resolution.height() / 2) - (self.frameSize().height() / 2))
+                  (resolution.height() / 2) - (self.frameSize().height() / 2))
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 
@@ -711,7 +711,8 @@ class TreeRois(object):
                 checked = False  # True if node at the same lvl node are all checked
                 for p in range(parent.childCount()):
                     if parent.child(p).checkState(0) == 2:
-                        checked = True  # if one node (at same lvl) is unchecked
+                        # if one node (at same lvl) is unchecked
+                        checked = True
                 if checked == False:
                     parent.setCheckState(0, Qt.Unchecked)
                 else:
@@ -728,7 +729,8 @@ class TreeRois(object):
                 checked = True  # True if node at the same lvl node are all checked
                 for p in range(parent.childCount()):
                     if parent.child(p).checkState(0) == 0:
-                        checked = False  # if one node (at same lvl) is unchecked
+                        # if one node (at same lvl) is unchecked
+                        checked = False
                 if checked:
                     parent.setCheckState(0, Qt.Checked)
                 else:
@@ -752,7 +754,8 @@ class TreeRois(object):
     def createGroupWithNodeChecked(self, group_name):
         """This method aims is to select all brain's node children if they're checked """
         brain_item = (self.tree_widget.findItems("brain", Qt.MatchExactly))[0]
-        if brain_item.checkState(0) in [0, 1]:  # It's not usefull to copy the full tree
+        # It's not usefull to copy the full tree
+        if brain_item.checkState(0) in [0, 1]:
             group_list = self.getLeavesChecked(brain_item, [])
         else:
             QErrorMessage.showMessage(QErrorMessage.qtHandler(),
@@ -804,7 +807,7 @@ class TreeRois(object):
                 for t in leaf_list:
                     # to avoid duplicate
                     if tree_item.parent().text(0) == t.text(0):
-                    # if the parent exist we just have to add item as child
+                        # if the parent exist we just have to add item as child
                         t.addChild(tree_item.clone())
                         parent_existing_in_list = True
 

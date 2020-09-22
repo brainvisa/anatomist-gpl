@@ -40,7 +40,7 @@ Loading and viewing a Volume with anatomist
 from __future__ import print_function
 
 from __future__ import absolute_import
-import anatomist.api  as anatomist  # works with all implementations
+import anatomist.api as anatomist  # works with all implementations
 
 # initialize Anatomist
 a = anatomist.Anatomist()
@@ -63,4 +63,3 @@ win.sphinx_gallery_snapshot()
 import sys
 if 'sphinx_gallery' in sys.modules:
     del win, avol
-

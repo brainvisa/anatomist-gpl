@@ -108,6 +108,7 @@ def transform(mesh, angles, scaling, translate):
     rot = rotation_3d(a1, a2, a3)
     apply_transform(mesh, scaling, rot, translate)
 
+
 mesh = aims.SurfaceGenerator.sphere(aims.Point3df(0, 0, 0), 1, 500)
 asphere = a.toAObject(mesh)
 asphere.releaseAppRef()

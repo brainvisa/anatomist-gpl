@@ -260,7 +260,8 @@ class Anatomist(base.Anatomist):
                 files = [filename, filename + '.minf']
                 for f in files:
                     if os.path.exists(f):
-                        if os.stat(f).st_mtime >= object.loadDate:  # reload it if the file has been modified since last load
+                        # reload it if the file has been modified since last load
+                        if os.stat(f).st_mtime >= object.loadDate:
                             self.reloadObjects([object])
                             break
                 if duplicate:
@@ -349,7 +350,7 @@ class Anatomist(base.Anatomist):
         newGraph = self.AGraph(self)
         self.execute(
             "CreateGraph", object=object, res_pointer=newGraph, name=name,
-          syntax=syntax, filename=filename)
+            syntax=syntax, filename=filename)
         newGraph.takeRef()
         newGraph.releaseAppRef()
         return newGraph
@@ -999,7 +1000,7 @@ class Anatomist(base.Anatomist):
                     # special case of dictionaries: they should convert to
                     # carto Trees, and have the __syntax__ property first
                     if '__syntax__' in value:
-                        v2 = "{ '__syntax__' : " + repr( value[ '__syntax__' ] ) \
+                        v2 = "{ '__syntax__' : " + repr(value['__syntax__']) \
                             + ', '
                     else:
                         v2 = "{ '__syntax__' : 'dictionary', "
@@ -1145,9 +1146,9 @@ class Anatomist(base.Anatomist):
 
         # def __del__(self):
             # if not self.weakRef:
-                # release the reference on item deletion
-                # self.anatomistinstance.execute("ExternalReference",
-                # elements=[self], action_type="ReleaseWeakSharedRef")
+            # release the reference on item deletion
+            # self.anatomistinstance.execute("ExternalReference",
+            # elements=[self], action_type="ReleaseWeakSharedRef")
         def takeRef(self):
             if self.refType is None:
                 self.refType = self.anatomistinstance.defaultRefType

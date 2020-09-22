@@ -181,7 +181,8 @@ class MeasuresWindow(QSplitter):
             if maskIterator.bucket is None:
                 roiCenter = aims.Point3df(0, 0, 0)
                 bucket = aims.BucketMap_VOID()
-                bucket.setSizeXYZT(*list(maskIterator.voxelSize().items()) + (1,))
+                bucket.setSizeXYZT(
+                    *list(maskIterator.voxelSize().items()) + (1,))
                 maskIterator.restart()
                 valid = 0
                 invalid = 0
@@ -233,8 +234,8 @@ class MeasuresWindow(QSplitter):
             # Set selected color to bucket
             maskIterator.bucket.setMaterial(self.anatomist.Material(
                 diffuse=[1, 0, 0, 0.5],
-                                    lighting=0,
-                                    face_culling=1,
+                lighting=0,
+                face_culling=1,
             ))
             # Set unselected color to previously selected bucket
             if self.selectedBucket is not None:
@@ -250,6 +251,7 @@ class MeasuresWindow(QSplitter):
                 self.matplotAxes.plot(
                     indices, numpy.array(maskIterator.means))
                 self.matplotCanvas.draw()
+
 
 if __name__ == '__main__':
     qApp = QApplication(sys.argv)

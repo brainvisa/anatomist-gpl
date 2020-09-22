@@ -106,4 +106,3 @@ if runloop and 'sphinx_gallery' not in sys.modules:
     Qt.QApplication.instance().exec_()
 if runloop or 'sphinx_gallery' in sys.modules:
     del win, win2, win3, fus, avol, arr, avol2
-

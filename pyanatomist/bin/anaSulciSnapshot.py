@@ -9,9 +9,9 @@
 #
 # This software is governed by the CeCILL license version 2 under
 # French law and abiding by the rules of distribution of free software.
-# You can  use, modify and/or redistribute the software under the 
+# You can  use, modify and/or redistribute the software under the
 # terms of the CeCILL license version 2 as circulated by CEA, CNRS
-# and INRIA at the following URL "http://www.cecill.info". 
+# and INRIA at the following URL "http://www.cecill.info".
 #
 # As a counterpart to the access to the source code and  rights to copy,
 # modify and redistribute granted by the license, users are provided only
@@ -26,15 +26,19 @@
 # therefore means  that it is reserved for developers  and  experienced
 # professionals having in-depth computer knowledge. Users are therefore
 # encouraged to load and test the software's suitability as regards their
-# requirements in conditions enabling the security of their systems and/or 
-# data to be ensured and,  more generally, to use and operate it in the 
+# requirements in conditions enabling the security of their systems and/or
+# data to be ensured and,  more generally, to use and operate it in the
 # same conditions as regards security.
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 from __future__ import print_function
 from __future__ import absolute_import
-import os, sys, sip, numpy, time
+import os
+import sys
+import sip
+import numpy
+import time
 from optparse import OptionParser
 import sigraph
 from soma import aims, aimsalgo
@@ -45,42 +49,41 @@ import soma.qt_gui.qt_backend.QtGui as qtgui
 a = anatomist.Anatomist()
 p = a.theProcessor()
 
+
 def setCamera(win, orientation):
     q = aims.Quaternion()
     q2 = aims.Quaternion()
-    if orientation == 'top' : # ok
+    if orientation == 'top':  # ok
         q.fromAxis([0, 0, 1], -numpy.pi/2)
-    elif orientation == 'bottom' : # ok
+    elif orientation == 'bottom':  # ok
         q.fromAxis([0, 0, 1], numpy.pi/2)
         q2.fromAxis([1, 0, 0], numpy.pi)
         q = q.compose(q2)
-    elif orientation == 'left' : # ok
+    elif orientation == 'left':  # ok
         q.fromAxis([0, 1, 0], numpy.pi / 2.)
         q2.fromAxis([1, 0, 0], numpy.pi / 2.)
         q = q.compose(q2)
-    elif orientation == 'right' : # ok
+    elif orientation == 'right':  # ok
         q.fromAxis([0, 1, 0], -numpy.pi / 2.)
         q2.fromAxis([1, 0, 0], numpy.pi / 2.)
         q = q.compose(q2)
-    elif orientation == 'back' : # ?
+    elif orientation == 'back':  # ?
         q.fromAxis([1, 0, 0], -numpy.pi / 2)
         q2.fromAxis([0, 1, 0], numpy.pi)
         q = q.compose(q2)
-    elif orientation == 'front' : # ?
+    elif orientation == 'front':  # ?
         q.fromAxis([1, 0, 0], numpy.pi / 2)
     elif orientation.startswith('auto='):
         v = [float(x) for x in orientation.split('=')[1].split(',')]
         q.setVector(v)
     a.camera(windows=[win], zoom=1,
-        observer_position=[10., 10., 10.],
-        view_quaternion=q.vector(), force_redraw=True)
-
-
+             observer_position=[10., 10., 10.],
+             view_quaternion=q.vector(), force_redraw=True)
 
 
 def display_graph(transfile, orientation, trm_name, graphname, meshname,
-    imagename, selected_sulci, bb, nodisplay, label_state, hiename,
-    win=None, wingeom=[0,0] ):
+                  imagename, selected_sulci, bb, nodisplay, label_state, hiename,
+                  win=None, wingeom=[0, 0]):
 
     # load objects
     ag = a.loadObject(graphname)
@@ -92,7 +95,8 @@ def display_graph(transfile, orientation, trm_name, graphname, meshname,
     if meshname:
         am = a.loadObject(meshname)
         aobjects.append(am)
-    else:	am = None
+    else:
+        am = None
     ahie = a.loadObject(hiename)
 
     # referential
@@ -102,27 +106,28 @@ def display_graph(transfile, orientation, trm_name, graphname, meshname,
         t = a.loadTransformation(trm_name, origin, destination)
     else:
         motion = aims.GraphManip.talairach(ag.graph())
-        vector = motion.toMatrix()[:3,3].tolist() + \
-            motion.toMatrix()[:3,:3].T.ravel().tolist()
+        vector = motion.toMatrix()[:3, 3].tolist() + \
+            motion.toMatrix()[:3, :3].T.ravel().tolist()
         t = a.execute("LoadTransformation",
-            **{'matrix' : vector,
-            'origin' : origin.getInternalRep(),
-            'destination' : destination.getInternalRep()})
+                      **{'matrix': vector,
+                         'origin': origin.getInternalRep(),
+                         'destination': destination.getInternalRep()})
         t = a.Transformation(a, t.trans())
     ag.setReferential(origin.internalRep)
-    if am: am.setReferential(origin.internalRep)
+    if am:
+        am.setReferential(origin.internalRep)
 
     # Windows
     if win is None:
         win = a.createWindow(wintype='3D', no_decoration=True,
-        options= {'wflags' : int(qt.Qt.X11BypassWindowManagerHint | qt.Qt.WindowStaysOnTopHint) })
+                             options={'wflags': int(qt.Qt.X11BypassWindowManagerHint | qt.Qt.WindowStaysOnTopHint)})
     else:
-            win.removeObjects( win.getObjects() )
+        win.removeObjects(win.getObjects())
     if selected_sulci is None:
-            add_graph_nodes = True
+        add_graph_nodes = True
     else:
-            add_graph_nodes = False
-    a.addObjects(aobjects, win, add_graph_nodes=add_graph_nodes )
+        add_graph_nodes = False
+    a.addObjects(aobjects, win, add_graph_nodes=add_graph_nodes)
     # remove cursor (referential)
     win.setHasCursor(0)
     win.Refresh()
@@ -134,9 +139,9 @@ def display_graph(transfile, orientation, trm_name, graphname, meshname,
     if selected_sulci is not None:
         names = ' '.join(selected_sulci)
         a.execute('SelectByNomenclature', nomenclature=ahie,
-            names=names)
+                  names=names)
         a.execute('SelectByNomenclature', nomenclature=ahie,
-            names=names, modifiers='toggle')
+                  names=names, modifiers='toggle')
 
     # see sulci colors
     ag.setColorMode(ag.Normal)
@@ -157,24 +162,25 @@ def display_graph(transfile, orientation, trm_name, graphname, meshname,
         setCamera(win, orientation)
         win.internalRep.focusView()
         a.camera(windows=[win],
-            boundingbox_min=bb[0], boundingbox_max=bb[1])
-    if nodisplay: return [win, ag, am, ahie, bb]
+                 boundingbox_min=bb[0], boundingbox_max=bb[1])
+    if nodisplay:
+        return [win, ag, am, ahie, bb]
 
     # fullscreen + snapshot
-    if wingeom == [0,0]:
+    if wingeom == [0, 0]:
         fullscreen = True
         win.setWindowState(win.windowState() | qt.Qt.WindowFullScreen)
     else:
         fullscreen = False
     desktop_geometry = qtgui.qApp.desktop().geometry()
     if not fullscreen:
-        desktop_geometry.setWidth( wingeom[0] )
-        desktop_geometry.setHeight( wingeom[1] )
+        desktop_geometry.setWidth(wingeom[0])
+        desktop_geometry.setHeight(wingeom[1])
     win.setFocus()
     win.raise_()
-    coords=desktop_geometry.getCoords()
+    coords = desktop_geometry.getCoords()
     a.execute("WindowConfig", windows=[win],
-        geometry=coords, snapshot=imagename)
+              geometry=coords, snapshot=imagename)
 
     return [win, ag, am, ahie, bb]
 
@@ -192,70 +198,71 @@ def compute_bb(bbfile):
     fd.close()
     return bb
 
+
 def parseOpts(argv):
     description = 'Snapshots...\n--mesh is optional.'
     parser = OptionParser(description)
     parser.add_option('--orientation', dest='orientation',
-        metavar='TYPE', action='store', default='left',
-        help='one of left, right, top, bottom (default : %default)')
+                      metavar='TYPE', action='store', default='left',
+                      help='one of left, right, top, bottom (default : %default)')
     parser.add_option('-g', '--graph', dest='graphname',
-        metavar='FILE', action='store', default=None,
-        help='graph of sulci')
+                      metavar='FILE', action='store', default=None,
+                      help='graph of sulci')
     parser.add_option('-m', '--mesh', dest='meshname',
-        metavar='FILE', action='store',	default=None,
-        help='mesh : grey/white')
+                      metavar='FILE', action='store',	default=None,
+                      help='mesh : grey/white')
     parser.add_option('-t', '--transformation', dest='trm_name',
-        metavar='FILE', action='store',	default=None,
-        help='trm file : subject -> Talairach, default: take it from graph')
+                      metavar='FILE', action='store',	default=None,
+                      help='trm file : subject -> Talairach, default: take it from graph')
     parser.add_option('-o', '--outimage', dest='imagename',
-        metavar='FILE', action='store',	default=None,
-        help='output image name')
+                      metavar='FILE', action='store',	default=None,
+                      help='output image name')
     parser.add_option('-s', '--sulci', dest='sulci',
-        metavar = 'NAME', action='store', default = None,
-        help='Select and display only specified sulci (coma-separated ' \
-        'list)')
+                      metavar='NAME', action='store', default=None,
+                      help='Select and display only specified sulci (coma-separated '
+                      'list)')
     parser.add_option('-q', '--quaternion', dest='quaternion',
-        metavar = 'VALUES', action='store', default = None,
-        help='Set orientation of camera by hand from anatomist '
-        'quaternion (see history.ana). 4 floatting values splitted '
-        'by commas. ex: 1,2,3,4')
+                      metavar='VALUES', action='store', default=None,
+                      help='Set orientation of camera by hand from anatomist '
+                      'quaternion (see history.ana). 4 floatting values splitted '
+                      'by commas. ex: 1,2,3,4')
     parser.add_option('-b', '--bounding-box', dest='bb',
-        metavar = 'VALUES/FILE', action='store', default = None,
-        help='Set bounding box of camera (default: autofocus).\n'
-        'VALUES=6 floatting values splitted by comas and semi-column. '
-        'ex: 1,2,3;4,5,6\nFILE=list of bounding box, one per line. '
-        'ex: ([1, 2, 3], [4, 5, 6])')
+                      metavar='VALUES/FILE', action='store', default=None,
+                      help='Set bounding box of camera (default: autofocus).\n'
+                      'VALUES=6 floatting values splitted by comas and semi-column. '
+                      'ex: 1,2,3;4,5,6\nFILE=list of bounding box, one per line. '
+                      'ex: ([1, 2, 3], [4, 5, 6])')
     parser.add_option('-f', '--bounding-box-file', dest='bbfile',
-        metavar = 'FILE', action='store', default = None,
-        help='Append boundingbox to this file (one per line)')
+                      metavar='FILE', action='store', default=None,
+                      help='Append boundingbox to this file (one per line)')
     parser.add_option('--nodisplay', dest='nodisplay',
-        action='store_true', default = False, help='no display.')
+                      action='store_true', default=False, help='no display.')
     parser.add_option('--label-mode', dest='label_state',
-        metavar = 'FILE', action='store', default = 'name',
-        type='choice', choices=('label', 'name'),
-        help="use 'label' or 'name' attribute to display sulci " + \
-        "(default : %default)")
+                      metavar='FILE', action='store', default='name',
+                      type='choice', choices=('label', 'name'),
+                      help="use 'label' or 'name' attribute to display sulci " +
+                      "(default : %default)")
 
     shared_path = aims.carto.Paths.shfjShared()
     transfile = os.path.join(aims.carto.Paths.shfjShared(), 'nomenclature',
-        'translation', 'sulci_model_noroots.trl')
+                             'translation', 'sulci_model_noroots.trl')
     hiename = os.path.join(shared_path, 'nomenclature',
-        'hierarchy', 'sulcal_root_colors.hie')
+                           'hierarchy', 'sulcal_root_colors.hie')
     parser.add_option('--translation', dest='transfile',
-        metavar = 'FILE', action='store', default = transfile,
-        help='translation file (default : %default)')
+                      metavar='FILE', action='store', default=transfile,
+                      help='translation file (default : %default)')
     parser.add_option('--hie', dest='hiename',
-        metavar='FILE', action='store', default=hiename,
-        help='hiearchy (default : %default)')
-    parser.add_option( '--size', dest='size', metavar = 'VALUES',
-        action='store', default = None,
-        help='Size (width,height) of the snapshot. 2 int values '
-        'separated by a coma. ex: 1024,768, 0,0: fullscreen (default)')
+                      metavar='FILE', action='store', default=hiename,
+                      help='hiearchy (default : %default)')
+    parser.add_option('--size', dest='size', metavar='VALUES',
+                      action='store', default=None,
+                      help='Size (width,height) of the snapshot. 2 int values '
+                      'separated by a coma. ex: 1024,768, 0,0: fullscreen (default)')
 
     return parser, parser.parse_args(argv)
 
 
-def main( argv ):
+def main(argv):
     '''
 orientation : left, right, bottom, top, auto=q1,q2,q3,q4
     '''
@@ -268,35 +275,38 @@ orientation : left, right, bottom, top, auto=q1,q2,q3,q4
         options.orientation = 'auto=%s' % options.quaternion
     if options.sulci:
         selected_sulci = options.sulci.split(',')
-    else:	selected_sulci = None
+    else:
+        selected_sulci = None
     if options.bb:
         if os.path.exists(options.bb):
             bb = compute_bb(options.bb)
         else:
-            bb = [[float(x) for x in b.split(',')] \
-                            for b in options.bb.split(';')]
-    else:	bb = None
-    if options.size is None:
-        geom = [ 0, 0 ]
+            bb = [[float(x) for x in b.split(',')]
+                  for b in options.bb.split(';')]
     else:
-        geom = [ int(x) for x in options.size.split(',')[:2] ]
+        bb = None
+    if options.size is None:
+        geom = [0, 0]
+    else:
+        geom = [int(x) for x in options.size.split(',')[:2]]
 
     # display
     obj = display_graph(options.transfile, options.orientation,
-        options.trm_name, options.graphname, options.meshname,
-        options.imagename, selected_sulci, bb, options.nodisplay,
-        options.label_state, options.hiename, wingeom=geom)
+                        options.trm_name, options.graphname, options.meshname,
+                        options.imagename, selected_sulci, bb, options.nodisplay,
+                        options.label_state, options.hiename, wingeom=geom)
     bb = obj[4]
 
-    if options.bbfile: # write bounding box
+    if options.bbfile:  # write bounding box
         fd = open(options.bbfile, 'a')
         fd.write(str(bb) + '\n')
         fd.close()
 
-    #print('done.')
+    # print('done.')
     return obj
 
+
 if __name__ == '__main__':
-    main( sys.argv )
+    main(sys.argv)
     sys.exit(0)
-    #qt.qApp.exec_loop()
+    # qt.qApp.exec_loop()

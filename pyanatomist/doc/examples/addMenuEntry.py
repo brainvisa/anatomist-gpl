@@ -53,6 +53,7 @@ class MyCallback(anatomist.cpp.ObjectMenuCallback):
     def doit(self, objects):
         print('plop!!')
 
+
 # Store python callbacks
 callbacks_list = []
 

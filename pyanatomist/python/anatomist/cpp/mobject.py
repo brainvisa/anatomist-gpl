@@ -36,12 +36,14 @@ The anatomist module allows access to the Anatomist library in python.
 
 from __future__ import absolute_import
 import sys
-anatomist = sys.modules[ 'anatomist.cpp' ]
+anatomist = sys.modules['anatomist.cpp']
 
 # Iterator a Python iterator on top of AIterator (we did not manage to
 # implement AIterator.__next__ correctly in SIP so far).
+
+
 class MIterator(object):
-    def __init__( self, object ):
+    def __init__(self, object):
         if object is not None:
             self._object = object
             self._iterator = object.begin()
@@ -60,8 +62,10 @@ class MIterator(object):
 
     next = __next__  # Python 2 compatibility
 
+
 def newiter(self):
     return MIterator(self)
+
 
 anatomist.MObject.__iter__ = newiter
 

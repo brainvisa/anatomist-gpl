@@ -77,7 +77,7 @@ pix = Qt.QPixmap(os.path.expandvars(os.path.join(
                                     aims.carto.Paths.globalShared(),
                                     'anatomist-%s/icons/anatomist.png'
                                     % '.'.join(
-                                    [str(x) for x in aims.version()]))))
+                                        [str(x) for x in aims.version()]))))
 spl = Qt.QSplashScreen(pix)
 spl.show()
 Qt.qApp.processEvents()
@@ -106,4 +106,3 @@ if runqt:
 # cleanup before exiting
 anasimple.closeAll()
 del anasimple
-

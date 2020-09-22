@@ -172,7 +172,7 @@ def testAnatomist(a, interactive=True):
     test_assert(r is not None, 'referential r is None')
     print(
         "r : Referential loaded from the Talairach-MNI_template-SPM.referential. r.__class__ = ", r.__class__, ", internalRep = ", r, ", r.refUuid = ",
-          r.refUuid, ". This should not create a new referential because Talairach-MNI_template-SPM referential is already loaded in Anatomist. ")
+        r.refUuid, ". This should not create a new referential because Talairach-MNI_template-SPM referential is already loaded in Anatomist. ")
     test_assert(r == a.mniTemplateRef,
                 'referenrial r is not the MNI referential')
     r2 = a.createReferential()
@@ -192,14 +192,14 @@ def testAnatomist(a, interactive=True):
     test_assert(t is not None, 'transformation t is None')
     print(
         "t : loaded from the file chaos_TO_talairach.trm, as a transformation between r2 and cr. t.__class__ = ",
-          t.__class__, ", internalRep = ", t)
+        t.__class__, ", internalRep = ", t)
 
     print("\n--- CreatePalette ---")
     p = a.createPalette("maPalette")
     test_assert(p is not None, 'palette p is None')
     print(
         "p : new palette named maPalette, added Anatomist list of palettes. p.__class__ = ",
-          p.__class__, ", internalRep = ", p)
+        p.__class__, ", internalRep = ", p)
 
     print("\n--- GroupObjects ---")
     g = a.groupObjects([o, o2])
@@ -421,7 +421,7 @@ def testAnatomist(a, interactive=True):
     print("\n--- AWindow Methods---")
     print(
         "Window attributes: w2.windowType = ", w2.windowType, ", w2.group = ",
-          w2.group)
+        w2.group)
     test_assert(w2.windowType == 'Sagittal', 'w2 type is not Sagittal')
     test_assert(w2.group == wg, 'w2 group is not wg')
     # Some methods available in Anatomist class are also available directly in
@@ -433,9 +433,9 @@ def testAnatomist(a, interactive=True):
     w2.addObjects([fus])
     w2.moveLinkedCursor([150, 100, 60])
     w6.showToolbox()
-                   # opens the toolbox window. This toolbox will be empty if
-                   # the window is empty. If there is an object on which it is
-                   # possible to draw a roi, the roi toolbox will be shown.
+    # opens the toolbox window. This toolbox will be empty if
+    # the window is empty. If there is an object on which it is
+    # possible to draw a roi, the roi toolbox will be shown.
 
     print("\n--- AWindowsGroup Methods---")
     wg.setSelection([fus])
@@ -455,7 +455,7 @@ def testAnatomist(a, interactive=True):
     g0.toggleSelectionByNomenclature(o4, ['Caude_gauche'])
     print(
         "Toggle selection by nomenclature in default group - toggle 'Caude_gauche' : ",
-          g0.getSelection())
+        g0.getSelection())
 
     print("\n--- APalette Methods---")
     # set colors take as parameter a list of RGB components for colors :

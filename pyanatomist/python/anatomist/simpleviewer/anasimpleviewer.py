@@ -75,9 +75,9 @@ class LeftSimple3DControl(Simple2DControl):
         self.mouseLongEventUnsubscribe(key.LeftButton, NoModifier)
         self.mouseLongEventSubscribe(
             key.LeftButton, NoModifier,
-          pool.action('ContinuousTrackball').beginTrackball,
-          pool.action('ContinuousTrackball').moveTrackball,
-          pool.action('ContinuousTrackball').endTrackball, True)
+            pool.action('ContinuousTrackball').beginTrackball,
+            pool.action('ContinuousTrackball').moveTrackball,
+            pool.action('ContinuousTrackball').endTrackball, True)
         self.keyPressEventSubscribe(
             key.Key_Space, ControlModifier,
             pool.action("ContinuousTrackball").startOrStop)
@@ -99,9 +99,9 @@ class VolRenderControl(LeftSimple3DControl):
         self.mouseLongEventUnsubscribe(Qt.Qt.MiddleButton, Qt.Qt.NoModifier)
         self.mouseLongEventSubscribe(
             Qt.Qt.MiddleButton, Qt.Qt.NoModifier,
-          pool.action('TrackCutAction').beginTrackball,
-          pool.action('TrackCutAction').moveTrackball,
-          pool.action('TrackCutAction').endTrackball, True)
+            pool.action('TrackCutAction').beginTrackball,
+            pool.action('TrackCutAction').moveTrackball,
+            pool.action('TrackCutAction').endTrackball, True)
 
 
 class AnaSimpleViewer(Qt.QObject):
@@ -151,7 +151,7 @@ class AnaSimpleViewer(Qt.QObject):
         self.awidget = awin
 
         # connect GUI actions callbacks
-        findChild = lambda x, y: Qt.QObject.findChild(x, QtCore.QObject, y)
+        def findChild(x, y): return Qt.QObject.findChild(x, QtCore.QObject, y)
 
         findChild(awin, 'fileOpenAction').triggered.connect(self.fileOpen)
         findChild(awin, 'fileExitAction').triggered.connect(self.closeAll)
@@ -258,7 +258,7 @@ class AnaSimpleViewer(Qt.QObject):
         else:
             pos2 = pos
 
-        findChild = lambda x, y: Qt.QObject.findChild(x, QtCore.QObject, y)
+        def findChild(x, y): return Qt.QObject.findChild(x, QtCore.QObject, y)
 
         x = findChild(self.awidget, 'coordXEdit')
         x.setText('%8.3f' % pos2[0])
@@ -453,7 +453,7 @@ class AnaSimpleViewer(Qt.QObject):
             # try to find a scanner-based ref and connect it to MNI
             sbref = [r for r in a.getReferentials()
                      if r.uuid() == aims.StandardReferentials.
-                          commonScannerBasedReferentialID()]
+                     commonScannerBasedReferentialID()]
             if sbref:
                 sbref = sbref[0]
                 t2 = a.getTransformation(obj.getReferential(), sbref)
@@ -810,7 +810,8 @@ class AnaSimpleViewer(Qt.QObject):
         a = ana.Anatomist('-b')
         if len(self.awindows) == 0:
             return
-        findChild = lambda x, y: Qt.QObject.findChild(x, QtCore.QObject, y)
+
+        def findChild(x, y): return Qt.QObject.findChild(x, QtCore.QObject, y)
         pos = [float(findChild(self.awidget, 'coordXEdit').text()),
                float(findChild(self.awidget, 'coordYEdit').text()),
                float(findChild(self.awidget, 'coordZEdit').text()),
@@ -821,10 +822,11 @@ class AnaSimpleViewer(Qt.QObject):
         if tr is not None:
             pos = tr.transform(pos)
         t = float(findChild(self.awidget, 'coordTEdit').text())
-        a.execute('LinkedCursor', window=self.awindows[0], position=pos[:3] + [t])
+        a.execute('LinkedCursor',
+                  window=self.awindows[0], position=pos[:3] + [t])
 
     def dragEnterEvent(self, win, event):
-        x = ana.cpp.QAObjectDrag.canDecode( event ) \
+        x = ana.cpp.QAObjectDrag.canDecode(event) \
             or ana.cpp.QAObjectDrag.canDecodeURI(event)
         if x:
             event.accept()
@@ -851,7 +853,8 @@ class AnaSimpleViewer(Qt.QObject):
                     if obj not in objnames:
                         self.loadObject(obj)
                     else:
-                        o = [x for x in self.aobjects if x.fileName() == obj][0]
+                        o = [x for x in self.aobjects if x.fileName() ==
+                             obj][0]
                         self.addObject(o)
                 # TODO: things[1]: .ana scripts
                 event.accept()
@@ -884,7 +887,3 @@ class AnaSimpleViewer(Qt.QObject):
         else:
             self.browser.removeObjects(self.browser.Objects())
         self.browser.addObjects(self.selectedObjects())
-
-
-
-

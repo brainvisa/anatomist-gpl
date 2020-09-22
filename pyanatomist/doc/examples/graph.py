@@ -81,4 +81,3 @@ if __name__ == '__main__':
         QtGui.qApp.exec_()
     if runqt or 'sphinx_gallery' in sys.modules:
         del w, x, ag, g
-

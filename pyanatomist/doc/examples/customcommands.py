@@ -79,4 +79,3 @@ if run_loop:
 
 if run_loop or 'sphinx_gallery' not in sys.modules:
     del win, win2, avol, vol, cx, i
-
