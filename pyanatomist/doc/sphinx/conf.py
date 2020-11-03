@@ -17,6 +17,7 @@ from __future__ import absolute_import
 import sys
 import os
 import datetime
+import six
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -69,7 +70,18 @@ def matplotlib_use(backend, warn=True, force=False):
     'agg' (with lowercase 'a'), which causes a mismatch, then aborts the
     whole documentation process.
     '''
-    matplotlib.use_bak(backend, warn=False, force=True)
+    # warn has been removed in mpl 3
+    if six.PY3:
+        argspec = inspect.getfullargspec(matplotlib.use_bak)
+        if 'warn' in argspec.args or 'warn' in argspec.kwonlyargs:
+            matplotlib.use_bak(backend, warn=False, force=True)
+        else:
+            matplotlib.use_bak(backend, force=True)
+    else:
+        if 'warn' in inspect.getargspec(matplotlib.use_bak).args:
+            matplotlib.use_bak(backend, warn=False, force=True)
+        else:
+            matplotlib.use_bak(backend, force=True)
 
 
 try:
@@ -78,64 +90,77 @@ try:
     # spinx-gallery will be usable with anatomist only if matplotlib.use
     # has the "force" parameter because we need to switch the backend.
     if not sys.platform.startswith('win') \
-            and not sys.platform.startswith('darwin') \
-            and 'force' in inspect.getargspec(matplotlib.use).args:
-        # hack matplotlob.use()
-        matplotlib.use_bak = matplotlib.use
-        matplotlib.use = matplotlib_use
+            and not sys.platform.startswith('darwin'):
+        patch = False
+        if six.PY3:
+            argspec = inspect.getfullargspec(matplotlib.use)
+            if 'force' in argspec.args or 'force' in argspec.kwonlyargs:
+                patch = True
+        else:
+            if 'force' in inspect.getargspec(matplotlib.use).args:
+                patch = True
+        if patch:
+            # hack matplotlob.use()
+            matplotlib.use_bak = matplotlib.use
+            matplotlib.use = matplotlib_use
 
-        import sphinx_gallery
-        extensions.append('sphinx_gallery.gen_gallery')
-        gallery_examples = ['anagraphannotate', 'aimsvolumetest',
-                            'anaevensimplerviewer', 'control', 'ellipsoid',
-                            'fusion3D', 'graph', 'graph_building', 'meshtest',
-                            'nomenclatureselection', 'selection', 'volumetest']
-        try:
-            import OpenGL
-            gallery_examples.append('customopenglobject')
-        except:
-            pass  # no OpenGL module: don't run this one
-        sphinx_gallery_conf = {
-            'examples_dirs': '../examples',   # path to your example scripts
-            'gallery_dirs': 'auto_examples',  # path where to save gallery generated examples
-            'filename_pattern': '/(%s)\.py' % ')|('.join(gallery_examples),
-            #'ignore_pattern': r'/[^abcefgmnst][^/]*\.py$',
-        }
+            import sphinx_gallery
+            extensions.append('sphinx_gallery.gen_gallery')
+            gallery_examples = ['anagraphannotate', 'aimsvolumetest',
+                                'anaevensimplerviewer', 'control',
+                                'ellipsoid',
+                                'fusion3D', 'graph', 'graph_building',
+                                'meshtest',
+                                'nomenclatureselection', 'selection',
+                                'volumetest']
+            try:
+                import OpenGL
+                gallery_examples.append('customopenglobject')
+            except:
+                pass  # no OpenGL module: don't run this one
+            sphinx_gallery_conf = {
+                # path to your example scripts
+                'examples_dirs': '../examples',
+                # path where to save gallery generated examples
+                'gallery_dirs': 'auto_examples',
+                'filename_pattern':
+                    '/(%s)\.py' % ')|('.join(gallery_examples),
+                #'ignore_pattern': r'/[^abcefgmnst][^/]*\.py$',
+            }
 
-        # capture exit to avoid crash on exit cleanup
-        def handle_exception(app, opts, exception, stderr=sys.stderr):
-            # print('#### handle_exception:', exception, '#####', file=sys.stderr)
-            global exit_status
-            exit_status = 1
-            #import traceback
-            # traceback.print_exc()
+            # capture exit to avoid crash on exit cleanup
+            def handle_exception(app, opts, exception, stderr=sys.stderr):
+                global exit_status
+                exit_status = 1
+                #import traceback
+                # traceback.print_exc()
+                from sphinx import cmdline
+                cmdline.handle_exception_bak(app, opts, exception,
+                                            stderr=sys.stderr)
+
+            def exit():
+                import sys
+                global exit_status
+                status = exit_status
+                # print('######## exit:', status, '########', file=sys.stderr)
+                os._exit(status)
+
+            import atexit
             from sphinx import cmdline
-            cmdline.handle_exception_bak(app, opts, exception,
-                                         stderr=sys.stderr)
-
-        def exit():
-            import sys
-            global exit_status
-            status = exit_status
-            # print('######## exit:', status, '########', file=sys.stderr)
-            os._exit(status)
-
-        import atexit
-        from sphinx import cmdline
-        # hack sphinx.cmdline.handle_exception to keep track of an error,
-        # in order to exit with the correct exit code
-        cmdline.handle_exception_bak = cmdline.handle_exception
-        cmdline.handle_exception = handle_exception
-        atexit.register(exit)
-        # neutralize Anatomist.close() to avoid cleanup while some
-        # python variables remain somewhere
-        # instantiate a headless anatomist in order to build docs without a
-        # graphical environment
-        import anatomist.headless as hana
-        hana.HeadlessAnatomist()
-        import anatomist.direct.api as ana
-        ana.Anatomist.close = lambda self: None
-        matplotlib.use('agg', force=True, warn=False)
+            # hack sphinx.cmdline.handle_exception to keep track of an error,
+            # in order to exit with the correct exit code
+            cmdline.handle_exception_bak = cmdline.handle_exception
+            cmdline.handle_exception = handle_exception
+            atexit.register(exit)
+            # neutralize Anatomist.close() to avoid cleanup while some
+            # python variables remain somewhere
+            # instantiate a headless anatomist in order to build docs without
+            # a graphical environment
+            import anatomist.headless as hana
+            hana.HeadlessAnatomist()
+            import anatomist.direct.api as ana
+            ana.Anatomist.close = lambda self: None
+            matplotlib.use('agg', force=True, warn=False)
 except ImportError:
     pass  # no gallery. Oh, well.
 
