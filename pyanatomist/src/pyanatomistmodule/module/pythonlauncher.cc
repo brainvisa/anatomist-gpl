@@ -60,18 +60,22 @@ void PythonLauncher::runModules()
 {
   // cout << "PythonLauncher::runModules()\n";
 
+  static bool modules_initialized = false;
+
+  if( !Py_IsInitialized() )
+    Py_Initialize();
+  // else
+      /* cout << "Python is already running." << endl;
+      cout << "I don't run anatomist python plugins to avoid conflicts"
+           << endl; */
+
+  if( modules_initialized )
+    return;
+
   char		sep = FileUtil::separator();
   string	shared2 = Settings::globalPath() + sep + "python_plugins";
 
-  if( Py_IsInitialized() )
-    {
-      /* cout << "Python is already running." << endl;
-      cout << "I don't run anatomist python plugins to avoid conflicts" 
-           << endl; */
-      return;
-    }
-  else
-    Py_Initialize();
+  modules_initialized = true;
 
   /* cout << "pythonpath 2: " << shared2 << endl; */
 
