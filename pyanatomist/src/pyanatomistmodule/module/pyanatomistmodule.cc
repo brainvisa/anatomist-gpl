@@ -59,7 +59,8 @@ PyAnatomistModule::PyAnatomistModule() : Module()
   cout << "PyAnatomist Module present\n";
   static PythonLauncher	pl;
 
-  QTimer::singleShot( 10, &pl, SLOT( runModules() ) );
+  pl.runModules();
+//   QTimer::singleShot( 10, &pl, SLOT( runModules() ) );
 }
 
 

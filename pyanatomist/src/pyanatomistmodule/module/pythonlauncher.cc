@@ -41,6 +41,14 @@ extern "C"
 #include <cartobase/stream/fileutil.h>
 #include <iostream>
 
+#ifdef __linux__
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE 1
+#endif
+#include <link.h>
+#include <dlfcn.h>
+#endif
+
 using namespace anatomist;
 using namespace aims;
 using namespace carto;
@@ -58,32 +66,64 @@ PythonLauncher::~PythonLauncher()
 
 void PythonLauncher::runModules()
 {
-  // cout << "PythonLauncher::runModules()\n";
+  cout << "PythonLauncher::runModules()\n";
+
+#ifdef __linux__
+  /* avoids missing symbols (why ??) see
+     https://stackoverflow.com/questions/29880931/importerror-and-pyexc-systemerror-while-embedding-python-script-within-c-for-pam
+
+     without this libpython reload, importing the sip module results in an
+     error: undefined symbol: PyExc_SystemError
+  */
+  void *self = dlopen(0, RTLD_LAZY | RTLD_GLOBAL);
+  struct link_map *info;
+
+  if( dlinfo( self, RTLD_DI_LINKMAP, &info ) == 0 )
+  {
+    struct link_map *next = info->l_next;
+    string bname;
+    while( next )
+    {
+      bname = FileUtil::basename( next->l_name );
+      if( bname.length() > 9 && bname.substr( 0, 9 ) == "libpython" )
+      {
+        // force reopening libpython in RT_GLOBAL mode
+        cout << dlopen( next->l_name, RTLD_NOW | RTLD_GLOBAL ) << endl;
+      }
+      next = next->l_next;
+    }
+  }
+#endif
+
+  static bool modules_initialized = false;
+
+  if( !Py_IsInitialized() )
+    Py_Initialize();
+//   else
+//   {
+//     cout << "Python is already running." << endl;
+//     cout << "I don't run anatomist python plugins to avoid conflicts"
+//          << endl;
+// //     modules_initialized = true;
+//   }
+
+  if( modules_initialized )
+    return;
 
   char		sep = FileUtil::separator();
   string	shared2 = Settings::globalPath() + sep + "python_plugins";
 
-  if( Py_IsInitialized() )
-    {
-      /* cout << "Python is already running." << endl;
-      cout << "I don't run anatomist python plugins to avoid conflicts" 
-           << endl; */
-      return;
-    }
-  else
-    Py_Initialize();
+  modules_initialized = true;
 
-  /* cout << "pythonpath 2: " << shared2 << endl; */
+  // cout << "pythonpath 2: " << shared2 << endl;
 
   PyRun_SimpleString( "import sys; sys.argv = [ 'anatomist' ]" );
 
-  PyRun_SimpleString( (char *) ( string( "sys.path.insert( 1, '" ) + shared2 
+  PyRun_SimpleString( (char *) ( string( "sys.path.insert( 1, '" ) + shared2
                                  + "' )" ).c_str() );
   PyRun_SimpleString( "import sip" );
   PyRun_SimpleString( "for name in ['QString', 'QVariant', 'QDate', 'QDateTime', 'QTextStream', 'QTime', 'QUrl']: sip.setapi(name, 2)" );
   PyRun_SimpleString( "import anatomist.cpp; anatomist.cpp.Anatomist()" );
-
-  //Py_Finalize();
 }
 
 
