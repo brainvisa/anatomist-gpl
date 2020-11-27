@@ -439,6 +439,9 @@ public:
   void hideEvent ( QHideEvent * ) ;
   void selectionChangedEvent();
 
+  std::map<int, std::string> activableControls() const;
+  std::map<int, std::string> availableControls() const;
+
 protected:
   ControlSwitch( anatomist::View * view ) ;
 };
