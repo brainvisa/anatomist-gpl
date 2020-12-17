@@ -940,12 +940,12 @@ class Anatomist(base.Anatomist):
         if not self.launched:
             return
         # remove exit handler
-        if sys.version_info[0] >= 3:
-            atexit.unregister(self.close)
-        else:
+        if six.PY2:
             for x in atexit._exithandlers:
                 if len(x) > 0 and x[0] == self.close:
                     atexit._exithandlers.remove(x)
+        else:
+            atexit.unregister(self.close)
         super(Anatomist, self).close()
         if self.newanatomist:
             isRunning = (self.anaServerProcess.state() == QProcess.Running)

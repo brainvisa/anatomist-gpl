@@ -141,7 +141,7 @@ def isMappingType(item):
         return item.isDictionary()
     methods = ['get', 'items', 'keys', 'values', '__getitem__', '__iter__',
                '__contains__', '__len__']
-    if sys.version_info[0] < 3:
+    if six.PY2:
         methods.append('iteritems')
     for m in methods:
         if not hasattr(item, m):
@@ -403,7 +403,7 @@ class Anatomist(AnatomistSip):
             loaded_modules.append(x)
             print('loading module', x)
             try:
-                exec('import ' + x)
+                six.exec_('import ' + x, {}, {})
             except:
                 print()
                 print('loading of module', x, 'failed:')

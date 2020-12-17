@@ -75,7 +75,7 @@ def isMappingType(item):
         return item.isDictionary()
     methods = ['get', 'items', 'keys', 'values', '__getitem__', '__iter__',
                '__contains__', '__len__']
-    if sys.version_info[0] < 3:
+    if six.PY2:
         methods.append('iteritems')
     for m in methods:
         if not hasattr(item, m):
@@ -1526,13 +1526,14 @@ class Anatomist(Singleton):
                 return False
             return self.internalRep == other.internalRep
 
-        if sys.version_info[0] >= 3:
-            # python3 doesn't define a hash function by default
-
-            def __hash__(self):
-                # a bit dangerous since internalRep is mutable.
-                # but, welll, we never change it, do we ?
-                return id(self.internalRep)
+        def __hash__(self):
+            # a bit dangerous since internalRep is mutable.
+            # but, welll, we never change it, do we ?
+            #
+            # ylep 2020-03-20: shouldn't we return
+            # hash((self.anatomistinstance, self.internalRep, self.refType,
+            # self.ref)) instead?
+            return id(self.internalRep)
 
         def __lt__(self, other):
             """
