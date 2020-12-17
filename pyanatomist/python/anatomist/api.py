@@ -33,12 +33,15 @@
 from __future__ import absolute_import
 import anatomist
 
+import six
+
+
 '''API version, corresponds to the C++ bindings lib version, if loaded.
 Thus the version may be None if using the socket API.
 '''
 __version__ = None
 
 # here we just import the default implementation
-exec('from anatomist.' + anatomist._implementation + '.api import *')
+six.exec_('from anatomist.' + anatomist._implementation + '.api import *')
 if 'version' in globals():
     __version__ = version

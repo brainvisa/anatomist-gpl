@@ -90,13 +90,15 @@ def test_glx(glxinfo_cmd=None, xdpyinfo_cmd=None, timeout=5.):
     if glxinfo_cmd is None:
         glxinfo_cmd = distutils.spawn.find_executable('glxinfo')
     if glxinfo_cmd not in (None, []):
-        glxinfo = ''
+        glxinfo = u''
         #glxinfo = StringIO()
         t0 = time.time()
         t1 = 0
-        while glxinfo == '' and t1 <= timeout:
+        while glxinfo == u'' and t1 <= timeout:
+            # universal_newlines = open stdout/stderr in text mode (Unicode)
             process = Popen(glxinfo_cmd, stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
+                            stderr=subprocess.PIPE,
+                            universal_newlines=True)
             try:
                 glxinfo, glxerr = process.communicate(timeout=5)
             except TimeoutExpired:
@@ -106,16 +108,14 @@ def test_glx(glxinfo_cmd=None, xdpyinfo_cmd=None, timeout=5.):
                                                 output=glxinfo)
             retcode = process.poll()
 
-            if sys.version_info[0] >= 3:
-                glxinfo = glxinfo.decode('utf-8')
             if retcode != 0:
-                if 'unable to open display' not in glxerr.decode('utf-8'):
+                if u'unable to open display' not in glxerr:
                     # failed for another reason: probably GLX is not working
                     break
                 time.sleep(0.01)
                 t1 = time.time() - t0
-        if glxinfo != '' or t1 > timeout:
-            if ' GLX Visuals' not in glxinfo:
+        if glxinfo != u'' or t1 > timeout:
+            if u' GLX Visuals' not in glxinfo:
                 return 0
             else:
                 return 2
@@ -123,16 +123,18 @@ def test_glx(glxinfo_cmd=None, xdpyinfo_cmd=None, timeout=5.):
     # here glxinfo has not been used or is not working
     if xdpyinfo_cmd is None:
         xdpyinfo_cmd = distutils.spawn.find_executable('xdpyinfo')
-    dpyinfo = ''
+    dpyinfo = u''
     t0 = time.time()
     t1 = 0
-    while dpyinfo == '' and t1 <= timeout:
+    while dpyinfo == u'' and t1 <= timeout:
         try:
-            dpyinfo = check_output(xdpyinfo_cmd)
+            # universal_newlines = open stdout/stderr in text mode (Unicode)
+            dpyinfo = check_output(xdpyinfo_cmd,
+                                   universal_newlines=True)
         except Exception as e:
             time.sleep(0.01)
             t1 = time.time() - t0
-    if 'GLX' not in dpyinfo:
+    if u'GLX' not in dpyinfo:
         return 0
     else:
         return 1
