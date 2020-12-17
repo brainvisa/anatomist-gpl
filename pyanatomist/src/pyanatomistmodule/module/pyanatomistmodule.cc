@@ -50,7 +50,7 @@ namespace
     return true;
   }
 
-  bool garbage = initPyAnatomistModule();
+  bool garbage __attribute__((unused)) = initPyAnatomistModule();
 }
 
 

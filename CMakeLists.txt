@@ -13,6 +13,8 @@ BRAINVISA_DEPENDENCY( DEV DEPENDS anatomist-free DEV )
 include( "${AIMS-GPL_USE_FILE}" )
 include( "${ANATOMIST-FREE_USE_FILE}" )
 
+#set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall" )
+
 if( NOT anatomist-free_VERSION_MAJOR EQUAL ${${PROJECT_NAME}_VERSION_MAJOR}
    AND NOT anatomist-free_VERSION_MINOR EQUAL ${${PROJECT_NAME}_VERSION_MINOR} )
   message( "WARNING: anatomist-gpl has version ${${PROJECT_NAME}_VERSION} whereas anatomist-free has version ${anatomist-free_VERSION}. This can be a problem at runtime because shared files are all supposed to be in a directory called anatomist-${anatomist-free_VERSION_MAJOR}.${anatomist-free_VERSION_MINOR}." )
@@ -53,7 +55,7 @@ if( PYTHON_FOUND AND SIP_FOUND AND NUMPY_FOUND AND PYQT${DESIRED_QT_VERSION}_FOU
   elseif( DESIRED_QT_VERSION EQUAL 5 )
     # TODO
   endif()
-  BRAINVISA_DEPENDENCY( RUN RECOMMANDS "python-matplotlib" RUN )
+  BRAINVISA_DEPENDENCY( RUN RECOMMENDS "python-matplotlib" RUN )
   set( ANATOMIST_RELATIVE_SIP_DIRECTORY
        "share/anatomist-${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}/sip" )
   if( anatomist-free_FOUND AND aims-gpl_FOUND )
