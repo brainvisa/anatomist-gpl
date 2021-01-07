@@ -46,9 +46,6 @@ import anatomist.direct.api as anatomist
 import soma.qt_gui.qt_backend.QtCore as qt
 import soma.qt_gui.qt_backend.QtGui as qtgui
 
-a = anatomist.Anatomist()
-p = a.theProcessor()
-
 
 def setCamera(win, orientation):
     q = aims.Quaternion()
@@ -76,6 +73,7 @@ def setCamera(win, orientation):
     elif orientation.startswith('auto='):
         v = [float(x) for x in orientation.split('=')[1].split(',')]
         q.setVector(v)
+    a = anatomist.Anatomist()
     a.camera(windows=[win], zoom=1,
              observer_position=[10., 10., 10.],
              view_quaternion=q.vector(), force_redraw=True)
@@ -86,6 +84,7 @@ def display_graph(transfile, orientation, trm_name, graphname, meshname,
                   win=None, wingeom=[0, 0]):
 
     # load objects
+    a = anatomist.Anatomist()
     ag = a.loadObject(graphname)
     g = ag.graph()
     if transfile and transfile != '':
