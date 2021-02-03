@@ -1,0 +1,4 @@
+# Generated files (should ideally be generated outside of sources)
+/examples/fusion.tex
+/examples/fusion.tex.minf
+/sphinx/auto_examples/
