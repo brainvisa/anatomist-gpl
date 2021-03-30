@@ -47,7 +47,8 @@ class VectorFieldTransforms(Singleton):
     transformations graph.
     This class is a singleton (it has a single shared instance)
 
-    We could also use the HBP web service:
+    We could also use the HBP web service instead of loading the full vector
+    fields:
 
     https://hbp-spatial-backend.apps.hbp.eu/v1/transform-point?source_space=MNI%20152%20ICBM%202009c%20Nonlinear%20Asymmetric&target_space=Big%20Brain%20%28Histology%29&x=1&y=2&z=3
 
@@ -157,6 +158,10 @@ class VectorFieldTransforms(Singleton):
 
         Users may use add_transformation()  or load_transformations_graph()
         instead.
+
+        By now we only use the ".ima" (GIS format) for deformation fields
+        because it can contain 3D vectors in each voxel. But we could easily
+        extend it to NIFTIs with 6 dimensions.
         '''
         print('loading transformation', filename, '...')
         trans = aims.read(filename, dtype='FfdTransformation')
@@ -305,6 +310,8 @@ class LinkROIAction(ana.cpp.ContinuousTrackball):
     '''
     Anatomist Action class, managing non-linear transformations in clicks,
     and selection by ROI names.
+    Based on the existing ContinuousTrackball class, which manages 3D rotation
+    using the mouse.
     '''
 
     def name(self):
@@ -375,9 +382,6 @@ class LinkROIAction(ana.cpp.ContinuousTrackball):
                 # cursor to it
                 win.setPosition(tpos, dref)
 
-    #def find_roi(self, x, y):
-        #print('find_roi:', x, y)
-
     def selection_changed(self):
         '''
         Callback handling a selection change in the current view. Here we
@@ -412,7 +416,6 @@ class LinkROIAction(ana.cpp.ContinuousTrackball):
             name = self.get_roi_name(obj)
             if name:
                 selected_names.add(name)
-        # print('selected_names:', selected_names)
 
         # select objects with the same label in all windows
         to_select = {}
@@ -428,7 +431,6 @@ class LinkROIAction(ana.cpp.ContinuousTrackball):
             bbox = self.bounding_box(sobj, w.getReferential())
             self.focus_view(w, bbox)
 
-        #print('to_select:', to_select)
         for g, o in to_select.items():
             sf.select(g, o)
 
@@ -532,6 +534,8 @@ class LinkROIControl(Left3DControl):
     '''
     Control in Anatomist views which performs non-linear transformations and
     ROI selection.
+    We use the existing Left3DControl as a basis to avoid having to plug every
+    action again.
     '''
 
     def __init__(self,
@@ -540,10 +544,14 @@ class LinkROIControl(Left3DControl):
         super(LinkROIControl, self).__init__(name)
 
     def eventAutoSubscription(self, pool):
-        Left3DControl.eventAutoSubscription(self, pool)
+        # call parent class method
+        super(LinkROIAction, self).eventAutoSubscription(pool)
+        # un-register the events we want to oveload: selection
         self.selectionChangedEventUnsubscribe()
+        # then register our own action
         self.selectionChangedEventSubscribe(pool.action(
             'LinkROIAction').selection_changed)
+        # same for left mouse button events
         self.mouseLongEventUnsubscribe(Qt.Qt.LeftButton, Qt.Qt.NoModifier)
         self.mouseLongEventSubscribe(
             Qt.Qt.LeftButton, Qt.Qt.NoModifier,
@@ -612,57 +620,64 @@ def main(argv=sys.argv):
 
     install_control()
 
+    # maintain a gloabl list of windows, objects and referentials to keep them
+    # alive (otherwise reference counting will destroy them)
     windows = []
+    objects = []
     refs = []
 
+    # load the sulci nomenclature and colors set
     sulci_nomenclature = a.loadObject(
         aims.carto.Paths.findResourceFile(
             'nomenclature/hierarchy/sulcal_root_colors.hie'))
-    objects = [sulci_nomenclature]
+    objects.append(sulci_nomenclature)
 
-    # Yaml files are transform graphs
+    # Yaml files are supposed to be transform graphs
     trans_graphs = [f for f in to_load
                     if f.endswith('.yaml') or f.endswith('.yml')]
     # the rest is objects to visualize
     to_load = [f for f in to_load if f not in trans_graphs]
 
+    # we instantiate a non-linear vector fields transformations graph
     vt = VectorFieldTransforms()
     for gname in trans_graphs:
         vt.load_transformations_graph(gname)
     # add a transformation link with Anatomist internals
+    # in order to identify the internal MNI and the ICBM 2009c referentials
     vt.load_transformations_graph(
         'MNI 152 ICBM 2009c Nonlinear Asymmetric:\n'
         '  803552a6-ac4d-491d-99f5-b938392b674b: ""')
 
+    # load all given objects, and open a new view for each one
     block = None
     for objname in to_load:
         o = a.loadObject(objname)
-        o.applyBuiltinReferential()
-        r = o.getReferential()
-        if not r or r.refUuid == a.centralReferential().refUuid:
-            r = a.createReferential()
-            refs.append(r)
-            o.assignReferential(r)
         if o:
+            # extract referential / transformatin information if available
+            o.applyBuiltinReferential()
+            r = o.getReferential()
+            if not r or r.refUuid == a.centralReferential().refUuid:
+                # individualize referential for each object
+                r = a.createReferential()
+                refs.append(r)
+                o.assignReferential(r)
             objects.append(o)
             if not block and use_block:
+                # the block is a Qt window which will contain all views in a
+                # grid layout. If no block is used each view will be a separate
+                # window.
                 block = a.createWindowsBlock()
             wtype = '3D'
             if isinstance(o.getInternalRep(), ana.cpp.SliceableObject):
+                # for volumes or other voxel-based objects we use the view in
+                # "slice" mode
                 wtype = 'Axial'
             w = a.createWindow(wtype, block=block)
             windows.append(w)
+            # put the loaded object in its view
             w.addObjects(o)
+            # force the new control in this new view
             w.setControl('LinkROIControl')
-
-    if len(refs) >= 2 and len(trans_graphs) == 0:
-        # trans = vt.add_transformation(refs[0], refs[1], '/tmp/deffield.ima')
-        trans = aims.TrilinearFfd(128, 128, 64, 2., 2., 2.)
-        na = np.asarray(aims.AimsData_POINT3DF(trans).volume())['v']
-        # this is a dummy fake FFD transform by now...
-        na[:] = np.mgrid[0:128, 0:128, 0:64].reshape((128, 128, 64, 1, 3))
-        for dest in refs[1:]:
-            vt.add_transformation(refs[0], dest, trans)
 
     if 'IPython' not in sys.modules:
         Qt.QApplication.instance().exec_()
