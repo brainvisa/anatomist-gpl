@@ -161,7 +161,7 @@ class VectorFieldTransforms(Singleton):
 
         By now we only use the ".ima" (GIS format) for deformation fields
         because it can contain 3D vectors in each voxel. But we could easily
-        extend it to NIFTIs with 6 dimensions.
+        extend it to NIFTIs with 5 dimensions.
         '''
         print('loading transformation', filename, '...')
         trans = aims.read(filename, dtype='FfdTransformation')
