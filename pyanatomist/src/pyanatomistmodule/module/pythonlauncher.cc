@@ -88,7 +88,7 @@ void PythonLauncher::runModules()
       if( bname.length() > 9 && bname.substr( 0, 9 ) == "libpython" )
       {
         // force reopening libpython in RT_GLOBAL mode
-        dlopen( next->l_name, RTLD_NOW | RTLD_GLOBAL ) << endl;
+        dlopen( next->l_name, RTLD_NOW | RTLD_GLOBAL );
       }
       next = next->l_next;
     }
