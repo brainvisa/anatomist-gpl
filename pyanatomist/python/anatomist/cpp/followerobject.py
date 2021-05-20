@@ -78,6 +78,9 @@ class ObjectFollowerCube(anatomist.ASurface_2):
         bbox = []
         for obj in self._objects:
             bbox2 = [aims.Point3df(x[:3]) for x in obj.boundingbox()]
+            if not bbox2:
+                # this object has no bbox
+                continue
             a = anatomist.Anatomist()
             tr = a.getTransformation(obj.getReferential(),
                                      self.getReferential())
