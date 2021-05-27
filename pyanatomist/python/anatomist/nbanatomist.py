@@ -518,6 +518,13 @@ class AnatomistInteractiveWidget(Canvas):
         self.close()
 
 
+class NoteBookAnatomist(HeadlessAnatomist):
+
+    def __init__(self, *args, **kwargs):
+
+        super(NoteBookAnatomist, self).__init__(*args, **kwargs)
+
+
 if __name__ == '__main__':
 
     a = ana.HeadlessAnatomist()

@@ -407,7 +407,8 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=False):
         # atexit.register(terminate_xvfb)
 
 
-def HeadlessAnatomist(*args, **kwargs):
+def HeadlessAnatomist(implementation='anatomist.direct.api.Anatomist',
+                      *args, **kwargs):
     ''' Implements an off-screen headless Anatomist.
 
     .. warning:: Only usable with X11.
@@ -499,7 +500,10 @@ def HeadlessAnatomist(*args, **kwargs):
     setup_headless(allow_virtualgl=allow_virtualgl,
                    force_virtualgl=force_virtualgl)
 
-    from anatomist.api import Anatomist
+    mod, aclass = implementation.rsplit('.', 1)
+    print('load module:', mod)
+    module = __import__(mod)
+    Anatomist = getattr(module, aclass)
 
     # def __del__ana(self):
     #atexit._exithandlers.remove((terminate_xvfb, (), {}))
