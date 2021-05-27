@@ -1,3 +1,32 @@
+
+"""
+Embed an Anatomist 3D view in a jupyter notebook widget
+
+To work this notebook widget needs:
+
+* to install ipycanvas, ipyevents, ipywidgets, PIL, numpy, anatomist, jupyter notebook
+* to register jupyter notebook extensions (may require sudo permissions if
+  jupyter is installed system-wide)::
+
+    jupyter nbextension enable --py widgetsnbextension
+    jupyter nbextension enable --py ipyevents
+    jupyter nbextension enable --py ipycanvas
+
+Typical use, in a notebook cell::
+
+    import anatomist.headless as ana
+    from anatomist.nbanatomist import AnatomistInteractiveWidget
+
+    a = ana.HeadlessAnatomist()
+    w = a.createWindow('3D')
+    mesh = a.loadObject('/home/riviere/data/ra_head.mesh')
+    w.addObjects(mesh)
+
+    canvas = AnatomistInteractiveWidget(w)
+    display(canvas)
+
+"""
+
 from ipycanvas import Canvas
 import anatomist.headless as ana
 from ipywidgets import Image
@@ -15,33 +44,6 @@ from ipycanvas import Canvas
 from ipyevents import Event
 import numpy as np
 from ipywidgets import Image
-
-"""
-Embed an Anatomist 3D view in a jupyter notebook widget
-
-To work this notebook widget needs:
-
-* to install ipycanvas, ipyevents, ipywidgets, PIL, numpy, anatomist, jupyter notebook
-* to register jupyter notebook extensions::
-
-  sudo jupyter nbextension enable --py widgetsnbextension
-  sudo jupyter nbextension enable --py ipyevents
-  sudo jupyter nbextension enable --py ipycanvas
-
-Typical use, in a notebook cell::
-
-    import anatomist.headless as ana
-    from anatomist.nbanatomist import AnatomistInteractiveWidget
-
-    a = ana.HeadlessAnatomist()
-    w = a.createWindow('3D')
-    mesh = a.loadObject('/home/riviere/data/ra_head.mesh')
-    w.addObjects(mesh)
-
-    canvas = AnatomistInteractiveWidget(w)
-    display(canvas)
-
-"""
 
 
 ### throttler.py:
