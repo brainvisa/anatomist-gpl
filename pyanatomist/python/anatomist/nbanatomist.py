@@ -12,7 +12,20 @@ To work this notebook widget needs:
     jupyter nbextension enable --py ipyevents
     jupyter nbextension enable --py ipycanvas
 
-Typical use, in a notebook cell::
+There are two ways to use it, in a notebook cell. The first is an "integrated"
+variant of the Anatomist application which redirects all its views to notebook
+canvases, the second is a "by window" method.
+
+Integrated Anatomist::
+
+    import anatomist.headless as ana
+
+    a = ana.HeadlessAnatomist(implementation='nbanatomist')
+    w = a.createWindow('3D')
+    mesh = a.loadObject('/home/dr144257/data/ra_head.mesh')
+    w.addObjects(mesh)
+
+By window::
 
     import anatomist.headless as ana
     from anatomist.nbanatomist import AnatomistInteractiveWidget
@@ -116,6 +129,12 @@ class AnatomistInteractiveWidget(Canvas):
     https://github.com/Kitware/ipyvtklink/blob/master/ipyvtklink/viewer.py
 
     Remote controller for Anatomist render windows.
+    In Anatomist 5.1, Anatomist views are sync'ed to the canvas automatically
+    at each 3D rendering (via a Qt signal). In earlier Anatomist (5.0) this
+    sync is not automatic and is only forced when input events are caught,
+    which means that renderings done on Anatomist side for other reasons (such
+    as animations) will not be rendered.
+
     Parameters
     ----------
     allow_wheel : bool, optional
@@ -154,6 +173,9 @@ class AnatomistInteractiveWidget(Canvas):
         self.adaptive_render_delay = True
         self.last_mouse_move_event = None
 
+        from soma.qt_gui.qt_backend import Qt
+        self.qtimer = Qt.QTimer()
+
         # refresh if mouse is just moving (not dragging)
         self.track_mouse_move = False
 
@@ -165,6 +187,12 @@ class AnatomistInteractiveWidget(Canvas):
         # Set Canvas size from window size
         self.width, self.height \
             = self.render_window.width(), self.render_window.height()
+
+        self.render_connected = False
+        if hasattr(awindow.getInternalRep().view(), 'viewRendered'):
+            awindow.getInternalRep().view().viewRendered.connect(
+                self.render_callback)
+            self.render_connected = True
 
         # record first render time
         tstart = time.time()
@@ -250,18 +278,28 @@ class AnatomistInteractiveWidget(Canvas):
 
     def get_image(self, force_render=True):
         if force_render:
+            self.render_window.getInternalRep().view().blockSignals(True)
             self.render_window.camera(force_redraw=1)
+            self.render_window.getInternalRep().view().blockSignals(False)
         return self._fast_image
 
     @property
     def _fast_image(self):
+        self.render_window.getInternalRep().view().blockSignals(True)
         qdata = self.render_window.snapshotImage()
+        self.render_window.getInternalRep().view().blockSignals(False)
         data = qt_backend.qimage_to_np(qdata)
 
         if self.transparent_background:
             return data
         else:  # ignore alpha channel
             return data[:, :, :-1]
+
+    def render_callback(self):
+        self.update_canvas(quality=self._quick_quality)
+        # trigger a better quality image
+        self.qimer.singleshot(
+            0.1, partial(self.full_render, qualiry=self._full_quality))
 
     #@throttle(0.1)
     def full_render(self):
@@ -280,6 +318,8 @@ class AnatomistInteractiveWidget(Canvas):
 
     #@throttle(0.01)
     def quick_render(self):
+        if self.render_connected:
+            return  # leave this job to the callback
         try:
             self.send_pending_mouse_move_event()
             self.update_canvas(quality=self._quick_quality)
@@ -518,16 +558,46 @@ class AnatomistInteractiveWidget(Canvas):
         self.close()
 
 
-class NoteBookAnatomist(HeadlessAnatomist):
+import anatomist.direct.api as anatomist
 
-    def __init__(self, *args, **kwargs):
+class NotebookAnatomist(anatomist.Anatomist):
+    '''
+    A derived Anatomist class which automatically redirects its views to
+    Jupyter notebook canvases. It only overloads the createWindow() method
+    which creates an AnatomistInteractiveWidget canvas together with each
+    window. It is normally used with the "headless" variant of Anatomist.
 
-        super(NoteBookAnatomist, self).__init__(*args, **kwargs)
+    Usage, in a notebook::
+
+        import anatomist.headless as ana
+
+        a = ana.HeadlessAnatomist(implementation='nbanatomist')
+        w = a.createWindow('3D')
+        mesh = a.loadObject('/home/dr144257/data/ra_head.mesh')
+        w.addObjects(mesh)
+    '''
+
+    def __singleton_init__(self, *args, **kwargs):
+
+        super(NotebookAnatomist, self).__singleton_init__(*args, **kwargs)
+
+    def createWindow(self, wintype, geometry=[], block=None,
+                     no_decoration=None, options=None):
+        win = super(NotebookAnatomist, self).createWindow(
+            wintype, geometry=geometry, block=None, no_decoration=True,
+            options=None)
+        canvas = AnatomistInteractiveWidget(win)
+        display(canvas)
+        win.canvas = canvas
+        return win
+
+# this shortcut is used to easily get the Anatomist implementation
+Anatomist = NotebookAnatomist
 
 
 if __name__ == '__main__':
 
-    a = ana.HeadlessAnatomist()
+    a = ana.HeadlessAnatomist('nbanatimist')
     w = a.createWindow('3D')
     mesh = a.loadObject('/home/riviere/data/ra_head.mesh')
     w.addObjects(mesh)
