@@ -297,6 +297,9 @@ class QAGLWidget : QGLWidget, anatomist::GLWidgetManager
     virtual QSize minimumSizeHint() const;
     virtual std::string name() const;
 
+  signals:
+    void viewRendered();
+
   public slots:
     virtual void updateGL();
     virtual void saveContents();
