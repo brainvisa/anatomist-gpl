@@ -182,12 +182,14 @@ class AnatomistInteractiveWidget(Canvas):
 
         self.message_timestamp_offset = None
 
-        self.layout.width = '%dpx' % awindow.getInternalRep().width()
-        self.layout.height = '%dpx' % awindow.getInternalRep().height()
-
         # Set Canvas size from window size
         self.width, self.height \
             = self.render_window.width(), self.render_window.height()
+
+        #self.layout.width = '%dpx' % awindow.getInternalRep().width()
+        #self.layout.height = '%dpx' % awindow.getInternalRep().height()
+        self.layout.width = 'auto'
+        self.layout.height = 'auto'
 
         self.render_connected = False
         if hasattr(awindow.getInternalRep().view(), 'viewRendered'):
@@ -275,6 +277,12 @@ class AnatomistInteractiveWidget(Canvas):
         image = Image(
             value=f.getvalue(), width=self.width, height=self.height
         )
+        if self.width != raw_img.shape[1]:
+            self.width = raw_img.shape[1]
+            self.layout.width = 'auto'
+        if self.height != raw_img.shape[0]:
+            self.height = raw_img.shape[0]
+            self.layout.height = 'auto'
         self.draw_image(image)
 
     def get_image(self, force_render=True):
@@ -300,7 +308,7 @@ class AnatomistInteractiveWidget(Canvas):
         self.update_canvas(quality=self._quick_quality)
         # trigger a better quality image
         self.qtimer.singleShot(
-            0.1, partial(self.full_render, qualiry=self._full_quality))
+            float(INTERACTION_THROTTLE) / 1000, partial(self.full_render, qualiry=self._full_quality))
 
     #@throttle(0.1)
     def full_render(self):
