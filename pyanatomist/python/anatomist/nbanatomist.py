@@ -57,6 +57,7 @@ from ipycanvas import Canvas
 from ipyevents import Event
 import numpy as np
 from ipywidgets import Image
+from functools import partial
 
 
 ### throttler.py:
@@ -298,7 +299,7 @@ class AnatomistInteractiveWidget(Canvas):
     def render_callback(self):
         self.update_canvas(quality=self._quick_quality)
         # trigger a better quality image
-        self.qimer.singleshot(
+        self.qtimer.singleShot(
             0.1, partial(self.full_render, qualiry=self._full_quality))
 
     #@throttle(0.1)
