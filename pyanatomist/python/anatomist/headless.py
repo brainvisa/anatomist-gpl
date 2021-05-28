@@ -24,6 +24,7 @@ import ctypes
 import sys
 from six.moves import range
 from io import StringIO
+import importlib
 
 xvfb = None
 original_display = None
@@ -407,8 +408,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=False):
         # atexit.register(terminate_xvfb)
 
 
-def HeadlessAnatomist(implementation='anatomist.direct.api.Anatomist',
-                      *args, **kwargs):
+def HeadlessAnatomist(*args, **kwargs):
     ''' Implements an off-screen headless Anatomist.
 
     .. warning:: Only usable with X11.
@@ -469,8 +469,12 @@ def HeadlessAnatomist(implementation='anatomist.direct.api.Anatomist',
     Anatomist will be used.
 
     Parameters are passed to Anatomist constructor, except the following
-    keyword arguments:
+    (keyword) arguments:
 
+    implementation: str (default: 'direct')
+        Anatomist API implementation. May be a shortcut ('direct', 'threaded',
+        'nbanatomist') or a module + class name
+        ('anatomist.direct.api.Anatomist')
     allow_virtualgl: bool (optional, default: True)
         If False, VirtualGL will not be attempted. Default is True.
         Use it if you experience crashes in your programs: it probably means
@@ -500,10 +504,20 @@ def HeadlessAnatomist(implementation='anatomist.direct.api.Anatomist',
     setup_headless(allow_virtualgl=allow_virtualgl,
                    force_virtualgl=force_virtualgl)
 
-    mod, aclass = implementation.rsplit('.', 1)
-    print('load module:', mod)
-    module = __import__(mod)
-    Anatomist = getattr(module, aclass)
+    implementation = kwargs.get('implementation', 'direct')
+    if '.' in implementation:
+        mod, aclass = implementation.rsplit('.', 1)
+    else:
+        mod = 'anatomist.%s' % implementation
+        aclass = 'Anatomist'
+
+    module = importlib.import_module(mod)
+    try:
+        Anatomist = getattr(module, aclass)
+    except AttributeError:
+        mod = '%s.api' % mod
+        module = importlib.import_module(mod)
+        Anatomist = getattr(module, aclass)
 
     # def __del__ana(self):
     #atexit._exithandlers.remove((terminate_xvfb, (), {}))
