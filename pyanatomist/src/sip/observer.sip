@@ -65,10 +65,29 @@ namespace anatomist
         else
           sipType = sipType_anatomist_AObject;
       }
-      else if( dynamic_cast<AWindow3D *>( sipCpp ) )
+      else if( dynamic_cast<anatomist::AWindow *>( sipCpp ) )
       {
-        *sipCppRet = dynamic_cast<AWindow3D *>( sipCpp );
-        sipType = sipType_AWindow3D;
+        // std::cout << "  Observable - is a AWindow: " << sipCppRet << std::endl;
+        if( dynamic_cast<AWindow3D *>( sipCpp ) )
+        {
+          *sipCppRet = dynamic_cast<AWindow3D *>( sipCpp );
+          sipType = sipType_AWindow3D;
+        }
+        else if( dynamic_cast<ControlledWindow *>( sipCpp ) )
+        {
+          *sipCppRet = dynamic_cast<ControlledWindow *>( sipCpp );
+          sipType = sipType_ControlledWindow;
+        }
+        else if( dynamic_cast<QAWindow *>( sipCpp ) )
+        {
+          *sipCppRet = dynamic_cast<QAWindow *>( sipCpp );
+          sipType = sipType_QAWindow;
+        }
+        else
+        {
+          *sipCppRet = dynamic_cast<anatomist::AWindow *>( sipCpp );
+          sipType = sipType_anatomist_AWindow;
+        }
       }
     }
     else if( dynamic_cast<anatomist::GlobalConfiguration *>( sipCpp ) )
@@ -150,7 +169,7 @@ namespace anatomist
   else if( dynamic_cast<anatomist::AWindow *>( sipCpp ) )
   {
     *sipCppRet = dynamic_cast<anatomist::AWindow *>( sipCpp );
-    // std::cout << "  - is a AWindow: " << sipCppRet << std::endl;
+    // std::cout << "  Observer - is a AWindow: " << sipCppRet << std::endl;
     if( dynamic_cast<QAWindow *>(sipCpp) )
     {
       *sipCppRet = dynamic_cast<QAWindow *>( sipCpp );

@@ -60,6 +60,7 @@ from ipyevents import Event
 import numpy as np
 from ipywidgets import Image
 from functools import partial
+import anatomist.direct.api as anatomist
 
 
 INTERACTION_THROTTLE = 100
@@ -68,11 +69,14 @@ log = logging.getLogger(__name__)
 log.setLevel("CRITICAL")
 #log.setLevel("DEBUG")
 log.addHandler(logging.StreamHandler())
-debug = False
+debug = True
 
 if debug:
     from ipywidgets import HTML
     h = HTML('Event info')
+
+with open('/tmp/analog.txt', 'w') as f: f.write('LOG')
+
 
 class AnatomistInteractiveWidget(Canvas):
     """Taken and modified from:
@@ -128,6 +132,9 @@ class AnatomistInteractiveWidget(Canvas):
 
         # refresh if mouse is just moving (not dragging)
         self.track_mouse_move = False
+        #self.track_mouse_move = True
+        #if self.is_window3d():
+            #self.track_mouse_move = True
 
         self.message_timestamp_offset = None
 
@@ -224,8 +231,8 @@ class AnatomistInteractiveWidget(Canvas):
         f = BytesIO()
         PIL.Image.fromarray(raw_img).save(f, 'JPEG', quality=quality)
         image = Image(
-            value=f.getvalue(), width=self.width, height=self.height
-        )
+            value=f.getvalue(), width=raw_img.shape[1],
+            height=raw_img.shape[0])
         if self.width != raw_img.shape[1]:
             self.width = raw_img.shape[1]
             self.layout.width = 'auto'
@@ -235,17 +242,30 @@ class AnatomistInteractiveWidget(Canvas):
         self.draw_image(image)
 
     def get_image(self, force_render=True):
-        if force_render:
-            self.render_window.getInternalRep().view().blockSignals(True)
+        if force_render and self.is_window3d():
+            self.render_window.view().blockSignals(True)
             self.render_window.camera(force_redraw=1)
-            self.render_window.getInternalRep().view().blockSignals(False)
+            self.render_window.view().blockSignals(False)
         return self._fast_image
 
     @property
     def _fast_image(self):
-        self.render_window.getInternalRep().view().blockSignals(True)
-        qdata = self.render_window.snapshotImage()
-        self.render_window.getInternalRep().view().blockSignals(False)
+        if self.is_window3d():
+            self.render_window.view().blockSignals(True)
+            qdata3 = self.render_window.snapshotImage()
+            self.render_window.view().blockSignals(False)
+            qdata = self.render_window.grab()
+            if not qdata.isNull():
+                from soma.qt_gui.qt_backend import Qt
+
+                rpos = self.render_window.view().mapTo(
+                    self.render_window.getInternalRep(), Qt.QPoint(0, 0))
+                painter = Qt.QPainter(qdata)
+                painter.drawImage(rpos.x(), rpos.y(), qdata3)
+                del painter
+        else:
+            qdata = self.render_window.grab()
+
         data = qt_backend.qimage_to_np(qdata)
 
         if self.transparent_background:
@@ -272,16 +292,11 @@ class AnatomistInteractiveWidget(Canvas):
         except Exception as e:
             self.error = str(e)
 
-    def send_pending_mouse_move_event(self):
-        if self.last_mouse_move_event is not None:
-            self.last_mouse_move_event = None
-
     #@throttle(0.01)
     def quick_render(self):
         if self.render_connected:
             return  # leave this job to the callback
         try:
-            self.send_pending_mouse_move_event()
             self.update_canvas(quality=self._quick_quality)
             if self.log_events:
                 self.elapsed_times.append(time.time() - self.last_render_time)
@@ -363,9 +378,11 @@ class AnatomistInteractiveWidget(Canvas):
 
         event_name = event["event"]
 
+        with open('/tmp/analog.txt', 'a') as f: f.write('event: %s\n' % event_name)
         if debug:
             lines = ['{}: {}'.format(k, v) for k, v in event.items()]
             h.value = 'new event: %s' % event_name
+            display(h)
 
         if 'offsetX' in event:
             event['offsetX'] = round(event["clientX"]-event["boundingRectLeft"]) #re-calculate coordinates
@@ -409,80 +426,66 @@ class AnatomistInteractiveWidget(Canvas):
                         )
 
                 qevent = get_mouse_qevent(event)
-                Qt.qApp.postEvent(self.render_window.getInternalRep().view(),
-                                  qevent)
+                self.post_qevent(qevent)
 
-                # We need to render something now it no rendering
-                # since self.quick_render_delay_sec
-                if time.time() - self.last_render_time > self.quick_render_delay_sec:
-                    self.quick_render()
             elif event_name == "mouseenter":
-                #self.interactor.EnterEvent()
                 self.last_mouse_move_event = None
+                self.dragging = False
 
-                qevent = Qt.QFocusEvent(Qt.QEvent.FocusInEvent,
+                qevent = Qt.QFocusEvent(Qt.QEvent.FocusIn,
                                         Qt.Qt.MouseFocusReason)
-                Qt.qApp.postEvent(self.render_window.getInternalRep().view(),
-                                  qevent)
+                self.post_qevent(qevent)
+
             elif event_name == "mouseleave":
-                #self.interactor.LeaveEvent()
                 self.last_mouse_move_event = None
                 if self.dragging:  # have to trigger a leave event and release event
-                    #self.interactor.LeftButtonReleaseEvent()
                     self.dragging = False
+                    qevent_btn, qevent_btns, qevent_mod \
+                        = get_mouse_event_buttons(event)
+                    qevent = Qt.QMouseEvent(
+                        Qt.QEvent.MouseButtonRelease,
+                        Qt.QPointF(event["relativeX"], event['relativeY']),
+                        qevent_btn, qevent_btn, qevent_mod)
+                    self.post_qevent(qevent)
 
-                qevent = Qt.QFocusEvent(Qt.QEvent.FocusOutEvent,
+                qevent = Qt.QFocusEvent(Qt.QEvent.FocusOut,
                                         Qt.Qt.MouseFocusReason)
-                Qt.qApp.postEvent(self.render_window.getInternalRep().view(),
-                                  qevent)
-                self.full_render()
+                self.post_qevent(qevent)
+
             elif event_name == "mousedown":
                 self.dragging = True
-                self.send_pending_mouse_move_event()
                 qevent = get_mouse_qevent(event)
-                Qt.qApp.postEvent(self.render_window.getInternalRep().view(),
-                                  qevent)
+                self.post_qevent(qevent)
 
-                self.full_render()  # does this have to be rendered?
             elif event_name == "mouseup":
-                self.send_pending_mouse_move_event()
+                self.dragging = False
                 qevent = get_mouse_qevent(event)
-                Qt.qApp.postEvent(self.render_window.getInternalRep().view(),
-                                  qevent)
+                self.post_qevent(qevent)
 
-                self.full_render()
             elif event_name == "dblclick":
-                self.send_pending_mouse_move_event()
                 qevent = get_mouse_qevent(event)
-                Qt.qApp.postEvent(self.render_window.getInternalRep().view(),
-                                  qevent)
+                self.post_qevent(qevent)
 
-                self.full_render()
             elif event_name == "keydown":
-                self.send_pending_mouse_move_event()
                 if (
                     event["key"] != "Shift"
                     and event["key"] != "Control"
                     and event["key"] != "Alt"
                 ):
                     qevent = get_key_qevent(event)
-                    Qt.qApp.postEvent(
-                        self.render_window.getInternalRep().view(), qevent)
-                    self.full_render()
+                    self.post_qevent(qevent)
+
             elif event_name == "keyup":
-                self.send_pending_mouse_move_event()
                 if (
                     event["key"] != "Shift"
                     and event["key"] != "Control"
                     and event["key"] != "Alt"
                 ):
                     qevent = get_key_qevent(event)
-                    Qt.qApp.postEvent(
-                        self.render_window.getInternalRep().view(), qevent)
-                    self.full_render()
+                    self.post_qevent(qevent)
+
             elif event_name == 'wheel':
                 if 'wheel' in self.interaction_events.watched_events:
-                    self.send_pending_mouse_move_event()
                     qevent_btn, qevent_btns, qevent_mod \
                         = get_mouse_event_buttons(event)
                     qevent = Qt.QWheelEvent(
@@ -491,9 +494,7 @@ class AnatomistInteractiveWidget(Canvas):
                         Qt.QPoint(event['deltaX'], event['deltaY']),
                         Qt.QPoint(0, 0), -event['deltaY'] * 2, Qt.Qt.Vertical,
                         qevent_btns, qevent_mod)
-                    Qt.qApp.postEvent(
-                        self.render_window.getInternalRep().view(), qevent)
-                    self.full_render()
+                    self.post_qevent(qevent)
 
             #elif event_name == 'contextmenu':
                 #qevent = Qt.QContextMenuEvent(
@@ -509,6 +510,41 @@ class AnatomistInteractiveWidget(Canvas):
             content = ', '.join(lines)
             h.value += '<br>' + content
 
+        with open('/tmp/analog.txt', 'a') as f: f.write(content)
+
+    def is_window3d(self):
+        return hasattr(self.render_window, 'getInternalRep') \
+            and hasattr(self.render_window.getInternalRep(), 'view') \
+            and isinstance(self.render_window.view(),
+                           anatomist.cpp.GLWidgetManager)
+
+    def post_qevent(self, qevent):
+
+        from soma.qt_gui.qt_backend import Qt
+
+        widget = self.render_window.getInternalRep()
+        if hasattr(qevent, 'pos'):
+            w2 = Qt.qApp.widgetAt(widget.mapToGlobal(qevent.pos()))
+            if w2:
+                if hasattr(self, '_last_widget_event') and qevent.type() in (
+                        Qt.QEvent.MouseButtonRelease, Qt.QEvent.MouseMove, Qt.QEvent.FocusOut):
+                    # these must happen in the same widget as they were started
+                    w2 = self._last_widget_event
+                pos = w2.mapFromGlobal(widget.mapToGlobal(qevent.pos()))
+                widget = w2
+                if isinstance(qevent, Qt.QMouseEvent):
+                    qevent = Qt.QMouseEvent(
+                        qevent.type(), pos, qevent.button(),
+                        qevent.buttons(), qevent.modifiers())
+        self._last_widget_event = widget
+        Qt.qApp.postEvent(widget, qevent)
+
+        if not self.is_window3d():
+            self.qtimer.singleShot(
+                float(INTERACTION_THROTTLE) / 1000,
+                partial(self.update_canvas, force_render=False,
+                        quality=self._full_quality))
+
     def close(self):
         super().close()
         self._on_close()
@@ -518,7 +554,6 @@ class AnatomistInteractiveWidget(Canvas):
         self.close()
 
 
-import anatomist.direct.api as anatomist
 from anatomist.headless import HeadlessAnatomist
 
 class NotebookAnatomist(anatomist.Anatomist):
@@ -561,11 +596,11 @@ class NotebookAnatomist(anatomist.Anatomist):
         win = super(NotebookAnatomist, self).createWindow(
             wintype, geometry=geometry, block=None, no_decoration=True,
             options=None)
-        if hasattr(win, 'view') and isinstance(win.view(),
-                                               anatomist.cpp.GLWidgetManager):
-            canvas = AnatomistInteractiveWidget(win)
-            display(canvas)
-            win.canvas = canvas
+        #if hasattr(win, 'view') and isinstance(win.view(),
+                                               #anatomist.cpp.GLWidgetManager):
+        canvas = AnatomistInteractiveWidget(win)
+        display(canvas)
+        win.canvas = canvas
         return win
 
 # this shortcut is used to easily get the Anatomist implementation

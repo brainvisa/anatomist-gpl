@@ -7,7 +7,7 @@ namespace anatomist
 
   void setQtColorStyle( QWidget* );
 
-  class AWindow : carto::SharedObject /Abstract/
+  class AWindow : carto::SharedObject, anatomist::Observer /Abstract/
   {
 %TypeHeaderCode
 #include <anatomist/window/Window.h>
