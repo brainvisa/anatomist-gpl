@@ -537,3 +537,7 @@ def HeadlessAnatomist(*args, **kwargs):
     #Anatomist.createWindow = createWindow_ana
 
     return hanatomist
+
+# shortcut for implementations
+Anatomist = HeadlessAnatomist
+

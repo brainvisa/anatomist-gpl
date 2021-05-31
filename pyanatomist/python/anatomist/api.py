@@ -42,6 +42,10 @@ Thus the version may be None if using the socket API.
 __version__ = None
 
 # here we just import the default implementation
-six.exec_('from anatomist.' + anatomist._implementation + '.api import *')
+try:
+    six.exec_('from anatomist.' + anatomist._implementation + '.api import *')
+except ImportError:
+    # try without the api submodule
+    six.exec_('from anatomist.' + anatomist._implementation + ' import *')
 if 'version' in globals():
     __version__ = version

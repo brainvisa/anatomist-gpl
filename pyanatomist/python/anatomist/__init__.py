@@ -94,11 +94,19 @@ SOCKET: str
     Use this constant to load anatomist api socket implementation. See :mod:`anatomist.socket.api` module.
 
 DIRECT: str
-  Use this constant to load anatomist api direct implementation (sip bindings). See :mod:`anatomist.direct.api` module.
+    Use this constant to load anatomist api direct implementation (sip bindings). See :mod:`anatomist.direct.api` module.
 
 THREADED: str
-  Use this constant to load anatomist api threaded direct implementation. See :mod:`anatomist.threaded.api` module.
+    Use this constant to load anatomist api threaded direct implementation. See :mod:`anatomist.threaded.api` module.
 
+HEADLESS: str
+    Identifier of the anatomist api headless implementation. See :mod:`anatomist.headless` module.
+
+NBANATOMIST: str
+    Identifier of the anatomist api nbanatomist implementation (inside a jupyter notebook). See :mod:`anatomist.nbanatomist` module.
+
+IMPLEMENTATIONS: tuple
+    List of Anatomist API implementations
 
 In addition to the Python APIs, the :meth:`Anatomist.execute <base.Anatomist.execute>` method of Anatomist also grants access to the :anadev:`commands system <commands.html>` which offers many functionalities, some of which have not been wrapped yet int the more "pythonic" API.
 
@@ -117,6 +125,10 @@ __version__ = '.'.join((info.version_major, info.version_minor,
 SOCKET = 'socket'
 DIRECT = 'direct'
 THREADED = 'threaded'
+HEADLESS = 'headless'
+NBANATOMIST = 'nbanatomist'
+
+IMPLEMENTATIONS = (SOCKET, DIRECT, THREADED, HEADLESS, NBANATOMIST)
 
 # import os
 #__path__ = [ os.path.join( os.path.dirname( __file__ ), 'direct' ),
@@ -143,4 +155,4 @@ def setDefaultImplementation(impl=DIRECT):
 
 def getDefaultImplementationModuleName():
     global _implementation
-    return 'anatomist.' + _implementation + '.api'
+    return 'anatomist.' + _implementation

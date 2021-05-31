@@ -18,9 +18,9 @@ canvases, the second is a "by window" method.
 
 Integrated Anatomist::
 
-    import anatomist.headless as ana
+    import anatomist.nbanatomist as ana
 
-    a = ana.HeadlessAnatomist(implementation='nbanatomist')
+    a = ana.Anatomist()
     w = a.createWindow('3D')
     mesh = a.loadObject('/home/dr144257/data/ra_head.mesh')
     w.addObjects(mesh)
@@ -37,6 +37,8 @@ By window::
 
     canvas = AnatomistInteractiveWidget(w)
     display(canvas)
+
+Note that the integrated anatomist.nbanatimist implementationis a headless implementation, but only wraps the 3D rendering views of Anatomist windows, and is not able to render Qt interfaces in a web browser. This means that it will not render Browser windows, popup menus, sliders and control buttons around views, or parameters dialogs, at least for now.
 
 """
 
@@ -60,60 +62,7 @@ from ipywidgets import Image
 from functools import partial
 
 
-### throttler.py:
-
-## the throttler does not seem to work in python 3.6 at least.
-
-#import asyncio
-
 INTERACTION_THROTTLE = 100
-
-#class Timer:
-    #def __init__(self, timeout, callback):
-        #self._timeout = timeout
-        #self._callback = callback
-        #self._task = asyncio.ensure_future(self._job())
-
-    #async def _job(self):
-        #await asyncio.sleep(self._timeout)
-        #self._callback()
-
-    #def cancel(self):
-        #self._task.cancel()
-
-
-#def throttle(wait):
-    #""" Decorator that prevents a function from being called
-        #more than once every wait period. """
-
-    #def decorator(fn):
-        #time_of_last_call = 0
-        #scheduled = False
-        #new_args, new_kwargs = None, None
-
-        #def throttled(*args, **kwargs):
-            #nonlocal new_args, new_kwargs, time_of_last_call, scheduled
-
-            #def call_it():
-                #nonlocal new_args, new_kwargs, time_of_last_call, scheduled
-                #time_of_last_call = time.time()
-                #fn(*new_args, **new_kwargs)
-                #scheduled = False
-
-            #time_since_last_call = time.time() - time_of_last_call
-            #new_args = args
-            #new_kwargs = kwargs
-            #if not scheduled:
-                #new_wait = max(0, wait - time_since_last_call)
-                #Timer(new_wait, call_it)
-                #scheduled = True
-
-        #return throttled
-
-    #return decorator
-
-
-## viewer.py
 
 log = logging.getLogger(__name__)
 log.setLevel("CRITICAL")
@@ -305,10 +254,12 @@ class AnatomistInteractiveWidget(Canvas):
             return data[:, :, :-1]
 
     def render_callback(self):
-        self.update_canvas(quality=self._quick_quality)
+        self.update_canvas(force_render=False, quality=self._quick_quality)
         # trigger a better quality image
         self.qtimer.singleShot(
-            float(INTERACTION_THROTTLE) / 1000, partial(self.full_render, qualiry=self._full_quality))
+            float(INTERACTION_THROTTLE) / 1000,
+            partial(self.update_canvas, force_render=False,
+                    quality=self._full_quality))
 
     #@throttle(0.1)
     def full_render(self):
@@ -568,6 +519,7 @@ class AnatomistInteractiveWidget(Canvas):
 
 
 import anatomist.direct.api as anatomist
+from anatomist.headless import HeadlessAnatomist
 
 class NotebookAnatomist(anatomist.Anatomist):
     '''
@@ -580,10 +532,24 @@ class NotebookAnatomist(anatomist.Anatomist):
 
         import anatomist.headless as ana
 
-        a = ana.HeadlessAnatomist(implementation='nbanatomist')
+        a = ana.HeadlessAnatomist(
+            implementation='anatomist.nbanatomist.NotebookAnatomist')
         w = a.createWindow('3D')
         mesh = a.loadObject('/home/dr144257/data/ra_head.mesh')
         w.addObjects(mesh)
+
+    This is also implemented as a variant of Anatomist implementation::
+
+        import anatomist
+        anatomist.setDefaultImplementation('nbanatomist')
+        import anatomist.api as ana
+
+        a = ana.Anatomist()
+
+    Or, simply:
+        import anatomist.nbanatomist as ana
+
+        a = ana.Anatomist()
     '''
 
     def __singleton_init__(self, *args, **kwargs):
@@ -595,13 +561,19 @@ class NotebookAnatomist(anatomist.Anatomist):
         win = super(NotebookAnatomist, self).createWindow(
             wintype, geometry=geometry, block=None, no_decoration=True,
             options=None)
-        canvas = AnatomistInteractiveWidget(win)
-        display(canvas)
-        win.canvas = canvas
+        if hasattr(win, 'view') and isinstance(win.view(),
+                                               anatomist.cpp.GLWidgetManager):
+            canvas = AnatomistInteractiveWidget(win)
+            display(canvas)
+            win.canvas = canvas
         return win
 
 # this shortcut is used to easily get the Anatomist implementation
-Anatomist = NotebookAnatomist
+Anatomist = partial(HeadlessAnatomist,
+                    implementation='anatomist.nbanatomist.NotebookAnatomist')
+'''
+Anatomist implementation rendering in a Jupyter Notebook. It is the headless wrapping around the :class:`NotebookAnatomist` implementation.
+'''
 
 
 if __name__ == '__main__':
