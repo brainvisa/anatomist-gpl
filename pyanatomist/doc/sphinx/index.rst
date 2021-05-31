@@ -86,6 +86,7 @@ Table of contents
       pyanatomist_threaded
       pyanatomist_cpp
       pyanatomist_headless
+      pyanatomist_nbanatomist
       pyanatomist_wip
       pyanatomist_tutorial_nb
       pyanatomist_pyaims_tutorial
@@ -102,6 +103,7 @@ Table of contents
       pyanatomist_threaded
       pyanatomist_cpp
       pyanatomist_headless
+      pyanatomist_nbanatomist
       pyanatomist_wip
       pyanatomist_tutorial
       pyanatomist_pyaims_tutorial
