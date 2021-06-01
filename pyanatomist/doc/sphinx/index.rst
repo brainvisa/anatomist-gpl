@@ -28,7 +28,7 @@ Sub-modules
 
 - :doc:`pyanatomist_headless`
 
-- :doc:`pyanatomist_nbanatomist`
+- :doc:`pyanatomist_notebook`
 
 - The C++ bindings are built on top of :pyaims:`PyAims <index.html>`
 
@@ -86,7 +86,7 @@ Table of contents
       pyanatomist_threaded
       pyanatomist_cpp
       pyanatomist_headless
-      pyanatomist_nbanatomist
+      pyanatomist_notebook
       pyanatomist_wip
       pyanatomist_tutorial_nb
       pyanatomist_pyaims_tutorial
@@ -103,7 +103,7 @@ Table of contents
       pyanatomist_threaded
       pyanatomist_cpp
       pyanatomist_headless
-      pyanatomist_nbanatomist
+      pyanatomist_notebook
       pyanatomist_wip
       pyanatomist_tutorial
       pyanatomist_pyaims_tutorial
