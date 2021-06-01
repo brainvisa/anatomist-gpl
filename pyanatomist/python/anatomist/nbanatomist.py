@@ -75,7 +75,7 @@ if debug:
     from ipywidgets import HTML
     h = HTML('Event info')
 
-with open('/tmp/analog.txt', 'w') as f: f.write('LOG')
+# with open('/tmp/analog.txt', 'w') as f: f.write('LOG')
 
 
 class AnatomistInteractiveWidget(Canvas):
@@ -108,7 +108,7 @@ class AnatomistInteractiveWidget(Canvas):
 
     def __init__(self, awindow, log_events=False,
                  transparent_background=False, allow_wheel=True, quality=85,
-                 quick_quality=50, on_close=None, **kwargs):
+                 quick_quality=50, on_close=None, only_3d=False, **kwargs):
 
         super().__init__(**kwargs)
         if quality < 0 or quality > 100:
@@ -126,6 +126,7 @@ class AnatomistInteractiveWidget(Canvas):
         self.quick_render_delay_sec_range = [0.02, 2.0]
         self.adaptive_render_delay = True
         self.last_mouse_move_event = None
+        self._only_3d = only_3d
 
         from soma.qt_gui.qt_backend import Qt
         self.qtimer = Qt.QTimer()
@@ -218,6 +219,14 @@ class AnatomistInteractiveWidget(Canvas):
             raise RuntimeError('render window has closed')
         return ren_win
 
+    @property
+    def ana_view(self):
+        if self.is_window3d():
+            return self.render_window.view()
+        w = self.render_window
+        if hasattr(w, 'getInternalRep'):
+            return w.getInternalRep()
+
     def set_quick_render_delay(self, delay_sec):
         if delay_sec < self.quick_render_delay_sec_range[0]:
             delay_sec = self.quick_render_delay_sec_range[0]
@@ -254,15 +263,20 @@ class AnatomistInteractiveWidget(Canvas):
             self.render_window.view().blockSignals(True)
             qdata3 = self.render_window.snapshotImage()
             self.render_window.view().blockSignals(False)
-            qdata = self.render_window.grab()
-            if not qdata.isNull():
-                from soma.qt_gui.qt_backend import Qt
+            if self._only_3d:
+                qdata = qdata3
+            else:
+                qdata = self.render_window.grab()
+                if qdata.isNull():
+                    qdata = qdata3
+                else:
+                    from soma.qt_gui.qt_backend import Qt
 
-                rpos = self.render_window.view().mapTo(
-                    self.render_window.getInternalRep(), Qt.QPoint(0, 0))
-                painter = Qt.QPainter(qdata)
-                painter.drawImage(rpos.x(), rpos.y(), qdata3)
-                del painter
+                    rpos = self.render_window.view().mapTo(
+                        self.render_window.getInternalRep(), Qt.QPoint(0, 0))
+                    painter = Qt.QPainter(qdata)
+                    painter.drawImage(rpos.x(), rpos.y(), qdata3)
+                    del painter
         else:
             qdata = self.render_window.grab()
 
@@ -378,7 +392,7 @@ class AnatomistInteractiveWidget(Canvas):
 
         event_name = event["event"]
 
-        with open('/tmp/analog.txt', 'a') as f: f.write('event: %s\n' % event_name)
+        #with open('/tmp/analog.txt', 'a') as f: f.write('event: %s\n' % event_name)
         if debug:
             lines = ['{}: {}'.format(k, v) for k, v in event.items()]
             h.value = 'new event: %s' % event_name
@@ -510,7 +524,7 @@ class AnatomistInteractiveWidget(Canvas):
             content = ', '.join(lines)
             h.value += '<br>' + content
 
-        with open('/tmp/analog.txt', 'a') as f: f.write(content)
+        #with open('/tmp/analog.txt', 'a') as f: f.write(content)
 
     def is_window3d(self):
         return hasattr(self.render_window, 'getInternalRep') \
@@ -522,20 +536,26 @@ class AnatomistInteractiveWidget(Canvas):
 
         from soma.qt_gui.qt_backend import Qt
 
-        widget = self.render_window.getInternalRep()
-        if hasattr(qevent, 'pos'):
-            w2 = Qt.qApp.widgetAt(widget.mapToGlobal(qevent.pos()))
-            if w2:
-                if hasattr(self, '_last_widget_event') and qevent.type() in (
-                        Qt.QEvent.MouseButtonRelease, Qt.QEvent.MouseMove, Qt.QEvent.FocusOut):
-                    # these must happen in the same widget as they were started
-                    w2 = self._last_widget_event
-                pos = w2.mapFromGlobal(widget.mapToGlobal(qevent.pos()))
-                widget = w2
-                if isinstance(qevent, Qt.QMouseEvent):
-                    qevent = Qt.QMouseEvent(
-                        qevent.type(), pos, qevent.button(),
-                        qevent.buttons(), qevent.modifiers())
+        if self._only_3d:
+            widget = self.ana_view
+        else:
+            widget = self.render_window.getInternalRep()
+            if hasattr(qevent, 'pos'):
+                w2 = widget.childAt(qevent.pos())
+                if w2:
+                    if hasattr(self, '_last_widget_event') \
+                            and qevent.type() in (
+                                Qt.QEvent.MouseButtonRelease,
+                                Qt.QEvent.MouseMove, Qt.QEvent.FocusOut):
+                        # these must happen in the same widget as they were
+                        # started
+                        w2 = self._last_widget_event
+                    pos = w2.mapFromGlobal(widget.mapToGlobal(qevent.pos()))
+                    widget = w2
+                    if isinstance(qevent, Qt.QMouseEvent):
+                        qevent = Qt.QMouseEvent(
+                            qevent.type(), pos, qevent.button(),
+                            qevent.buttons(), qevent.modifiers())
         self._last_widget_event = widget
         Qt.qApp.postEvent(widget, qevent)
 
@@ -585,6 +605,10 @@ class NotebookAnatomist(anatomist.Anatomist):
         import anatomist.nbanatomist as ana
 
         a = ana.Anatomist()
+
+    The :meth:`createWindow` method overload adds an additonal keyword
+    argument, ``only_3D`` which enables to display only the 3D rendering view,
+    or the full window with buttons and sliders.
     '''
 
     def __singleton_init__(self, *args, **kwargs):
@@ -592,13 +616,27 @@ class NotebookAnatomist(anatomist.Anatomist):
         super(NotebookAnatomist, self).__singleton_init__(*args, **kwargs)
 
     def createWindow(self, wintype, geometry=[], block=None,
-                     no_decoration=None, options=None):
+                     no_decoration=None, options=None, only_3d=False):
+        '''
+        Overload for :meth:`anatomist.direct.api.Anatomist.createWindow` which embeds the window in a Jupyter notebook canvas. It has an additional optional keyword argument:
+
+        Parameters
+        ----------
+        only_3d: bool
+            if False, the full window is rendered in the notebook canvas
+            (except that menubars are hidden since popups are not working).
+            If True, only the 3D view part is rendered in the canvas (which
+            should also be more efficient because it avoids a buffer copy).
+        '''
+        if only_3d:
+            no_decoration = True
         win = super(NotebookAnatomist, self).createWindow(
-            wintype, geometry=geometry, block=None, no_decoration=True,
-            options=None)
-        #if hasattr(win, 'view') and isinstance(win.view(),
-                                               #anatomist.cpp.GLWidgetManager):
-        canvas = AnatomistInteractiveWidget(win)
+            wintype, geometry=geometry, block=None,
+            no_decoration=no_decoration, options=None)
+        if not no_decoration:
+            # hide menubars
+            win.menuBar().hide()
+        canvas = AnatomistInteractiveWidget(win, only_3d=only_3d)
         display(canvas)
         win.canvas = canvas
         return win
