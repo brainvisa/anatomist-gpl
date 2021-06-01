@@ -357,7 +357,6 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=False):
                 print('OpenGL lib already loaded. Using Xvfb will not be '
                       'possible.')
                 result.xvfb = None
-        print(glx, force_virtualgl, gl_libs, allow_virtualgl, qtapp)
 
         # WARNING: the test was initially glx < 2, but then it would not
         # enable virtualGL if glx is detected through glxinfo. I don't remember

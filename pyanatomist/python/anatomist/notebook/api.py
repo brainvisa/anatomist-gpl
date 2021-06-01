@@ -311,6 +311,10 @@ class AnatomistInteractiveWidget(Canvas):
             #return data[:, :, :-1]
 
     def render_callback(self):
+        if self._render_window() is None:
+            # the anatromist window has been closed
+            self.close()
+            return
         self.update_canvas(force_render=False, quality=self._quick_quality)
         # trigger a better quality image
         self.qtimer.singleShot(
@@ -616,10 +620,17 @@ class NotebookAnatomist(anatomist.Anatomist):
 
         a = ana.Anatomist()
 
-    Or, simply:
+    Or, simply::
+
         import anatomist.notebook as ana
 
         a = ana.Anatomist()
+
+    ..note::
+
+        In this example we load ``anatomist.notebook`̀̀` without the ``api``
+        submodule, because the latter loads Qt and thus prevents the optimized
+        headless implementation to load and use VirtualGL.
 
     The :meth:`createWindow` method overload adds an additonal keyword
     argument, ``only_3D`` which enables to display only the 3D rendering view,

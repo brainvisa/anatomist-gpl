@@ -30,10 +30,13 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+from __future__ import print_function
 from __future__ import absolute_import
+
 import anatomist
 
 import six
+import importlib
 
 
 '''API version, corresponds to the C++ bindings lib version, if loaded.
@@ -41,11 +44,34 @@ Thus the version may be None if using the socket API.
 '''
 __version__ = None
 
+ana_mod = None
+error = False
 # here we just import the default implementation
-try:
-    six.exec_('from anatomist.' + anatomist._implementation + '.api import *')
-except ImportError:
-    # try without the api submodule
-    six.exec_('from anatomist.' + anatomist._implementation + ' import *')
-if 'version' in globals():
-    __version__ = version
+for impl in ('anatomist.%s' % anatomist._implementation,
+             'anatomist.%s.api' % anatomist._implementation):
+    try:
+        # try with the api submodule
+        ana_mod = importlib.import_module(impl)
+        if hasattr(ana_mod, 'Anatomist'):
+            break
+    except ImportError:
+        error = True
+
+if error:
+    raise
+
+del impl, error
+
+if ana_mod:
+    Anatomist = ana_mod.Anatomist
+
+    if hasattr(ana_mod, 'version'):
+        __version__ = ana_mod.version
+    elif hasattr(ana_mod, '__version__'):
+        __version__ = ana_mod.version
+
+    for k, v in ana_mod.__dict__.items():
+        if not k.startswith('__'):
+            globals()[k] = v
+
+    del ana_mod
