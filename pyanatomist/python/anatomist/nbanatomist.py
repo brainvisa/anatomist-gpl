@@ -47,7 +47,7 @@ import anatomist.headless as ana
 from ipywidgets import Image
 from io import BytesIO
 from soma.qt_gui import qt_backend
-import PIL
+#import PIL
 
 import time
 import logging
@@ -74,8 +74,6 @@ debug = True
 if debug:
     from ipywidgets import HTML
     h = HTML('Event info')
-
-# with open('/tmp/analog.txt', 'w') as f: f.write('LOG')
 
 
 class AnatomistInteractiveWidget(Canvas):
@@ -236,18 +234,36 @@ class AnatomistInteractiveWidget(Canvas):
 
     def update_canvas(self, force_render=True, quality=75):
         """Updates the canvas with the current render"""
+        from soma.qt_gui.qt_backend import Qt
+
         raw_img = self.get_image(force_render=force_render)
-        f = BytesIO()
-        PIL.Image.fromarray(raw_img).save(f, 'JPEG', quality=quality)
+        # save using Qt to avoid a copy
+        buffer = Qt.QByteArray()
+        fbuf = Qt.QBuffer(buffer)
+        fbuf.open(fbuf.WriteOnly)
+        raw_img.save(fbuf, 'JPEG', quality)
         image = Image(
-            value=f.getvalue(), width=raw_img.shape[1],
-            height=raw_img.shape[0])
-        if self.width != raw_img.shape[1]:
-            self.width = raw_img.shape[1]
+            value=bytes(fbuf.buffer()), width=raw_img.width(), height=raw_img.height())
+        if self.width != raw_img.width():
+            self.width = raw_img.width()
             self.layout.width = 'auto'
-        if self.height != raw_img.shape[0]:
-            self.height = raw_img.shape[0]
+        if self.height != raw_img.width():
+            self.height = raw_img.height()
             self.layout.height = 'auto'
+
+        # this one was using a np array and PIL
+
+        #f = BytesIO()
+        #PIL.Image.fromarray(raw_img).save(f, 'JPEG', quality=quality)
+        #image = Image(
+            #value=f.getvalue(), width=raw_img.shape[1],
+            #height=raw_img.shape[0])
+        #if self.width != raw_img.shape[1]:
+            #self.width = raw_img.shape[1]
+            #self.layout.width = 'auto'
+        #if self.height != raw_img.shape[0]:
+            #self.height = raw_img.shape[0]
+            #self.layout.height = 'auto'
         self.draw_image(image)
 
     def get_image(self, force_render=True):
@@ -280,12 +296,14 @@ class AnatomistInteractiveWidget(Canvas):
         else:
             qdata = self.render_window.grab()
 
-        data = qt_backend.qimage_to_np(qdata)
+        return qdata  # return a QImage
 
-        if self.transparent_background:
-            return data
-        else:  # ignore alpha channel
-            return data[:, :, :-1]
+        #data = qt_backend.qimage_to_np(qdata)
+
+        #if self.transparent_background:
+            #return data
+        #else:  # ignore alpha channel
+            #return data[:, :, :-1]
 
     def render_callback(self):
         self.update_canvas(force_render=False, quality=self._quick_quality)
@@ -392,7 +410,6 @@ class AnatomistInteractiveWidget(Canvas):
 
         event_name = event["event"]
 
-        #with open('/tmp/analog.txt', 'a') as f: f.write('event: %s\n' % event_name)
         if debug:
             lines = ['{}: {}'.format(k, v) for k, v in event.items()]
             h.value = 'new event: %s' % event_name
@@ -523,8 +540,6 @@ class AnatomistInteractiveWidget(Canvas):
         if debug:
             content = ', '.join(lines)
             h.value += '<br>' + content
-
-        #with open('/tmp/analog.txt', 'a') as f: f.write(content)
 
     def is_window3d(self):
         return hasattr(self.render_window, 'getInternalRep') \
