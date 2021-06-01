@@ -44,23 +44,20 @@ Thus the version may be None if using the socket API.
 '''
 __version__ = None
 
-ana_mod = None
-error = False
 # here we just import the default implementation
-for impl in ('anatomist.%s' % anatomist._implementation,
-             'anatomist.%s.api' % anatomist._implementation):
+ana_mod = None
+for n, impl in enumerate(('anatomist.%s' % anatomist._implementation,
+                          'anatomist.%s.api' % anatomist._implementation)):
     try:
         # try with the api submodule
         ana_mod = importlib.import_module(impl)
         if hasattr(ana_mod, 'Anatomist'):
             break
     except ImportError:
-        error = True
+        if n == 1:
+            raise
 
-if error:
-    raise
-
-del impl, error
+del impl
 
 if ana_mod:
     Anatomist = ana_mod.Anatomist
