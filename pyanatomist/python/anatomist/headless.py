@@ -284,19 +284,40 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=False):
     global xvfb
     global original_display
 
+    class Result(object):
+        def __init__(self):
+            self.xvfb = None
+            self.original_display = None
+            self.display = None
+            self.glx = None
+            self.virtualgl = None
+            self.headless = None
+            self.mesa = False
+            self.qtapp = None
+
+    result = Result()
+    result.xvfb = xvfb
+    result.original_display = original_display
+
     if xvfb:
         # already setup
-        return
+        return result
     if sys.platform in ('darwin', 'win32'):
         # not a X11 implementation
-        return
+        result.headless = False
+        return result
+
     qtapp = test_qapp()
+    result.qtapp = qtapp
+
     if qtapp == 'QApp':
         # QApplication has already opened the current display: we cannot change
         # it afterwards.
         print('QApplication already instantiated, headless Anatomist is not '
               'possible.')
-        return
+        result.headless = False
+        return result
+
     use_xvfb = True
     glxinfo_cmd = distutils.spawn.find_executable('glxinfo')
     xdpyinfo_cmd = distutils.spawn.find_executable('xdpyinfo')
@@ -321,15 +342,28 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=False):
         original_display = os.environ.get('DISPLAY', None)
         os.environ['DISPLAY'] = ':%d' % display
 
+        result.original_display = original_display
+        result.display = display
+        result.xvfb = xvfb
+        result.headless = True
+
         glx = test_glx(glxinfo_cmd=glxinfo_cmd, xdpyinfo_cmd=xdpyinfo_cmd)
+        result.glx = glx
+
         gl_libs = set()
         if not glx:
             gl_libs = test_opengl(verbose=True)
             if len(gl_libs) != 0:
                 print('OpenGL lib already loaded. Using Xvfb will not be '
                       'possible.')
+                result.xvfb = None
+        print(glx, force_virtualgl, gl_libs, allow_virtualgl, qtapp)
 
-        if (glx < 2 or force_virtualgl) and not gl_libs and allow_virtualgl \
+        # WARNING: the test was initially glx < 2, but then it would not
+        # enable virtualGL if glx is detected through glxinfo. I don't remember
+        # why this was done this way, we perhaps experienced some crashes.
+
+        if (glx <= 2 or force_virtualgl) and not gl_libs and allow_virtualgl \
                 and qtapp is None:
             # try VirtualGL
             vgl = distutils.spawn.find_executable('vglrun')
@@ -346,6 +380,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=False):
                     print('VirtualGL should work.')
 
                     glx = setup_virtualGL()
+                    result.virtualgl = glx
 
                     if glx:
                         print('Running through VirtualGL + Xvfb: '
@@ -371,8 +406,11 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=False):
                 xvfb = Popen(['Xvfb', '-screen', '0', '1280x1024x24',
                               '+extension', 'GLX', ':%d' % display],
                              preexec_fn=on_parent_exit('SIGINT'))
+                result.xvfb = xvfb
                 #self.mesa_lib = mesa_lib
                 glx = test_glx(glxinfo_cmd, xdpyinfo_cmd)
+                result.glx = glx
+                result.mesa = True
                 if glx:
                     print('Running using Mesa software OpenGL: performance '
                           'will be slow. To get faster results, and if X '
@@ -388,24 +426,31 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=False):
             xvfb.terminate()
             xvfb.wait()
             xvfb = None
+            result.xvfb = None
             if original_display is not None:
                 os.environ['DISPLAY'] = original_display
+                result.display = original_display
             else:
                 del os.environ['DISPLAY']
+                result.display = None
             use_xvfb = False
             #raise RuntimeError('GLX extension missing')
 
     if not use_xvfb:
         if xdpyinfo_cmd:
             glx = test_glx(glxinfo_cmd, xdpyinfo_cmd, 0)
+            result.glx = glx
             if not glx:
                 raise RuntimeError('GLX extension missing')
         print('Headless Anatomist running in normal (non-headless) mode')
+        result.headless = False
 
     # this is not needed any longer, since on_parent_exit() is passed to
     # Popen
     # if xvfb is not None:
         # atexit.register(terminate_xvfb)
+
+    return result
 
 
 def HeadlessAnatomist(*args, **kwargs):
@@ -501,8 +546,8 @@ def HeadlessAnatomist(*args, **kwargs):
         force_virtualgl = kwargs['force_virtualgl']
         kwargs = dict(kwargs)
         del kwargs['force_virtualgl']
-    setup_headless(allow_virtualgl=allow_virtualgl,
-                   force_virtualgl=force_virtualgl)
+    result = setup_headless(allow_virtualgl=allow_virtualgl,
+                            force_virtualgl=force_virtualgl)
 
     implementation = kwargs.get('implementation', 'direct')
     if '.' in implementation:
@@ -532,6 +577,7 @@ def HeadlessAnatomist(*args, **kwargs):
     # return self._old_createWindow(wintype, **kwargs)
 
     hanatomist = Anatomist()
+    hanatomist.headless_info = result
     #Anatomist.__del__ = __del__ana
     #Anatomist._old_createWindow = Anatomist.createWindow
     #Anatomist.createWindow = createWindow_ana
