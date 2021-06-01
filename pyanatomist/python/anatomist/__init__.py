@@ -69,7 +69,7 @@ Several means of driving Anatomist in python scripts exist : Python bindings for
 * :mod:`anatomist.direct.api` module contains an implementation using sip bindings of Anatomist C++ api.
 * :mod:`anatomist.threaded.api` module is a thread safe layer for the direct module. Useful if you have to use anatomist api in a multi-threaded environment.
 * :mod:`anatomist.headless` module is an off-screen redirection of Anatomist display.
-* :mod:`anatomist.nbanatomist` module is a Jupyter Notebook widget proxy, rendering the contents of an Anatomist view.
+* :mod:`anatomist.notebook.api` module is a Jupyter Notebook widget proxy, rendering the contents of an Anatomist view.
 * :mod:`anatomist.cpp` module contains sip bindings of Anatomist C++ api. It is a low level module, only for advanced user.
 * :doc:`pyanatomist_wip` work in progress module
 
@@ -102,8 +102,8 @@ THREADED: str
 HEADLESS: str
     Identifier of the anatomist api headless implementation. See :mod:`anatomist.headless` module.
 
-NBANATOMIST: str
-    Identifier of the anatomist api nbanatomist implementation (inside a jupyter notebook). See :mod:`anatomist.nbanatomist` module.
+NOTEBOOK: str
+    Identifier of the anatomist api notebook implementation (inside a jupyter notebook). See :mod:`anatomist.notebook` module.
 
 IMPLEMENTATIONS: tuple
     List of Anatomist API implementations
@@ -126,9 +126,9 @@ SOCKET = 'socket'
 DIRECT = 'direct'
 THREADED = 'threaded'
 HEADLESS = 'headless'
-NBANATOMIST = 'nbanatomist'
+NOTEBOOK = 'notebook'
 
-IMPLEMENTATIONS = (SOCKET, DIRECT, THREADED, HEADLESS, NBANATOMIST)
+IMPLEMENTATIONS = (SOCKET, DIRECT, THREADED, HEADLESS, NOTEBOOK)
 
 # import os
 #__path__ = [ os.path.join( os.path.dirname( __file__ ), 'direct' ),

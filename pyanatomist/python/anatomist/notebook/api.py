@@ -18,7 +18,7 @@ canvases, the second is a "by window" method.
 
 Integrated Anatomist::
 
-    import anatomist.nbanatomist as ana
+    import anatomist.notebook as ana
 
     a = ana.Anatomist()
     w = a.createWindow('3D')
@@ -28,9 +28,11 @@ Integrated Anatomist::
 By window::
 
     import anatomist.headless as ana
-    from anatomist.nbanatomist import AnatomistInteractiveWidget
-
+    # need to be instantiated before Qt implementations are loaded
     a = ana.HeadlessAnatomist()
+
+    from anatomist.notebook.api import AnatomistInteractiveWidget
+
     w = a.createWindow('3D')
     mesh = a.loadObject('/home/riviere/data/ra_head.mesh')
     w.addObjects(mesh)
@@ -38,7 +40,7 @@ By window::
     canvas = AnatomistInteractiveWidget(w)
     display(canvas)
 
-Note that the integrated anatomist.nbanatimist implementationis a headless implementation, but only wraps the 3D rendering views of Anatomist windows, and is not able to render Qt interfaces in a web browser. This means that it will not render Browser windows, popup menus, sliders and control buttons around views, or parameters dialogs, at least for now.
+Note that the integrated anatomist.notebook implementation is a headless implementation, and wraps Anatomist windows widget as a single canvas. It is able to render Qt interfaces in a web browser, but cannot open pop-ups, menus, tooltips, or parameters dialogs. Qt widgets renderings are not synchronized because we lack a callback slot when this is done.
 
 """
 
@@ -61,6 +63,9 @@ import numpy as np
 from ipywidgets import Image
 from functools import partial
 import anatomist.direct.api as anatomist
+from soma.qt_gui.qt_backend import Qt
+
+from . import Anatomist
 
 
 INTERACTION_THROTTLE = 100
@@ -81,11 +86,14 @@ class AnatomistInteractiveWidget(Canvas):
     https://github.com/Kitware/ipyvtklink/blob/master/ipyvtklink/viewer.py
 
     Remote controller for Anatomist render windows.
-    In Anatomist 5.1, Anatomist views are sync'ed to the canvas automatically
-    at each 3D rendering (via a Qt signal). In earlier Anatomist (5.0) this
-    sync is not automatic and is only forced when input events are caught,
-    which means that renderings done on Anatomist side for other reasons (such
-    as animations) will not be rendered.
+    In Anatomist 5.1, Anatomist 3D views are sync'ed to the canvas
+    automatically at each 3D rendering (via a Qt signal). In earlier Anatomist
+    (5.0) this sync is not automatic and is only forced when input events are
+    caught, which means that renderings done on Anatomist side for other
+    reasons (such as animations) will not be rendered.
+
+    Other Qt widgets (browsers...) are not sync'ed either because we have no
+    obvious means to capture paint events from arbitrary Qt widgets.
 
     Parameters
     ----------
@@ -126,7 +134,6 @@ class AnatomistInteractiveWidget(Canvas):
         self.last_mouse_move_event = None
         self._only_3d = only_3d
 
-        from soma.qt_gui.qt_backend import Qt
         self.qtimer = Qt.QTimer()
 
         # refresh if mouse is just moving (not dragging)
@@ -234,7 +241,6 @@ class AnatomistInteractiveWidget(Canvas):
 
     def update_canvas(self, force_render=True, quality=75):
         """Updates the canvas with the current render"""
-        from soma.qt_gui.qt_backend import Qt
 
         raw_img = self.get_image(force_render=force_render)
         # save using Qt to avoid a copy
@@ -243,7 +249,8 @@ class AnatomistInteractiveWidget(Canvas):
         fbuf.open(fbuf.WriteOnly)
         raw_img.save(fbuf, 'JPEG', quality)
         image = Image(
-            value=bytes(fbuf.buffer()), width=raw_img.width(), height=raw_img.height())
+            value=bytes(fbuf.buffer()), width=raw_img.width(),
+            height=raw_img.height())
         if self.width != raw_img.width():
             self.width = raw_img.width()
             self.layout.width = 'auto'
@@ -286,8 +293,6 @@ class AnatomistInteractiveWidget(Canvas):
                 if qdata.isNull():
                     qdata = qdata3
                 else:
-                    from soma.qt_gui.qt_backend import Qt
-
                     rpos = self.render_window.view().mapTo(
                         self.render_window.getInternalRep(), Qt.QPoint(0, 0))
                     painter = Qt.QPainter(qdata)
@@ -415,15 +420,14 @@ class AnatomistInteractiveWidget(Canvas):
             h.value = 'new event: %s' % event_name
             display(h)
 
-        if 'offsetX' in event:
-            event['offsetX'] = round(event["clientX"]-event["boundingRectLeft"]) #re-calculate coordinates
-            scale_x = self.width/event['boundingRectWidth']
-            event['offsetX'] = round(event['offsetX']*scale_x)
-            event['offsetY'] = round(event["clientY"]-event["boundingRectTop"]) #re-calculate coordinates
-            scale_y = self.height/event['boundingRectHeight']
-            event['offsetY'] = round(event['offsetY']*scale_y)
+        #if 'offsetX' in event:
+            #event['offsetX'] = round(event["clientX"]-event["boundingRectLeft"]) #re-calculate coordinates
+            #scale_x = self.width/event['boundingRectWidth']
+            #event['offsetX'] = round(event['offsetX']*scale_x)
+            #event['offsetY'] = round(event["clientY"]-event["boundingRectTop"]) #re-calculate coordinates
+            #scale_y = self.height/event['boundingRectHeight']
+            #event['offsetY'] = round(event['offsetY']*scale_y)
 
-        from soma.qt_gui.qt_backend import Qt
 
         try:
             if self.log_events:
@@ -549,8 +553,6 @@ class AnatomistInteractiveWidget(Canvas):
 
     def post_qevent(self, qevent):
 
-        from soma.qt_gui.qt_backend import Qt
-
         if self._only_3d:
             widget = self.ana_view
         else:
@@ -589,8 +591,6 @@ class AnatomistInteractiveWidget(Canvas):
         self.close()
 
 
-from anatomist.headless import HeadlessAnatomist
-
 class NotebookAnatomist(anatomist.Anatomist):
     '''
     A derived Anatomist class which automatically redirects its views to
@@ -603,7 +603,7 @@ class NotebookAnatomist(anatomist.Anatomist):
         import anatomist.headless as ana
 
         a = ana.HeadlessAnatomist(
-            implementation='anatomist.nbanatomist.NotebookAnatomist')
+            implementation='anatomist.notebook.api.NotebookAnatomist')
         w = a.createWindow('3D')
         mesh = a.loadObject('/home/dr144257/data/ra_head.mesh')
         w.addObjects(mesh)
@@ -611,13 +611,13 @@ class NotebookAnatomist(anatomist.Anatomist):
     This is also implemented as a variant of Anatomist implementation::
 
         import anatomist
-        anatomist.setDefaultImplementation('nbanatomist')
+        anatomist.setDefaultImplementation('notebook')
         import anatomist.api as ana
 
         a = ana.Anatomist()
 
     Or, simply:
-        import anatomist.nbanatomist as ana
+        import anatomist.notebook as ana
 
         a = ana.Anatomist()
 
@@ -655,25 +655,4 @@ class NotebookAnatomist(anatomist.Anatomist):
         display(canvas)
         win.canvas = canvas
         return win
-
-# this shortcut is used to easily get the Anatomist implementation
-Anatomist = partial(HeadlessAnatomist,
-                    implementation='anatomist.nbanatomist.NotebookAnatomist')
-'''
-Anatomist implementation rendering in a Jupyter Notebook. It is the headless wrapping around the :class:`NotebookAnatomist` implementation.
-'''
-
-
-if __name__ == '__main__':
-
-    a = ana.HeadlessAnatomist('nbanatimist')
-    w = a.createWindow('3D')
-    mesh = a.loadObject('/home/riviere/data/ra_head.mesh')
-    w.addObjects(mesh)
-
-    canvas = AnatomistInteractiveWidget(w)
-    display(canvas)
-    if debug:
-        display(h)
-
 

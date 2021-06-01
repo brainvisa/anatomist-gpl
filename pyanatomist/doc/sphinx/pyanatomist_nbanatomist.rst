@@ -1,6 +1,8 @@
 Anatomist NoteBook widget
 +++++++++++++++++++++++++
 
-.. automodule:: anatomist.nbanatomist
+.. automodule:: anatomist.notebook
   :members:
 
+.. automodule:: anatomist.notebook.api
+  :members:
