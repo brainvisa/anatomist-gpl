@@ -4,7 +4,7 @@ Embed an Anatomist 3D view in a jupyter notebook widget
 
 To work this notebook widget needs:
 
-* to install ipycanvas, ipyevents, ipywidgets, PIL, numpy, anatomist, jupyter notebook
+* to install ipycanvas, ipyevents, ipywidgets, numpy, anatomist, jupyter notebook
 * to register jupyter notebook extensions (may require sudo permissions if
   jupyter is installed system-wide)::
 
@@ -46,16 +46,14 @@ Note that the integrated anatomist.notebook implementation is a headless impleme
 
 from ipycanvas import Canvas
 import anatomist.headless as ana
-from ipywidgets import Image
-from io import BytesIO
 from soma.qt_gui import qt_backend
 #import PIL
 
 import time
 import logging
 import weakref
-from io import BytesIO
-import PIL.Image
+#from io import BytesIO
+#import PIL.Image
 
 from ipycanvas import Canvas
 from ipyevents import Event
