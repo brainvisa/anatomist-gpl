@@ -63,13 +63,17 @@ Tutorial
     - :download:`Downoad the tutorial notebook <pyanatomist_tutorial_nb.ipynb>`
     - :doc:`pyanatomist_pyaims_tutorial`
     - You can also have a look at the :pyaims:`PyAims tutorial <pyaims_tutorial_nb.html>`.
+    - :doc:`ana_notebook`
+    - :download:`Downoad the notebook demo <ana_notebook.ipynb>`
 
 
 .. ifconfig:: 'nbsphinx' not in extensions
 
     - :doc:`pyanatomist_tutorial`
+    - :download:`Downoad the tutorial notebook <pyanatomist_tutorial_nb.ipynb>`
     - :doc:`pyanatomist_pyaims_tutorial`
     - You can also have a look at the :pyaims:`PyAims tutorial <pyaims_tutorial.html>`.
+    - :download:`Downoad the notebook demo  <ana_notebook.ipynb>`
 
 
 Table of contents
@@ -91,6 +95,7 @@ Table of contents
       pyanatomist_tutorial_nb
       pyanatomist_pyaims_tutorial
       pyanatomist_howto
+      ana_notebook
 
 .. ifconfig:: 'nbsphinx' not in extensions
 
