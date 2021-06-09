@@ -152,7 +152,8 @@ class AnatomistInteractiveWidget(Canvas):
         self.layout.height = 'auto'
 
         self.render_connected = False
-        if hasattr(awindow.getInternalRep().view(), 'viewRendered'):
+        if hasattr(awindow.getInternalRep(), 'view') \
+                and hasattr(awindow.getInternalRep().view(), 'viewRendered'):
             awindow.getInternalRep().view().viewRendered.connect(
                 self.render_callback)
             self.render_connected = True
