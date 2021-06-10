@@ -241,36 +241,40 @@ class AnatomistInteractiveWidget(Canvas):
     def update_canvas(self, force_render=True, quality=75):
         """Updates the canvas with the current render"""
 
-        raw_img = self.get_image(force_render=force_render)
-        # save using Qt to avoid a copy
-        buffer = Qt.QByteArray()
-        fbuf = Qt.QBuffer(buffer)
-        fbuf.open(fbuf.WriteOnly)
-        raw_img.save(fbuf, 'JPEG', quality)
-        image = Image(
-            value=bytes(fbuf.buffer()), width=raw_img.width(),
-            height=raw_img.height())
-        if self.width != raw_img.width():
-            self.width = raw_img.width()
-            self.layout.width = 'auto'
-        if self.height != raw_img.width():
-            self.height = raw_img.height()
-            self.layout.height = 'auto'
+        try:
+            raw_img = self.get_image(force_render=force_render)
+            # save using Qt to avoid a copy
+            buffer = Qt.QByteArray()
+            fbuf = Qt.QBuffer(buffer)
+            fbuf.open(fbuf.WriteOnly)
+            raw_img.save(fbuf, 'JPEG', quality)
+            image = Image(
+                value=bytes(fbuf.buffer()), width=raw_img.width(),
+                height=raw_img.height())
+            if self.width != raw_img.width():
+                self.width = raw_img.width()
+                self.layout.width = 'auto'
+            if self.height != raw_img.width():
+                self.height = raw_img.height()
+                self.layout.height = 'auto'
 
-        # this one was using a np array and PIL
+            # this one was using a np array and PIL
 
-        #f = BytesIO()
-        #PIL.Image.fromarray(raw_img).save(f, 'JPEG', quality=quality)
-        #image = Image(
-            #value=f.getvalue(), width=raw_img.shape[1],
-            #height=raw_img.shape[0])
-        #if self.width != raw_img.shape[1]:
-            #self.width = raw_img.shape[1]
-            #self.layout.width = 'auto'
-        #if self.height != raw_img.shape[0]:
-            #self.height = raw_img.shape[0]
-            #self.layout.height = 'auto'
-        self.draw_image(image)
+            #f = BytesIO()
+            #PIL.Image.fromarray(raw_img).save(f, 'JPEG', quality=quality)
+            #image = Image(
+                #value=f.getvalue(), width=raw_img.shape[1],
+                #height=raw_img.shape[0])
+            #if self.width != raw_img.shape[1]:
+                #self.width = raw_img.shape[1]
+                #self.layout.width = 'auto'
+            #if self.height != raw_img.shape[0]:
+                #self.height = raw_img.shape[0]
+                #self.layout.height = 'auto'
+            self.draw_image(image)
+        except RuntimeError:
+            # the render window may have been closed on serer side
+            self.close()
 
     def get_image(self, force_render=True):
         if force_render and self.is_window3d():
@@ -310,16 +314,20 @@ class AnatomistInteractiveWidget(Canvas):
             #return data[:, :, :-1]
 
     def render_callback(self):
-        if self._render_window() is None:
-            # the anatromist window has been closed
+        try:
+            if self._render_window() is None:
+                # the anatromist window has been closed
+                self.close()
+                return
+            self.update_canvas(force_render=False, quality=self._quick_quality)
+            # trigger a better quality image
+            self.qtimer.singleShot(
+                float(INTERACTION_THROTTLE) / 1000,
+                partial(self.update_canvas, force_render=False,
+                        quality=self._full_quality))
+        except RuntimeError:
+            # the render window may have been closed on serer side
             self.close()
-            return
-        self.update_canvas(force_render=False, quality=self._quick_quality)
-        # trigger a better quality image
-        self.qtimer.singleShot(
-            float(INTERACTION_THROTTLE) / 1000,
-            partial(self.update_canvas, force_render=False,
-                    quality=self._full_quality))
 
     #@throttle(0.1)
     def full_render(self):
