@@ -86,7 +86,9 @@ Another specific implementation for Brainvisa also exists: brainvisa.anatomist m
 It enables to use brainvisa database informations on loaded objects to automatically load associated referentials and transformations.
 It uses the same api, so it is possible to switch from one implementation to the other.
 
-By default, brainvisa module uses socket implementation. This way, Brainvisa and Anatomist applications run in separated processes. and potential errors in Anatomist do not crash Brainvisa.
+By default, brainvisa module uses the :doc:`direct <pyanatomist_direct>` implementation.
+
+In addition to the Python APIs, the :meth:`Anatomist.execute <base.Anatomist.execute>` method of Anatomist also grants access to the :anadev:`commands system <commands.html>` which offers many functionalities, some of which have not been wrapped yet int the more "pythonic" API.
 
 Attributes
 ----------
@@ -107,8 +109,6 @@ NOTEBOOK: str
 
 IMPLEMENTATIONS: tuple
     List of Anatomist API implementations
-
-In addition to the Python APIs, the :meth:`Anatomist.execute <base.Anatomist.execute>` method of Anatomist also grants access to the :anadev:`commands system <commands.html>` which offers many functionalities, some of which have not been wrapped yet int the more "pythonic" API.
 
 Methods
 -------
