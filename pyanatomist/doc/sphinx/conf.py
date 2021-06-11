@@ -31,6 +31,44 @@ except Exception as e:
     print('warning:', e)
 from soma import aims
 
+
+# avoid warnings for duplicate refs
+# see https://github.com/sphinx-doc/sphinx/issues/3866
+from sphinx.domains.python import PythonDomain
+
+_desired_base_module = 'anatomist'
+
+class MyPythonDomain(PythonDomain):
+    def resolve_xref(self, env, fromdocname, builder, typ, target, node, contnode):
+        if 'refspecific' in node:
+            del node['refspecific']
+        return super(MyPythonDomain, self).resolve_xref(
+            env, fromdocname, builder, typ, target, node, contnode)
+
+    def find_obj(self, env, modname, classname, name, type, searchmode=0):
+        """Ensures an object always resolves to the desired module if defined there."""
+        orig_matches = PythonDomain.find_obj(self, env, modname, classname, name, type, searchmode)
+        matches = []
+        for match in orig_matches:
+            match_name = match[0]
+            desired_name = _desired_base_module + '.' + name.strip('.')
+            if match_name == desired_name:
+                matches.append(match)
+                break
+        if matches:
+            return matches
+        else:
+            return orig_matches
+
+
+def setup(sphinx):
+    """Use MyPythonDomain in place of PythonDomain"""
+    try:
+        sphinx.add_domain(MyPythonDomain, override=True)
+    except:
+        sphinx.override_domain(MyPythonDomain)
+
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
