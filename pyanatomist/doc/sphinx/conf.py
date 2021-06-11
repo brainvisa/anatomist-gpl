@@ -30,6 +30,8 @@ try:
 except Exception as e:
     print('warning:', e)
 from soma import aims
+import anatomist.headless as hana
+hana.force_virtualgl = False
 
 
 # avoid warnings for duplicate refs

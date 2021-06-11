@@ -593,13 +593,20 @@ class AnatomistInteractiveWidget(Canvas):
                 partial(self.update_canvas, force_render=False,
                         quality=self._full_quality))
 
+    def release_awindow(self):
+        try:
+            del self.render_window.canvas
+        except:
+            pass
+
     def close(self):
+        self.release_awindow()
         super().close()
         self._on_close()
 
     def __del__(self):
-        super().__del__()
         self.close()
+        super().__del__()
 
 
 class NotebookAnatomist(anatomist.Anatomist):

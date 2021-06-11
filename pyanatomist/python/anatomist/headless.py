@@ -29,7 +29,7 @@ import importlib
 xvfb = None
 original_display = None
 hanatomist = None
-
+force_virtualgl = True
 
 def setup_virtualGL():
     ''' Load VirtualGL libraries and LD_PRELOAD env variable to run the current
@@ -253,7 +253,7 @@ def on_parent_exit(signame):
     return set_parent_exit_signal
 
 
-def setup_headless(allow_virtualgl=True, force_virtualgl=False):
+def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
     ''' Sets up a headless virtual X server and tunes the current process
     libraries to use it appropriately.
 
@@ -362,7 +362,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=False):
         # enable virtualGL if glx is detected through glxinfo. I don't remember
         # why this was done this way, we perhaps experienced some crashes.
 
-        if (glx <= 2 or force_virtualgl) and not gl_libs and allow_virtualgl \
+        if (glx < 2 or force_virtualgl) and not gl_libs and allow_virtualgl \
                 and qtapp is None:
             # try VirtualGL
             vgl = distutils.spawn.find_executable('vglrun')
