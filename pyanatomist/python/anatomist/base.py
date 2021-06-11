@@ -2197,29 +2197,30 @@ class Anatomist(Singleton):
                 iconifies (or hides) windows
             light: dict (optional)
                 Windows lighting settings. This dictionary may include the
-                following parameters:
-                    * ambient: ambiant lighting settings (list of float, 4
-                      elements)
-                    * diffuse: diffuse lighting settings (list of float, 4
-                      elements)
-                    * specular: specular lighting settings (list of float, 4
-                      elements)
-                    * background: background color (list of float, 4 elements)
-                    * position: light position (list of float, 4 elements)
-                    * spot_direction: spot light direction (list of float, 3
-                      elements)
-                    * spot_exponent: spot light intensity exponent (float)
-                    * spot_cutoff: spot light cutoff angle (float)
-                    * attenuation_offset: light attenuation, offset part (
-                      float)
-                    * attenuation_linear: light attenuation, linear coefficient
-                      (float)
-                    * attenuation_quadratic: light attenuation, quadratic
-                      coefficient (float)
-                    * model_ambient: don't really know... (list of float, 4
-                      elements)
-                    * model_local_viewer: don't really know... (float)
-                    * model_two_side: don't really know (float)
+                following parameters: ubublle
+
+                * ambient: ambiant lighting settings (list of float, 4
+                  elements)
+                * diffuse: diffuse lighting settings (list of float, 4
+                  elements)
+                * specular: specular lighting settings (list of float, 4
+                  elements)
+                * background: background color (list of float, 4 elements)
+                * position: light position (list of float, 4 elements)
+                * spot_direction: spot light direction (list of float, 3
+                  elements)
+                * spot_exponent: spot light intensity exponent (float)
+                * spot_cutoff: spot light cutoff angle (float)
+                * attenuation_offset: light attenuation, offset part (
+                  float)
+                * attenuation_linear: light attenuation, linear coefficient
+                  (float)
+                * attenuation_quadratic: light attenuation, quadratic
+                  coefficient (float)
+                * model_ambient: don't really know... (list of float, 4
+                  elements)
+                * model_local_viewer: don't really know... (float)
+                * model_two_side: don't really know (float)
             linkedcursor_on_slider_change: int (optional)
                 enables or disables the mode when slice/time sliders act as
                 linked cursor actions (with propagation to other views)
