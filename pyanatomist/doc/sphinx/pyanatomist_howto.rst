@@ -107,24 +107,58 @@ Headless Anatomist mode
 
 HeadlessAnatomist is using Xvfb under the hood, so it should be installed and working. It should also support the GLX protocol, which, with some 3D drivers/OpenGL (nvidia linux driver for instance) will need `VirtualGL <http://www.virtualgl.org>`_ in addition.
 
->>> import anatomist.headless as hana
->>> a = hana.HeadlessAnatomist()
+>>> import anatomist.headless as ana
+>>> a = ana.Anatomist()
 >>> mesh = a.loadObject('subject01_Lhemi.mesh')
 >>> w = a.createWindow('3D')
 >>> w.addObjects(mesh)
 >>> w.snapshot('snapshot.jpg', width=3000, height=2500)
 
-To use VirtualGL, the *anatomist* process must be run through ``vglrun``:
+VirtualGL is used automatically when it is available, so you normally don't need to do anything more than installing it. If needed some options allow to control its use in HeadlessAnatomist.
 
-.. code-block:: bash
+Binary distributions of BrainVisa 5 and later are container images which already include Xvfb and VirtualGL, thus work out-of-the-box with the headless mode.
 
-    vglrun anatomist_script.py
+Note that, to work correctly, VirtualGL patches the OpenGL libraries by pre-loading its hooks in the running program, so it has to be started *before any GL library is loaded in the program*. Qt loads them, thus you have to start the headless anatomist before you import modules relying on Qt or PyQt.
 
-or:
+You can check if the optimal mode is used or not: when instantiating the headless Anatomist, you may see messages like this one in the terminal standard output::
 
-.. code-block:: bash
+    >>> import anatomist.headless as ana
+    >>> a = ana.Anatomist()
+    VirtualGL found.
+    VirtualGL should work.
+    Running through VirtualGL + Xvfb: this is optimal.
+    [...]
 
-    vglrun ipython
+moreover Anatomist holds information about it::
 
-then use HeadlessAnatomist in the anatomist script.
+    >>> print(a.headless_info.__dict__)
+    {'xvfb': <subprocess.Popen object at 0x7ff302bb2f28>, 'original_display': ':0', 'display': 1, 'glx': 2, 'virtualgl': True, 'headless': True, 'mesa': False, 'qtapp': None}
 
+If Qt has already been imported, you will get different messages::
+
+    >>> from PyQt5 import Qt
+    >>> import anatomist.headless as ana
+    >>> a = ana.Anatomist()
+    QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-dr144257'
+    Starting Anatomist.....
+    config file : /casa/home/.anatomist/config/settings.cfg
+    PyAnatomist Module present
+    [...]
+    >>> print(a.headless_info.__dict__)
+    {'xvfb': <subprocess.Popen object at 0x7f67f008bb00>, 'original_display': ':0', 'display': 1, 'glx': 2, 'virtualgl': None, 'headless': True, 'mesa': False, 'qtapp': 'QtGui'}
+
+If a connection to the X server has already been established in Qt (Qt application is already instantiated), then the headless mode cannot work (because all Qt widgets are bound to the same display)::
+
+    >>> from PyQt5 import Qt
+    >>> app = Qt.QApplication([])
+    [...]
+    >>> import anatomist.headless as ana
+    >>> a = ana.Anatomist()
+    QApplication already instantiated, headless Anatomist is not possible.
+    Starting Anatomist.....
+    [...]
+    >>> print(a.headless_info.__dict__)
+    {'xvfb': None, 'original_display': None, 'display': None, 'glx': None, 'virtualgl': None, 'headless': False, 'mesa': False, 'qtapp': 'QApp'}
+
+Things will work then, but will be visible on screen.
+(this will happen for instance if you run ``ipython`` with the option ``--gui=qt`` because then ipython instantiates the Qt application before you have a hand on it).
