@@ -62,6 +62,7 @@ from ipywidgets import Image
 from functools import partial
 import anatomist.direct.api as anatomist
 from soma.qt_gui.qt_backend import Qt
+import types
 
 from . import Anatomist
 
@@ -654,6 +655,14 @@ class NotebookAnatomist(anatomist.Anatomist):
     def __singleton_init__(self, *args, **kwargs):
 
         super(NotebookAnatomist, self).__singleton_init__(*args, **kwargs)
+
+    class AWindow(anatomist.Anatomist.AWindow):
+        def __del__(self):
+            canvas = getattr(self, 'canvas', None)
+            if canvas and hasattr(canvas, 'close'):
+                canvas.close()
+            super(NotebookAnatomist.AWindow, self).__del__()
+
 
     def createWindow(self, wintype, geometry=[], block=None,
                      no_decoration=None, options=None, only_3d=False):
