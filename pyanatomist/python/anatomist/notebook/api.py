@@ -687,15 +687,32 @@ class NotebookAnatomist(anatomist.Anatomist):
 
         a = ana.Anatomist()
 
-    ..note::
+    .. note::
 
-        In this example we load ``anatomist.notebook`̀̀` without the ``api``
+        In this example we load ``anatomist.notebook`` without the ``api``
         submodule, because the latter loads Qt and thus prevents the optimized
         headless implementation to load and use VirtualGL.
 
     The :meth:`createWindow` method overload adds an additonal keyword
     argument, ``only_3D`` which enables to display only the 3D rendering view,
     or the full window with buttons and sliders.
+
+    .. warning:: *Limitations*
+
+        The notebook execution in a script (like for sphinx docs) may crash
+        anatomist: the notebook execution while a GUI event loop is running, is
+        done through GUI events. Such events thus contain code to execute. The
+        code may contain (or imply) objects deletion, but they may be triggered
+        from within Anatomist winwows methods. For instance, the
+        ``AWindow3D.snapshotImage()`` method, used to draw the canvas, needs to
+        call ``QApplication.processEvents()``, because it needs to force the
+        window paint before grabing its content, and this is done in Qt through
+        events. Here with notebooks, the events may contain code which can
+        delete the window being used, and lead to a crash.
+
+        We have not found a solution for now. However running the notebook
+        interactively, or running notebooks which do not delete windows
+        objects, seem to be safe.
     '''
 
     def __singleton_init__(self, *args, **kwargs):
