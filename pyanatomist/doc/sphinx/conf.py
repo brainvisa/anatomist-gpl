@@ -210,6 +210,7 @@ try:
     nbsphinx_allow_errors = True
     extensions += ['nbsphinx',
                    'sphinx.ext.mathjax']
+    # nbsphinx_execute = 'always'
 except ImportError:
     nbsphinx = None
 
