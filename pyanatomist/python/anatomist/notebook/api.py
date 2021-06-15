@@ -115,7 +115,7 @@ class AnatomistInteractiveWidget(Canvas):
                  transparent_background=False, allow_wheel=True, quality=85,
                  quick_quality=50, on_close=None, only_3d=False, **kwargs):
 
-        super().__init__(**kwargs)
+        super(AnatomistInteractiveWidget, self).__init__(**kwargs)
         if quality < 0 or quality > 100:
             raise ValueError('`quality` parameter must be between 0 and 100')
         self._quality = quality
@@ -232,6 +232,15 @@ class AnatomistInteractiveWidget(Canvas):
         if hasattr(w, 'getInternalRep'):
             return w.getInternalRep()
 
+    def is_closed(self):
+        if getattr(self, '_closed', False):
+            return True
+        try:
+            win = self.render_window
+            return False
+        except:
+            return True
+
     def set_quick_render_delay(self, delay_sec):
         if delay_sec < self.quick_render_delay_sec_range[0]:
             delay_sec = self.quick_render_delay_sec_range[0]
@@ -244,6 +253,9 @@ class AnatomistInteractiveWidget(Canvas):
 
         try:
             raw_img = self.get_image(force_render=force_render)
+            if raw_img is None:
+                return  # something like recursive call happened
+
             # save using Qt to avoid a copy
             buffer = Qt.QByteArray()
             fbuf = Qt.QBuffer(buffer)
@@ -286,6 +298,9 @@ class AnatomistInteractiveWidget(Canvas):
 
     @property
     def _fast_image(self):
+        if getattr(self, '_recursive_getimage', False):
+            return
+        self._recursive_getimage = True
         if self.is_window3d():
             self.render_window.view().blockSignals(True)
             qdata3 = self.render_window.snapshotImage()
@@ -305,6 +320,8 @@ class AnatomistInteractiveWidget(Canvas):
         else:
             qdata = self.render_window.grab()
 
+        self._recursive_getimage = False
+
         return qdata  # return a QImage
 
         #data = qt_backend.qimage_to_np(qdata)
@@ -315,6 +332,15 @@ class AnatomistInteractiveWidget(Canvas):
             #return data[:, :, :-1]
 
     def render_callback(self):
+        # purge events, avoid to have too much recursive events
+        Qt.QApplication.instance().sendPostedEvents()
+        Qt.QApplication.instance().processEvents()
+        Qt.QApplication.instance().processEvents()
+
+        if self.is_closed():
+            return
+        if getattr(self, '_recursive_getimage', False):
+            return
         try:
             if self._render_window() is None:
                 # the anatromist window has been closed
@@ -322,10 +348,11 @@ class AnatomistInteractiveWidget(Canvas):
                 return
             self.update_canvas(force_render=False, quality=self._quick_quality)
             # trigger a better quality image
-            self.qtimer.singleShot(
-                float(INTERACTION_THROTTLE) / 1000,
-                partial(self.update_canvas, force_render=False,
-                        quality=self._full_quality))
+            if not self.is_closed():
+                self.qtimer.singleShot(
+                    float(INTERACTION_THROTTLE) / 1000,
+                    partial(self.update_canvas, force_render=False,
+                            quality=self._full_quality))
         except RuntimeError:
             # the render window may have been closed on serer side
             self.close()
@@ -596,18 +623,37 @@ class AnatomistInteractiveWidget(Canvas):
 
     def release_awindow(self):
         try:
+            self.render_window.getInternalRep().view().viewRendered.disconnect(
+                self.render_callback)
+            self.render_window.getInternalRep().view().blockSignals(True)
+            Qt.QApplication.instance().processEvents()
+            Qt.QApplication.instance().processEvents()
+            Qt.QApplication.instance().processEvents()
+            self.render_window.getInternalRep().view().blockSignals(False)
+        except:
+            pass
+        try:
             del self.render_window.canvas
+            # release weak ref
+            class A(object):
+                pass
+            a = A()
+            self._render_window = weakref.ref(a)
+            del a  # the weak ref is null now.
         except:
             pass
 
     def close(self):
+        if getattr(self, '_closed', False):
+            return  # already closed
+        self._closed = True
         self.release_awindow()
-        super().close()
+        super(AnatomistInteractiveWidget, self).close()
         self._on_close()
 
     def __del__(self):
         self.close()
-        super().__del__()
+        super(AnatomistInteractiveWidget, self).__del__()
 
 
 class NotebookAnatomist(anatomist.Anatomist):
@@ -688,5 +734,6 @@ class NotebookAnatomist(anatomist.Anatomist):
         canvas = AnatomistInteractiveWidget(win, only_3d=only_3d)
         display(canvas)
         win.canvas = canvas
+
         return win
 
