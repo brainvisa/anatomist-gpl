@@ -535,18 +535,21 @@ def HeadlessAnatomist(*args, **kwargs):
     if hanatomist:
         return hanatomist
 
+    global force_virtualgl
+    inst_force_virtualgl = force_virtualgl
+
     allow_virtualgl = True
-    force_virtualgl = False
     if 'allow_virtualgl' in kwargs:
         allow_virtualgl = kwargs['allow_virtualgl']
         kwargs = dict(kwargs)
         del kwargs['allow_virtualgl']
     if 'force_virtualgl' in kwargs:
-        force_virtualgl = kwargs['force_virtualgl']
+        inst_force_virtualgl = kwargs['force_virtualgl']
         kwargs = dict(kwargs)
         del kwargs['force_virtualgl']
+
     result = setup_headless(allow_virtualgl=allow_virtualgl,
-                            force_virtualgl=force_virtualgl)
+                            force_virtualgl=inst_force_virtualgl)
 
     implementation = kwargs.get('implementation', 'direct')
     if '.' in implementation:
