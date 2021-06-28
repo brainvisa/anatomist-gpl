@@ -115,6 +115,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         self._loadCbks = set()
         global __version__
 
+
     class AEventHandler(cpp.EventHandler):
 
         """
@@ -132,7 +133,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
             cpp.EventHandler.__init__(self)
             self.notifier = notifier
-            self.anatomistinstance = anatomistinstance
+            self.anatomistinstance = weakref.proxy(anatomistinstance)
 
         def doit(self, event):
             """

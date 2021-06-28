@@ -49,6 +49,7 @@ import threading
 import collections
 import sys
 import six
+import weakref
 
 
 def isSequenceType(item):
@@ -181,64 +182,66 @@ class Anatomist(Singleton):
         # enable listening of event  only when the notifier has at least one
         # listener.
         self.onLoadNotifier.onAddFirstListener.add(
-            partial(self.enableListening, "LoadObject", self.onLoadNotifier))
+            partial(weakref.proxy(self.enableListening), "LoadObject",
+                    weakref.proxy(self.onLoadNotifier)))
         self.onLoadNotifier.onRemoveLastListener.add(
-            partial(self.disableListening, "LoadObject"))
+            partial(weakref.proxy(self.disableListening), "LoadObject"))
 
         self.onDeleteNotifier = ObservableNotifier()
         self.onDeleteNotifier.onAddFirstListener.add(
-            partial(self.enableListening, "DeleteObject",
-                    self.onDeleteNotifier))
+            partial(weakref.proxy(self.enableListening), "DeleteObject",
+                    weakref.proxy(self.onDeleteNotifier)))
         self.onDeleteNotifier.onRemoveLastListener.add(
-            partial(self.disableListening, "DeleteObject"))
+            partial(weakref.proxy(self.disableListening), "DeleteObject"))
 
         self.onFusionNotifier = ObservableNotifier()
         self.onFusionNotifier.onAddFirstListener.add(
-            partial(self.enableListening, "FusionObjects",
-                    self.onFusionNotifier))
+            partial(weakref.proxy(self.enableListening), "FusionObjects",
+                    weakref.proxy(self.onFusionNotifier)))
         self.onFusionNotifier.onRemoveLastListener.add(
-            partial(self.disableListening, "FusionObjects"))
+            partial(weakref.proxy(self.disableListening), "FusionObjects"))
 
         self.onCreateWindowNotifier = ObservableNotifier()
         self.onCreateWindowNotifier.onAddFirstListener.add(
-            partial(self.enableListening, "CreateWindow",
-                    self.onCreateWindowNotifier))
+            partial(weakref.proxy(self.enableListening), "CreateWindow",
+                    weakref.proxy(self.onCreateWindowNotifier)))
         self.onCreateWindowNotifier.onRemoveLastListener.add(
-            partial(self.disableListening, "CreateWindow"))
+            partial(weakref.proxy(self.disableListening), "CreateWindow"))
 
         self.onCloseWindowNotifier = ObservableNotifier()
         self.onCloseWindowNotifier.onAddFirstListener.add(
-            partial(self.enableListening, "CloseWindow",
-                    self.onCloseWindowNotifier))
+            partial(weakref.proxy(self.enableListening), "CloseWindow",
+                    weakref.proxy(self.onCloseWindowNotifier)))
         self.onCloseWindowNotifier.onRemoveLastListener.add(
-            partial(self.disableListening, "CloseWindow"))
+            partial(weakref.proxy(self.disableListening), "CloseWindow"))
 
         self.onAddObjectNotifier = ObservableNotifier()
         self.onAddObjectNotifier.onAddFirstListener.add(
-            partial(self.enableListening, "AddObject",
-                    self.onAddObjectNotifier))
+            partial(weakref.proxy(self.enableListening), "AddObject",
+                    weakref.proxy(self.onAddObjectNotifier)))
         self.onAddObjectNotifier.onRemoveLastListener.add(
-            partial(self.disableListening, "AddObject"))
+            partial(weakref.proxy(self.disableListening), "AddObject"))
 
         self.onRemoveObjectNotifier = ObservableNotifier()
         self.onRemoveObjectNotifier.onAddFirstListener.add(
-            partial(self.enableListening, "RemoveObject",
-                    self.onRemoveObjectNotifier))
+            partial(weakref.proxy(self.enableListening), "RemoveObject",
+                    weakref.proxy(self.onRemoveObjectNotifier)))
         self.onRemoveObjectNotifier.onRemoveLastListener.add(
-            partial(self.disableListening, "RemoveObject"))
+            partial(weakref.proxy(self.disableListening), "RemoveObject"))
 
         self.onCursorNotifier = ObservableNotifier()
         self.onCursorNotifier.onAddFirstListener.add(
-            partial(self.enableListening, "LinkedCursor",
-                    self.onCursorNotifier))
+            partial(weakref.proxy(self.enableListening), "LinkedCursor",
+                    weakref.proxy(self.onCursorNotifier)))
         self.onCursorNotifier.onRemoveLastListener.add(
-            partial(self.disableListening, "LinkedCursor"))
+            partial(weakref.proxy(self.disableListening), "LinkedCursor"))
 
         self.onExitNotifier = ObservableNotifier()
         self.onExitNotifier.onAddFirstListener.add(
-            partial(self.enableListening, "Exit", self.onExitNotifier))
+            partial(weakref.proxy(self.enableListening), "Exit",
+                    weakref.proxy(self.onExitNotifier)))
         self.onExitNotifier.onRemoveLastListener.add(
-            partial(self.disableListening, "Exit"))
+            partial(weakref.proxy(self.disableListening), "Exit"))
 
     def enableListening(self, event, notifier):
         """
@@ -1482,7 +1485,7 @@ class Anatomist(Singleton):
         def __init__(self, anatomistinstance, internalRep=None, refType=None,
                      *args, **kwargs):
             super(Anatomist.AItem, self).__init__(*args, **kwargs)
-            self.anatomistinstance = anatomistinstance
+            self.anatomistinstance = weakref.proxy(anatomistinstance)
             self.refType = refType
             if internalRep is None:
                 internalRep = anatomistinstance.newItemRep()
