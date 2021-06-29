@@ -1430,8 +1430,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                 if att is None:
                     raise AttributeError("'" + type(self).__name__ +
                                          '\' object has no attribute \'' + name + "'")
-                conv = super(type(gattr('anatomistinstance')),
-                             gattr('anatomistinstance')).__getattribute__(
+                # get anatomist instance out of its weakproxy
+                ainstance = gattr('anatomistinstance').__init__.__self__
+                conv = super(type(ainstance), ainstance).__getattribute__(
                     'convertParamsToAItems')
                 if callable(att):
                     return lambda *args, **kwargs: conv(att(*args, **kwargs))
