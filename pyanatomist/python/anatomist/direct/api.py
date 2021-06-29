@@ -115,6 +115,13 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         self._loadCbks = set()
         global __version__
 
+    def __del__(self):
+        # quit the app and delete it
+        self.quit()
+        s = super(Anatomist, self)
+        if hasattr(s, '__del__'):
+          s.__del__()
+
 
     class AEventHandler(cpp.EventHandler):
 

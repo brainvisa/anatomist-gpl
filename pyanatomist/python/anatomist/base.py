@@ -43,6 +43,7 @@ from __future__ import absolute_import
 from soma.notification import ObservableNotifier
 from soma.singleton import Singleton
 from soma.functiontools import partial
+from soma.utils import weak_proxy
 import operator
 import string
 import threading
@@ -1485,7 +1486,7 @@ class Anatomist(Singleton):
         def __init__(self, anatomistinstance, internalRep=None, refType=None,
                      *args, **kwargs):
             super(Anatomist.AItem, self).__init__(*args, **kwargs)
-            self.anatomistinstance = weakref.proxy(anatomistinstance)
+            self.anatomistinstance = weak_proxy.weak_proxy(anatomistinstance)
             self.refType = refType
             if internalRep is None:
                 internalRep = anatomistinstance.newItemRep()
