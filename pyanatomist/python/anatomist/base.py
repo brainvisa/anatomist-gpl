@@ -184,66 +184,66 @@ class Anatomist(Singleton):
         # enable listening of event  only when the notifier has at least one
         # listener.
         self.onLoadNotifier.onAddFirstListener.add(
-            partial(proxy_method(self, 'enableListening'), "LoadObject",
+            partial(proxy_method(self.enableListening), "LoadObject",
                     self.onLoadNotifier))
         self.onLoadNotifier.onRemoveLastListener.add(
-            partial(proxy_method(self, 'disableListening'), "LoadObject"))
+            partial(proxy_method(self.disableListening), "LoadObject"))
 
         self.onDeleteNotifier = ObservableNotifier()
         self.onDeleteNotifier.onAddFirstListener.add(
-            partial(proxy_method(self, 'enableListening'), "DeleteObject",
+            partial(proxy_method(self.enableListening), "DeleteObject",
                     self.onDeleteNotifier))
         self.onDeleteNotifier.onRemoveLastListener.add(
-            partial(proxy_method(self, 'disableListening'), "DeleteObject"))
+            partial(proxy_method(self.disableListening), "DeleteObject"))
 
         self.onFusionNotifier = ObservableNotifier()
         self.onFusionNotifier.onAddFirstListener.add(
-            partial(proxy_method(self, 'enableListening'), "FusionObjects",
+            partial(proxy_method(self.enableListening), "FusionObjects",
                     self.onFusionNotifier))
         self.onFusionNotifier.onRemoveLastListener.add(
-            partial(proxy_method(self, 'disableListening'), "FusionObjects"))
+            partial(proxy_method(self.disableListening), "FusionObjects"))
 
         self.onCreateWindowNotifier = ObservableNotifier()
         self.onCreateWindowNotifier.onAddFirstListener.add(
-            partial(proxy_method(self, 'enableListening'), "CreateWindow",
+            partial(proxy_method(self.enableListening), "CreateWindow",
                     self.onCreateWindowNotifier))
         self.onCreateWindowNotifier.onRemoveLastListener.add(
-            partial(proxy_method(self, 'disableListening'), "CreateWindow"))
+            partial(proxy_method(self.disableListening), "CreateWindow"))
 
         self.onCloseWindowNotifier = ObservableNotifier()
         self.onCloseWindowNotifier.onAddFirstListener.add(
-            partial(proxy_method(self, 'enableListening'), "CloseWindow",
+            partial(proxy_method(self.enableListening), "CloseWindow",
                     self.onCloseWindowNotifier))
         self.onCloseWindowNotifier.onRemoveLastListener.add(
-            partial(proxy_method(self, 'disableListening'), "CloseWindow"))
+            partial(proxy_method(self.disableListening), "CloseWindow"))
 
         self.onAddObjectNotifier = ObservableNotifier()
         self.onAddObjectNotifier.onAddFirstListener.add(
-            partial(proxy_method(self, 'enableListening'), "AddObject",
+            partial(proxy_method(self.enableListening), "AddObject",
                     self.onAddObjectNotifier))
         self.onAddObjectNotifier.onRemoveLastListener.add(
-            partial(proxy_method(self, 'disableListening'), "AddObject"))
+            partial(proxy_method(self.disableListening), "AddObject"))
 
         self.onRemoveObjectNotifier = ObservableNotifier()
         self.onRemoveObjectNotifier.onAddFirstListener.add(
-            partial(proxy_method(self, 'enableListening'), "RemoveObject",
+            partial(proxy_method(self.enableListening), "RemoveObject",
                     self.onRemoveObjectNotifier))
         self.onRemoveObjectNotifier.onRemoveLastListener.add(
-            partial(proxy_method(self, 'disableListening'), "RemoveObject"))
+            partial(proxy_method(self.disableListening), "RemoveObject"))
 
         self.onCursorNotifier = ObservableNotifier()
         self.onCursorNotifier.onAddFirstListener.add(
-            partial(proxy_method(self, 'enableListening'),
-                    "LinkedCursor", self.onCursorNotifier))
+            partial(proxy_method(self.enableListening), "LinkedCursor",
+                    self.onCursorNotifier))
         self.onCursorNotifier.onRemoveLastListener.add(
-            partial(proxy_method(self, 'disableListening'), "LinkedCursor"))
+            partial(proxy_method(self.disableListening), "LinkedCursor"))
 
         self.onExitNotifier = ObservableNotifier()
         self.onExitNotifier.onAddFirstListener.add(
-            partial(proxy_method(self, 'enableListening'), "Exit",
+            partial(proxy_method(self.enableListening), "Exit",
                     self.onExitNotifier))
         self.onExitNotifier.onRemoveLastListener.add(
-            partial(proxy_method(self, 'disableListening'), "Exit"))
+            partial(proxy_method(self.disableListening), "Exit"))
 
     def enableListening(self, event, notifier):
         """
