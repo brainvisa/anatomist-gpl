@@ -566,6 +566,7 @@ class AnaSimpleViewer(Qt.QObject):
             fusobjs = [o for o in self.fusion2d[1:] if o != obj]
             if len(fusobjs) >= 2:
                 f2d = a.fusionObjects(fusobjs, method='Fusion2DMethod')
+                f2d.releaseAppRef()
             else:
                 f2d = None
             if self.fusion2d[0] is not None:
@@ -743,6 +744,7 @@ class AnaSimpleViewer(Qt.QObject):
         self.viewgridlay = None
         self.volrender = None
         self.fusion2d = []
+        self.meshes2d = {}
         self.aobjects = []
         self.awidget.close()
         self.awidget = None
