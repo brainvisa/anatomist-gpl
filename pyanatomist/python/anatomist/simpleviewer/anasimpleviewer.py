@@ -497,7 +497,9 @@ class AnaSimpleViewer(Qt.QObject):
             if len(wins) == 0:
                 return
             vr = a.fusionObjects([obj], method='VolumeRenderingFusionMethod')
+            vr.releaseAppRef()
             clip = a.fusionObjects([vr], method='FusionClipMethod')
+            clip.releaseAppRef()
             self.volrender = [clip, vr]
             a.addObjects(clip, wins, **opts)
         else:
@@ -527,6 +529,7 @@ class AnaSimpleViewer(Qt.QObject):
             # several objects: fusion them
             fusobjs = self.fusion2d[1:] + [obj]
             f2d = a.fusionObjects(fusobjs, method='Fusion2DMethod')
+            f2d.releaseAppRef()
             if self.fusion2d[0] is not None:
                 # destroy the previous fusion
                 a.deleteObjects(self.fusion2d[0])
@@ -782,7 +785,9 @@ class AnaSimpleViewer(Qt.QObject):
         if len(wins) == 0:
             return
         vr = a.fusionObjects([obj], method='VolumeRenderingFusionMethod')
+        vr.releaseAppRef()
         clip = a.fusionObjects([vr], method='FusionClipMethod')
+        clip.releaseAppRef()
         self.volrender = [clip, vr]
         a.removeObjects(obj, wins)
         a.addObjects(clip, wins)
