@@ -731,7 +731,7 @@ class AnaSimpleViewer(Qt.QObject):
         objs = [o for o in a.getObjects() if o.filename in files]
         self.deleteObjects(objs)
 
-    def closeAll(self):
+    def closeAll(self, close_ana=True):
         '''Exit'''
         print("Exiting")
         a = ana.Anatomist('-b')
@@ -752,8 +752,9 @@ class AnaSimpleViewer(Qt.QObject):
         self.awidget.close()
         self.awidget = None
         del self.fdialog
-        a = ana.Anatomist()
-        a.close()
+        if close_ana:
+            a = ana.Anatomist()
+            a.close()
 
     def stopVolumeRendering(self):
         '''Disable volume rendering: show a slice instead'''
