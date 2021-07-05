@@ -697,29 +697,28 @@ typedef std::set<anatomist::AWindow * > set_AWindowPtr;
         int			iserr = 0;
         so.reserve( no );
         for( i=0; i<no; ++i )
+        {
+          item = PyList_GetItem( a0, i );
+          if( item )
           {
-            item = PyList_GetItem( a0, i );
-            if( item )
-              {
-                ao = reinterpret_cast<anatomist::AObject *>
-                  ( sipForceConvertToInstance( item,
-                    sipClass_anatomist_AObject, 0, 0, 0, &iserr ) );
-                if( !ao || iserr )
-                  {
-                    sipIsErr = 1;
-                    break;
-                  }
-                so.push_back( ao );
-              }
+            ao = reinterpret_cast<anatomist::AObject *>
+              ( sipForceConvertToInstance( item,
+                sipClass_anatomist_AObject, 0, 0, 0, &iserr ) );
+            if( !ao || iserr )
+            {
+              sipIsErr = 1;
+              break;
+            }
+            so.push_back( ao );
           }
+        }
         if( !sipIsErr )
-          {
-            Py_BEGIN_ALLOW_THREADS
-              std::cout << "FusionObjects: " << so.size() << ", " << *a1 << std::endl;
-              sipCpp = new sipanatomist_FusionObjectsCommand( so, *a1, a2, 
-                                                              a3, a4 );
-            Py_END_ALLOW_THREADS
-          }
+        {
+          Py_BEGIN_ALLOW_THREADS
+          sipCpp = new sipanatomist_FusionObjectsCommand( so, *a1, a2,
+                                                          a3, a4 );
+          Py_END_ALLOW_THREADS
+        }
       }
 %End
 
