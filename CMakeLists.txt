@@ -46,6 +46,10 @@ BRAINVISA_INSTALL( FILES "${CMAKE_BINARY_DIR}/python/anatomist/info.py"
                    DESTINATION "python/anatomist"
                    COMPONENT ${PROJECT_NAME} )
 
+# don't warn on obsolete classes within this library: we still provide obsolete
+# features so we have to build them without warnings
+add_definitions( "-DAIMSDATA_CLASS_NO_DEPREC_WARNING=1" )
+
 if( PYTHON_FOUND AND SIP_FOUND AND NUMPY_FOUND AND PYQT${DESIRED_QT_VERSION}_FOUND )
   if( DESIRED_QT_VERSION EQUAL 4 )
     foreach( component python python-numpy python-qt4 python-sip4 )
