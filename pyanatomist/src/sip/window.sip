@@ -365,6 +365,11 @@ public:
   bool fog() const;
   void resizeView( int w, int h );
   QImage snapshotImage( int width=0, int height=0, int bufmode=0 );
+
+signals:
+  void refreshed();
+  void sliderChanged( int dim, int slice );
+  void orientationChanged();
 };
 
 
