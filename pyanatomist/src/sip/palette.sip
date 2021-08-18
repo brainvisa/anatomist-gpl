@@ -1,7 +1,7 @@
 namespace anatomist
 {
 
-class APalette : AimsData_RGBA
+class APalette // : AimsData_RGBA
 {
 %TypeHeaderCode
 #include <anatomist/color/palette.h>
