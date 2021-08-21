@@ -53,7 +53,7 @@ if Qt.QApplication.instance() is None:
 # initialize Anatomist
 a = anatomist.Anatomist()
 
-# convert the AimsData volume to Anatomist API
+# convert the carto volume to Anatomist API
 avol = a.toAObject(vol)
 avol.releaseAppRef()
 

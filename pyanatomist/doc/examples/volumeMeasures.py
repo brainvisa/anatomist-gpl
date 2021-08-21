@@ -119,11 +119,10 @@ class MeasuresWindow(QSplitter):
         else:
             self.setWindowTitle(base)
         # load any volume as a aims.Volume_* object
-        r = aims.Reader({'Volume': 'AimsData'})
-        self.volume = r.read(fileName)
+        self.volume = aims.read(fileName)
         self.interpolator = aims.aims.getLinearInterpolator(self.volume).get()
 
-        # convert the AimsData volume to Anatomist API
+        # convert the carto volume to Anatomist API
         avol = self.anatomist.toAObject(self.volume)
         avol.releaseAppRef()
         # put volume in window
