@@ -271,8 +271,8 @@ class PaletteEditor(QtGui.QGroupBox):
         max = apal.max1()
 
         refpal = apal.refPalette()
-        dimx = refpal.dimX()
-        dimy = refpal.dimY()
+        dimx = refpal.getSizeX()
+        dimy = refpal.getSizeY()
         if dimy < 32:
             dimy = 32
         if dimx > 256:
@@ -285,8 +285,8 @@ class PaletteEditor(QtGui.QGroupBox):
             min = 0
             max = 1
 
-        facx = float(refpal.dimX()) / dimx
-        facy = float(refpal.dimY()) / dimy
+        facx = float(refpal.getSizeX()) / dimx
+        facy = float(refpal.getSizeY()) / dimy
 
         rgb = aims.AimsRGBA
         minx = dimx * min

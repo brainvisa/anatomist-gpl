@@ -296,8 +296,9 @@ class AnaSimpleViewer(Qt.QObject):
             valbox.setItem(i, 0, newItem)
             # check bounds
             if pos2[0] >= 0 and pos2[1] >= 0 and pos2[2] >= 0 and pos[3] >= 0 \
-                and pos2[0] < aimsv.dimX() and pos2[1] < aimsv.dimY() \
-                    and pos2[2] < aimsv.dimZ() and pos[3] < aimsv.dimT():
+                and pos2[0] < aimsv.getSizeX() and pos2[1] < aimsv.getSizeY() \
+                    and pos2[2] < aimsv.getSizeZ() \
+                    and pos[3] < aimsv.getSizeT():
                 txt = str(aimsv.value(*pos2))
             else:
                 txt = ''
