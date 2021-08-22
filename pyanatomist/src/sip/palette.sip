@@ -1,7 +1,7 @@
 namespace anatomist
 {
 
-class APalette // : AimsData_RGBA
+class APalette : carto::RCObject  // : AimsData_RGBA
 {
 %TypeHeaderCode
 #include <anatomist/color/palette.h>
@@ -16,6 +16,7 @@ public:
   void setName( const std::string & );
   bool isTransparent() const;
   void update();
+  rc_ptr_Volume_RGBA volume();
 };
 
 

@@ -718,6 +718,16 @@ def __GlobalConfiguration_setitem__(self, param, value):
 anatomist.GlobalConfiguration.__setitem__ = __GlobalConfiguration_setitem__
 del __GlobalConfiguration_setitem__
 
+# APalette inherits AimsData<AimsRGBA> but AimsData has no bindings any longer
+# thus we delegate calls to the underlying Volume.
+def APalette_getattr(palette, attribute):
+    try:
+        return object.__getattribute__(palette, attribute)
+    except AttributeError:
+        return getattr(palette.volume(), attribute)
+
+APalette.__getattribute__ = APalette_getattr
+
 del os, string, glob
 del anatomist  # , aims
 
