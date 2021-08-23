@@ -194,6 +194,8 @@ public:
       carto::Object options = carto::Object() );
   static rc_ptr_Volume_S32 volume_S32( anatomist::AObject*,
       carto::Object options = carto::Object() );
+  static rc_ptr_Volume_U32 volume_U32( anatomist::AObject*,
+      carto::Object options = carto::Object() );
   static rc_ptr_Volume_FLOAT volume_FLOAT( anatomist::AObject*,
       carto::Object options = carto::Object() );
   static rc_ptr_Volume_DOUBLE volume_DOUBLE( anatomist::AObject*,
