@@ -215,38 +215,38 @@ def aimsFromAnatomist(ao, options={'scale': 1}):
             hdr = ao.attributed()
             if hdr:
                 dt = hdr['data_type']
-                oc = getattr(AObjectConverter, 'aimsData_' + dt)
+                oc = getattr(AObjectConverter, 'Volume_' + dt)
                 aim = oc(ao, options)
                 if not aim.isNull():
                     return aim._get()
         except:
             pass
         # all this just in case data_type is not set in header
-        aim = AObjectConverter.aimsData_U8(ao, options)
+        aim = AObjectConverter.volume_U8(ao, options)
         if not aim.isNull():
             return aim._get()
-        aim = AObjectConverter.aimsData_S16(ao, options)
+        aim = AObjectConverter.volume_S16(ao, options)
         if not aim.isNull():
             return aim._get()
-        aim = AObjectConverter.aimsData_U16(ao, options)
+        aim = AObjectConverter.volume_U16(ao, options)
         if not aim.isNull():
             return aim._get()
-        aim = AObjectConverter.aimsData_S32(ao, options)
+        aim = AObjectConverter.volume_S32(ao, options)
         if not aim.isNull():
             return aim._get()
-        aim = AObjectConverter.aimsData_U32(ao, options)
+        aim = AObjectConverter.volume_U32(ao, options)
         if not aim.isNull():
             return aim._get()
-        aim = AObjectConverter.aimsData_FLOAT(ao, options)
+        aim = AObjectConverter.volume_FLOAT(ao, options)
         if not aim.isNull():
             return aim._get()
-        aim = AObjectConverter.aimsData_DOUBLE(ao, options)
+        aim = AObjectConverter.volume_DOUBLE(ao, options)
         if not aim.isNull():
             return aim._get()
-        aim = AObjectConverter.aimsData_RGB(ao, options)
+        aim = AObjectConverter.volume_RGB(ao, options)
         if not aim.isNull():
             return aim._get()
-        aim = AObjectConverter.aimsData_RGBA(ao, options)
+        aim = AObjectConverter.volume_RGBA(ao, options)
         if not aim.isNull():
             return aim._get()
     elif tn == 'SURFACE':
