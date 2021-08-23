@@ -95,24 +95,6 @@ public:
 class AObjectConverter
 {
 public:
-  static carto::rc_ptr<AimsData_U8> aimsData_U8( anatomist::AObject*,
-      carto::Object options = carto::Object() );
-  static carto::rc_ptr<AimsData_S16> aimsData_S16( anatomist::AObject*,
-      carto::Object options = carto::Object() );
-  static carto::rc_ptr<AimsData_U16> aimsData_U16( anatomist::AObject*,
-      carto::Object options = carto::Object() );
-  static carto::rc_ptr<AimsData_S32> aimsData_S32( anatomist::AObject*,
-      carto::Object options = carto::Object() );
-  static carto::rc_ptr<AimsData_U32> aimsData_U32( anatomist::AObject*,
-      carto::Object options = carto::Object() );
-  static carto::rc_ptr<AimsData_FLOAT> aimsData_FLOAT( anatomist::AObject*,
-      carto::Object options = carto::Object() );
-  static carto::rc_ptr<AimsData_DOUBLE> aimsData_DOUBLE( anatomist::AObject*,
-      carto::Object options = carto::Object() );
-  static carto::rc_ptr<AimsData_RGB> aimsData_RGB( anatomist::AObject*,
-      carto::Object options = carto::Object() );
-  static carto::rc_ptr<AimsData_RGBA> aimsData_RGBA( anatomist::AObject*,
-      carto::Object options = carto::Object() );
   static carto::rc_ptr<Volume_U8> volume_U8( anatomist::AObject*,
       carto::Object options = carto::Object() );
   static carto::rc_ptr<Volume_S16> volume_S16( anatomist::AObject*,
@@ -169,15 +151,6 @@ public:
       aimsSparseOrDenseMatrix( anatomist::AObject* obj,
                 carto::Object options = carto::Object() );
 
-  static anatomist::AObject* anatomist( carto::rc_ptr<AimsData_U8> );
-  static anatomist::AObject* anatomist( carto::rc_ptr<AimsData_S16> );
-  static anatomist::AObject* anatomist( carto::rc_ptr<AimsData_U16> );
-  static anatomist::AObject* anatomist( carto::rc_ptr<AimsData_S32> );
-  static anatomist::AObject* anatomist( carto::rc_ptr<AimsData_U32> );
-  static anatomist::AObject* anatomist( carto::rc_ptr<AimsData_FLOAT> );
-  static anatomist::AObject* anatomist( carto::rc_ptr<AimsData_DOUBLE> );
-  static anatomist::AObject* anatomist( carto::rc_ptr<AimsData_RGB> );
-  static anatomist::AObject* anatomist( carto::rc_ptr<AimsData_RGBA> );
   static anatomist::AObject* anatomist( carto::rc_ptr<Volume_U8> );
   static anatomist::AObject* anatomist( carto::rc_ptr<Volume_S16> );
   static anatomist::AObject* anatomist( carto::rc_ptr<Volume_U16> );
