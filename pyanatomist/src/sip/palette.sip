@@ -52,6 +52,37 @@ public:
   bool isTransparent() const;
   Volume_RGBA* colors ();
   QImage* toQImage( int w = 0, int h = 0 );
+
+  /** Maximum size of the internal palette image.
+      0 means unused: no palette image is needed.
+      -1 means no limit: may grow as large as the reference palette image
+      -2 means unchanged
+    */
+  int maxSizeX() const;
+%Docstring
+maxSizeX()
+Maximum size of the internal palette image.
+0 means unused: no palette image is needed.
+-1 means no limit: may grow as large as the reference palette image
+-2 means unchanged
+%End
+
+  int maxSizeY() const;
+  void setMaxSize( int maxsizex, int maxsizey );
+%Docstring
+  setMaxSize(sx, sy)
+%End
+
+  int glMaxSizeX() const;
+%Docstring
+glMaxSizeX()
+Maximum size of the OpenGL palette image, after scaling.
+0 means unused: no GL palette image is needed.
+-1 means no limit: may grow as large as the reference palette image
+-2 means unchanged
+%End
+  int glMaxSizeY() const;
+  void glSetMaxSize( int glmaxsizex, int glmaxsizey );
 };
 
 
