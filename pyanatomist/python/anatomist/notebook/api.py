@@ -55,7 +55,6 @@ import weakref
 #from io import BytesIO
 #import PIL.Image
 
-from ipycanvas import Canvas
 from ipyevents import Event
 import numpy as np
 from ipywidgets import Image
@@ -354,7 +353,7 @@ class AnatomistInteractiveWidget(Canvas):
                     partial(self.update_canvas, force_render=False,
                             quality=self._full_quality))
         except RuntimeError:
-            # the render window may have been closed on serer side
+            # the render window may have been closed on server side
             self.close()
 
     #@throttle(0.1)
@@ -614,6 +613,10 @@ class AnatomistInteractiveWidget(Canvas):
                             qevent.buttons(), qevent.modifiers())
         self._last_widget_event = widget
         Qt.qApp.postEvent(widget, qevent)
+        # immediately send/process events because we expect a real-time
+        # callback
+        #Qt.QApplication.instance().sendPostedEvents()
+        Qt.QApplication.instance().processEvents()
 
         if not self.is_window3d():
             self.qtimer.singleShot(
