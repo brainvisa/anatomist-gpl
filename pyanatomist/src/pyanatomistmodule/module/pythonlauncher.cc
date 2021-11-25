@@ -117,7 +117,7 @@ void PythonLauncher::runModules()
 
   // cout << "pythonpath 2: " << shared2 << endl;
 
-  PyRun_SimpleString( "import sys; sys.argv = [ 'anatomist' ]" );
+  PyRun_SimpleString( "import sys" );
 
   PyRun_SimpleString( (char *) ( string( "sys.path.insert( 1, '" ) + shared2
                                  + "' )" ).c_str() );
