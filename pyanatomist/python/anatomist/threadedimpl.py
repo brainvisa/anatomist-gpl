@@ -211,5 +211,7 @@ def threadSafeCall(mainThread, func):
     """
     import threading
     f = lambda *args, **kwargs: mainThread.call(func, *args, **kwargs)
+    # set function doc and name on the lambda proxy
     f.__doc__ = func.__doc__
+    f.__name__ = func.__name__
     return f
