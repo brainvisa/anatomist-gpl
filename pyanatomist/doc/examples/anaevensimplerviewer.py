@@ -309,6 +309,7 @@ class AnaSimpleViewer(Qt.QObject):
         global awin, viewgridlay
         # remove windows from their parent to prevent them to be brutally
         # deleted by Qt.
+        w = None  # ensure there is a w variable before the "del" later
         for w in awindows:
             w.hide()
             viewgridlay.removeWidget(w.internalRep._get())
