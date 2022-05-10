@@ -118,7 +118,7 @@ import logging
 
 
 def isSequenceType(item):
-    if isinstance(item, collections.Sequence):
+    if isinstance(item, collections.abc.Sequence):
         return True
     if hasattr(item, 'isArray'):
         # aims Object API
@@ -134,7 +134,7 @@ def isSequenceType(item):
 
 
 def isMappingType(item):
-    if isinstance(item, collections.Mapping):
+    if isinstance(item, collections.abc.Mapping):
         return True
     if hasattr(item, 'isDictionary'):
         # aims Object API
