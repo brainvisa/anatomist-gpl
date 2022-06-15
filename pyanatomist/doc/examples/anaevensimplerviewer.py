@@ -104,7 +104,7 @@ class AnaSimpleViewer(Qt.QObject):
         '''
         global vieww, nviews
         x = nviews % 2
-        y = nviews / 2
+        y = nviews // 2
         nviews += 1
 
         w = a.createWindow(wintype, no_decoration=True, options={'hidden': 1})
