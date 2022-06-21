@@ -102,10 +102,10 @@ def get_snapshot(w, size):
     return cropped_im
 
 
-def detect_slices_of_interest(data, slice_directions=['A'], threshold=0):
+def detect_min_max_slices(data, slice_directions=['A'], threshold=0):
     '''
-    Returns a set of slices of interest : { 'S': [5,10,15,20],
-                                            'A': [10,11,12,13] }
+    Returns first and last non empty slices
+    slices_minmax[direction] = (first_nonempty_slice, last_nonempty_slice)
     '''
 
     d = data.arraydata()
