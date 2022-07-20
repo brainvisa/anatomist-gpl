@@ -545,7 +545,7 @@ class LinkROIControl(Left3DControl):
 
     def eventAutoSubscription(self, pool):
         # call parent class method
-        super(LinkROIAction, self).eventAutoSubscription(pool)
+        super(LinkROIControl, self).eventAutoSubscription(pool)
         # un-register the events we want to oveload: selection
         self.selectionChangedEventUnsubscribe()
         # then register our own action
@@ -596,7 +596,7 @@ The corresponding atlases templates can be downloaded using the links there. How
 - for Colin27: create colin27_t1_tal_lin.nii.minf:
 
     attributes = {
-        "referentials": ["MNI Colin 27"],
+        "referentials": ["ID: MNI Colin 27"],
     }
 
 - for the BigBrain, the referential is "Big Brain (Histology)"
