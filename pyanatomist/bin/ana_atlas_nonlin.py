@@ -27,20 +27,6 @@ a = ana.Anatomist()
 from simple_controls import Left3DControl
 
 
-class TransformationChain3d(object):
-    '''
-    This fakes aims.TransformationChain3d which inherits Transformation3d,
-    and is not part of pyaims bindings in aims 5.0.0
-    '''
-    def __init__(self, chain):
-        self.chain = chain
-
-    def transform(self, position):
-        for trans in self.chain:
-            position = trans.transform(position)
-        return position
-
-
 class VectorFieldTransforms(Singleton):
     '''
     Manage non-linear transformations, which are not part of Anatomist
@@ -140,8 +126,11 @@ class VectorFieldTransforms(Singleton):
                 chain = [self.load_transformation(t[0], t[1],t[2])
                         if isinstance(t[0], str) else t[0]
                         for t in chain]
-                trans = TransformationChain3d(chain)
-                if len(chain) != 0:
+                trans = aims.TransformationChain3d()
+                for tr in chain:
+                    trans.push_back(tr)
+                trans = trans.simplify()
+                if len(trans) != 0:
                     # register the composition in the graph
                     self.add_transformation(source_ref, dest_ref, trans)
 
@@ -210,6 +199,7 @@ class VectorFieldTransforms(Singleton):
                     if transform is not None:
                         visited.add(target_space)
                         to_visit.append(target_space)
+                        transform = transform.motion()  # get aims trans
                         back_pointers[target_space] = (space, transform)
 
     def referential_from_id(self, ref_id):
