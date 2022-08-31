@@ -164,7 +164,7 @@ class VectorFieldTransforms(Singleton):
         extend it to NIFTIs with 5 dimensions.
         '''
         print('loading transformation', filename, '...')
-        trans = aims.read(filename, dtype='FfdTransformation')
+        trans = aims.read(filename, dtype='Transformation3d')
         if source_ref and dest_ref:
             self.add_transformation(source_ref, dest_ref, trans)
         return trans
