@@ -77,10 +77,6 @@ class VectorFieldTransforms(Singleton):
           registered as its filename. Loading will happen only when the
           transformation is used, in get_transformation().
         '''
-        if hasattr(source_ref, 'getInternalRep'):
-            source_ref = source_ref.getInternalRep()
-        if hasattr(dest_ref, 'getInternalRep'):
-            dest_ref = dest_ref.getInternalRep()
         if isinstance(transform, str) and (transform.endswith('.trm')
                                            or transform == ''):
             # this transformation is affine: use the regular builtin system
@@ -91,6 +87,10 @@ class VectorFieldTransforms(Singleton):
             a.loadTransformation(transform, source_ref, dest_ref)
         else:
             # non-linear: use our new system
+            if hasattr(source_ref, 'getInternalRep'):
+                source_ref = source_ref.getInternalRep()
+            if hasattr(dest_ref, 'getInternalRep'):
+                dest_ref = dest_ref.getInternalRep()
             self._transformations.setdefault(source_ref, {})[dest_ref] \
                 = transform
 
@@ -294,16 +294,7 @@ class VectorFieldTransforms(Singleton):
                 if trans:
                     trans = os.path.join(dirname, trans)
                 # print('add trans:', sr.refUuid, dest_ref.refUuid, trans)
-                if trans.endswith('.trm') or trans == '':
-                    # this transformation is affine: use the regular builtin
-                    # system
-                    if trans == '':
-                        # An empty transformation file is identity.
-                        trans = [0, 0, 0,  1, 0, 0,  0, 1, 0,  0, 0, 1]
-                    a.loadTransformation(trans, sr, dest_ref)
-                else:
-                    # non-linear: use our new system
-                    self.add_transformation(sr, dest_ref, trans)
+                self.add_transformation(sr, dest_ref, trans)
 
 
 class LinkROIAction(ana.cpp.ContinuousTrackball):
