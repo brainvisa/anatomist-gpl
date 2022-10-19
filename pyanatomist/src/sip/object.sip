@@ -116,6 +116,7 @@ namespace anatomist
     virtual Tree* optionTree() const /AutoGen/;
     virtual anatomist::Material & GetMaterial() /AutoGen/;
     long loadDate() const;
+    void setLoadDate( long t );
     bool isCopy() const;
     carto::GenericObject* attributed();
 %MethodCode
@@ -201,6 +202,18 @@ namespace anatomist
     virtual void update( const anatomist::Observable *observable, void *arg );
     virtual std::string toolTip() const;
 
+    virtual std::string objectFullTypeName() const;
+    bool save( const std::string & filename, bool onlyIfModified );
+    virtual bool save( const std::string & filename );
+    bool userModified() const;
+%Docstring
+    if the object has been modified by user interaction, and needs saving
+  %En
+
+    void setUserModified( bool state = true );
+%Docstring
+    if the object has been modified by user interaction, and needs saving
+%End
   };
 
 };
