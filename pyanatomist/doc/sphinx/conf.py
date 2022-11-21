@@ -32,7 +32,8 @@ except Exception as e:
 from soma import aims
 import anatomist.headless as hana
 hana.force_virtualgl = False
-
+# start headless mode
+hana.HeadlessAnatomist()
 
 # avoid warnings for duplicate refs
 # see https://github.com/sphinx-doc/sphinx/issues/3866
