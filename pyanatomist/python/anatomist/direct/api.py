@@ -117,8 +117,10 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
     def __del__(self):
         # quit the app and delete it
-        self.quit()
+        # (avoid calling the overload of __getattr__ here)
         s = super(Anatomist, self)
+        quit = s.__getattribute__('quit')
+        quit()
         if hasattr(s, '__del__'):
           s.__del__()
 
