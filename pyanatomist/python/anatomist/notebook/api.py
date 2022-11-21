@@ -349,7 +349,7 @@ class AnatomistInteractiveWidget(Canvas):
             # trigger a better quality image
             if not self.is_closed():
                 self.qtimer.singleShot(
-                    float(INTERACTION_THROTTLE) / 1000,
+                    int(float(INTERACTION_THROTTLE) / 1000),
                     partial(self.update_canvas, force_render=False,
                             quality=self._full_quality))
         except RuntimeError:
