@@ -44,6 +44,8 @@ namespace anatomist
 
     virtual bool reload( anatomist::AObject* object, bool notifyFail = true, 
                          bool onlyoutdated = false ) const;
+
+    static void cleanup();
   };
 
 }; // namespace anatomist

@@ -39,6 +39,7 @@ namespace anatomist
     static bool exist( const std::string & type );
     static int registerType( const std::string & type,
       anatomist::AWindowCreator *creator /Transfer/, bool=false );
+    static void unregisterType( const std::string & type );
     static set_STRING types();
     static bool hasControlWindowButton( int type );
     static void setHasControlWindowButton( int type, bool visible );
