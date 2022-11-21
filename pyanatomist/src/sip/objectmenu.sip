@@ -51,6 +51,7 @@ public:
   Tree* item( const vector_STRING &, bool = true );
   Tree* tree();
   Tree* releaseTree() /TransferBack/;
+  void removeItem( const vector_STRING & inside, const std::string & text );
 };
 
 
