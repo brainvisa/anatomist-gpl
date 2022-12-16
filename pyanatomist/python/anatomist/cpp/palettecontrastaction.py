@@ -181,8 +181,8 @@ class PaletteContrastAction(anatomist.Action):
         gwidth = 150
         gheight = 50
         w = gwidth - 12
-        baseh = (gheight - 10) * 0.33 + 5
-        baseh2 = (gheight - 10) * 0.66 + 5
+        baseh = int(round((gheight - 10) * 0.33 + 5))
+        baseh2 = int(round((gheight - 10) * 0.66 + 5))
         img = pal.toQImage(w, baseh2 - baseh - 1)
         pix = QtGui.QPixmap.fromImage(img)
         scene = gv.scene()
