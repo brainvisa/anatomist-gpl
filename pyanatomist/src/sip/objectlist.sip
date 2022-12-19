@@ -11,9 +11,9 @@ class ObjectList : anatomist::MObject
 
 %ConvertToSubClassCode
   if (dynamic_cast<anatomist::ObjectList *>(sipCpp))
-    sipClass = sipClass_anatomist_ObjectList;
+    sipType = sipType_anatomist_ObjectList;
   else
-    sipClass = 0;
+    sipType = 0;
 %End
 
 public:

@@ -24,18 +24,18 @@ class ControlWindow : QMainWindow
 
 %ConvertToSubClassCode
   if( dynamic_cast<ControlWindow *>( sipCpp ) )
-    sipClass = sipClass_ControlWindow;
+    sipType = sipType_ControlWindow;
   else
     if( dynamic_cast<QAWindow *>( sipCpp ) )
       if( dynamic_cast<ControlledWindow *>( sipCpp ) )
         if( dynamic_cast<AWindow3D *>( sipCpp ) )
-          sipClass = sipClass_AWindow3D;
+          sipType = sipType_AWindow3D;
         else
-          sipClass = sipClass_ControlledWindow;
+          sipType = sipType_ControlledWindow;
       else
-        sipClass = sipClass_QAWindow;
+        sipType = sipType_QAWindow;
     else
-      sipClass = 0;
+      sipType = 0;
 %End
 
 public:

@@ -17,20 +17,20 @@ class GLItem : carto::RCObject
 
 %ConvertToSubClassCode
   if( dynamic_cast<anatomist::GLList *>( sipCpp ) )
-    sipClass = sipClass_anatomist_GLList;
+    sipType = sipType_anatomist_GLList;
   else if( dynamic_cast<anatomist::GLTexture *>( sipCpp ) )
-    sipClass = sipClass_anatomist_GLTexture;
+    sipType = sipType_anatomist_GLTexture;
   else if( dynamic_cast<anatomist::GLItemList *>( sipCpp ) )
   {
     if( dynamic_cast<anatomist::GLNoExecItemList *>( sipCpp ) )
-      sipClass = sipClass_anatomist_GLNoExecItemList;
+      sipType = sipType_anatomist_GLNoExecItemList;
     else
-      sipClass = sipClass_anatomist_GLItemList;
+      sipType = sipType_anatomist_GLItemList;
   }
   else if( dynamic_cast<anatomist::Primitive *>( sipCpp ) )
-    sipClass = sipClass_anatomist_Primitive;
+    sipType = sipType_anatomist_Primitive;
   else
-    sipClass = NULL;
+    sipType = NULL;
 %End
 
 public:
