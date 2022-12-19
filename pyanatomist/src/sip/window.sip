@@ -19,7 +19,7 @@ namespace anatomist
 
 %ConvertToTypeCode
   return anatomist::sipConvertToTypeCodeFromInternalRep( sipPy,
-    sipClass_anatomist_AWindow, sipTransferObj, sipIsErr, sipCppPtr );
+    sipType_anatomist_AWindow, sipTransferObj, sipIsErr, sipCppPtr );
 %End
 
   public:
@@ -93,7 +93,6 @@ namespace anatomist
     virtual void displayClickPoint() const = 0;
   };
 
-
 /*
   class QAWindowDrag : QStoredDrag
   {
@@ -117,7 +116,6 @@ class View
 %TypeHeaderCode
 #include <anatomist/controler/view.h>
 #include <anatomist/window/glwidget.h>
-
 %End
 
 %ConvertToSubClassCode
@@ -126,22 +124,21 @@ class View
     if( dynamic_cast<QAGLWidget *>( sipCpp ) )
     {
       *sipCppRet = dynamic_cast<QAGLWidget *>( sipCpp );
-      sipClass = sipClass_QAGLWidget;
+      sipType = sipType_QAGLWidget;
     }
     else
     {
       *sipCppRet = static_cast<anatomist::GLWidgetManager *>( sipCpp );
-      sipClass = sipClass_anatomist_GLWidgetManager;
+      sipType = sipType_anatomist_GLWidgetManager;
     }
   }
   else
-    sipClass = NULL;
+    sipType = NULL;
 %End
 
   public:
   View( anatomist::AWindow * );
   virtual ~View();
-
   anatomist::GLWidgetManager* glWidget();
 %MethodCode
     sipRes = dynamic_cast<anatomist::GLWidgetManager *>( sipCpp );
@@ -152,7 +149,6 @@ class View
   anatomist::AWindow * aWindow();
   // const anatomist::AWindow * aWindow() const;
 };
-
 };
 
 
@@ -195,122 +191,6 @@ protected:
 };
 
 
-
-namespace anatomist
-{
-
-class GLWidgetManager : anatomist::View
-{
-%TypeHeaderCode
-#include <anatomist/window/glwidgetmanager.h>
-#include <pyaims/vector/vector.h>
-%End
-
-  public:
-    virtual ~GLWidgetManager();
-
-    QGLWidget *qglWidget ();
-    void setPrimitives( const anatomist::GLPrimitives & );
-    anatomist::GLPrimitives primitives() const;
-
-    void clearLists();
-    void setExtrema( const Point3df &, const Point3df & );
-    void setWindowExtrema( const Point3df &, const Point3df & );
-    Point3df boundingMin() const;
-    Point3df boundingMax() const;
-    Point3df windowBoundingMin() const;
-    Point3df windowBoundingMax() const;
-    void setLightGLList( unsigned );
-    void setPreferredSize( int, int );
-    void setMinimumSizeHint( const QSize & );
-    virtual bool positionFromCursor( int, int, Point3df & );
-    virtual bool cursorFromPosition( const Point3df &, Point3df & );
-    virtual Point3df objectPositionFromWindow( const Point3df & winpos );
-    virtual bool translateCursorPosition( float, float, Point3df & );
-
-    virtual std::string name() const;
-    void setZoom( float );
-    float zoom() const;
-    const aims::Quaternion & quaternion() const;
-    void setQuaternion( const Point4df & );
-    void setQuaternion( const  aims::Quaternion & );
-    /* const float* rotation() const; */
-    void setXDirection( bool );
-    void setYDirection( bool );
-    void setZDirection( bool );
-    bool invertedX() const;
-    bool invertedY() const;
-    bool invertedZ() const;
-    void setRotationCenter( const Point3df & );
-    Point3df rotationCenter() const;
-    bool perspectiveEnabled() const;
-    void enablePerspective( bool );
-    void setAutoCentering( bool );
-    // bool autoCentering() const;
-    virtual void recordStart( const QString &,
-                              const QString & = QString::null );
-    void saveContents( const QString &, const QString &, int=0, int=0 );
-    void saveOtherBuffer( const QString &,
-                          const QString &, int, int=0, int=0 );
-    QImage snapshotImage( int bufmode, int width=0, int height=0 );
-    void setOtherBuffersSaveMode( int );
-    int otherBuffersSaveMode() const;
-
-    bool hasTransparentObjects() const;
-    void setTransparentObjects( bool );
-    bool depthPeelingAllowed() const;
-    bool depthPeelingEnabled() const;
-    void enableDepthPeeling( bool );
-    unsigned depthPeelingPasses() const;
-    void setDepthPeelingPasses( unsigned );
-    unsigned numTextureUnits() const;
-    anatomist::AWindow *aWindow();
-    virtual int width() = 0;
-    virtual int height() = 0;
-    virtual void paintScene();
-    virtual void updateGL();
-
-  private :
-    GLWidgetManager( const anatomist::GLWidgetManager& );
-    GLWidgetManager();
-};
-
-};
-
-
-class QAGLWidget : QGLWidget, anatomist::GLWidgetManager
-{
-%TypeHeaderCode
-#include <anatomist/window/glwidget.h>
-#include <pyaims/vector/vector.h>
-
-%End
-
-  public:
-
-    QAGLWidget( anatomist::AWindow*, QWidget* = 0, 
-                const char* = 0, 
-                const QGLWidget * = 0, Qt::WindowFlags = 0 );
-    virtual ~QAGLWidget();
-
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
-    virtual std::string name() const;
-
-  signals:
-    void viewRendered();
-
-  public slots:
-    virtual void updateGL();
-    virtual void saveContents();
-    virtual void recordStart();
-    virtual void recordStop();
-
-  private :
-    QAGLWidget( const QAGLWidget& );
-};
-
-
 class AWindow3D : ControlledWindow, anatomist::Observable
 {
 %TypeHeaderCode
@@ -340,9 +220,11 @@ public:
   virtual void Refresh();
   virtual void refreshNow();
   virtual anatomist::AObject* objectAtCursorPosition( int x, int y );
+
 /*  virtual std::list<anatomist::AObject*> *objectsAtCursorPosition( int x,
       int y, int tolerenceRadius );
       */
+
   virtual int polygonAtCursorPosition( int x, int y,
                                        const anatomist::AObject* obj );
   ViewType viewType() const;
@@ -388,3 +270,4 @@ public:
   void edgePOV(int);
   void cornerPOV(int);
 };
+

@@ -56,4 +56,5 @@ todo = {'rcptr': ['anatomist::EventHandler', 'anatomist::Unserializer',
         'anatomist': ['Void'],
         'sharedptr': ['anatomist::AObject', 'anatomist::AWindow'],
         'volumeview': basetypes,
+        'glwidget': ['Void'],
         }
