@@ -55,7 +55,7 @@ class GLWidgetManager : anatomist::View
     void setAutoCentering( bool );
     // bool autoCentering() const;
     virtual void recordStart( const QString &,
-                              const QString & = QString::null );
+                              const QString & = QString() );
     void saveContents( const QString &, const QString &, int=0, int=0 );
     void saveOtherBuffer( const QString &,
                           const QString &, int, int=0, int=0 );
@@ -103,11 +103,12 @@ class QAGLWidget : QGLWidget, anatomist::GLWidgetManager
 %#if QT_VERSION >= 0X060000%
     QAGLWidget( anatomist::AWindow*, QWidget* = 0,
                 const char* = 0,
-                const QOpenGLWidget * = 0, Qt::WindowFlags = 0 );
+                const QOpenGLWidget * = 0,
+                Qt::WindowFlags = Qt::WindowFlags() );
 %#else%
     QAGLWidget( anatomist::AWindow*, QWidget* = 0,
                 const char* = 0,
-                const QGLWidget * = 0, Qt::WindowFlags = 0 );
+                const QGLWidget * = 0, Qt::WindowFlags = Qt::WindowFlags );
 %#endif%
     virtual ~QAGLWidget();
 
