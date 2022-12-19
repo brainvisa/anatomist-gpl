@@ -53,7 +53,7 @@ namespace anatomist
     if (!sipIsErr)
     {
       // check type
-      if( sipCanConvertType( sipPy, siptype,
+      if( sipCanConvertToType( sipPy, siptype,
           SIP_NOT_NONE | SIP_NO_CONVERTORS ) )
         return 1;
       if( PyObject_HasAttrString( sipPy, "internalRep" ) )

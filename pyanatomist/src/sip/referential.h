@@ -44,8 +44,8 @@ inline PyObject* pyanatomistConvertFrom_anatomist_ReferentialP( void * a )
 inline void* pyanatomistConvertTo_anatomist_ReferentialP( PyObject * o )
 {
   int isErr = 0;
-  return sipCanConvertToType( o, sipType_anatomist_Referential, 0, 0, 0,
-                              &isErr );
+  return sipConvertToType( o, sipType_anatomist_Referential, 0, 0, 0,
+                           &isErr );
 }
 
 

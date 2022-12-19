@@ -44,7 +44,7 @@ typedef std::list<anatomist::RefGLItem> list_RefGLItem;
 inline void* pyanatomistConvertTo_RefGLItem( PyObject* obj )
 {
   int sipIsErr = 0;
-  void *ptr = sipCanConvertToType( obj, sipType_rc_ptr_GLItem,
+  void *ptr = sipForceConvertToType( obj, sipType_rc_ptr_GLItem,
     0, 0, 0, &sipIsErr );
   if( sipIsErr )
     return 0;
