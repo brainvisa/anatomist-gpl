@@ -35,10 +35,10 @@ namespace anatomist
     virtual std::string Title() const;
 
     virtual Type type() const = 0;
-    virtual SubType subtype() const /AutoGen/;
+    virtual SubType subtype() const;
     virtual void registerObject( anatomist::AObject *, bool = false,
-      int=-1 ) /AutoGen/;
-    virtual void unregisterObject( anatomist::AObject * ) /AutoGen/;
+      int=-1 );
+    virtual void unregisterObject( anatomist::AObject * );
     virtual void Refresh();
     int Group() const;
     bool hasObject(anatomist::AObject *) const;
@@ -56,9 +56,9 @@ namespace anatomist
     bool isTemporary( anatomist::AObject* o ) const;
     anatomist::Referential *getReferential() const;
     virtual void setReferential( anatomist::Referential *ref );
-    virtual void show() /AutoGen/;
-    virtual void hide() /AutoGen/;
-    virtual const std::string & baseTitle() const /AutoGen/;
+    virtual void show();
+    virtual void hide();
+    virtual const std::string & baseTitle() const;
 
     static anatomist::AWindow* fromObject( carto::GenericObject );
 %MethodCode
@@ -170,7 +170,7 @@ public:
     carto::Object =carto::none(), Qt::WindowFlags=Qt::Window );
   virtual ~QAWindow();
   virtual void refreshNow();
-  virtual bool close() /AutoGen/;
+  virtual bool close();
   static QAWindow* fromObject( carto::GenericObject );
 %MethodCode
   try

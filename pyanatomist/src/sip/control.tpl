@@ -119,7 +119,7 @@ public:
   public:
     virtual ~ActionCreatorBase();
 %#if SIP_VERSION == 0x040403%
-    virtual anatomist::Action* operator () () /Factory, AutoGen/;
+    virtual anatomist::Action* operator () () /Factory;
 %#else%
     virtual anatomist::Action* operator () () =0 /Factory/;
 %#endif%
@@ -326,7 +326,7 @@ public:
   public:
     virtual ~ControlCreatorBase();
 %#if SIP_VERSION == 0x040403%
-    virtual anatomist::Control* operator () () /Factory, AutoGen/;
+    virtual anatomist::Control* operator () () /Factory/;
 %#else%
     virtual anatomist::Control* operator () () =0 /Factory/;
 %#endif%

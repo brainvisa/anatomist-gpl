@@ -50,7 +50,7 @@ public:
 
 	virtual std::string ID() const = 0;
 	virtual bool orderingMatters() const;
-	virtual std::string generatedObjectType() const = 0 /AutoGen/;
+	virtual std::string generatedObjectType() const = 0;
 };
 
 class Fusion2dMethod : anatomist::FusionMethod

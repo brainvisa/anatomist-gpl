@@ -95,7 +95,7 @@ namespace anatomist
 
     virtual void setInternalsChanged();
     virtual void internalUpdate();
-    virtual bool render( anatomist::GLPrimitives &, const anatomist::ViewState & ) /AutoGen/;
+    virtual bool render( anatomist::GLPrimitives &, const anatomist::ViewState & );
 
     void setType(int);
     void SetMaterial(const anatomist::Material &mat);
@@ -104,17 +104,17 @@ namespace anatomist
     anatomist::AObject *referentialInheritance() const;
     virtual void setReferentialInheritance( anatomist::AObject* ao );
     virtual bool boundingBox( vector_FLOAT & /TransferBack/,
-      vector_FLOAT & /TransferBack/) const /AutoGen/;
+      vector_FLOAT & /TransferBack/) const;
     virtual bool boundingBox2D( vector_FLOAT & /TransferBack/,
-      vector_FLOAT & /TransferBack/) const /AutoGen/;
+      vector_FLOAT & /TransferBack/) const;
     virtual vector_FLOAT voxelSize() const;
     virtual void setVoxelSize( const vector_FLOAT & );
     virtual anatomist::AObjectPalette *palette();
     virtual void setPalette( const anatomist::AObjectPalette & palette );
     virtual const anatomist::AObjectPalette *getOrCreatePalette() const;
     virtual void adjustPalette();
-    virtual Tree* optionTree() const /AutoGen/;
-    virtual anatomist::Material & GetMaterial() /AutoGen/;
+    virtual Tree* optionTree() const;
+    virtual anatomist::Material & GetMaterial();
     long loadDate() const;
     void setLoadDate( long t );
     bool isCopy() const;
