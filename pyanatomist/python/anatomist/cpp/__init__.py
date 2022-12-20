@@ -788,3 +788,9 @@ for x in dir():
     if not x.startswith('_') and x not in private:
         __all__.append(x)
 del x, private
+
+# export sip6 enums
+from soma.utils.sip_compat import sip_export_enums
+
+sip_export_enums(sys.modules[__name__])
+
