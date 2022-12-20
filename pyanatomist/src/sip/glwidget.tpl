@@ -108,7 +108,7 @@ class QAGLWidget : QGLWidget, anatomist::GLWidgetManager
 %#else%
     QAGLWidget( anatomist::AWindow*, QWidget* = 0,
                 const char* = 0,
-                const QGLWidget * = 0, Qt::WindowFlags = Qt::WindowFlags );
+                const QGLWidget * = 0, Qt::WindowFlags = Qt::WindowFlags() );
 %#endif%
     virtual ~QAGLWidget();
 
