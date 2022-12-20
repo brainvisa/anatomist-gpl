@@ -56,7 +56,7 @@ the GUI is frozen until the event loop is executed, using the following PyQt
 code:
 
 >>> # from PyQt4 import Qt
->>> # or, to switch to the correct Qt implementation and bindings (Qt4/Qt5)
+>>> # or, to switch to the correct Qt implementation and bindings (Qt4/Qt5/Qt6)
 >>> from soma.qt_gui.qt_backend import Qt
 >>> Qt.qApp.exec_loop()
 
@@ -177,13 +177,14 @@ sip_classes = ['QString', 'QVariant', 'QDate', 'QDateTime',
                'QTextStream', 'QTime', 'QUrl']
 _sip_api_set = False
 import sip
-for sip_class in sip_classes:
-    try:
-        sip.setapi(sip_class, 2)
-    except ValueError as e:
-        if not _sip_api_set:
-            logging.warning(e.message)
-    _sip_api_set = True
+if hasattr(sip, 'setapi'):
+    for sip_class in sip_classes:
+        try:
+            sip.setapi(sip_class, 2)
+        except ValueError as e:
+            if not _sip_api_set:
+                logging.warning(e.message)
+        _sip_api_set = True
 
 # cleanup namespaces in Sip-generated code
 ExtendedImporter().importInModule('', globals(), locals(), 'anatomistsip')
