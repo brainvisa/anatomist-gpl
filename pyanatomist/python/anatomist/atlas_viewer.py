@@ -1,6 +1,5 @@
-#! /usr/bin/python2
+#! /usr/bin/bin python
 # -*- coding: utf-8 -*-
-# -*- coding:Latin-1 -*- #
 """
 """
 
