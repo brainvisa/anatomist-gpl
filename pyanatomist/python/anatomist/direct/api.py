@@ -1891,10 +1891,30 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                 self.anatomistinstance.execute('DeleteElement',
                                                elements=[self.internalRep])
 
-            def __cmp__(self, y):
+            def __eq__(self, y):
                 if isinstance(y, Anatomist.AWindowsBlock.WidgetProxy):
-                    return cmp(self.widget, y.widget)
-                return cmp(self.widget, y)
+                    return self.widget == y.widget
+                return self.widget == y
+
+            def __lt__(self, y):
+                if isinstance(y, Anatomist.AWindowsBlock.WidgetProxy):
+                    return self.widget < y.widget
+                return self.widget < y
+
+            def __le__(self, y):
+                if isinstance(y, Anatomist.AWindowsBlock.WidgetProxy):
+                    return self.widget <= y.widget
+                return self.widget <= y
+
+            def __gt__(self, y):
+                if isinstance(y, Anatomist.AWindowsBlock.WidgetProxy):
+                    return self.widget > y.widget
+                return self.widget > y
+
+            def __ge__(self, y):
+                if isinstance(y, Anatomist.AWindowsBlock.WidgetProxy):
+                    return self.widget >= y.widget
+                return self.widget >= y
 
         def __init__(self, anatomistinstance=None, nbCols=2, nbRows=0,
                      widgetproxy=None):

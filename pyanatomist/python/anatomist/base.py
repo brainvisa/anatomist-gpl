@@ -1504,25 +1504,6 @@ class Anatomist(Singleton):
             """
             return str(self.internalRep)
 
-        def __cmp__(self, other):
-            """
-            Called on comparison operations between self and other.
-            Their internalRep is compared.
-
-            Returns
-            -------
-            cmp: int
-                -1 if self < other, 0 if self == other, 1 if self > other
-            """
-            if not isinstance(other, Anatomist.AItem):
-                return 1
-            if self.internalRep == other.internalRep:
-                return 0
-            elif self.internalRep < other.internalRep:
-                return -1
-            else:
-                return 1
-
         def __eq__(self, other):
             """
             Equality operator for python3
@@ -1548,6 +1529,14 @@ class Anatomist(Singleton):
                 return False
             return self.internalRep < other.internalRep
 
+        def __le__(self, other):
+            """
+            Comparison operator for python3
+            """
+            if not isinstance(other, Anatomist.AItem):
+                return False
+            return self.internalRep <= other.internalRep
+
         def __gt__(self, other):
             """
             Comparison operator for python3
@@ -1555,6 +1544,14 @@ class Anatomist(Singleton):
             if not isinstance(other, Anatomist.AItem):
                 return False
             return self.internalRep > other.internalRep
+
+        def __ge__(self, other):
+            """
+            Comparison operator for python3
+            """
+            if not isinstance(other, Anatomist.AItem):
+                return False
+            return self.internalRep >= other.internalRep
 
         def getInfo(self):
             """
@@ -2649,25 +2646,6 @@ class Anatomist(Singleton):
             if uuid is not None:
                 self.refUuid = uuid
 
-        def __cmp__(self, other):
-            """
-            Called on comparison operations between self and other.
-            Their uuid is compared.
-
-            Returns
-            -------
-            cmp: int
-                -1 if self < other, 0 if self == other, 1 if self > other
-            """
-            if not isinstance(other, Anatomist.Referential):
-                return 1
-            if self.refUuid == other.refUuid:
-                return 0
-            elif self.refUuid < other.refUuid:
-                return -1
-            else:
-                return 1
-
         def __eq__(self, other):
             if not isinstance(other, Anatomist.Referential):
                 return False
@@ -2684,10 +2662,20 @@ class Anatomist(Singleton):
                 return False
             return self.refUuid < other.refUuid
 
+        def __le__(self, other):
+            if not isinstance(other, Anatomist.Referential):
+                return False
+            return self.refUuid <= other.refUuid
+
         def __gt__(self, other):
             if not isinstance(other, Anatomist.Referential):
                 return False
             return self.refUuid > other.refUuid
+
+        def __ge__(self, other):
+            if not isinstance(other, Anatomist.Referential):
+                return False
+            return self.refUuid >= other.refUuid
 
     #
     class APalette(AItem):
