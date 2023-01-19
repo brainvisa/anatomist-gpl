@@ -194,7 +194,7 @@ def find_mesa():
     Mesa library file with full path, or None if not found
     '''
     paths = os.environ.get('LD_LIBRARY_PATH')
-    ldconfig = check_output(['ldconfig', '-p'])
+    ldconfig = check_output(['ldconfig', '-p'], text=True)
     paths2 = [os.path.dirname(p.split()[-1])
               for p in ldconfig.split('\n')[1:-1]]
     if paths:
