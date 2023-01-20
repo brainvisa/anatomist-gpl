@@ -10,6 +10,10 @@ class GLComponent
 #include <pyanatomist/refglitem.h>
 %End
 
+%TypeCode
+#include <pyaims/vector/numpyarrayfunc.h>
+%End
+
 
 public:
   enum glTextureMode
@@ -137,6 +141,75 @@ typedef std::vector<float> vector_FLOAT;
   virtual std::string viewStateID( anatomist::GLComponent::glPart part,
     const anatomist::ViewState & ) const /AutoGen/;
   virtual carto::Object debugInfo() const /AutoGen/;
+
+  SIP_PYOBJECT glVertexArray( const anatomist::ViewState & ) /Factory/;
+%MethodCode
+  std::vector<int> dims( 2, sipCpp->glNumVertex( *a0 ) );
+  dims[1] = 3;
+
+  PyArray_Descr *descr = PyArray_DescrFromType( NPY_FLOAT32 );
+  sipRes = aims::initNumpyArray( sipSelf, descr, dims.size(),
+                                 &dims[0],
+                                 (char *) sipCpp->glVertexArray( *a0 ) );
+%End
+
+  SIP_PYOBJECT glNormalArray( const anatomist::ViewState & ) /Factory/;
+%MethodCode
+  if( sipCpp->glNormalArray( *a0 ) == 0 )
+  {
+    sipRes = Py_None;
+    Py_INCREF( Py_None );
+  }
+  else
+  {
+    std::vector<int> dims( 2, sipCpp->glNumVertex( *a0 ) );
+    dims[1] = 3;
+
+    PyArray_Descr *descr = PyArray_DescrFromType( NPY_FLOAT32 );
+    sipRes = aims::initNumpyArray( sipSelf, descr, dims.size(),
+                                  &dims[0],
+                                  (char *) sipCpp->glNormalArray( *a0 ) );
+  }
+%End
+
+  SIP_PYOBJECT glPolygonArray( const anatomist::ViewState & ) /Factory/;
+%MethodCode
+  std::vector<int> dims( 2, sipCpp->glNumPolygon( *a0 ) );
+  dims[1] = int( sipCpp->glPolygonSize( *a0 ) );
+
+  PyArray_Descr *descr = PyArray_DescrFromType( NPY_INT32 );
+  sipRes = aims::initNumpyArray( sipSelf, descr, dims.size(),
+                                &dims[0],
+                                (char *) sipCpp->glPolygonArray( *a0 ) );
+%End
+
+  SIP_PYOBJECT glTexCoordArray( const anatomist::ViewState &,
+                                unsigned tex = 0 ) /Factory/;
+
+%MethodCode
+  if( sipCpp->glTexCoordArray( *a0, a1 ) == 0 )
+  {
+    sipRes = Py_None;
+    Py_INCREF( Py_None );
+  }
+  else
+  {
+    std::vector<int> dims( 2, sipCpp->glNumVertex( *a0 ) );
+    dims[1] = int( sipCpp->glDimTex( *a0, a1 ) );
+
+    PyArray_Descr *descr = PyArray_DescrFromType( NPY_FLOAT32 );
+    sipRes = aims::initNumpyArray(
+      sipSelf, descr, dims.size(),
+      &dims[0],
+      (char *) sipCpp->glTexCoordArray( *a0, a1 ) );
+  }
+%End
+
+  rc_ptr_Volume_RGBA glBuildTexImage(
+    const anatomist::ViewState & state, unsigned tex, int dimx = -1,
+    int dimy = -1, bool useTexScale = true ) const;
+  virtual const Material *glMaterial() const;
+  virtual const AObjectPalette* glPalette( unsigned tex = 0 ) const;
 };
 
 };
