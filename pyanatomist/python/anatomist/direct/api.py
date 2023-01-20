@@ -1916,10 +1916,14 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                     return self.widget >= y.widget
                 return self.widget >= y
 
+            def __hash__(self):
+                return id(self.widget)
+
         def __init__(self, anatomistinstance=None, nbCols=2, nbRows=0,
                      widgetproxy=None):
             super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance,
-                                                          nbCols=nbCols, nbRows=nbRows)
+                                                          nbCols=nbCols,
+                                                          nbRows=nbRows)
             if widgetproxy is not None:
                 self.internalRep = widgetproxy.internalRep
                 self.internalWidget = widgetproxy
