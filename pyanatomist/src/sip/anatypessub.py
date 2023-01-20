@@ -485,7 +485,23 @@ typessub.update({'anatomist::EventHandler':
                      'testPyType': 'pyanatomistObjectRefGLItem_Check',
                   },
 
-                 })
+                 'anatomist::ViewState':
+                 {'typecode': 'ViewState',
+                  'pyFromC': '',
+                  'CFromPy': '',
+                  'deref': '*',
+                  'address': '&',
+                  'defScalar': '',
+                  'defNumpyBindings': '',
+                  'new': 'new anatomist::ViewState',
+                  'NumType': 'PyArray_OBJECT',
+                  'PyType': 'anatomist::ViewState',
+                  'sipClass': 'anatomist_ViewState',
+                  'typeinclude': '#include <anatomist/window/viewstate.h>',
+                  'sipinclude': '',
+                  },
+
+    })
 
 if qt_version[0] >= 4:
     typessub['QPixmap']['sipinclude'] = '#if SIP_VERSION < 0x040700\n' \
