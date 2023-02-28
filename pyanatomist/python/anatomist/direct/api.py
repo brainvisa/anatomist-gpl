@@ -638,8 +638,11 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         trans: :class:`Transformation`
             Transformation to apply to convert coordinates from one referent
         """
-        c = cpp.LoadTransformationCommand(filename, origin.getInternalRep(),
-                                          destination.getInternalRep())
+        if hasattr(origin, 'getInternalRep'):
+            origin = origin.getInternalRep()
+        if hasattr(destination, 'getInternalRep'):
+            destination = destination.getInternalRep()
+        c = cpp.LoadTransformationCommand(filename, origin, destination)
         self.execute(c)
         return self.Transformation(self, c.trans())
 
@@ -661,8 +664,11 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         trans: :class:`Transformation`
             New transformation
         """
-        c = cpp.LoadTransformationCommand(
-            matrix, origin.getInternalRep(), destination.getInternalRep())
+        if hasattr(origin, 'getInternalRep'):
+            origin = origin.getInternalRep()
+        if hasattr(destination, 'getInternalRep'):
+            destination = destination.getInternalRep()
+        c = cpp.LoadTransformationCommand(matrix, origin, destination)
         self.execute(c)
         return self.Transformation(self, c.trans())
 
