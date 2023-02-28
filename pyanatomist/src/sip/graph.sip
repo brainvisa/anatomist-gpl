@@ -22,8 +22,7 @@ private:
 };
 
 
-class AGraphObject : anatomist::MObject, anatomist::GLComponent,
-  anatomist::PythonAObject
+class AGraphObject : anatomist::MObject, anatomist::PythonAObject
 {
 %TypeHeaderCode
 #include <anatomist/graph/GraphObject.h>
