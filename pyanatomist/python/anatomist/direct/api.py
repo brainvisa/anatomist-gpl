@@ -105,15 +105,15 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     def __singleton_init__(self, *args, **kwargs):
         # call C++ constructor now with all arguments, otherwise it will be called
         # via Singleton.__init__ without arguments.
+        self.context = cpp.CommandContext.defaultContext()
+        self.handlers = {}
+        self._loadCbks = set()
+        global __version__
         cpp.Anatomist.__init__(self, *args, **kwargs)
         super(Anatomist, self).__singleton_init__(*args, **kwargs)
         from soma.qt_gui.qt_backend import QtGui
         import threading
         self.log("Anatomist started.")
-        self.context = cpp.CommandContext.defaultContext()
-        self.handlers = {}
-        self._loadCbks = set()
-        global __version__
 
     def __del__(self):
         # quit the app and delete it
