@@ -38,22 +38,22 @@
 
 inline PyObject* pyanatomistConvertFrom_qpixmap( void * a )
 {
-  return sipConvertFromInstance( a, sipClass_QPixmap, 0 );
+  return sipConvertFromType( a, sipType_QPixmap, 0 );
 }
 
 
 inline void* pyanatomistConvertTo_qpixmap( PyObject * o )
 {
   int isErr = 0;
-  return sipConvertToInstance( o, sipClass_QPixmap, 0, 0, 0,
-                               &isErr );
+  return sipConvertToType( o, sipType_QPixmap, 0, 0, 0,
+                           &isErr );
 }
 
 
 inline int pyanatomist_qpixmap( PyObject* o )
 {
-  return sipCanConvertToInstance( o, sipClass_QPixmap,
-                                  SIP_NOT_NONE | SIP_NO_CONVERTORS );
+  return sipCanConvertToType( o, sipType_QPixmap,
+                              SIP_NOT_NONE | SIP_NO_CONVERTORS );
 }
 
 #endif

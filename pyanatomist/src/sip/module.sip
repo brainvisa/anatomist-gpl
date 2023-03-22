@@ -50,8 +50,8 @@ public:
 
   for( i=0, it=sipCpp->begin(); it!=e; ++i, ++it )
     PyTuple_SET_ITEM( l, i,
-                      sipConvertFromInstance( *it, 
-                                              sipClass_anatomist_Module, 0 ) );
+                      sipConvertFromType( *it,
+                                          sipType_anatomist_Module, 0 ) );
   sipRes = l;
 %End
 

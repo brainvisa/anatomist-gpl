@@ -121,8 +121,10 @@ void PythonLauncher::runModules()
 
   PyRun_SimpleString( (char *) ( string( "sys.path.insert( 1, '" ) + shared2
                                  + "' )" ).c_str() );
+#if QT_VERSION < 0x050000
   PyRun_SimpleString( "import sip" );
   PyRun_SimpleString( "for name in ['QString', 'QVariant', 'QDate', 'QDateTime', 'QTextStream', 'QTime', 'QUrl']: sip.setapi(name, 2)" );
+#endif
   PyRun_SimpleString( "import anatomist.cpp; anatomist.cpp.Anatomist()" );
 }
 

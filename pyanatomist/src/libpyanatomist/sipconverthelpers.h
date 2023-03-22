@@ -46,14 +46,14 @@ namespace anatomist
 
   template <typename T> inline
       int sipConvertToTypeCodeFromInternalRep( PyObject *sipPy,
-                                               sipWrapperType *siptype,
+                                               sipTypeDef *siptype,
                                                PyObject *sipTransferObj,
                                                int *&sipIsErr, T **&sipCppPtr )
   {
     if (!sipIsErr)
     {
       // check type
-      if( sipCanConvertToInstance( sipPy, siptype,
+      if( sipCanConvertToType( sipPy, siptype,
           SIP_NOT_NONE | SIP_NO_CONVERTORS ) )
         return 1;
       if( PyObject_HasAttrString( sipPy, "internalRep" ) )
@@ -61,8 +61,8 @@ namespace anatomist
         PyObject *internalRep = PyObject_GetAttrString( sipPy, "internalRep" );
         if( internalRep )
         {
-          bool x = sipCanConvertToInstance( internalRep, siptype,
-                                            SIP_NOT_NONE | SIP_NO_CONVERTORS );
+          bool x = sipCanConvertToType( internalRep, siptype,
+                                        SIP_NOT_NONE | SIP_NO_CONVERTORS );
           Py_DECREF( internalRep );
           return x;
         }
@@ -79,24 +79,24 @@ namespace anatomist
     int state = 0;
 
     T * obj = 0;
-    if( sipCanConvertToInstance( sipPy, siptype, SIP_NO_CONVERTORS ) )
+    if( sipCanConvertToType( sipPy, siptype, SIP_NO_CONVERTORS ) )
       obj = (T *)
-          sipConvertToInstance( sipPy, siptype, sipTransferObj,
-                                SIP_NO_CONVERTORS, &state, sipIsErr );
+          sipConvertToType( sipPy, siptype, sipTransferObj,
+                            SIP_NO_CONVERTORS, &state, sipIsErr );
     if( !obj && PyObject_HasAttrString( sipPy, "internalRep" ) )
     {
       PyObject *internalRep = PyObject_GetAttrString( sipPy, "internalRep" );
       if( internalRep )
       {
         obj = (T *)
-            sipConvertToInstance( internalRep, siptype, sipTransferObj,
-                                  SIP_NO_CONVERTORS, &state, sipIsErr );
+            sipConvertToType( internalRep, siptype, sipTransferObj,
+                              SIP_NO_CONVERTORS, &state, sipIsErr );
         Py_DECREF( internalRep );
       }
     }
     if( *sipIsErr && obj )
     {
-      sipReleaseInstance( obj, sipClass_anatomist_Referential, state );
+      sipReleaseType( obj, sipType_anatomist_Referential, state );
       obj = 0;
     }
     else if( obj )

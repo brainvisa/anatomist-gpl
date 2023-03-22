@@ -63,27 +63,27 @@ public:
     virtual anatomist::AIterator end() = 0;
     void eraseObject( anatomist::AObject *);
 
-    virtual float MinT() const /AutoGen/;
-    virtual float MaxT() const /AutoGen/;
+    virtual float MinT() const;
+    virtual float MaxT() const;
 
-    virtual vector_FLOAT voxelSize() const /AutoGen/;
-    virtual bool boundingBox( vector_FLOAT &, vector_FLOAT & ) const /AutoGen/;
-    virtual anatomist::AObject* objectAt( const vector_FLOAT &, float = 0 ) /AutoGen/;
-    virtual bool Is2DObject() /AutoGen/;
-    virtual bool Is3DObject() /AutoGen/;
-    virtual bool isTransparent() const /AutoGen/;
-    virtual void update( const anatomist::Observable*, void* ) /AutoGen/;
-    virtual bool CanRemove( anatomist::AObject * ) /AutoGen/;
-    virtual void setContentChanged() const /AutoGen/;
-    bool hasContentChanged() const /AutoGen/;
-    virtual void clearHasChangedFlags() const /AutoGen/;
-    virtual void setPalette( const anatomist::AObjectPalette & ) /AutoGen/;
+    virtual vector_FLOAT voxelSize() const;
+    virtual bool boundingBox( vector_FLOAT &, vector_FLOAT & ) const;
+    virtual anatomist::AObject* objectAt( const vector_FLOAT &, float = 0 );
+    virtual bool Is2DObject();
+    virtual bool Is3DObject();
+    virtual bool isTransparent() const;
+    virtual void update( const anatomist::Observable*, void* );
+    virtual bool CanRemove( anatomist::AObject * );
+    virtual void setContentChanged() const;
+    bool hasContentChanged() const;
+    virtual void clearHasChangedFlags() const;
+    virtual void setPalette( const anatomist::AObjectPalette & );
     virtual anatomist::GLComponent* glAPI();
     virtual list_AObjectPtr generativeChildren() const;
     virtual list_AObjectPtr renderedSubObjects(
       const anatomist::ViewState & ) const;
 
-    anatomist::AObject * __getitem__(int) /AutoGen/;
+    anatomist::AObject * __getitem__(int);
 %MethodCode
     if ( a0 < (int) sipCpp->size())
     {

@@ -28,42 +28,42 @@ namespace anatomist
 %ConvertToSubClassCode
   if( dynamic_cast<anatomist::RegularCommand *>( sipCpp ) )
     if( dynamic_cast<anatomist::CreateWindowCommand *>( sipCpp ) )
-      sipClass = sipClass_anatomist_CreateWindowCommand;
+      sipType = sipType_anatomist_CreateWindowCommand;
     else if( dynamic_cast<anatomist::AddObjectCommand *>( sipCpp ) )
-      sipClass = sipClass_anatomist_AddObjectCommand;
+      sipType = sipType_anatomist_AddObjectCommand;
     else if( dynamic_cast<anatomist::RemoveObjectCommand *>( sipCpp ) )
-      sipClass = sipClass_anatomist_RemoveObjectCommand;
+      sipType = sipType_anatomist_RemoveObjectCommand;
     else if( dynamic_cast<anatomist::FusionObjectsCommand *>( sipCpp ) )
-      sipClass = sipClass_anatomist_FusionObjectsCommand;
+      sipType = sipType_anatomist_FusionObjectsCommand;
     else if( dynamic_cast<anatomist::SetObjectPaletteCommand *>( sipCpp ) )
-      sipClass = sipClass_anatomist_SetObjectPaletteCommand;
+      sipType = sipType_anatomist_SetObjectPaletteCommand;
     else if( dynamic_cast<anatomist::AssignReferentialCommand *>( sipCpp ) )
-      sipClass = sipClass_anatomist_AssignReferentialCommand;
+      sipType = sipType_anatomist_AssignReferentialCommand;
     else if( dynamic_cast<anatomist::LoadTransformationCommand *>( sipCpp ) )
-      sipClass = sipClass_anatomist_LoadTransformationCommand;
+      sipType = sipType_anatomist_LoadTransformationCommand;
     else if( dynamic_cast<anatomist::NewPaletteCommand *>( sipCpp ) )
-      sipClass = sipClass_anatomist_NewPaletteCommand;
+      sipType = sipType_anatomist_NewPaletteCommand;
     else if( dynamic_cast<anatomist::GroupObjectsCommand *>( sipCpp ) )
-      sipClass = sipClass_anatomist_GroupObjectsCommand;
+      sipType = sipType_anatomist_GroupObjectsCommand;
     else if( dynamic_cast<anatomist::ObjectInfoCommand *>( sipCpp ) )
-      sipClass = sipClass_anatomist_ObjectInfoCommand;
+      sipType = sipType_anatomist_ObjectInfoCommand;
     else if( dynamic_cast<anatomist::GetInfoCommand *>( sipCpp ) )
-      sipClass = sipClass_anatomist_GetInfoCommand;
+      sipType = sipType_anatomist_GetInfoCommand;
     else if( dynamic_cast<anatomist::FusionInfoCommand *>( sipCpp ) )
-      sipClass = sipClass_anatomist_FusionInfoCommand;
+      sipType = sipType_anatomist_FusionInfoCommand;
     else
-      sipClass = sipClass_anatomist_RegularCommand;
+      sipType = sipType_anatomist_RegularCommand;
   else if( dynamic_cast<anatomist::WaitCommand *>( sipCpp ) )
     if( dynamic_cast<anatomist::LoadObjectCommand *>( sipCpp ) )
-      sipClass = sipClass_anatomist_LoadObjectCommand;
+      sipType = sipType_anatomist_LoadObjectCommand;
     else
-      sipClass = sipClass_anatomist_WaitCommand;
+      sipType = sipType_anatomist_WaitCommand;
   else if( dynamic_cast<anatomist::GenerateTextureCommand *>( sipCpp ) )
-    sipClass = sipClass_anatomist_GenerateTextureCommand;
+    sipType = sipType_anatomist_GenerateTextureCommand;
   else if( dynamic_cast<anatomist::ExtractTextureCommand *>( sipCpp ) )
-    sipClass = sipClass_anatomist_ExtractTextureCommand;
+    sipType = sipType_anatomist_ExtractTextureCommand;
   else
-    sipClass = 0;
+    sipType = 0;
 %End
 
 %TypeHeaderCode
@@ -169,28 +169,28 @@ namespace anatomist
         if( t == "AObject" )
         {
           sipRes =
-            sipConvertFromInstance( ptr, sipClass_anatomist_AObject, 0 );
+            sipConvertFromType( ptr, sipType_anatomist_AObject, 0 );
         }
         else if( t == "AWindow" )
         {
           sipRes =
-            sipConvertFromInstance( ptr, sipClass_anatomist_AWindow, 0 );
+            sipConvertFromType( ptr, sipType_anatomist_AWindow, 0 );
         }
         else if( t == "Referential" )
         {
           sipRes =
-            sipConvertFromInstance( ptr, sipClass_anatomist_Referential, 0 );
+            sipConvertFromType( ptr, sipType_anatomist_Referential, 0 );
         }
         else if( t == "Transformation" )
         {
           sipRes =
-            sipConvertFromInstance( ptr, sipClass_anatomist_Transformation,
+            sipConvertFromType( ptr, sipType_anatomist_Transformation,
                                     0 );
         }
         else if( t == "Widget" )
         {
           sipRes =
-            sipConvertFromInstance( ptr, sipClass_QWidget, 0 );
+            sipConvertFromType( ptr, sipType_QWidget, 0 );
         }
         else
         {
@@ -595,8 +595,8 @@ typedef std::set<anatomist::AWindow * > set_AWindowPtr;
             if( item )
               {
                 ao = reinterpret_cast<anatomist::AObject *>
-                  ( sipForceConvertToInstance( item,
-                    sipClass_anatomist_AObject, 0, 0, 0, &iserr ) );
+                  ( sipForceConvertToType( item,
+                    sipType_anatomist_AObject, 0, 0, 0, &iserr ) );
                 if( !ao || iserr )
                   {
                     sipIsErr = 1;
@@ -613,8 +613,8 @@ typedef std::set<anatomist::AWindow * > set_AWindowPtr;
                 if( item )
                   {
                     aw = reinterpret_cast<anatomist::AWindow *>
-                      ( sipForceConvertToInstance( itemn
-                        sipClass_anatomist_AWindow, 0, 0, 0, &iserr ) );
+                      ( sipForceConvertToType( itemn
+                        sipType_anatomist_AWindow, 0, 0, 0, &iserr ) );
                     if( !aw || iserr )
                       {
                         sipIsErr = 1;
@@ -702,8 +702,8 @@ typedef std::set<anatomist::AWindow * > set_AWindowPtr;
           if( item )
           {
             ao = reinterpret_cast<anatomist::AObject *>
-              ( sipForceConvertToInstance( item,
-                sipClass_anatomist_AObject, 0, 0, 0, &iserr ) );
+              ( sipForceConvertToType( item,
+                sipType_anatomist_AObject, 0, 0, 0, &iserr ) );
             if( !ao || iserr )
             {
               sipIsErr = 1;
@@ -777,8 +777,8 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
             if( item )
               {
                 ao = reinterpret_cast<anatomist::AObject *>
-                  ( sipForceConvertToInstance( item,
-                    sipClass_anatomist_AObject, 0, 0, 0, &iserr ) );
+                  ( sipForceConvertToType( item,
+                    sipType_anatomist_AObject, 0, 0, 0, &iserr ) );
                 if( !ao || iserr )
                   {
                     sipIsErr = 1;
@@ -1031,8 +1031,8 @@ typedef std::set<std::string> set_STRING;
         if( item )
         {
           ao = reinterpret_cast<anatomist::AObject *>
-            ( sipForceConvertToInstance( item,
-              sipClass_anatomist_AObject, 0, 0, 0, &iserr ) );
+            ( sipForceConvertToType( item,
+              sipType_anatomist_AObject, 0, 0, 0, &iserr ) );
           if( !ao || iserr )
           {
             sipIsErr = 1;

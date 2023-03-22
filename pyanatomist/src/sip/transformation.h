@@ -37,22 +37,22 @@
 
 inline PyObject* pyanatomistConvertFrom_anatomist_TransformationP( void * a )
 {
-  return sipConvertFromInstance( a, sipClass_anatomist_Transformation, 0 );
+  return sipConvertFromType( a, sipType_anatomist_Transformation, 0 );
 }
 
 
 inline void* pyanatomistConvertTo_anatomist_TransformationP( PyObject * o )
 {
   int isErr = 0;
-  return sipConvertToInstance( o, sipClass_anatomist_Transformation, 0, 0, 0,
-                               &isErr );
+  return sipConvertToType( o, sipType_anatomist_Transformation, 0, 0, 0,
+                           &isErr );
 }
 
 
 inline int pyanatomistTransformationP_Check( PyObject* o )
 {
-  return sipCanConvertToInstance( o, sipClass_anatomist_Transformation,
-                                  SIP_NOT_NONE | SIP_NO_CONVERTORS );
+  return sipCanConvertToType( o, sipType_anatomist_Transformation,
+                              SIP_NOT_NONE | SIP_NO_CONVERTORS );
 }
 
 #endif

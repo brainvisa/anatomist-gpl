@@ -119,6 +119,7 @@ namespace anatomist
     void obsSetChanged( const std::string &, bool = true ) const;
   };
 
+
   class Observer
   {
 %TypeHeaderCode

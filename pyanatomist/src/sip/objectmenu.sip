@@ -121,6 +121,7 @@ public:
 
 %TypeCode
 #include <anatomist/selection/qSelMenu.h>
+#include <QMenu>
 %End
 
   public:

@@ -44,7 +44,7 @@ typedef std::list<anatomist::RefGLItem> list_RefGLItem;
 inline void* pyanatomistConvertTo_RefGLItem( PyObject* obj )
 {
   int sipIsErr = 0;
-  void *ptr = sipForceConvertToInstance( obj, sipClass_rc_ptr_GLItem,
+  void *ptr = sipForceConvertToType( obj, sipType_rc_ptr_GLItem,
     0, 0, 0, &sipIsErr );
   if( sipIsErr )
     return 0;
@@ -56,16 +56,16 @@ inline PyObject* pyanatomistConvertFrom_RefGLItem( void* obj )
   carto::rc_ptr<anatomist::GLItem>  * robj
       = (carto::rc_ptr<anatomist::GLItem> *) obj;
   PyObject *ptr
-      = sipConvertFromInstance( new carto::rc_ptr<anatomist::GLItem>( *robj ),
-                                sipClass_rc_ptr_GLItem,
-                                Py_None );
+      = sipConvertFromType( new carto::rc_ptr<anatomist::GLItem>( *robj ),
+                            sipType_rc_ptr_GLItem,
+                            Py_None );
   return ptr;
 }
 
 inline int pyanatomistObjectRefGLItem_Check( PyObject* o )
 {
-   return sipCanConvertToInstance( o, sipClass_rc_ptr_GLItem,
-                                   SIP_NOT_NONE | SIP_NO_CONVERTORS );
+   return sipCanConvertToType( o, sipType_rc_ptr_GLItem,
+                               SIP_NOT_NONE | SIP_NO_CONVERTORS );
 }
 #endif
 

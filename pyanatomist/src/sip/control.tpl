@@ -35,65 +35,65 @@ class Action
   {
     if( dynamic_cast<anatomist::ContinuousTrackball *>( sipCpp ) )
     {
-      sipClass = sipClass_anatomist_ContinuousTrackball;
+      sipType = sipType_anatomist_ContinuousTrackball;
       *sipCppRet = static_cast<anatomist::ContinuousTrackball *>( sipCpp );
     }
     else if (dynamic_cast<anatomist::Transformer *>(sipCpp))
     {
         if (dynamic_cast<anatomist::PlanarTransformer *>(sipCpp))
         {
-            sipClass = sipClass_anatomist_PlanarTransformer;
+            sipType = sipType_anatomist_PlanarTransformer;
             *sipCppRet = static_cast<anatomist::PlanarTransformer *>(sipCpp);
         }
         else
         {
-            sipClass = sipClass_anatomist_Transformer;
+            sipType = sipType_anatomist_Transformer;
             *sipCppRet = static_cast<anatomist::Transformer *>(sipCpp);
         }
     }
     else
-      sipClass = sipClass_anatomist_Trackball;
+      sipType = sipType_anatomist_Trackball;
   }
   else if( dynamic_cast<anatomist::WindowActions *>( sipCpp ) )
-    sipClass = sipClass_anatomist_WindowActions;
+    sipType = sipType_anatomist_WindowActions;
   else if( dynamic_cast<anatomist::LinkAction *>( sipCpp ) )
-    sipClass = sipClass_anatomist_LinkAction;
+    sipType = sipType_anatomist_LinkAction;
   else if( dynamic_cast<anatomist::MenuAction *>( sipCpp ) )
-    sipClass = sipClass_anatomist_MenuAction;
+    sipType = sipType_anatomist_MenuAction;
   else if( dynamic_cast<anatomist::SelectAction *>( sipCpp ) )
-    sipClass = sipClass_anatomist_SelectAction;
+    sipType = sipType_anatomist_SelectAction;
   else if( dynamic_cast<anatomist::Zoom3DAction *>( sipCpp ) )
-    sipClass = sipClass_anatomist_Zoom3DAction;
+    sipType = sipType_anatomist_Zoom3DAction;
   else if( dynamic_cast<anatomist::Translate3DAction *>( sipCpp ) )
-    sipClass = sipClass_anatomist_Translate3DAction;
+    sipType = sipType_anatomist_Translate3DAction;
   else if( dynamic_cast<anatomist::Sync3DAction *>( sipCpp ) )
-    sipClass = sipClass_anatomist_Sync3DAction;
+    sipType = sipType_anatomist_Sync3DAction;
   else if( dynamic_cast<anatomist::SliceAction *>( sipCpp ) )
-    sipClass = sipClass_anatomist_SliceAction;
+    sipType = sipType_anatomist_SliceAction;
   else if( dynamic_cast<anatomist::DragObjectAction *>( sipCpp ) )
-    sipClass = sipClass_anatomist_DragObjectAction;
+    sipType = sipType_anatomist_DragObjectAction;
   else if( dynamic_cast<anatomist::LabelEditAction *>( sipCpp ) )
-    sipClass = sipClass_anatomist_LabelEditAction;
+    sipType = sipType_anatomist_LabelEditAction;
   else if(dynamic_cast<anatomist::TranslaterAction *>(sipCpp))
   {
     if (dynamic_cast<anatomist::ResizerAction *>(sipCpp))
     {
-        sipClass = sipClass_anatomist_ResizerAction;
+        sipType = sipType_anatomist_ResizerAction;
         *sipCppRet = static_cast<anatomist::ResizerAction *>(sipCpp);
     }
     else
     {
-        sipClass = sipClass_anatomist_TranslaterAction;
+        sipType = sipType_anatomist_TranslaterAction;
         *sipCppRet = static_cast<anatomist::TranslaterAction *>(sipCpp);
     }
   }
   else if( dynamic_cast<anatomist::MovieAction *>( sipCpp ) )
   {
-    sipClass = sipClass_anatomist_MovieAction;
+    sipType = sipType_anatomist_MovieAction;
     *sipCppRet = static_cast<anatomist::MovieAction *>( sipCpp );
   }
   else
-    sipClass = 0;
+    sipType = 0;
 %End
 
 public:
@@ -119,7 +119,7 @@ public:
   public:
     virtual ~ActionCreatorBase();
 %#if SIP_VERSION == 0x040403%
-    virtual anatomist::Action* operator () () /Factory, AutoGen/;
+    virtual anatomist::Action* operator () () /Factory;
 %#else%
     virtual anatomist::Action* operator () () =0 /Factory/;
 %#endif%
@@ -172,19 +172,19 @@ class Control
 
 %ConvertToSubClassCode
   if( dynamic_cast<anatomist::Control3D *>( sipCpp ) )
-    sipClass = sipClass_anatomist_Control3D;
+    sipType = sipType_anatomist_Control3D;
   else if( dynamic_cast<anatomist::Select3DControl *>( sipCpp ) )
-    sipClass = sipClass_anatomist_Select3DControl;
+    sipType = sipType_anatomist_Select3DControl;
   else if( dynamic_cast<anatomist::FlightControl *>( sipCpp ) )
-    sipClass = sipClass_anatomist_FlightControl;
+    sipType = sipType_anatomist_FlightControl;
   else if( dynamic_cast<anatomist::ObliqueControl *>( sipCpp ) )
-    sipClass = sipClass_anatomist_ObliqueControl;
+    sipType = sipType_anatomist_ObliqueControl;
   else if( dynamic_cast<anatomist::TransformControl *>( sipCpp ) )
-    sipClass = sipClass_anatomist_TransformControl;
+    sipType = sipType_anatomist_TransformControl;
   else if( dynamic_cast<anatomist::CutControl *>( sipCpp ) )
-    sipClass = sipClass_anatomist_CutControl;
+    sipType = sipType_anatomist_CutControl;
   else
-    sipClass = 0;
+    sipType = 0;
 %End
 
 public:
@@ -240,7 +240,7 @@ public:
   PyObject* action;
   for( i=ac.begin(); i!=e; ++i )
   {
-    action = sipConvertFromInstance( i->second, sipClass_anatomist_Action, 0 );
+    action = sipConvertFromType( i->second, sipType_anatomist_Action, 0 );
     PyDict_SetItemString( sipRes, i->first.c_str(), action );
     Py_DecRef( action );
   }
@@ -326,7 +326,7 @@ public:
   public:
     virtual ~ControlCreatorBase();
 %#if SIP_VERSION == 0x040403%
-    virtual anatomist::Control* operator () () /Factory, AutoGen/;
+    virtual anatomist::Control* operator () () /Factory/;
 %#else%
     virtual anatomist::Control* operator () () =0 /Factory/;
 %#endif%

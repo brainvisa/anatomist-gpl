@@ -13,7 +13,7 @@ class Referential
 
 %ConvertToTypeCode
   return anatomist::sipConvertToTypeCodeFromInternalRep( sipPy,
-    sipClass_anatomist_Referential, sipTransferObj, sipIsErr, sipCppPtr );
+    sipType_anatomist_Referential, sipTransferObj, sipIsErr, sipCppPtr );
 %End
 
 
@@ -51,7 +51,7 @@ class Transformation
 
 %ConvertToTypeCode
   return anatomist::sipConvertToTypeCodeFromInternalRep( sipPy,
-    sipClass_anatomist_Transformation, sipTransferObj, sipIsErr, sipCppPtr );
+    sipType_anatomist_Transformation, sipTransferObj, sipIsErr, sipCppPtr );
 %End
 
 public:
@@ -85,11 +85,11 @@ public:
   sipCpp->transformBoundingBox( *a0, *a1, bmin, bmax );
   sipRes = PyTuple_New( 2 );
   PyTuple_SetItem( sipRes, 0,
-    sipConvertFromInstance( new Point3df( bmin ),
-      sipClass_AimsVector_FLOAT_3, Py_None ) );
+    sipConvertFromType( new Point3df( bmin ),
+      sipType_AimsVector_FLOAT_3, Py_None ) );
   PyTuple_SetItem( sipRes, 1,
-    sipConvertFromInstance( new Point3df( bmax ),
-      sipClass_AimsVector_FLOAT_3, Py_None ) );
+    sipConvertFromType( new Point3df( bmax ),
+      sipType_AimsVector_FLOAT_3, Py_None ) );
 %End
 };
 

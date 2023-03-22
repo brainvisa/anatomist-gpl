@@ -23,7 +23,7 @@ from soma.qt_gui.qt_backend.QtWidgets import QWidget, QLabel, QVBoxLayout
 from soma.qt_gui.qt_backend.QtWidgets import QToolBar, QHBoxLayout
 from soma.qt_gui.qt_backend.QtWidgets import QDockWidget, QErrorMessage
 from soma.qt_gui.qt_backend.QtWidgets import QAction
-from soma.qt_gui.qt_backend.QtWidgets import QDesktopWidget, QTreeWidget
+from soma.qt_gui.qt_backend.QtWidgets import QTreeWidget
 from soma.qt_gui.qt_backend.QtWidgets import QTreeWidgetItem, QMenu
 from soma.qt_gui.qt_backend.QtWidgets import QFileDialog
 from soma.qt_gui.qt_backend.QtWidgets import QTreeWidgetItemIterator
@@ -592,7 +592,11 @@ class AtlasJsonRois(QMainWindow):
     def centerOnScreen(self):
         '''centerOnScreen()
             centers the window on the screen.'''
-        resolution = QDesktopWidget().screenGeometry()
+        if hasattr(self, 'screen'):
+            screen = self.screen()
+        else:
+            screen = QApplication.primaryScreen()
+        resolution = screen.geometry()
         self.move((resolution.width() / 2) - (self.frameSize().width() / 2),
                   (resolution.height() / 2) - (self.frameSize().height() / 2))
 #------------------------------------------------------------------------------
