@@ -80,6 +80,8 @@ public:
     virtual void setPalette( const anatomist::AObjectPalette & );
     virtual anatomist::GLComponent* glAPI();
     virtual list_AObjectPtr generativeChildren() const;
+    virtual list_AObjectPtr renderedSubObjects(
+      const anatomist::ViewState & ) const;
 
     anatomist::AObject * __getitem__(int);
 %MethodCode

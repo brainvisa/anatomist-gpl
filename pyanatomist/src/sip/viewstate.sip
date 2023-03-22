@@ -8,6 +8,16 @@ class ViewState
 #include <anatomist/window/viewstate.h>
 %End
 
+%ConvertToSubClassCode
+  sipType = sipType_anatomist_ViewState;
+  *sipCppRet = sipCpp;
+  if( dynamic_cast<anatomist::SliceViewState *>( sipCpp ) )
+  {
+    *sipCppRet = dynamic_cast<anatomist::SliceViewState *>( sipCpp );
+      sipType = sipType_anatomist_SliceViewState;
+  }
+%End
+
 public:
   ViewState( float t = 0, anatomist::AWindow * = 0 );
   ViewState( const vector_FLOAT & timedims, anatomist::AWindow * = 0 );

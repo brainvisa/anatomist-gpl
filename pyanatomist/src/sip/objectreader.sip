@@ -15,7 +15,7 @@ namespace anatomist
       ~PostRegisterList();
     };
 
-    class LoadFunctionClass
+    class LoadFunctionClass : carto::RCObject
     {
     public:
       virtual ~LoadFunctionClass();

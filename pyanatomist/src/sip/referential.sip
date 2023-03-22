@@ -35,6 +35,7 @@ public:
   static anatomist::Referential *referentialOfUUID( const std::string &uuid );
   static anatomist::Referential *acPcReferential();
   static anatomist::Referential *mniTemplateReferential();
+  static void clearUnusedReferentials();
 };
 
 

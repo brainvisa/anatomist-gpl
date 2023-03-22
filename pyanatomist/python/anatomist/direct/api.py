@@ -105,20 +105,20 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
     def __singleton_init__(self, *args, **kwargs):
         # call C++ constructor now with all arguments, otherwise it will be called
         # via Singleton.__init__ without arguments.
+        self.context = cpp.CommandContext.defaultContext()
+        self.handlers = {}
+        self._loadCbks = set()
+        global __version__
         cpp.Anatomist.__init__(self, *args, **kwargs)
         super(Anatomist, self).__singleton_init__(*args, **kwargs)
         from soma.qt_gui.qt_backend import QtGui
         import threading
         self.log("Anatomist started.")
-        self.context = cpp.CommandContext.defaultContext()
-        self.handlers = {}
-        self._loadCbks = set()
-        global __version__
 
     def __del__(self):
         # quit the app and delete it
         # (avoid calling the overload of __getattr__ here)
-        s = super(Anatomist, self)
+        s = super()
         quit = s.__getattribute__('quit')
         quit()
         if hasattr(s, '__del__'):
@@ -638,8 +638,11 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         trans: :class:`Transformation`
             Transformation to apply to convert coordinates from one referent
         """
-        c = cpp.LoadTransformationCommand(filename, origin.getInternalRep(),
-                                          destination.getInternalRep())
+        if hasattr(origin, 'getInternalRep'):
+            origin = origin.getInternalRep()
+        if hasattr(destination, 'getInternalRep'):
+            destination = destination.getInternalRep()
+        c = cpp.LoadTransformationCommand(filename, origin, destination)
         self.execute(c)
         return self.Transformation(self, c.trans())
 
@@ -661,8 +664,11 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         trans: :class:`Transformation`
             New transformation
         """
-        c = cpp.LoadTransformationCommand(
-            matrix, origin.getInternalRep(), destination.getInternalRep())
+        if hasattr(origin, 'getInternalRep'):
+            origin = origin.getInternalRep()
+        if hasattr(destination, 'getInternalRep'):
+            destination = destination.getInternalRep()
+        c = cpp.LoadTransformationCommand(matrix, origin, destination)
         self.execute(c)
         return self.Transformation(self, c.trans())
 
@@ -1891,15 +1897,39 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                 self.anatomistinstance.execute('DeleteElement',
                                                elements=[self.internalRep])
 
-            def __cmp__(self, y):
+            def __eq__(self, y):
                 if isinstance(y, Anatomist.AWindowsBlock.WidgetProxy):
-                    return cmp(self.widget, y.widget)
-                return cmp(self.widget, y)
+                    return self.widget == y.widget
+                return self.widget == y
+
+            def __lt__(self, y):
+                if isinstance(y, Anatomist.AWindowsBlock.WidgetProxy):
+                    return self.widget < y.widget
+                return self.widget < y
+
+            def __le__(self, y):
+                if isinstance(y, Anatomist.AWindowsBlock.WidgetProxy):
+                    return self.widget <= y.widget
+                return self.widget <= y
+
+            def __gt__(self, y):
+                if isinstance(y, Anatomist.AWindowsBlock.WidgetProxy):
+                    return self.widget > y.widget
+                return self.widget > y
+
+            def __ge__(self, y):
+                if isinstance(y, Anatomist.AWindowsBlock.WidgetProxy):
+                    return self.widget >= y.widget
+                return self.widget >= y
+
+            def __hash__(self):
+                return id(self.widget)
 
         def __init__(self, anatomistinstance=None, nbCols=2, nbRows=0,
                      widgetproxy=None):
             super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance,
-                                                          nbCols=nbCols, nbRows=nbRows)
+                                                          nbCols=nbCols,
+                                                          nbRows=nbRows)
             if widgetproxy is not None:
                 self.internalRep = widgetproxy.internalRep
                 self.internalWidget = widgetproxy

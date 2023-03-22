@@ -40,7 +40,7 @@ for z in [[(x, y) for y in basetypes] for x in basetypes]:
 todo = {'rcptr': ['anatomist::EventHandler', 'anatomist::Unserializer',
                   'anatomist::GLItem', 'anatomist::AObject',
                   'anatomist::AWindow', 'anatomist::APalette',
-                  'anatomist::ObjectMenu', ],
+                  'anatomist::ObjectMenu', 'anatomist::ViewState'],
         'asurface': ['3', '2'],
         'control': ['Void'],
         'vector': ['anatomist::AObject *'],

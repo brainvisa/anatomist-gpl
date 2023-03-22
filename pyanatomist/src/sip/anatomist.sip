@@ -41,6 +41,7 @@
 %Include command.sip
 %Include event.sip
 %Include rcptr_EventHandler.sip
+%Include rcptr_ViewState.sip
 %Include module.sip
 %Include actions.sip
 %Include set_AWindowPtr.sip
