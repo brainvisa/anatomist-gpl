@@ -220,7 +220,8 @@ anatomist::PaletteList & AnatomistSip::palettes()
 }
 
 
-Point3df AnatomistSip::lastPosition( const Referential *toref ) const
+Point3df AnatomistSip::lastPosition(
+  const anatomist::Referential *toref ) const
 {
   return theAnatomist->lastPosition( toref );
 }
