@@ -178,7 +178,9 @@ def test_qapp():
     for mod in mods:
         if mod in sys.modules:
             from soma.qt_gui.qt_backend import Qt
-            if Qt.QApplication.instance() is not None:
+            if Qt.QApplication.instance() is not None \
+                    and isinstance(Qt.QApplication.instance(),
+                                   Qt.QApplication):
                 return 'QApp'
             return 'QtGui'
     return None
