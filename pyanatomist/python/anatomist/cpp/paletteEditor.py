@@ -257,10 +257,10 @@ class PaletteEditor(QtGui.QGroupBox):
                     self.sliderPrecision) + self.real_min
 
         self.minsb.blockSignals(True)
-        self.minsb.setValue(real_min)
+        self.minsb.setValue(int(real_min))
         self.minsb.blockSignals(False)
         self.maxsb.blockSignals(True)
-        self.maxsb.setValue(real_max)
+        self.maxsb.setValue(int(real_max))
         self.maxsb.blockSignals(False)
 
         self.paletteMinMaxChanged.emit(self.image)
