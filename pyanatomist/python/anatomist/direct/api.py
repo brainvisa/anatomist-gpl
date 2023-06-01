@@ -1171,7 +1171,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         elif isinstance(v, (six.string_types, int, float, dict,
                             np.int16, np.int32, np.int64, np.int8,
                             np.uint16, np.uint32, np.uint64, np.uint8,
-                            np.float, np.float16, np.float32, np.float64,
+                            np.float16, np.float32, np.float64,
                             np.float128)):
             return v
         raise TypeError('Expecting an Anatomist object but got one of type %s'
