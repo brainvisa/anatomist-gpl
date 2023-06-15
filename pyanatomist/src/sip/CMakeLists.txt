@@ -48,5 +48,5 @@ target_link_libraries( anatomistsip
   pyanatomistexports
   "${AIMS_PYAIMS_LIBRARY}" )
 BRAINVISA_INSTALL( TARGETS anatomistsip 
-                   DESTINATION python/anatomist/cpp
+                   DESTINATION $PYTHON_INSTALL_DIRECTORY/anatomist/cpp
                    COMPONENT ${PROJECT_NAME} )
