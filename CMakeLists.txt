@@ -42,8 +42,8 @@ endif()
 include_directories( ${ANATOMIST-GPL_INCLUDE_DIRS} )
 
 configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/config/info.py.in" "${CMAKE_BINARY_DIR}/${PYTHON_INSTALL_DIRECTORY}/anatomist/info.py" @ONLY )
-BRAINVISA_INSTALL( FILES "${CMAKE_BINARY_DIR}/python/anatomist/info.py"
-                   DESTINATION "python/anatomist"
+BRAINVISA_INSTALL( FILES "${CMAKE_BINARY_DIR}/${PYTHON_INSTALL_DIRECTORY}/anatomist/info.py"
+                   DESTINATION "${PYTHON_INSTALL_DIRECTORY}/anatomist"
                    COMPONENT ${PROJECT_NAME} )
 
 # don't warn on obsolete classes within this library: we still provide obsolete
