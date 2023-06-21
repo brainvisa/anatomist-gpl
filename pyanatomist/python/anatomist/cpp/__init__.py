@@ -172,6 +172,13 @@ del path, sep
 from soma import aims
 from soma.importer import ExtendedImporter
 
+try:
+    # QtWebEngineWidgets must be imported before the qApp is built
+    from soma.qt_gui.qt_backend import QtWebEngineWidgets
+except ImportError:
+    pass  # never mind
+
+
 # force using sip API v2 for PyQt4
 sip_classes = ['QString', 'QVariant', 'QDate', 'QDateTime',
                'QTextStream', 'QTime', 'QUrl']
