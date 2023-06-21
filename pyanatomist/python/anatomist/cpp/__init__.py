@@ -109,44 +109,10 @@ import os
 import sys
 import string
 import glob
-import operator
-import types
 import numpy
 import six
 import collections
 import logging
-
-
-def isSequenceType(item):
-    if isinstance(item, collections.abc.Sequence):
-        return True
-    if hasattr(item, 'isArray'):
-        # aims Object API
-        return item.isArray()
-    if isMappingType(item):
-        return False
-    methods = ['__getitem__', '__contains__', '__iter__', '__len__']
-    # should also include: count, index but pyaims sequences do not have them
-    for m in methods:
-        if not hasattr(item, m):
-            return False
-    return True
-
-
-def isMappingType(item):
-    if isinstance(item, collections.abc.Mapping):
-        return True
-    if hasattr(item, 'isDictionary'):
-        # aims Object API
-        return item.isDictionary()
-    methods = ['get', 'items', 'keys', 'values', '__getitem__', '__iter__',
-               '__contains__', '__len__']
-    if six.PY2:
-        methods.append('iteritems')
-    for m in methods:
-        if not hasattr(item, m):
-            return False
-    return True
 
 
 path = os.path.dirname(__file__)
@@ -171,12 +137,18 @@ del path, sep
 
 from soma import aims
 from soma.importer import ExtendedImporter
+from soma.qt_gui import qt_backend
+qt_backend.set_qt_backend(compatible_qt5=True, pyqt_api=2)
 
+fdi = aims.carto.fdinhibitor(2)
+fdi.close()  # disable stderr during the next import
 try:
     # QtWebEngineWidgets must be imported before the qApp is built
     from soma.qt_gui.qt_backend import QtWebEngineWidgets
 except ImportError:
     pass  # never mind
+fdi.open()  # restore stderr
+del fdi
 
 
 # force using sip API v2 for PyQt4
@@ -199,9 +171,6 @@ ExtendedImporter().importInModule('', globals(), locals(), 'anatomistsip',
                                   ['anatomistsip.anatomist'])
 del ExtendedImporter
 
-from soma.qt_gui import qt_backend
-qt_backend.set_qt_backend(compatible_qt5=True, pyqt_api=2)
-
 from anatomistsip import *
 
 aims.__fixsipclasses__(list(globals().items()))
@@ -209,6 +178,39 @@ aims.__fixsipclasses__(list(globals().items()))
 loaded_modules = []
 global _anatomist_modsloaded
 _anatomist_modsloaded = 0
+
+
+def isMappingType(item):
+    if isinstance(item, collections.abc.Mapping):
+        return True
+    if hasattr(item, 'isDictionary'):
+        # aims Object API
+        return item.isDictionary()
+    methods = ['get', 'items', 'keys', 'values', '__getitem__', '__iter__',
+               '__contains__', '__len__']
+    if six.PY2:
+        methods.append('iteritems')
+    for m in methods:
+        if not hasattr(item, m):
+            return False
+    return True
+
+
+def isSequenceType(item):
+    if isinstance(item, collections.abc.Sequence):
+        return True
+    if hasattr(item, 'isArray'):
+        # aims Object API
+        return item.isArray()
+    if isMappingType(item):
+        return False
+    methods = ['__getitem__', '__contains__', '__iter__', '__len__']
+    # should also include: count, index but pyaims sequences do not have them
+    for m in methods:
+        if not hasattr(item, m):
+            return False
+    return True
+
 
 # update AObjectConverter class to be more flexible
 
