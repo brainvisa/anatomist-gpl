@@ -1,5 +1,9 @@
 %Timeline { Qt_4 Qt_5 Qt_6 }
 
+%ModuleHeaderCode
+#include <pyaims/sipnewtypedefs.h>
+%End
+
 %Include observer.sip
 %Include material.sip
 %Include primitive.sip
