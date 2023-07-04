@@ -102,7 +102,7 @@ def test_glx(glxinfo_cmd=None, xdpyinfo_cmd=None, timeout=5.):
                             universal_newlines=True)
             try:
                 glxinfo, glxerr = process.communicate(timeout=5)
-            except TimeoutExpired:
+            except subprocess.TimeoutExpired:
                 process.kill()
                 glxinfo, glxerr = process.communicate()
                 raise subprocess.TimeoutExpired(process.args, 5,
@@ -170,19 +170,22 @@ def test_opengl(pid=None, verbose=False):
 
 def test_qapp():
     ''' If QtGui is already loaded, switching to VirtualGL in the running
-    process leads to segfaults.
+    process leads to segfaults, or even using GLX in PyQt6.
     Moreover if QApplication is instantiated, the display is already connected
     and cannot change in Qt afterwards.
+    However if only a QCoreApplication exists, it is possible to instantiate a
+    QApplication in addition (without deleting the QCoreApplication). But
+    VirtualGL cannot be used.
     '''
-    mods = ('PyQt4.QtGui', 'PyQt5.QtGui', 'PySide.QtGui')
-    for mod in mods:
-        if mod in sys.modules:
-            from soma.qt_gui.qt_backend import Qt
-            if Qt.QApplication.instance() is not None \
-                    and isinstance(Qt.QApplication.instance(),
-                                   Qt.QApplication):
-                return 'QApp'
-            return 'QtGui'
+    from soma.qt_gui.qt_backend import QtCore
+    if QtCore.QCoreApplication.instance() is not None:
+        if QtCore.QCoreApplication.instance().__class__.__name__ \
+                != 'QCoreApplication':
+            return 'QApp'
+        from soma.qt_gui import qt_backend
+        if qt_backend.qt_backend == 'PyQt6' and 'PyQt6.QtGui' in sys.modules:
+            return 'QApp'  # QtGui is loaded: don't use headless
+        return 'QtCore'
     return None
 
 
@@ -283,6 +286,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
         extension. This is useful when GLX is present but does not work when
         OpenGL is used.
     '''
+
     global xvfb
     global original_display
 
@@ -310,6 +314,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
         return result
 
     qtapp = test_qapp()
+    # print('qtapp:', qtapp)
     result.qtapp = qtapp
 
     if qtapp == 'QApp':
@@ -325,7 +330,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
     xdpyinfo_cmd = distutils.spawn.find_executable('xdpyinfo')
     # if not xdpyinfo_cmd:
     # not a X client, probably not Linux
-    #use_xvfb = False
+    # use_xvfb = False
     xvfb_cmd = distutils.spawn.find_executable('Xvfb')
     if not xvfb_cmd:
         use_xvfb = False
@@ -390,6 +395,10 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
                         print('But VirtualGL could not be loaded...')
 
                     # test_opengl(verbose=True)
+        else:
+            print('Too dangerous to use VirtualGL: QCoreApplication is '
+                  'instantiated, or GLX is not completely OK, or OpenGL libs '
+                  'are loaded.')
 
         if not glx and not gl_libs:
             # try Mesa, if found

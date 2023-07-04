@@ -66,6 +66,7 @@ void unexpectedExceptionHandler()
 
 AnatomistSip::AnatomistSip( const vector<string> & argv )
 {
+  // cout << "AnatomistSip::AnatomistSip\n";
   set_unexpected( unexpectedExceptionHandler );
   try
     {
@@ -96,16 +97,23 @@ AnatomistSip::AnatomistSip( const vector<string> & argv )
           falseArgv[n] = 0;
         }
 
-        if( !qApp || !dynamic_cast<QApplication *>( qApp ) )
+        if( !QApplication::instance()
+            || !dynamic_cast<QApplication *>( QApplication::instance() ) )
         {
-          /* cerr << "build a QApplication" << endl;
-          cout << "argc: " << falseargc << endl; */
+          cerr << "existing QApplication: " << QApplication::instance() << endl;
+          if( QApplication::instance() )
+            cout << ": "  << typeid( *QApplication::instance() ).name() << endl;
+          // cerr << "build a QApplication" << endl;
+          // cout << "argc: " << falseargc << endl;
+          // needed in WebEngine helps and other extensions in python
+          if( !QApplication::instance() )
+            QCoreApplication::setAttribute( Qt::AA_ShareOpenGLContexts );
+          cout << "create qapp\n";
           new QApplication( falseargc, falseArgv );
+          cout << "done\n";
         }
-        // else cout << "existing qApp\n";
         new anatomist::Anatomist( falseargc, (const char **) falseArgv,
                                   "PyAnatomist GUI" );
-
         theAnatomist->initialize();
         new QSelectFactory;
       }
