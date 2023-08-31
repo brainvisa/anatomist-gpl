@@ -60,7 +60,7 @@ By default, the brainvisa module uses the threaded implementation. But it is pos
 Using the API
 -------------
 
-In this part, we will use the same story as in the :anatomist:`anatomist tutorial <ana_training/en/html/index.html>` and see how to do the same with a python script. The data for the examples in this section are the same: ftp://ftp.cea.fr/pub/dsv/anatomist/data/demo_data.zip.
+In this part, we will use the same story as in the :anatomist:`anatomist tutorial <ana_training/en/html/index.html>` and see how to do the same with a python script. The data for the examples in this section are the same: https://brainvisa.info/download/data/demo_data.zip.
 
 The following examples use the general API functions that are available in both direct and socket implementations.
 To run the following examples, we will use an interactive python shell `IPython <http://ipython.org>`_. It is much more practical than the classic python shell because it offers useful features like automatic completion. This program is available in the BrainVISA package with all other executable programs in the *bin* directory of the BrainVISA package directory. *IPython* should be run with the option *--gui=qt*, which runs a Qt event loop, needed for the graphical interface.
