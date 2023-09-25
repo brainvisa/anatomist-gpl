@@ -145,7 +145,7 @@ mosaic output images
     if options.shape is None:
         number = int(options.number)
         # shape
-        page_n = (global_n / number)
+        page_n = int(global_n / number)
         if page_n * number < global_n:
             page_n += 1
     else:
