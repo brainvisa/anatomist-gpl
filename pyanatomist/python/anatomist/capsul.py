@@ -1,22 +1,19 @@
-from __future__ import print_function
-from __future__ import absolute_import
 
-import os
-from capsul.api import InteractiveProcess
-from traits.api import File, Enum, Int
+from capsul.api import Process
+from soma.controller import field, File, Literal
 import math
 from six.moves import range
 
 
-class AnatomistSceneProcess(InteractiveProcess):
+class AnatomistSceneProcess(Process):
     '''
-    Base class for all viewers and snapshot generators. All derived 
-    classes must define a create_anatomist_view method that create 
+    Base class for all viewers and snapshot generators. All derived
+    classes must define a create_anatomist_view method that create
     an anatomist window containing a scene.
     '''
-    output = File(output=True)
-    output_width = Int(None, output=False)
-    output_height = Int(None, output=False)
+    output: File = field(type_=File, write=True)
+    output_width: int = None
+    output_height: int = None
 
     def __init__(self, *args, **kwargs):
         super(AnatomistSceneProcess, self).__init__(*args, **kwargs)
@@ -43,7 +40,7 @@ class AnatomistSceneProcess(InteractiveProcess):
                 from anatomist.headless import HeadlessAnatomist
                 try:
                     a = HeadlessAnatomist('-b')
-                except:
+                except Exception:
                     a = Anatomist('-b')
                 self.set_anatomist(a)
         return self._anatomist
@@ -51,9 +48,9 @@ class AnatomistSceneProcess(InteractiveProcess):
     def create_anatomist_view(self):
         '''
         This method must be defined in derived classes. It is
-        responsible for the creation of the Anatomist scene. The 
+        responsible for the creation of the Anatomist scene. The
         value returned by the method is a dictionary with two items :
-        'objects' that contains the list of created Anatomist objects 
+        'objects' that contains the list of created Anatomist objects
         and 'windows' that contains the list of anatomist windows created
         by this method.
         '''
@@ -63,12 +60,11 @@ class AnatomistSceneProcess(InteractiveProcess):
         '''
         This method is called to create a snapshot for this scene
         factory. view_objects must be the result
-        of self.create_anatomist_view(). It creates a snapshot of 
+        of self.create_anatomist_view(). It creates a snapshot of
         the first Anatomist window.
         '''
         windows = view_objects['windows']
         if windows:
-            from soma.qt_gui.qt_backend import QtGui
             # still needed until fixed in Anatomist C++ lib
             # QtGui.qApp.processEvents()
             windows[0].snapshot(self.output, self.output_width,
@@ -77,7 +73,7 @@ class AnatomistSceneProcess(InteractiveProcess):
     def _run_process(self):
         '''
         Process execution method. First, it calls self.create_anatomist_view().
-        Then, if self.snapshot is defined and not empty, 
+        Then, if self.snapshot is defined and not empty,
         it calls self.snapshot(). Finally, if the process is interactive, all
         Anatomist windows created are displayed.
         '''
@@ -96,8 +92,8 @@ class Anatomist3DWindowProcess(AnatomistSceneProcess):
     3D-like window. This adds to the process several parameters to
     control the created window point of view.
     '''
-    reuse_window = Int(0)
-    window_type = Enum(('Axial', 'Saggital', 'Coronal', '3D'))
+    reuse_window: int = 0
+    window_type: Literal['Axial', 'Saggital', 'Coronal', '3D']
 
     def get_window(self):
         a = self.anatomist
@@ -117,11 +113,12 @@ class Anatomist3DWindowProcess(AnatomistSceneProcess):
 class AnatomistMultipleViewsProcess(AnatomistSceneProcess):
     '''
     Specialization of AnatomistSceneProcess for a scene with multiple Anatomist
-    windows. The resulting snapshot will compose a large image according to the specified layout.
+    windows. The resulting snapshot will compose a large image according to the
+    specified layout.
     '''
-    view_layout_cols = Int(0)
-    view_layout_rows = Int(0)
-    margin = Int(5)
+    view_layout_cols: int = 0
+    view_layout_rows: int = 0
+    margin: int = 5
 
     def __init__(self, *args, **kwargs):
         super(AnatomistMultipleViewsProcess, self).__init__(*args, **kwargs)
