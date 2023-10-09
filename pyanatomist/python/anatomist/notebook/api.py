@@ -249,7 +249,6 @@ class AnatomistInteractiveWidget(Canvas):
 
     def update_canvas(self, force_render=True, quality=75):
         """Updates the canvas with the current render"""
-
         try:
             raw_img = self.get_image(force_render=force_render)
             if raw_img is None:
@@ -349,7 +348,7 @@ class AnatomistInteractiveWidget(Canvas):
             # trigger a better quality image
             if not self.is_closed():
                 self.qtimer.singleShot(
-                    int(float(INTERACTION_THROTTLE) / 1000),
+                    INTERACTION_THROTTLE,
                     partial(self.update_canvas, force_render=False,
                             quality=self._full_quality))
         except RuntimeError:
@@ -487,15 +486,21 @@ class AnatomistInteractiveWidget(Canvas):
                     ageOfProcessedMessage = time.time() - (
                         event["timeStamp"] * 0.001 + self.message_timestamp_offset
                     )
-                    if ageOfProcessedMessage > 1.5 * self.quick_render_delay_sec:
+                    if ageOfProcessedMessage \
+                            > 1.5 * self.quick_render_delay_sec:
                         # we are falling behind, try to render less frequently
-                        self.set_quick_render_delay(self.quick_render_delay_sec * 1.05)
-                    elif ageOfProcessedMessage < 0.5 * self.quick_render_delay_sec:
-                        # we can keep up with events, try to render more frequently
-                        self.set_quick_render_delay(self.quick_render_delay_sec / 1.05)
+                        self.set_quick_render_delay(
+                            self.quick_render_delay_sec * 1.05)
+                    elif ageOfProcessedMessage \
+                            < 0.5 * self.quick_render_delay_sec:
+                        # we can keep up with events, try to render more
+                        # frequently
+                        self.set_quick_render_delay(
+                            self.quick_render_delay_sec / 1.05)
                     if self.log_events:
                         self.age_of_processed_messages.append(
-                            [ageOfProcessedMessage, self.quick_render_delay_sec]
+                            [ageOfProcessedMessage,
+                             self.quick_render_delay_sec]
                         )
 
                 qevent = get_mouse_qevent(event)
@@ -620,7 +625,7 @@ class AnatomistInteractiveWidget(Canvas):
 
         if not self.is_window3d():
             self.qtimer.singleShot(
-                float(INTERACTION_THROTTLE) / 1000,
+                INTERACTION_THROTTLE,
                 partial(self.update_canvas, force_render=False,
                         quality=self._full_quality))
 
@@ -729,11 +734,12 @@ class NotebookAnatomist(anatomist.Anatomist):
                 canvas.close()
             super(NotebookAnatomist.AWindow, self).__del__()
 
-
     def createWindow(self, wintype, geometry=[], block=None,
                      no_decoration=None, options=None, only_3d=False):
         '''
-        Overload for :meth:`anatomist.direct.api.Anatomist.createWindow` which embeds the window in a Jupyter notebook canvas. It has an additional optional keyword argument:
+        Overload for :meth:`anatomist.direct.api.Anatomist.createWindow` which
+        embeds the window in a Jupyter notebook canvas. It has an additional
+        optional keyword argument:
 
         Parameters
         ----------
