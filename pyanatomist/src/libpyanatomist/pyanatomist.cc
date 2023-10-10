@@ -121,10 +121,12 @@ AnatomistSip::AnatomistSip( const vector<string> & argv )
   catch( exception &e )
     {
       cerr << "PyAnatomist error: " << e.what() << endl;
+      throw;
     }
   catch( ... )
     {
       cerr << "PyAnatomist unknown error" << endl;
+      throw;
     }
 }
 
