@@ -1,0 +1,52 @@
+#!/usr/bin/env python
+
+# This is a launcher script for Anatomist. It replaces the C++ command
+# "anatomist".
+# An IPython kernel is started, so that connections from a qtconsole will
+# always be possible. In the C++ anatomist command, the python engine is
+# started from a module, and the ipython kernel is run on demand when we open a
+# python qtconsole shell.
+# Unfortunately in recent ipython/jupyter/tornado or other modules, this does
+# not work any longer, the IP kernel loop does not return to the running
+# python, so the IP kernel is blocked.
+# To overcome that, we run the IP kernel, and the Qt event loop inside it (like
+# in a regular ipython).
+# Drawbacks:
+# - it always run an IP kernel, with its server engine
+# - it does it from the start, thus slows down the startup of Anatomist
+# But it works, and will continue to in the future since it is the way it is
+# designed for (our way was a hack).
+
+import sys
+import os
+try:
+    from ipykernel import kernelapp as app
+except ImportError:
+    # ipykernel is not installed
+    app = None
+import anatomist.api as ana
+from soma.qt_gui import qt_backend
+from soma.qt_gui.qt_backend import QtWidgets, QtCore
+
+QtCore.QCoreApplication.setAttribute( QtCore.Qt.AA_ShareOpenGLContexts )
+qapp = QtWidgets.QApplication([])
+if app is not None:
+    # ipkernel loop does not exit after QApplication.quit(). We must force exit
+    QtWidgets.QApplication.instance().aboutToQuit.connect(sys.exit)
+
+a = ana.Anatomist(*sys.argv)
+
+if app is not None:
+    # init Qt GUI in ipython
+    os.environ['QT_API'] = qt_backend.get_qt_backend().lower()
+    sys.argv.insert(1, '--gui=qt')
+    # purge argv for args meant for anatomist
+    while len(sys.argv) > 2:
+        del sys.argv[-1]
+
+    # will never return, exit is done via the callback above
+    app.launch_new_instance()
+else:
+    # without ipython, just run the Qt loop
+    result = qapp.exec()
+    sys.exit(result)
