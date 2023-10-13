@@ -47,6 +47,9 @@ def setup_virtualGL():
     if os.environ.get('VGL_ISACTIVE') == '1':
         return True
     try:
+        if 'VGL_DISPLAY' not in os.environ and original_display is not None:
+            # set VGL_DISPLAY to be the initial (3D accelerated) display
+            os.environ['VGL_DISPLAY'] = original_display
         preload = ['libdlfaker']
         # vglrun may use either librrfaker or libvglfaker depending on its
         # version.
@@ -378,9 +381,10 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
                 vglglxinfo_cmd = None
                 vglxdpyinfo_cmd = None
                 if glxinfo_cmd:
-                    vglglxinfo_cmd = [vgl, glxinfo_cmd]
+                    vglglxinfo_cmd = [vgl, '-d', original_display, glxinfo_cmd]
                 if xdpyinfo_cmd:
-                    vglxdpyinfo_cmd = [vgl, xdpyinfo_cmd]
+                    vglxdpyinfo_cmd = [vgl, '-d', original_display,
+                                       xdpyinfo_cmd]
                 if test_glx(glxinfo_cmd=vglglxinfo_cmd,
                             xdpyinfo_cmd=vglxdpyinfo_cmd, timeout=0):
                     print('VirtualGL should work.')
