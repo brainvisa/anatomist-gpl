@@ -1819,17 +1819,13 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             aim = qt_backend.qimage_to_np(im)
             from matplotlib import pyplot
             plot = pyplot.imshow(aim, figure=figure)
-            if figure is not None:
-                axes = figure.axes()
-            else:
-                axes = pyplot.axes()
-            axes.get_xaxis().set_visible(False)
-            axes.get_yaxis().set_visible(False)
+            if figure is None:
+                figure = pyplot.gcf()
+            axes = figure.axes
+            axes[0].get_xaxis().set_visible(False)
+            axes[0].get_yaxis().set_visible(False)
             if show:
-                if figure is not None:
-                    figure.show()
-                else:
-                    pyplot.show(block=False)
+                figure.show()
             return plot
 
         def sphinx_gallery_snapshot(self, width=0, height=0,
