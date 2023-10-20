@@ -1861,7 +1861,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             # display in matplotlib for sphinx_gallery
             import matplotlib
             backend = matplotlib.get_backend()
-            matplotlib.use('agg', warn=False, force=True)  # force agg
+            matplotlib.use('agg', force=True)  # force agg
             plot = self.imshow(show=True, width=width, height=height)
             if restore_backend:
                 # restore backend
