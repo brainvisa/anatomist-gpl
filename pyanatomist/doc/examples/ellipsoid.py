@@ -46,7 +46,13 @@ import time
 import numpy
 import sys
 from six.moves import range
+from soma.qt_gui import qt_backend
+from soma.qt_gui.qt_backend import QtGui, Qt
 
+if 'IPython' in sys.modules and Qt.QApplication.instance() is None:
+    run_loop = False
+else:
+    run_loop = True
 
 a = anatomist.Anatomist()
 
@@ -118,8 +124,6 @@ a.addObjects([asphere], [aw])
 
 
 if __name__ == '__main__':
-    from soma.qt_gui import qt_backend
-    from soma.qt_gui.qt_backend import QtGui
     angles = numpy.array([0., 0., 0.])
     scaling = numpy.array([1., 1., 1., 0.])
     translate = numpy.array([0, 0, 0, 1])
@@ -134,7 +138,7 @@ if __name__ == '__main__':
         matplotlib.use('agg', force=True)  # force agg
         aw.imshow(show=True)
 
-    else:
+    elif run_loop:
         while a.getControlWindow().isVisible():
             transform(mesh, angles, scaling, translate)
             asphere.setChanged()
