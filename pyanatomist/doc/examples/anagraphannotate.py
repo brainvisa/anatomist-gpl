@@ -65,7 +65,7 @@ def makelabel(label, gc, pos, color, props):
 
 
 runloop = False
-if QtGui.QApplication.startingUp():
+if QtGui.QApplication.startingUp() and 'IPython' not in sys.modules:
     runloop = True
 
 a = ana.Anatomist()

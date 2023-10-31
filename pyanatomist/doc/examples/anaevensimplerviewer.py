@@ -57,10 +57,17 @@ from six.moves import zip
 def findChild(x, y): return Qt.QObject.findChild(x, Qt.QObject, y)
 
 
-if Qt.QApplication.instance() is None:
+close_qt = False
+if 'sphinx_gallery' in sys.modules \
+        or ('IPython' in sys.modules
+            and Qt.QApplication.instance() is None):
+    run_qt = False
+    close_qt = True
+elif Qt.QApplication.instance() is None:
     run_qt = True
 else:
     run_qt = False
+
 
 # start the Anatomist engine, in batch mode (no main window)
 a = ana.Anatomist('-b')
@@ -343,8 +350,7 @@ a.config()['windowSizeFactor'] = 1.
 
 # run Qt
 if __name__ == '__main__':
-    # run_qt = False
-    if 'sphinx_gallery' not in sys.modules and run_qt:
+    if run_qt:
         Qt.QApplication.instance().exec_()
     elif 'sphinx_gallery' in sys.modules:
         # load a data
@@ -380,5 +386,5 @@ if __name__ == '__main__':
         pyplot.show(block=False)
         # matplotlib.use(backend, force=True)  # restore backend
 
-    if run_qt or 'sphinx_gallery' in sys.modules:
+    if close_qt:
         anasimple.closeAll()

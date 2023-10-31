@@ -326,7 +326,7 @@ Sending a command to Anatomist
 
 A lot of commands that can be processed by Anatomist are encapsulted in Anatomist class methods. But some commands, less commonly used are not available through specific methods. Nevertheless, they can be called through a generic method :meth:`Anatomist.execute`.
 
-The list of available commands is listed in the following page: :anatomist:`html/fr/programmation/commands.html`.
+The list of available commands is listed in the following page: :anatomist:`Commands <html/fr/programmation/commands.html>`.
 
 In the previous examples, we use this method to call the :anatomist:`Fusion2DParams command <html/fr/programmation/commands.html#Fusion2DParams>` which is not encapsulated in a specific method.
 

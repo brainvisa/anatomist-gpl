@@ -40,9 +40,6 @@ Custom controls example
 Plugging new conrols / actions in Anatomist views
 '''
 
-from __future__ import print_function
-
-from __future__ import absolute_import
 import anatomist.direct.api as anatomist
 from soma import aims
 from soma.aims import colormaphints
@@ -56,7 +53,7 @@ sys.path.insert(0, '.')
 from soma.qt_gui.qt_backend import QtCore, QtGui, loadUi
 
 # do we have to run QApplication ?
-if QtGui.qApp.startingUp():
+if QtGui.qApp.startingUp() and 'IPython' not in sys.modules:
     runqt = True
 else:
     runqt = False
