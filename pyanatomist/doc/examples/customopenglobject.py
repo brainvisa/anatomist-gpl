@@ -39,12 +39,12 @@ Using OpenGL in PyAnatomist
 Customizing OpenGL parameters for objects
 '''
 
-from __future__ import absolute_import
 from soma import aims
 import anatomist.direct.api as anatomist
 from soma.qt_gui.qt_backend import Qt
 from OpenGL import GL
 import six
+import sys
 
 
 class VolRender(anatomist.cpp.ObjectVector, anatomist.cpp.GLComponent):
@@ -167,7 +167,7 @@ class WinViewMesh (anatomist.cpp.ASurface_3):
 # ---
 if __name__ == '__main__':
     runloop = False
-    if Qt.QApplication.instance() is None:
+    if Qt.QApplication.instance() is None and 'IPython' not in sys.modules:
         runloop = True
     a = anatomist.Anatomist()
     mesh = aims.SurfaceGenerator.sphere((0, 0, 0), 1., 200)

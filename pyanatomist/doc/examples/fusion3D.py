@@ -37,7 +37,6 @@ Fusion3D example
 Fusion3D (mesh + texture from a volume) in Anatomist
 '''
 
-from __future__ import absolute_import
 import anatomist.api as anatomist
 # to expand the mesh bigger
 from soma import aims
@@ -80,9 +79,7 @@ fusion.exportTexture("fusion.tex")
 
 
 # display in matplotlib for sphinx_gallery
-import matplotlib
-matplotlib.use('agg', force=True)  # force agg
-win.imshow(show=True)
+win.sphinx_gallery_snapshot()
 
 if runloop and 'sphinx_gallery' not in sys.modules:
     Qt.QApplication.instance().exec_()

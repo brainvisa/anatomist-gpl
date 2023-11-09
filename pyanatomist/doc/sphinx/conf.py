@@ -11,9 +11,6 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-from __future__ import print_function
-
-from __future__ import absolute_import
 import sys
 import os
 import datetime
@@ -400,26 +397,26 @@ autoclass_content = "both"
 
 extlinks = {
     'anatomist': ('../../anatomist-' + version + '/%s',
-                  'anatomist '),
+                  'anatomist %s'),
     'anadox': ('../../anatomist-' + version + '/doxygen/%s',
-               'anadox '),
+               'anadox %s'),
     'anausr': ('../../anatomist-' + version + '/user_doc/%s',
-               'anausr '),
+               'anausr %s'),
     'anadev': ('../../anatomist-' + version + '/dev_doc/%s',
-               'anadev '),
+               'anadev %s'),
     'aimsdox': ('../../aimsdata-' + version + '/doxygen/%s',
-                'aimsdox '),
+                'aimsdox %s'),
     'aimsdata': ('../../aimsdata-' + version + '/%s', 'aimsdata '),
     'pyaims': ('../../pyaims-' + version + '/sphinx/%s',
-               'pyaims '),
+               'pyaims %s'),
     'soma': ('../../soma-base-' + version + '/sphinx/%s',
-             'soma '),
+             'soma %s'),
     'cartobdox': ('../../cartobase-' + version + '/doxygen/%s',
-                  'cartobdox '),
+                  'cartobdox %s'),
     'cartoddox': ('../../cartodata-' + version + '/doxygen/%s',
-                  'cartoddox '),
+                  'cartoddox %s'),
     'graphdox': ('../../graph-' + version + '/doxygen/%s',
-                 'graphdox '),
+                 'graphdox %s'),
 }
 
 import soma

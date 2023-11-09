@@ -41,12 +41,10 @@ Using a mesh and modifying it while it is displayed
 from __future__ import absolute_import
 from soma import aims
 import time
-import os
 import anatomist.direct.api as anatomist
 import sys
 from soma.qt_gui.qt_backend.QtGui import qApp
 from soma.qt_gui.qt_backend import Qt
-import sys
 import six
 
 # create a unit sphere of radius 1 and 500 vertices
@@ -56,7 +54,7 @@ m = aims.SurfaceGenerator.sphere(aims.Point3df(0, 0, 0), 1, 500, False)
 for p in six.moves.xrange(m.vertex().size()):
     m.vertex()[p] *= 100
 
-runloop = Qt.QApplication.instance() is None
+runloop = Qt.QApplication.instance() is None and 'IPython' not in sys.modules
 
 # Open Anatomist
 a = anatomist.Anatomist()

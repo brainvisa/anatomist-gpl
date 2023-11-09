@@ -36,13 +36,13 @@
 Build a custom simplified viewer based on Anatomist
 ===================================================
 
-An even simplified version of the anasimpleviewer application, which may also be used as a programming example. Its code is in the “bin/”” directory of the binary packages.
+An even simplified version of the anasimpleviewer application, which may also
+be used as a programming example. Its code is in the “bin/”” directory of the
+binary packages.
 
 .. .. figure:: ../images/anaevensimplerviewer.png
 '''
 
-from __future__ import print_function
-from __future__ import absolute_import
 import anatomist.direct.api as ana
 from soma import aims
 from soma.aims import colormaphints
@@ -57,10 +57,17 @@ from six.moves import zip
 def findChild(x, y): return Qt.QObject.findChild(x, Qt.QObject, y)
 
 
-if Qt.QApplication.instance() is None:
+close_qt = False
+if 'sphinx_gallery' in sys.modules \
+        or ('IPython' in sys.modules
+            and Qt.QApplication.instance() is None):
+    run_qt = False
+    close_qt = True
+elif Qt.QApplication.instance() is None:
     run_qt = True
 else:
     run_qt = False
+
 
 # start the Anatomist engine, in batch mode (no main window)
 a = ana.Anatomist('-b')
@@ -168,8 +175,8 @@ class AnaSimpleViewer(Qt.QObject):
 
     def addVolume(self, obj, opts={}):
         '''Display a volume in all windows.
-        If several volumes are displayed, a Fusion2D will be built to wrap all of
-        them.
+        If several volumes are displayed, a Fusion2D will be built to wrap all
+        of them.
         '''
         global fusion2d
         if obj in fusion2d:
@@ -191,7 +198,8 @@ class AnaSimpleViewer(Qt.QObject):
             obj = f2d
         if obj.objectType == 'VOLUME':
             # choose a good colormap for a single volume
-            if 'volume_contents_likelihoods' in obj.attributed()['colormaphints']:
+            if 'volume_contents_likelihoods' in \
+                    obj.attributed()['colormaphints']:
                 cmap = colormaphints.chooseColormaps(
                     (obj.attributed()['colormaphints'], ))
                 obj.setPalette(cmap[0])
@@ -342,8 +350,7 @@ a.config()['windowSizeFactor'] = 1.
 
 # run Qt
 if __name__ == '__main__':
-    #run_qt = False
-    if not 'sphinx_gallery' in sys.modules and run_qt:
+    if run_qt:
         Qt.QApplication.instance().exec_()
     elif 'sphinx_gallery' in sys.modules:
         # load a data
@@ -368,16 +375,16 @@ if __name__ == '__main__':
         del w, s, p
         # snapshot to matplotlib
         import matplotlib
-        #backend = matplotlib.get_backend()
-        matplotlib.use('agg', force=True, warn=False)  # force agg
+        # backend = matplotlib.get_backend()
+        matplotlib.use('agg', force=True)  # force agg
         from matplotlib import pyplot
         im = qt_backend.qimage_to_np(ws)
         plot = pyplot.imshow(im)
-        axes = pyplot.axes()
-        axes.get_xaxis().set_visible(False)
-        axes.get_yaxis().set_visible(False)
+        axes = pyplot.gcf().axes
+        axes[0].get_xaxis().set_visible(False)
+        axes[0].get_yaxis().set_visible(False)
         pyplot.show(block=False)
         # matplotlib.use(backend, force=True)  # restore backend
 
-    if run_qt or 'sphinx_gallery' in sys.modules:
+    if close_qt:
         anasimple.closeAll()
