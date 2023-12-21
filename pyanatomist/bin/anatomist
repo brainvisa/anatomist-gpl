@@ -28,7 +28,14 @@ import anatomist.api as ana
 from soma.qt_gui import qt_backend
 from soma.qt_gui.qt_backend import QtWidgets, QtCore
 
-QtCore.QCoreApplication.setAttribute( QtCore.Qt.AA_ShareOpenGLContexts )
+
+def restore_stdout():
+    # restore stdout / stderr from their initial values
+    sys.stdout = sys.__stdout__
+    sys.stderr = sys.__stderr__
+
+
+QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_ShareOpenGLContexts)
 qapp = QtWidgets.QApplication([])
 if app is not None:
     # ipkernel loop does not exit after QApplication.quit(). We must force exit
@@ -43,6 +50,11 @@ if app is not None:
     # purge argv for args meant for anatomist
     while len(sys.argv) > 2:
         del sys.argv[-1]
+
+    # trigger a timer just after the event loop is started
+    # it will restore stdout / stderr because if we don't, they are captured
+    # for redirection to the qtconsole, but the console client is not here yet.
+    timer = QtCore.QTimer.singleShot(10, restore_stdout)
 
     # will never return, exit is done via the callback above
     app.launch_new_instance()
