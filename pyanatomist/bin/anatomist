@@ -39,9 +39,15 @@ QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_ShareOpenGLContexts)
 qapp = QtWidgets.QApplication([])
 if app is not None:
     # ipkernel loop does not exit after QApplication.quit(). We must force exit
-    QtWidgets.QApplication.instance().aboutToQuit.connect(sys.exit)
+    # NOTE in recent ipykernels, Qt doesn't call callbacks after
+    # QApplication.quit() so this doesn't work any longer.
+    QtWidgets.QApplication.instance().aboutToQuit.connect(
+        sys.exit, QtCore.Qt.QueuedConnection)
 
 a = ana.Anatomist(*sys.argv)
+# exits abruptly when closing the control window. Works around the callback
+# problem above
+a.setExitOnQuit(True)
 
 if app is not None:
     # init Qt GUI in ipython
@@ -58,6 +64,7 @@ if app is not None:
 
     # will never return, exit is done via the callback above
     app.launch_new_instance()
+    print('EXIT')
 else:
     # without ipython, just run the Qt loop
     result = qapp.exec()

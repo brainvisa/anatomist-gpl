@@ -253,6 +253,18 @@ GlobalConfiguration* AnatomistSip::config()
   return theAnatomist->config();
 }
 
+
+bool AnatomistSip::exitOnQuit() const
+{
+  return theAnatomist->exitOnQuit();
+}
+
+
+void AnatomistSip::setExitOnQuit( bool x )
+{
+  theAnatomist->setExitOnQuit( x );
+}
+
 // ------------------------
 
 carto::rc_ptr<Volume_U8>

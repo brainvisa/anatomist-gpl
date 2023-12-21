@@ -124,6 +124,8 @@ public:
   void setUserLevel( int );
   anatomist::GlobalConfiguration* config();
   void quit();
+  bool exitOnQuit() const;
+  void setExitOnQuit( bool x );
 
   void registerObject( anatomist::AObject *, bool = true );
 %MethodCode
