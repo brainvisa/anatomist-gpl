@@ -165,6 +165,13 @@ try:
                     '/(%s)\.py' % ')|('.join(gallery_examples),
                 #'ignore_pattern': r'/[^abcefgmnst][^/]*\.py$',
             }
+            if not os.path.exists('auto_examples'):
+                os.mkdir('auto_examples')
+            if not os.path.exists('auto_examples/irm.ima'):
+                # copy data in the auto_examples directory
+                import shutil
+                shutil.copy2('../examples/irm.ima', 'auto_examples/irm.ima')
+                shutil.copy2('../examples/irm.dim', 'auto_examples/irm.dim')
 
             # capture exit to avoid crash on exit cleanup
             def handle_exception(app, opts, exception, stderr=sys.stderr):
