@@ -1,11 +1,8 @@
 
 import io
 import six
-from soma import aims
-import anatomist.direct.api as ana
 from soma.qt_gui.qt_backend import Qt
 from PIL import Image, ImageChops
-from six.moves import zip
 
 '''Useful functions and variable to take snapshot'''
 
@@ -108,48 +105,50 @@ def detect_min_max_slices(data, slice_directions=['A'], threshold=0):
     slices_minmax[direction] = (first_nonempty_slice, last_nonempty_slice)
     '''
 
-    d = data.arraydata()
     slices_minmax = {}
     for direction in slice_directions:
         if direction == 'A':
-            n_slices = d.shape[1]
+            n_slices = data.shape[2]
             first_nonempty_slice = 0
             last_nonempty_slice = n_slices - 1
-            s = d[0, first_nonempty_slice, :, :]
-            while (s[s > threshold].size == 0 and first_nonempty_slice < n_slices-1):
+            s = data[:, :, first_nonempty_slice, 0]
+            while (s[s > threshold].size == 0
+                   and first_nonempty_slice < n_slices-1):
                 first_nonempty_slice += 1
-                s = d[0, first_nonempty_slice, :, :]
+                s = data[:, :, first_nonempty_slice, 0]
 
-            s = d[0, last_nonempty_slice, :, :]
+            s = data[:, :, last_nonempty_slice, 0]
             while (s[s > threshold].size == 0 and last_nonempty_slice > 0):
                 last_nonempty_slice -= 1
-                s = d[0, last_nonempty_slice, :, :]
+                s = data[:, :, last_nonempty_slice, 0]
         elif direction == 'C':
-            n_slices = d.shape[2]
+            n_slices = data.shape[1]
             first_nonempty_slice = 0
             last_nonempty_slice = n_slices - 1
-            s = d[0, :, first_nonempty_slice, :]
-            while (s[s > threshold].size == 0 and first_nonempty_slice < n_slices-1):
+            s = data[:, first_nonempty_slice, :, 0]
+            while (s[s > threshold].size == 0
+                   and first_nonempty_slice < n_slices-1):
                 first_nonempty_slice += 1
-                s = d[0, :, first_nonempty_slice, :]
+                s = data[:, first_nonempty_slice, :, 0]
 
-            s = d[0, :, last_nonempty_slice, :]
+            s = data[:, last_nonempty_slice, :, 0]
             while (s[s > threshold].size == 0 and last_nonempty_slice > 0):
                 last_nonempty_slice -= 1
-                s = d[0, :, last_nonempty_slice, :]
+                s = data[:, last_nonempty_slice, :, 0]
         elif direction == 'S':
-            n_slices = d.shape[3]
+            n_slices = data.shape[0]
             first_nonempty_slice = 0
             last_nonempty_slice = n_slices - 1
-            s = d[0, :, :, first_nonempty_slice]
-            while (s[s > threshold].size == 0 and first_nonempty_slice < n_slices-1):
+            s = data[first_nonempty_slice, :, :, 0]
+            while (s[s > threshold].size == 0
+                   and first_nonempty_slice < n_slices-1):
                 first_nonempty_slice += 1
-                s = d[0, :, :, first_nonempty_slice]
+                s = data[first_nonempty_slice, :, :, 0]
 
-            s = d[0, :, :, last_nonempty_slice]
+            s = data[last_nonempty_slice, :, :, 0]
             while (s[s > threshold].size == 0 and last_nonempty_slice > 0):
                 last_nonempty_slice -= 1
-                s = d[0, :, :, last_nonempty_slice]
+                s = data[last_nonempty_slice, :, :, 0]
         if first_nonempty_slice >= last_nonempty_slice:
             first_nonempty_slice = 0
             last_nonempty_slice = n_slices - 1
@@ -188,7 +187,8 @@ def get_one_tile(views_images, grid_dim=None):
                     24: (6, 4)}[len(views_images)]
 
     tiled_image = Image.new(
-        'RGBA', (grid_dim[0] * image_size[0], grid_dim[1] * image_size[1]), 'black')
+        'RGBA', (grid_dim[0] * image_size[0], grid_dim[1] * image_size[1]),
+        'black')
     positions = [[j * image_size[0], i * image_size[1]]
                  for i in six.moves.xrange(grid_dim[1])
                  for j in six.moves.xrange(grid_dim[0])]
