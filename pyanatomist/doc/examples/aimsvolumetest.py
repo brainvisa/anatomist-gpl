@@ -37,11 +37,11 @@ AIMS / Anatomist volume manipulation
 Loading, handling and viewing a Volume with aims and anatomist
 '''
 
-from __future__ import absolute_import
 import anatomist.direct.api as anatomist
 from soma import aims
 from soma.qt_gui.qt_backend import Qt
 import sys
+
 
 # load any volume as a aims.Volume_* object
 vol = aims.read('irm.ima')
@@ -64,10 +64,8 @@ win.addObjects(avol)
 
 # volume change and update test
 
-# using Numeric API
-arr = vol.arraydata()
 # we're just printing a white square in the middle of the volume
-arr[0, 50:70, 100:130, 100:130] = 255
+vol[100:130, 100:130, 50:70, 0] = 255
 
 # update Anatomist object and its views
 avol.setChanged()
@@ -105,4 +103,4 @@ win3.sphinx_gallery_snapshot()
 if runloop and 'sphinx_gallery' not in sys.modules:
     Qt.QApplication.instance().exec_()
 if runloop or 'sphinx_gallery' in sys.modules:
-    del win, win2, win3, fus, avol, arr, avol2
+    del win, win2, win3, fus, avol, avol2

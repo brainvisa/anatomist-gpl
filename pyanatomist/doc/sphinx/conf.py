@@ -15,6 +15,7 @@ import sys
 import os
 import datetime
 import six
+import shutil
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -165,6 +166,18 @@ try:
                     '/(%s)\.py' % ')|('.join(gallery_examples),
                 #'ignore_pattern': r'/[^abcefgmnst][^/]*\.py$',
             }
+            if not os.path.exists('auto_examples'):
+                os.mkdir('auto_examples')
+            # copy data in the auto_examples directory
+            for item in ('irm.ima', 'irm.dim', 'Rbase.arg', 'Rbase.data',
+                         'test.mesh', 'control.xpm'):
+                src = os.path.join('../examples', item)
+                dst = os.path.join('auto_examples', item)
+                if not os.path.exists(dst):
+                    if os.path.isdir(src):
+                        shutil.copytree(src, dst)
+                    else:
+                        shutil.copy2(src, dst)
 
             # capture exit to avoid crash on exit cleanup
             def handle_exception(app, opts, exception, stderr=sys.stderr):

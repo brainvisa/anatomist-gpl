@@ -214,6 +214,9 @@ namespace anatomist
 %Docstring
     if the object has been modified by user interaction, and needs saving
 %End
+
+    bool allowsOverwriteOnSave() const;
+    void setAllowsOverwriteOnSave( bool x );
   };
 
 };
