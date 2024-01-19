@@ -20,7 +20,22 @@
 import sys
 import os
 try:
+    from ipykernel import eventloops
+
+    def _loop_qt(app):
+        if not getattr(app, 'in_event_loop', False):
+            app._in_event_loop = True
+            app.exec()
+            app._in_event_loop = False
+
+    def loop_qt5(kernel):
+        return eventloops.loop_qt4(kernel)
+
+    eventloops._loop_qt = _loop_qt
+    eventloops.loop_qt5 = loop_qt5
+
     from ipykernel import kernelapp as app
+
 except ImportError:
     # ipykernel is not installed
     app = None
