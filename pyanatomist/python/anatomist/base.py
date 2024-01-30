@@ -805,7 +805,7 @@ class Anatomist(Singleton):
                      temporary=int(temporary),
                      position=position)
 
-    def removeObjects(self, objects, windows, remove_children=False):
+    def removeObjects(self, objects, windows, remove_children=-1):
         """
         Removes objects from windows.
 
@@ -1708,7 +1708,7 @@ class Anatomist(Singleton):
                 [self], windows, temporary=temporary,
                 position=position)
 
-        def removeFromWindows(self, windows):
+        def removeFromWindows(self, windows, remove_children=-1):
             """
             Removes object from windows.
 
@@ -1717,7 +1717,8 @@ class Anatomist(Singleton):
             windows: list of :class:`Anatomist.AWindow`
                 List of windows from which the object must be removed
             """
-            self.anatomistinstance.removeObjects([self], windows)
+            self.anatomistinstance.removeObjects(
+                [self], windows, remove_children=remove_children)
 
         def delete(self):
             """
@@ -2100,7 +2101,7 @@ class Anatomist(Singleton):
                                               temporary=temporary,
                                               position=position)
 
-        def removeObjects(self, objects):
+        def removeObjects(self, objects, remove_children=-1):
             """
             Removes objects from window.
 
@@ -2109,7 +2110,8 @@ class Anatomist(Singleton):
             objects: list of :class:`Anatomist.AObject`
                 List of objects to remove
             """
-            self.anatomistinstance.removeObjects(objects, [self])
+            self.anatomistinstance.removeObjects(
+                objects, [self], remove_children=remove_children)
 
         def camera(
                 self, zoom=None, observer_position=None, view_quaternion=None,
