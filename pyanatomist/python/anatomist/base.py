@@ -37,21 +37,13 @@ General interface of pyanatomist API. It describes classes and methods that are 
 Several implementations exist depending on the mean of driving Anatomist (Sip bindings C++/Python or commands via socket).
 """
 
-from __future__ import print_function
-
-from __future__ import absolute_import
 from soma.notification import ObservableNotifier
 from soma.singleton import Singleton
 from soma.functiontools import partial
 from soma.utils import weak_proxy
 from soma.utils.weak_proxy import proxy_method
-import operator
-import string
 import threading
 import collections
-import sys
-import six
-import weakref
 
 
 def isSequenceType(item):
@@ -78,8 +70,6 @@ def isMappingType(item):
         return item.isDictionary()
     methods = ['get', 'items', 'keys', 'values', '__getitem__', '__iter__',
                '__contains__', '__len__']
-    if six.PY2:
-        methods.append('iteritems')
     for m in methods:
         if not hasattr(item, m):
             return False
@@ -1337,7 +1327,7 @@ class Anatomist(Singleton):
                 return k[:-1]
             return k
         params = dict((ununderscore(k), self.convertParamsToIDs(v))
-                      for k, v in six.iteritems(kwargs) if v is not None)
+                      for k, v in kwargs.items() if v is not None)
         self.logCommand(command, **params)
         self.send(command, **params)
 
@@ -1379,7 +1369,7 @@ class Anatomist(Singleton):
         """
         if isinstance(item, Anatomist.AItem):
             return item.getInternalRep()
-        elif isinstance(item, (six.string_types, int, float, dict)):
+        elif isinstance(item, (str, int, float, dict)):
             return item
         raise TypeError('Expecting an Anatomist object but got one of type %s'
                         % repr(type(item)))
@@ -1401,7 +1391,7 @@ class Anatomist(Singleton):
         elements: dict or list
             Converted elements
         """
-        if not isinstance(params, six.string_types) \
+        if not isinstance(params, str) \
                 and isSequenceType(params):
             return [self.convertSingleObjectParamsToIDs(i) for i in params]
         else:
@@ -2124,7 +2114,8 @@ class Anatomist(Singleton):
         def camera(
                 self, zoom=None, observer_position=None, view_quaternion=None,
                 slice_quaternion=None, force_redraw=None, cursor_position=None,
-                boundingbox_min=None, boundingbox_max=None, slice_orientation=None):
+                boundingbox_min=None, boundingbox_max=None,
+                slice_orientation=None):
             """
             Sets the point of view, zoom, cursor position for a 3D window.
 
