@@ -83,6 +83,8 @@ Maximum size of the OpenGL palette image, after scaling.
 %End
   int glMaxSizeY() const;
   void glSetMaxSize( int glmaxsizex, int glmaxsizey );
+  AimsRGBA normColor( float x, float y = 0 ) const;
+  AimsRGBA normColor( const Point2df & pos ) const;
 };
 
 
