@@ -7,7 +7,9 @@ namespace anatomist
 
   void setQtColorStyle( QWidget* );
 
-  class AWindow : carto::SharedObject, anatomist::Observer /Abstract/
+  class AWindow
+    : anatomist::Observer, anatomist::Observable
+    /Abstract/
   {
 %TypeHeaderCode
 #include <anatomist/window/Window.h>
@@ -193,7 +195,7 @@ protected:
 };
 
 
-class AWindow3D : ControlledWindow, anatomist::Observable
+class AWindow3D : ControlledWindow
 {
 %TypeHeaderCode
 #include <anatomist/window3D/window3D.h>
