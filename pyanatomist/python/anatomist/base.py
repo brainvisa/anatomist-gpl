@@ -264,7 +264,8 @@ class Anatomist(Singleton):
         pass
 
     # objects creation
-    def createWindowsBlock(self, nbCols=None, nbRows=None):
+    def createWindowsBlock(self, nbCols=None, nbRows=None, visible=False,
+                           default_block=False):
         """
         Creates a window containing other windows.
 
