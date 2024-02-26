@@ -197,7 +197,12 @@ class AnaSimpleViewer(Qt.QObject):
 
         # vieww: parent widget for anatomist windows
         vieww = findChild(awin, 'windows')
-        self.viewgridlay = Qt.QGridLayout(vieww)
+        vl = Qt.QVBoxLayout()
+        vieww.setLayout(vl)
+        self.wblock = a.createWindowsBlock(visible=True, default_block=True)
+        vl.addWidget(self.wblock.internalWidget.widget)
+        self.viewgridlay \
+            = self.wblock.internalWidget.widget.centralWidget().layout()
         self.fdialog = None
         self.awindows = []
         self.aobjects = []
@@ -324,7 +329,8 @@ class AnaSimpleViewer(Qt.QObject):
         assigned the custom control, and have no menu/toolbars.
         '''
         a = ana.Anatomist('-b')
-        w = a.createWindow(wintype, no_decoration=True, options={'hidden': 1})
+        w = a.createWindow(wintype, no_decoration=True, options={'hidden': 1},
+                           block=self.wblock)
         w.setAcceptDrops(False)
         # insert in grid layout
         x = 0
@@ -342,7 +348,7 @@ class AnaSimpleViewer(Qt.QObject):
                     break
         # in Qt4, the widget must not have a parent before calling
         # layout.addWidget
-        self.viewgridlay.addWidget(w.getInternalRep(), x, y)
+        #self.viewgridlay.addWidget(w.getInternalRep(), x, y)
         self._winlayouts[x][y] = 1
         # keep it in anasimpleviewer list of windows
         self.awindows.append(w)
