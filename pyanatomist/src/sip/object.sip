@@ -195,7 +195,7 @@ namespace anatomist
 
     virtual const anatomist::AObject* nearestVertex(
       const vector_FLOAT & pos, int *vertex, float *distance, float tol = -1,
-      int *polygon = 0, bool tex_only = false, int target_poly = -1 ) const;
+      int *polygon /In/ = 0, bool tex_only = false, int target_poly = -1 ) const;
 %Docstring
         Get the nearest vertex to a given position.
 
