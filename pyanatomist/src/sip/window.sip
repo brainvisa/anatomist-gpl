@@ -50,6 +50,8 @@ namespace anatomist
     virtual vector_FLOAT getFullPosition() const;
     virtual void setPosition( const Point3df &position,
       const anatomist::Referential *refdep );
+    virtual void setPosition( const vector_FLOAT & position,
+                              const anatomist::Referential *refdep = 0 );
     void setHasCursor(int);
     virtual bool toolBarsVisible() const;
     virtual void showToolBars(int = 2 );
