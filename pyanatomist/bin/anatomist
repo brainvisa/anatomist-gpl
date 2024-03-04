@@ -18,77 +18,17 @@
 # designed for (our way was a hack).
 
 import sys
-import os
-try:
-    from ipykernel import eventloops
-
-    if hasattr(eventloops, 'loop_qt4'):
-        # ipykernel v7 needs a patch for qt6
-        # v8 is OK
-
-        def _loop_qt(app):
-            if not getattr(app, '_in_event_loop', False):
-                app._in_event_loop = True
-                app.exec()
-                app._in_event_loop = False
-
-        @eventloops.register_integration('qt', 'qt5')
-        def loop_qt5(kernel):
-            return eventloops.loop_qt4(kernel)
-
-        eventloops._loop_qt = _loop_qt
-        eventloops.loop_qt5 = loop_qt5
-
-    from ipykernel import kernelapp as app
-
-except ImportError:
-    # ipykernel is not installed
-    app = None
-
+from soma.qt_gui import ipkernel_tools
 import anatomist.api as ana
-from soma.qt_gui import qt_backend
-from soma.qt_gui.qt_backend import QtWidgets, QtCore
 
 
-def restore_stdout():
-    # restore stdout / stderr from their initial values
-    sys.__ip_stdout = sys.stdout
-    sys.__ip_stderr = sys.stderr
-    sys.stdout = sys.__stdout__
-    sys.stderr = sys.__stderr__
-
-
-QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_ShareOpenGLContexts)
-qapp = QtWidgets.QApplication([])
-if app is not None:
-    # ipkernel loop does not exit after QApplication.quit(). We must force exit
-    # NOTE in recent ipykernels, Qt doesn't call callbacks after
-    # QApplication.quit() so this doesn't work any longer.
-    QtWidgets.QApplication.instance().aboutToQuit.connect(
-        sys.exit, QtCore.Qt.QueuedConnection)
+ipkernel_tools.before_start_ipkernel()
 
 a = ana.Anatomist(*sys.argv)
 # exits abruptly when closing the control window. Works around the callback
-# problem above
+# problem: when the even loop runs through ipython kernel,
+# QApplication.aboutToQuit signals are never executed, thus cannot actually
+# quit.
 a.setExitOnQuit(True)
 
-if app is not None:
-    # init Qt GUI in ipython
-    os.environ['QT_API'] = qt_backend.get_qt_backend().lower()
-    sys.argv.insert(1, '--gui=qt')
-    # purge argv for args meant for anatomist
-    while len(sys.argv) > 2:
-        del sys.argv[-1]
-
-    # trigger a timer just after the event loop is started
-    # it will restore stdout / stderr because if we don't, they are captured
-    # for redirection to the qtconsole, but the console client is not here yet.
-    timer = QtCore.QTimer.singleShot(10, restore_stdout)
-
-    # will never return, exit is done via the callback above
-    app.launch_new_instance()
-    print('EXIT')
-else:
-    # without ipython, just run the Qt loop
-    result = qapp.exec()
-    sys.exit(result)
+ipkernel_tools.start_ipkernel_qt_engine()
