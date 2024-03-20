@@ -52,6 +52,7 @@ public:
   bool isTransparent() const;
   Volume_RGBA* colors ();
   QImage* toQImage( int w = 0, int h = 0 );
+  rc_ptr_Volume_RGBA toVolume( int w = 0, int h = 0, bool scaled = true );
 
   /** Maximum size of the internal palette image.
       0 means unused: no palette image is needed.
