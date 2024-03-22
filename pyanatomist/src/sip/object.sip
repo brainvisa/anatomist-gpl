@@ -193,12 +193,50 @@ namespace anatomist
   }
 %End
 
+    virtual const anatomist::AObject* nearestVertex(
+      const vector_FLOAT & pos, int *vertex, float *distance, float tol = -1,
+      int *polygon /In/ = 0, bool tex_only = false, int target_poly = -1 ) const;
+%Docstring
+        Get the nearest vertex to a given position.
+
+        Only valid for a mesh-based object, otherwise 0 is returned.
+        vertex and distance should point to a valid int and float, and will be
+        filled with the mesh vertex index, and the distance to this vertex. If
+        the object has children objects, the child with the nearest vertex will
+        be returned. If tol is >=0, this tolerence threshold is used to filter
+        out vertices too far (thus the function may fail and return 0). If
+        polygon is given as a valid pointer to an int, the polygon index of the
+        "nearest polygon" will also be filled. The nearest polygon will contain
+        the nearest vertex, thus a polygon wich center is nearest to the given
+        point can be discarded.
+
+        The base implementation will perform an exaustive search, thus is
+        costy. Optimized implementations could make use of a kdtree algorithm,
+        but this default one does not.
+
+        If the object is also displayed in a 3D window, OpenGL-based functions
+        may be more efficient than this one.
+%End
+
     virtual vector_FLOAT texValues( const vector_FLOAT & pos,
-                                    const anatomist::Referential* orgRef ) const;
-    virtual vector_FLOAT texValues( const vector_FLOAT & pos ) const;
+                                    const anatomist::Referential* orgRef,
+                                    int poly = -1 ) const;
+    virtual vector_FLOAT texValues( const vector_FLOAT & pos,
+                                    int poly = -1 ) const;
     virtual float mixedTexValue( const vector_FLOAT & pos,
-                                 const anatomist::Referential* orgRef ) const;
-    virtual float mixedTexValue( const vector_FLOAT & pos ) const;
+                                 const anatomist::Referential* orgRef,
+                                 int poly = -1 ) const;
+    virtual float mixedTexValue( const vector_FLOAT & pos,
+                                 int poly = -1 ) const;
+    virtual rc_ptr_Volume_FLOAT texValuesSeries(
+      const vector_FLOAT & pos, int axis, const Referential* orgRef,
+      int poly = -1 ) const;
+    virtual rc_ptr_Volume_FLOAT texValuesSeries(
+      const vector_FLOAT & pos, int axis, int poly = -1 ) const;
+    virtual void
+    getTextureLabels( const vector_FLOAT & texvalues,
+                      vector_STRING & labels,
+                      std::string & textype ) const;
     virtual void update( const anatomist::Observable *observable, void *arg );
     virtual std::string toolTip() const;
 

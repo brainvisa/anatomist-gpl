@@ -7,7 +7,9 @@ namespace anatomist
 
   void setQtColorStyle( QWidget* );
 
-  class AWindow : carto::SharedObject, anatomist::Observer /Abstract/
+  class AWindow
+    : anatomist::Observer, anatomist::Observable
+    /Abstract/
   {
 %TypeHeaderCode
 #include <anatomist/window/Window.h>
@@ -45,8 +47,11 @@ namespace anatomist
     float getTime() const;
     virtual void setTime( float time );
     virtual Point3df getPosition() const;
+    virtual vector_FLOAT getFullPosition() const;
     virtual void setPosition( const Point3df &position,
       const anatomist::Referential *refdep );
+    virtual void setPosition( const vector_FLOAT & position,
+                              const anatomist::Referential *refdep = 0 );
     void setHasCursor(int);
     virtual bool toolBarsVisible() const;
     virtual void showToolBars(int = 2 );
@@ -59,6 +64,7 @@ namespace anatomist
     virtual void show();
     virtual void hide();
     virtual const std::string & baseTitle() const;
+    virtual void update( const anatomist::Observable* observable, void* arg );
 
     static anatomist::AWindow* fromObject( carto::GenericObject );
 %MethodCode
@@ -191,7 +197,7 @@ protected:
 };
 
 
-class AWindow3D : ControlledWindow, anatomist::Observable
+class AWindow3D : ControlledWindow
 {
 %TypeHeaderCode
 #include <anatomist/window3D/window3D.h>

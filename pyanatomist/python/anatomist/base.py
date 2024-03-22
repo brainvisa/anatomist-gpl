@@ -37,21 +37,13 @@ General interface of pyanatomist API. It describes classes and methods that are 
 Several implementations exist depending on the mean of driving Anatomist (Sip bindings C++/Python or commands via socket).
 """
 
-from __future__ import print_function
-
-from __future__ import absolute_import
 from soma.notification import ObservableNotifier
 from soma.singleton import Singleton
 from soma.functiontools import partial
 from soma.utils import weak_proxy
 from soma.utils.weak_proxy import proxy_method
-import operator
-import string
 import threading
 import collections
-import sys
-import six
-import weakref
 
 
 def isSequenceType(item):
@@ -78,8 +70,6 @@ def isMappingType(item):
         return item.isDictionary()
     methods = ['get', 'items', 'keys', 'values', '__getitem__', '__iter__',
                '__contains__', '__len__']
-    if six.PY2:
-        methods.append('iteritems')
     for m in methods:
         if not hasattr(item, m):
             return False
@@ -274,7 +264,8 @@ class Anatomist(Singleton):
         pass
 
     # objects creation
-    def createWindowsBlock(self, nbCols=None, nbRows=None):
+    def createWindowsBlock(self, nbCols=None, nbRows=None, visible=False,
+                           default_block=False):
         """
         Creates a window containing other windows.
 
@@ -815,7 +806,7 @@ class Anatomist(Singleton):
                      temporary=int(temporary),
                      position=position)
 
-    def removeObjects(self, objects, windows, remove_children=False):
+    def removeObjects(self, objects, windows, remove_children=-1):
         """
         Removes objects from windows.
 
@@ -1337,7 +1328,7 @@ class Anatomist(Singleton):
                 return k[:-1]
             return k
         params = dict((ununderscore(k), self.convertParamsToIDs(v))
-                      for k, v in six.iteritems(kwargs) if v is not None)
+                      for k, v in kwargs.items() if v is not None)
         self.logCommand(command, **params)
         self.send(command, **params)
 
@@ -1379,7 +1370,7 @@ class Anatomist(Singleton):
         """
         if isinstance(item, Anatomist.AItem):
             return item.getInternalRep()
-        elif isinstance(item, (six.string_types, int, float, dict)):
+        elif isinstance(item, (str, int, float, dict)):
             return item
         raise TypeError('Expecting an Anatomist object but got one of type %s'
                         % repr(type(item)))
@@ -1401,7 +1392,7 @@ class Anatomist(Singleton):
         elements: dict or list
             Converted elements
         """
-        if not isinstance(params, six.string_types) \
+        if not isinstance(params, str) \
                 and isSequenceType(params):
             return [self.convertSingleObjectParamsToIDs(i) for i in params]
         else:
@@ -1718,7 +1709,7 @@ class Anatomist(Singleton):
                 [self], windows, temporary=temporary,
                 position=position)
 
-        def removeFromWindows(self, windows):
+        def removeFromWindows(self, windows, remove_children=-1):
             """
             Removes object from windows.
 
@@ -1727,7 +1718,8 @@ class Anatomist(Singleton):
             windows: list of :class:`Anatomist.AWindow`
                 List of windows from which the object must be removed
             """
-            self.anatomistinstance.removeObjects([self], windows)
+            self.anatomistinstance.removeObjects(
+                [self], windows, remove_children=remove_children)
 
         def delete(self):
             """
@@ -2110,7 +2102,7 @@ class Anatomist(Singleton):
                                               temporary=temporary,
                                               position=position)
 
-        def removeObjects(self, objects):
+        def removeObjects(self, objects, remove_children=-1):
             """
             Removes objects from window.
 
@@ -2119,12 +2111,14 @@ class Anatomist(Singleton):
             objects: list of :class:`Anatomist.AObject`
                 List of objects to remove
             """
-            self.anatomistinstance.removeObjects(objects, [self])
+            self.anatomistinstance.removeObjects(
+                objects, [self], remove_children=remove_children)
 
         def camera(
                 self, zoom=None, observer_position=None, view_quaternion=None,
                 slice_quaternion=None, force_redraw=None, cursor_position=None,
-                boundingbox_min=None, boundingbox_max=None, slice_orientation=None):
+                boundingbox_min=None, boundingbox_max=None,
+                slice_orientation=None):
             """
             Sets the point of view, zoom, cursor position for a 3D window.
 

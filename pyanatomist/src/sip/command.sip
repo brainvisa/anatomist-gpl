@@ -2,6 +2,7 @@
 %ModuleCode
 #if SIP_VERSION >= 0x040700
 #include <anatomist/commands/cCreateWindow.h>
+#include <anatomist/commands/cCreateWindowsBlock.h>
 #include <anatomist/commands/cAddObject.h>
 #include <anatomist/commands/cRemoveObject.h>
 #include <anatomist/commands/cFusionObjects.h>
@@ -51,6 +52,8 @@ namespace anatomist
       sipType = sipType_anatomist_GetInfoCommand;
     else if( dynamic_cast<anatomist::FusionInfoCommand *>( sipCpp ) )
       sipType = sipType_anatomist_FusionInfoCommand;
+    else if( dynamic_cast<anatomist::CreateWindowsBlockCommand *>( sipCpp ) )
+      sipType = sipType_anatomist_CreateWindowsBlockCommand;
     else
       sipType = sipType_anatomist_RegularCommand;
   else if( dynamic_cast<anatomist::WaitCommand *>( sipCpp ) )
@@ -502,6 +505,31 @@ namespace anatomist
 
   private:
     CreateWindowCommand( const anatomist::CreateWindowCommand & );
+  };
+
+
+  class CreateWindowsBlockCommand : anatomist::RegularCommand
+  {
+%TypeHeaderCode
+#include <anatomist/commands/cCreateWindowsBlock.h>
+%End
+
+  public:
+    CreateWindowsBlockCommand( int = -1,
+                               anatomist::CommandContext * = 0,
+                               const vector_S32& = vector_S32(),
+                               int = 0, int = 0,
+                               int = 1 );
+
+    virtual ~CreateWindowsBlockCommand();
+    virtual std::string name() const;
+    QWidget *block() const;
+
+  protected:
+    virtual void doit();
+
+  private:
+    CreateWindowsBlockCommand( const anatomist::CreateWindowsBlockCommand & );
   };
 
 

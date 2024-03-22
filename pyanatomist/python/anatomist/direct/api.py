@@ -219,7 +219,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         self.quit()
 
     # objects creation
-    def createWindowsBlock(self, nbCols=2, nbRows=0, widget=None):
+    def createWindowsBlock(self, nbCols=2, nbRows=0, widget=None,
+                           visible=False, default_block=False):
         """
         Creates a window containing other windows.
 
@@ -233,7 +234,17 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             Number of rows of the windows block (exclusive with nbCols)
         widget: QWidget (optional)
             New in Anatomist 4.6.2, only applies to the direct implementation.
-            Existing parent widget to be used as a block
+            Existing parent widget to be used as a block (if visible is not
+            set)
+        visible: bool (optional)
+            New in Anatomist 5.2. If a new block is created, by default it is
+            not shown (end even not really created) before a window actually
+            uses it. If this flag is set, then the block widget will be created
+            and displayed.
+        default_block: bool (optional)
+            New in Anatomist 5.2. If True, every window created later, unless
+            specified something else, will be created inside this block.
+
 
         Returns
         -------
@@ -242,7 +253,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
         """
         if nbRows:
             nbCols = 0
-        block = self.AWindowsBlock(self, nbCols=nbCols, nbRows=nbRows)
+        block = self.AWindowsBlock(self, nbCols=nbCols, nbRows=nbRows,
+                                   visible=visible,
+                                   default_block=default_block)
         if widget is not None:
             block.setWidget(widget)
         return block
@@ -1922,7 +1935,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                 return id(self.widget)
 
         def __init__(self, anatomistinstance=None, nbCols=2, nbRows=0,
-                     widgetproxy=None):
+                     widgetproxy=None, visible=False, default_block=False):
             super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance,
                                                           nbCols=nbCols,
                                                           nbRows=nbRows)
@@ -1932,6 +1945,13 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             else:
                 self.internalRep = anatomistinstance.newId()
                 self.internalWidget = None
+                if visible:
+                    cmd = cpp.CreateWindowsBlockCommand(
+                        -1, None, [], nbCols, nbRows,
+                        default_block)
+                    anatomistinstance.execute(cmd)
+                    self.internalWidget = Anatomist.AWindowsBlock.WidgetProxy(
+                        self, self.internalRep, cmd.block())
 
         def __del__(self):
             base.Anatomist.AWindowsBlock.__del__(self)
