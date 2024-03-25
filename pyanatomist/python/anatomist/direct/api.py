@@ -1936,9 +1936,9 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
         def __init__(self, anatomistinstance=None, nbCols=2, nbRows=0,
                      widgetproxy=None, visible=False, default_block=False):
-            super(Anatomist.AWindowsBlock, self).__init__(anatomistinstance,
-                                                          nbCols=nbCols,
-                                                          nbRows=nbRows)
+            super(Anatomist.AWindowsBlock, self).__init__(
+                anatomistinstance, nbCols=nbCols, nbRows=nbRows,
+                visible=visible, default_block=default_block)
             if widgetproxy is not None:
                 self.internalRep = widgetproxy.internalRep
                 self.internalWidget = widgetproxy
@@ -1947,7 +1947,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                 self.internalWidget = None
                 if visible:
                     cmd = cpp.CreateWindowsBlockCommand(
-                        -1, None, [], nbCols, nbRows,
+                        self.internalRep, None, [], nbCols, nbRows,
                         default_block)
                     anatomistinstance.execute(cmd)
                     self.internalWidget = Anatomist.AWindowsBlock.WidgetProxy(
