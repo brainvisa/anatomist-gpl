@@ -11,25 +11,25 @@ Other functions are used by HeadlessAnatomist implementation.
 
 '''
 
-from __future__ import print_function
-
-from __future__ import absolute_import
 from soma import subprocess
 import os
-from soma.subprocess import Popen, check_output, call
-import atexit
+from soma.subprocess import Popen, check_output
 import time
 import distutils.spawn
 import ctypes
 import sys
 from six.moves import range
-from io import StringIO
 import importlib
+import shutil
+import atexit
 
-xvfb = None
+virtual_display = 'xvfb'
+virtual_display_proc = None
 original_display = None
+display = None
 hanatomist = None
 force_virtualgl = True
+
 
 def setup_virtualGL():
     ''' Load VirtualGL libraries and LD_PRELOAD env variable to run the current
@@ -50,6 +50,9 @@ def setup_virtualGL():
         if 'VGL_DISPLAY' not in os.environ and original_display is not None:
             # set VGL_DISPLAY to be the initial (3D accelerated) display
             os.environ['VGL_DISPLAY'] = original_display
+            print('VGL_DISPLAY:', original_display)
+        # needed if linGL is not directly linked against the executable
+        os.environ['VGL_GLLIB'] = 'libGL.so.1'
         preload = ['libdlfaker']
         # vglrun may use either librrfaker or libvglfaker depending on its
         # version.
@@ -59,10 +62,10 @@ def setup_virtualGL():
         except:
             vglfaker = ctypes.CDLL('libvglfaker.so', ctypes.RTLD_GLOBAL)
             preload.append('libvglfaker.so')
-        dlfaker = ctypes.CDLL('libdlfaker.so', ctypes.RTLD_GLOBAL)
+        #dlfaker = ctypes.CDLL('libdlfaker.so', ctypes.RTLD_GLOBAL)
         os.environ['LD_PRELOAD'] = ':'.join(preload)
         os.environ['VGL_ISACTIVE'] = '1'
-    except:
+    except Exception:
         return False
     return True
 
@@ -95,7 +98,6 @@ def test_glx(glxinfo_cmd=None, xdpyinfo_cmd=None, timeout=5.):
         glxinfo_cmd = distutils.spawn.find_executable('glxinfo')
     if glxinfo_cmd not in (None, []):
         glxinfo = u''
-        #glxinfo = StringIO()
         t0 = time.time()
         t1 = 0
         while glxinfo == u'' and t1 <= timeout:
@@ -221,17 +223,84 @@ def find_mesa():
     return None
 
 
-# def terminate_xvfb():
-    #global xvfb
-    #global original_display
-    # if xvfb:
-    # xvfb.terminate()
-    # xvfb.wait()
-    #xvfb = None
-    # if original_display:
-    #os.environ['DISPLAY'] = original_display
-    # else:
-    #del os.environ['DISPLAY']
+def start_xvfb(displaynum=None):
+    if shutil.which('Xvfb') is None:
+        return None
+    if displaynum is None:
+        for tdisplay in range(100):
+            if not os.path.exists('/tmp/.X11-unix/X%d' % tdisplay) \
+                    and not os.path.exists('/tmp/.X%d-lock' % tdisplay):
+                break
+        else:
+            raise RuntimeError('Too many X servers')
+    else:
+        tdisplay = str(displaynum)
+    xvfb = Popen(['Xvfb', '-screen', '0', '1280x1024x24',
+                  '+extension', 'GLX', ':%d' % tdisplay],
+                 preexec_fn=on_parent_exit('SIGINT'))
+    if xvfb:
+        global display
+        display = tdisplay
+
+    return xvfb
+
+
+def start_xpra(displaynum=None):
+    if shutil.which('xpra') is None:
+        return None
+    if displaynum is None:
+        for tdisplay in range(100):
+            if not os.path.exists('/tmp/.X11-unix/X%d' % tdisplay) \
+                    and not os.path.exists('/tmp/.X%d-lock' % tdisplay):
+                break
+        else:
+            raise RuntimeError('Too many X servers')
+    else:
+        tdisplay = str(displaynum)
+    xpra = Popen(['xpra', 'start', ':%d' % tdisplay,],
+                 preexec_fn=on_parent_exit('SIGINT'))
+    if xpra:
+        global display
+        display = tdisplay
+
+    return xpra
+
+
+def start_virtual_display(display=None):
+    global virtual_display
+    global virtual_display_proc
+
+    if virtual_display == 'xvfb':
+        virtual_display_proc = start_xvfb(display)
+        if virtual_display_proc is not None:
+            return virtual_display_proc
+        else:
+            virtual_display = 'xpra'
+    if virtual_display == 'xpra':
+        virtual_display_proc = start_xpra(display)
+    return virtual_display_proc
+
+
+def terminate_virtual_display():
+    global virtual_display
+    global virtual_display_proc
+    global original_display
+    global display
+
+    if virtual_display_proc is None:
+        return
+
+    virtual_display_proc.terminate()
+    virtual_display_proc.wait()
+    virtual_display_proc = None
+
+    if original_display:
+        os.environ['DISPLAY'] = original_display
+    else:
+        del os.environ['DISPLAY']
+
+    if virtual_display == 'xpra':
+        subprocess.call(['xpra', 'stop', str(display)])
 
 
 class PrCtlError(Exception):
@@ -266,7 +335,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
     libraries to use it appropriately.
 
     .. warning::
-        calling this function may run a Xvfb process, and change the
+        calling this function may run a Xvfb or xpra process, and change the
         current process libraries to use VirtualGL or Mesa GL.
 
     If OpenGL library or Qt QtGui module is loaded, then VirtualGL will not be
@@ -290,12 +359,13 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
         OpenGL is used.
     '''
 
-    global xvfb
+    global virtual_display_proc
+    global virtual_display
     global original_display
 
     class Result(object):
         def __init__(self):
-            self.xvfb = None
+            self.virtual_display_proc = None
             self.original_display = None
             self.display = None
             self.glx = None
@@ -305,10 +375,10 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
             self.qtapp = None
 
     result = Result()
-    result.xvfb = xvfb
+    result.virtual_display_proc = virtual_display_proc
     result.original_display = original_display
 
-    if xvfb:
+    if virtual_display_proc:
         # already setup
         return result
     if sys.platform in ('darwin', 'win32'):
@@ -339,22 +409,18 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
         use_xvfb = False
 
     if use_xvfb:
-        for display in range(100):
-            if not os.path.exists('/tmp/.X11-unix/X%d' % display) \
-                    and not os.path.exists('/tmp/.X%d-lock' % display):
-                break
-        else:
-            raise RuntimeError('Too many X servers')
-        xvfb = Popen(['Xvfb', '-screen', '0', '1280x1024x24',
-                      '+extension', 'GLX', ':%d' % display],
-                     preexec_fn=on_parent_exit('SIGINT'))
+        virtual_display_proc = start_virtual_display()
+
+    if virtual_display_proc is not None:
+        global display
 
         original_display = os.environ.get('DISPLAY', None)
-        os.environ['DISPLAY'] = ':%d' % display
+        print('using DISPLAY=:%s' % display)
+        os.environ['DISPLAY'] = ':%s' % display
 
         result.original_display = original_display
         result.display = display
-        result.xvfb = xvfb
+        result.virtual_display_proc = virtual_display_proc
         result.headless = True
 
         glx = test_glx(glxinfo_cmd=glxinfo_cmd, xdpyinfo_cmd=xdpyinfo_cmd)
@@ -364,9 +430,9 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
         if not glx:
             gl_libs = test_opengl(verbose=True)
             if len(gl_libs) != 0:
-                print('OpenGL lib already loaded. Using Xvfb will not be '
-                      'possible.')
-                result.xvfb = None
+                print('OpenGL lib already loaded. Using Xvfb or xpra will not '
+                      'be possible.')
+                result.virtual_display_proc = None
 
         # WARNING: the test was initially glx < 2, but then it would not
         # enable virtualGL if glx is detected through glxinfo. I don't remember
@@ -393,8 +459,8 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
                     result.virtualgl = glx
 
                     if glx:
-                        print('Running through VirtualGL + Xvfb: '
-                              'this is optimal.')
+                        print('Running through VirtualGL + %s: '
+                              'this is optimal.' % virtual_display)
                     else:
                         print('But VirtualGL could not be loaded...')
 
@@ -415,12 +481,10 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
                     = os.path.dirname(mesa) + ':' \
                     + os.getenv('LD_LIBRARY_PATH')
                 # re-run Xvfb using new path
-                xvfb.terminate()
-                xvfb.wait()
-                xvfb = Popen(['Xvfb', '-screen', '0', '1280x1024x24',
-                              '+extension', 'GLX', ':%d' % display],
-                             preexec_fn=on_parent_exit('SIGINT'))
-                result.xvfb = xvfb
+                virtual_display_proc.terminate()
+                virtual_display_proc.wait()
+                virtual_display_proc = start_virtual_display(display=display)
+                result.virtual_display_proc = virtual_display_proc
                 #self.mesa_lib = mesa_lib
                 glx = test_glx(glxinfo_cmd, xdpyinfo_cmd)
                 result.glx = glx
@@ -435,12 +499,12 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
                 print('Mesa not found.')
 
         if not glx:
-            print('The current Xvfb does not have a GLX extension. '
+            print('The current virtual display does not have a GLX extension. '
                   'Aborting it.')
-            xvfb.terminate()
-            xvfb.wait()
-            xvfb = None
-            result.xvfb = None
+            virtual_display_proc.terminate()
+            virtual_display_proc.wait()
+            virtual_display_proc = None
+            result.virtual_display_proc = None
             if original_display is not None:
                 os.environ['DISPLAY'] = original_display
                 result.display = original_display
@@ -459,10 +523,10 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
         print('Headless Anatomist running in normal (non-headless) mode')
         result.headless = False
 
-    # this is not needed any longer, since on_parent_exit() is passed to
-    # Popen
-    # if xvfb is not None:
-        # atexit.register(terminate_xvfb)
+    # this is not needed any longer for Xvfb, since on_parent_exit() is passed
+    # to Popen, but xpra needs to stop the corresponding server
+    if virtual_display_proc is not None:
+        atexit.register(terminate_virtual_display)
 
     return result
 
@@ -471,11 +535,11 @@ def HeadlessAnatomist(*args, **kwargs):
     ''' Implements an off-screen headless Anatomist.
 
     .. warning:: Only usable with X11.
-        Needs Xvfb and xdpyinfo commands to be available, and possibly
-        VirtualGL or Mesa.
+        Needs either Xvfb or xpra, and xdpyinfo commands to be available,
+        and possibly VirtualGL or Mesa.
 
-    All X rendering is deported to a virtual X server (Xvfb) which doesn't
-    actually display things.
+    All X rendering is deported to a virtual X server (Xvfb or xpra) which
+    doesn't actually display things.
 
     Depending on the OpenGL implementation / driver, Xvfb will not
     necessarily support the GLX extension. This especially happens with
@@ -582,8 +646,8 @@ def HeadlessAnatomist(*args, **kwargs):
         Anatomist = getattr(module, aclass)
 
     # def __del__ana(self):
-    #atexit._exithandlers.remove((terminate_xvfb, (), {}))
-    # terminate_xvfb()
+    #atexit._exithandlers.remove((terminate_virtual_display, (), {}))
+    # terminate_virtual_display()
 
     # def createWindow_ana(self, wintype, **kwargs):
     #options = kwargs.get('options', {})

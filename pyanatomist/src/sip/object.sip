@@ -193,9 +193,10 @@ namespace anatomist
   }
 %End
 
-    virtual const anatomist::AObject* nearestVertex(
-      const vector_FLOAT & pos, int *vertex, float *distance, float tol = -1,
-      int *polygon /In/ = 0, bool tex_only = false, int target_poly = -1 ) const;
+    const anatomist::AObject* nearestVertex(
+      const vector_FLOAT & pos, int *vertex, float *distance, int *polygon,
+      float tol = -1, bool tex_only = false, int target_poly = -1,
+      bool get_poly = false ) const;
 %Docstring
         Get the nearest vertex to a given position.
 
@@ -205,8 +206,9 @@ namespace anatomist
         the object has children objects, the child with the nearest vertex will
         be returned. If tol is >=0, this tolerence threshold is used to filter
         out vertices too far (thus the function may fail and return 0). If
-        polygon is given as a valid pointer to an int, the polygon index of the
-        "nearest polygon" will also be filled. The nearest polygon will contain
+        get_poly is True, the polygon index of the
+        "nearest polygon" will also be returned (otherwise -1 is returned).
+        The nearest polygon will contain
         the nearest vertex, thus a polygon wich center is nearest to the given
         point can be discarded.
 
@@ -216,6 +218,10 @@ namespace anatomist
 
         If the object is also displayed in a 3D window, OpenGL-based functions
         may be more efficient than this one.
+%End
+%MethodCode
+  a3 = -1;
+  sipRes = sipCpp->nearestVertex( *a0, &a1, &a2, a4, a7 ? &a3 : 0, a5, a6 );
 %End
 
     virtual vector_FLOAT texValues( const vector_FLOAT & pos,

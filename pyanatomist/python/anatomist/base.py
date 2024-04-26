@@ -1477,7 +1477,7 @@ class Anatomist(Singleton):
 
         def __init__(self, anatomistinstance, internalRep=None, refType=None,
                      *args, **kwargs):
-            super(Anatomist.AItem, self).__init__(*args, **kwargs)
+            super(Anatomist.AItem, self).__init__()
             self.anatomistinstance = weak_proxy.weak_proxy(anatomistinstance)
             self.refType = refType
             if internalRep is None:
@@ -2463,7 +2463,7 @@ class Anatomist(Singleton):
 
         def setColumns(self, nCol):
             self.nbCols = nCol
-            self.rnRows = 0
+            self.nbRows = 0
             self.anatomistinstance.execute(
                 'WindowBlock', block=self.internalRep,
                 block_columns=nCol)
@@ -2480,7 +2480,12 @@ class Anatomist(Singleton):
                 'WindowBlock', block=self.internalRep,
                 make_rectangle=1, rectangle_ratio=widthHeightRatio)
 
-    #
+        def reorderViews(self, views):
+            self.anatomistinstance.execute(
+                'WindowBlock', block=self.internalRep,
+                reorder_views=views)
+
+
     class AWindowsGroup(AItem):
 
         """
