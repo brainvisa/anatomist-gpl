@@ -24,7 +24,7 @@ import anatomist.api as ana
 
 ipkernel_tools.before_start_ipkernel()
 
-a = ana.Anatomist(*sys.argv)
+a = ana.Anatomist(*sys.argv[1:])
 # exits abruptly when closing the control window. Works around the callback
 # problem: when the even loop runs through ipython kernel,
 # QApplication.aboutToQuit signals are never executed, thus cannot actually
