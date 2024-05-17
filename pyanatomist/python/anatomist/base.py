@@ -310,7 +310,8 @@ class Anatomist(Singleton):
         """
         pass
 
-    def loadObject(self, filename, objectName=None, restrict_object_types=None, forceReload=True, duplicate=False, hidden=False):
+    def loadObject(self, filename, objectName=None, restrict_object_types=None,
+                   forceReload=True, duplicate=False, hidden=False):
         """
         Loads an object from a file (volume, mesh, graph, texture...)
 
@@ -341,6 +342,28 @@ class Anatomist(Singleton):
             The loaded object
         """
         pass
+
+    def loadObjects(self, filenames, object_names="",
+                    restrict_object_types=None,
+                    forceReload=True, duplicate=False, hidden=False,
+                    parallel=False):
+        if not isinstance(object_names, list):
+            object_names = [object_names] * len(filenames)
+        if not isinstance(restrict_object_types, list):
+            restrict_object_types = [restrict_object_types] * len(filenames)
+        if not isinstance(forceReload, list):
+            forceReload = [forceReload] * len(filenames)
+        if not isinstance(duplicate, list):
+            duplicate = [duplicate] * len(filenames)
+        if not isinstance(hidden, list):
+            hidden = [hidden] * len(filenames)
+        objs = []
+        for fn, on, rot, fr, d, h in zip(filenames, object_names,
+                                         restrict_object_types, forceReload,
+                                         duplicate, hidden):
+            objs.append(self.loadObject(fn, on, rot, fr, d, h))
+
+        return objs
 
     def duplicateObject(self, source, shallowCopy=True):
         """

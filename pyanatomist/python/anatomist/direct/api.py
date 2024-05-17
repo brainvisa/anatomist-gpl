@@ -54,22 +54,19 @@ If the Anatomist object is created outside the main thread, you must get a threa
 >>> import anatomist.api as anatomist
 
 """
-from __future__ import print_function
 
-from __future__ import absolute_import
 from anatomist import cpp
 from anatomist import base
-import operator
 from soma import aims
 from soma.qt_gui import qt_backend
 import os
 import sys
-import types
 import weakref
-import sys
 import numpy as np
 import six
 from anatomist.base import isSequenceType, isMappingType
+from functools import partial
+import time
 
 try:
     from soma.qt_gui.qt_backend.QtCore import QString
@@ -423,12 +420,56 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             if obj is None:
                 self.callback(None, filename)
             else:
-                o = self.anatomistinstance.typeObject(obj)
+                o = self.anatomistinstance.typedObject(obj)
                 o.releaseAppRef()
                 if self.duplicate:
                     # the original object has been loaded hidden, duplicate it
                     o = self.anatomistinstance.duplicateObject(o)
                 self.callback(o, filename)
+
+    def loadObjects(self, filenames, object_names="",
+                    restrict_object_types=None,
+                    forceReload=True, duplicate=False, hidden=False,
+                    parallel=True):
+        def append_object(objl, obj, filename):
+            objl.append(obj)
+
+        if not isinstance(object_names, list):
+            object_names = [object_names] * len(filenames)
+        if not isinstance(restrict_object_types, list):
+            restrict_object_types = [restrict_object_types] * len(filenames)
+        if not isinstance(forceReload, list):
+            forceReload = [forceReload] * len(filenames)
+        if not isinstance(duplicate, list):
+            duplicate = [duplicate] * len(filenames)
+        if not isinstance(hidden, list):
+            hidden = [hidden] * len(filenames)
+
+        options = []
+        cbk = None
+        objl = []
+        if parallel:
+            cbk = partial(append_object, objl)
+        for fn, on, rot, fr, d, h in zip(filenames, object_names,
+                                         restrict_object_types, forceReload,
+                                         duplicate, hidden):
+            options.append({'asyncCallback': cbk,
+                            'objectName': on,
+                            'restrict_object_types': rot,
+                            'forceReload': fr,
+                            'duplicate': d,
+                            'hidden': h})
+
+        objs = [self.loadObject(filename=f, **op)
+                for f, op in zip(filenames, options)]
+
+        if parallel:
+            while len(objl) != len(filenames):
+                time.sleep(0.01)
+                Qt.QApplication.instance().processEvents()
+            objs = objl
+
+        return objs
 
     def duplicateObject(self, source, shallowCopy=True):
         """
