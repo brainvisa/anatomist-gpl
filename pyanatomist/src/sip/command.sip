@@ -501,7 +501,7 @@ namespace anatomist
     QWidget *block() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
 
   private:
     CreateWindowCommand( const anatomist::CreateWindowCommand & );
@@ -526,7 +526,7 @@ namespace anatomist
     QWidget *block() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
 
   private:
     CreateWindowsBlockCommand( const anatomist::CreateWindowsBlockCommand & );
@@ -552,7 +552,7 @@ namespace anatomist
     void objectLoaded( anatomist::AObject*, const std::string & );
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
 
   private:
     LoadObjectCommand( const anatomist::LoadObjectCommand & );
@@ -665,7 +665,7 @@ typedef std::set<anatomist::AWindow * > set_AWindowPtr;
     virtual std::string name() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
 
   private:
     AddObjectCommand( const anatomist::AddObjectCommand & );
@@ -691,7 +691,7 @@ typedef std::set<anatomist::AWindow * > set_AWindowPtr;
     virtual std::string name() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
 
   private:
     RemoveObjectCommand( const anatomist::RemoveObjectCommand & );
@@ -756,7 +756,7 @@ typedef std::set<anatomist::AWindow * > set_AWindowPtr;
     anatomist::AObject* createdObject() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 
@@ -836,7 +836,7 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
     virtual std::string name() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 
@@ -862,7 +862,7 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
     anatomist::Referential *ref() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 
@@ -889,7 +889,7 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
     anatomist::Transformation *trans() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 
@@ -906,7 +906,7 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
     virtual std::string name() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 
@@ -932,7 +932,7 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
     anatomist::MObject* groupObject() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 
@@ -951,7 +951,7 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
     anatomist::AObject* createdObject();
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 
@@ -970,7 +970,7 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
     anatomist::AObject* createdObject();
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 
