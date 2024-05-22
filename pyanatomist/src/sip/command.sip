@@ -79,7 +79,7 @@ namespace anatomist
 %End
 
   public:
-    virtual void execute(); 
+    virtual void execute() /ReleaseGIL/;
     virtual std::string name() const = 0;
     carto::Object write( anatomist::CommandContext * = 0 );
 %MethodCode
@@ -123,11 +123,11 @@ namespace anatomist
 
   public:
     Processor();
-    void execute( anatomist::Command * /Transfer/ ) /PyName=_execute/;
+    void execute( anatomist::Command * /Transfer/ ) /PyName=_execute, ReleaseGIL/;
 
     anatomist::Command* 
     execute( const std::string &, const std::string & ="", 
-             anatomist::CommandContext* = 0 ) /PyName=_execute/;
+             anatomist::CommandContext* = 0 ) /PyName=_execute, ReleaseGIL/;
     bool execWhileIdle() const;
     void allowExecWhileIdle( bool );
 
@@ -556,6 +556,40 @@ namespace anatomist
 
   private:
     LoadObjectCommand( const anatomist::LoadObjectCommand & );
+  };
+
+
+  class LoadObjectsCommand : QObject,
+                             anatomist::WaitCommand
+  {
+%TypeHeaderCode
+#include <anatomist/commands/cLoadObjects.h>
+%End
+
+  public:
+    LoadObjectsCommand( const vector_STRING & filename,
+                        const vector_S32 & id = vector_S32(),
+                        const vector_STRING & objname
+                          = vector_STRING(),
+                        carto::Object options = carto::none(),
+                        anatomist::CommandContext* context
+                          = &anatomist::CommandContext::defaultContext(),
+                        bool threaded = true );
+    virtual ~LoadObjectsCommand();
+
+    virtual std::string name() const;
+    vector_AObjectPtr loadedObjects();
+    bool loading() const;
+    void wait();
+
+  protected:
+    virtual void doit() /ReleaseGIL/;
+
+  signals:
+    void objectLoaded( anatomist::AObject*, const QString & );
+
+  private:
+    LoadObjectsCommand( const anatomist::LoadObjectsCommand & );
   };
 
 
