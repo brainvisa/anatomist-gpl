@@ -330,7 +330,7 @@ def on_parent_exit(signame):
     return set_parent_exit_signal
 
 
-def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
+def setup_headless_xvfb(allow_virtualgl=True, force_virtualgl=force_virtualgl):
     ''' Sets up a headless virtual X server and tunes the current process
     libraries to use it appropriately.
 
@@ -531,6 +531,48 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
     return result
 
 
+def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
+
+    from soma.qt_gui.qt_backend import Qt
+    import sip
+
+    class Result(object):
+        def __init__(self):
+            self.virtual_display_proc = None
+            self.original_display = None
+            self.display = None
+            self.glx = None
+            self.virtualgl = None
+            self.headless = None
+            self.mesa = False
+            self.qtapp = None
+            self.qt_offscreen = None
+
+    result = Result()
+    result.virtual_display_proc = virtual_display_proc
+    result.original_display = original_display
+
+    qtapp = test_qapp()
+    # print('qtapp:', qtapp)
+    result.qtapp = qtapp
+
+    if qtapp == 'QApp':
+        # QApplication has already opened the current display: we cannot change
+        # it afterwards.
+        print('QApplication already instantiated, headless Anatomist is not '
+              'possible.')
+        result.qt_offscreen = False
+        result.headless = False
+
+    print('starting QApplication offscreen.')
+    app = Qt.QApplication([sys.argv[0], '-platform', 'offscreen'])
+    sip.transferto(app, None)  # to prevent deletion just after now
+    result.qt_offscreen = True
+    result.headless = True
+
+    return result
+
+
 def HeadlessAnatomist(*args, **kwargs):
     ''' Implements an off-screen headless Anatomist.
 
@@ -629,6 +671,7 @@ def HeadlessAnatomist(*args, **kwargs):
 
     result = setup_headless(allow_virtualgl=allow_virtualgl,
                             force_virtualgl=inst_force_virtualgl)
+    print('qapp:', test_qapp())
 
     implementation = kwargs.get('implementation', 'direct')
     if '.' in implementation:
