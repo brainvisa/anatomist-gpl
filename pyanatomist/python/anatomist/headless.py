@@ -565,6 +565,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
         result.headless = False
 
     print('starting QApplication offscreen.')
+    Qt.QCoreApplication.setAttribute(Qt.Qt.AA_ShareOpenGLContexts)
     app = Qt.QApplication([sys.argv[0], '-platform', 'offscreen'])
     sip.transferto(app, None)  # to prevent deletion just after now
     result.qt_offscreen = True
