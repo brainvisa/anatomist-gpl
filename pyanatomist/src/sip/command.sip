@@ -1,6 +1,5 @@
 
 %ModuleCode
-#if SIP_VERSION >= 0x040700
 #include <anatomist/commands/cCreateWindow.h>
 #include <anatomist/commands/cCreateWindowsBlock.h>
 #include <anatomist/commands/cAddObject.h>
@@ -14,10 +13,10 @@
 #include <anatomist/commands/cObjectInfo.h>
 #include <anatomist/commands/cGetInfo.h>
 #include <anatomist/commands/cLoadObject.h>
+#include <anatomist/commands/cLoadObjects.h>
 #include <anatomist/commands/cGenerateTexture.h>
 #include <anatomist/commands/cExtractTexture.h>
 #include <anatomist/commands/cFusionInfo.h>
-#endif
 %End
 
 
@@ -59,6 +58,8 @@ namespace anatomist
   else if( dynamic_cast<anatomist::WaitCommand *>( sipCpp ) )
     if( dynamic_cast<anatomist::LoadObjectCommand *>( sipCpp ) )
       sipType = sipType_anatomist_LoadObjectCommand;
+    else if( dynamic_cast<anatomist::LoadObjectsCommand *>( sipCpp ) )
+      sipType = sipType_anatomist_LoadObjectsCommand;
     else
       sipType = sipType_anatomist_WaitCommand;
   else if( dynamic_cast<anatomist::GenerateTextureCommand *>( sipCpp ) )
