@@ -534,7 +534,6 @@ def setup_headless_xvfb(allow_virtualgl=True, force_virtualgl=force_virtualgl):
 def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
 
     from soma.qt_gui.qt_backend import Qt
-    import sip
 
     class Result(object):
         def __init__(self):
@@ -553,7 +552,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
     result.original_display = original_display
 
     qtapp = test_qapp()
-    # print('qtapp:', qtapp)
+    print('qtapp:', qtapp)
     result.qtapp = qtapp
 
     if qtapp == 'QApp':
@@ -565,12 +564,16 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
         result.headless = False
 
     print('starting QApplication offscreen.')
+    print('former app:', Qt.QApplication.instance())
     Qt.QCoreApplication.setAttribute(Qt.Qt.AA_ShareOpenGLContexts)
     app = Qt.QApplication([sys.argv[0], '-platform', 'offscreen'])
-    sip.transferto(app, None)  # to prevent deletion just after now
+    # sip.transferto(app, None)  # to prevent deletion just after now
     result.qt_offscreen = True
     result.headless = True
 
+    # we need to keep a reference to the qapp, otherwise it gets
+    # replaced with a QCoreApplication instance for an unknown reason.
+    result.qapp = app
     return result
 
 
@@ -672,7 +675,6 @@ def HeadlessAnatomist(*args, **kwargs):
 
     result = setup_headless(allow_virtualgl=allow_virtualgl,
                             force_virtualgl=inst_force_virtualgl)
-    print('qapp:', test_qapp())
 
     implementation = kwargs.get('implementation', 'direct')
     if '.' in implementation:
