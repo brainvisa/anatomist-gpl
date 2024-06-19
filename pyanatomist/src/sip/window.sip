@@ -171,6 +171,7 @@ public:
   QAWindow( QWidget * /TransferThis/ = 0, const char *=0,
     carto::Object =carto::none(), Qt::WindowFlags=Qt::Window );
   virtual ~QAWindow();
+  virtual void Refresh();
   virtual void refreshNow();
   virtual bool close();
   static QAWindow* fromObject( carto::GenericObject );
