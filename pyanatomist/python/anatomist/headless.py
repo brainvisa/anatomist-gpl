@@ -562,6 +562,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
               'possible.')
         result.qt_offscreen = False
         result.headless = False
+        return result
 
     print('starting QApplication offscreen.')
     print('former app:', Qt.QApplication.instance())
