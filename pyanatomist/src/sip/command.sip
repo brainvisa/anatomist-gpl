@@ -1,6 +1,5 @@
 
 %ModuleCode
-#if SIP_VERSION >= 0x040700
 #include <anatomist/commands/cCreateWindow.h>
 #include <anatomist/commands/cCreateWindowsBlock.h>
 #include <anatomist/commands/cAddObject.h>
@@ -14,10 +13,10 @@
 #include <anatomist/commands/cObjectInfo.h>
 #include <anatomist/commands/cGetInfo.h>
 #include <anatomist/commands/cLoadObject.h>
+#include <anatomist/commands/cLoadObjects.h>
 #include <anatomist/commands/cGenerateTexture.h>
 #include <anatomist/commands/cExtractTexture.h>
 #include <anatomist/commands/cFusionInfo.h>
-#endif
 %End
 
 
@@ -59,6 +58,8 @@ namespace anatomist
   else if( dynamic_cast<anatomist::WaitCommand *>( sipCpp ) )
     if( dynamic_cast<anatomist::LoadObjectCommand *>( sipCpp ) )
       sipType = sipType_anatomist_LoadObjectCommand;
+    else if( dynamic_cast<anatomist::LoadObjectsCommand *>( sipCpp ) )
+      sipType = sipType_anatomist_LoadObjectsCommand;
     else
       sipType = sipType_anatomist_WaitCommand;
   else if( dynamic_cast<anatomist::GenerateTextureCommand *>( sipCpp ) )
@@ -79,7 +80,7 @@ namespace anatomist
 %End
 
   public:
-    virtual void execute(); 
+    virtual void execute() /ReleaseGIL/;
     virtual std::string name() const = 0;
     carto::Object write( anatomist::CommandContext * = 0 );
 %MethodCode
@@ -123,11 +124,11 @@ namespace anatomist
 
   public:
     Processor();
-    void execute( anatomist::Command * /Transfer/ ) /PyName=_execute/;
+    void execute( anatomist::Command * /Transfer/ ) /PyName=_execute, ReleaseGIL/;
 
     anatomist::Command* 
     execute( const std::string &, const std::string & ="", 
-             anatomist::CommandContext* = 0 ) /PyName=_execute/;
+             anatomist::CommandContext* = 0 ) /PyName=_execute, ReleaseGIL/;
     bool execWhileIdle() const;
     void allowExecWhileIdle( bool );
 
@@ -501,7 +502,7 @@ namespace anatomist
     QWidget *block() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
 
   private:
     CreateWindowCommand( const anatomist::CreateWindowCommand & );
@@ -526,7 +527,7 @@ namespace anatomist
     QWidget *block() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
 
   private:
     CreateWindowsBlockCommand( const anatomist::CreateWindowsBlockCommand & );
@@ -552,10 +553,44 @@ namespace anatomist
     void objectLoaded( anatomist::AObject*, const std::string & );
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
 
   private:
     LoadObjectCommand( const anatomist::LoadObjectCommand & );
+  };
+
+
+  class LoadObjectsCommand : QObject,
+                             anatomist::WaitCommand
+  {
+%TypeHeaderCode
+#include <anatomist/commands/cLoadObjects.h>
+%End
+
+  public:
+    LoadObjectsCommand( const vector_STRING & filename,
+                        const vector_S32 & id = vector_S32(),
+                        const vector_STRING & objname
+                          = vector_STRING(),
+                        carto::Object options = carto::none(),
+                        anatomist::CommandContext* context
+                          = &anatomist::CommandContext::defaultContext(),
+                        bool threaded = true );
+    virtual ~LoadObjectsCommand();
+
+    virtual std::string name() const;
+    vector_AObjectPtr loadedObjects();
+    bool loading() const;
+    void wait();
+
+  protected:
+    virtual void doit() /ReleaseGIL/;
+
+  signals:
+    void objectLoaded( anatomist::AObject*, const QString & );
+
+  private:
+    LoadObjectsCommand( const anatomist::LoadObjectsCommand & );
   };
 
 
@@ -665,7 +700,7 @@ typedef std::set<anatomist::AWindow * > set_AWindowPtr;
     virtual std::string name() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
 
   private:
     AddObjectCommand( const anatomist::AddObjectCommand & );
@@ -691,7 +726,7 @@ typedef std::set<anatomist::AWindow * > set_AWindowPtr;
     virtual std::string name() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
 
   private:
     RemoveObjectCommand( const anatomist::RemoveObjectCommand & );
@@ -756,7 +791,7 @@ typedef std::set<anatomist::AWindow * > set_AWindowPtr;
     anatomist::AObject* createdObject() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 
@@ -836,7 +871,7 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
     virtual std::string name() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 
@@ -862,7 +897,7 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
     anatomist::Referential *ref() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 
@@ -889,7 +924,7 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
     anatomist::Transformation *trans() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 
@@ -906,7 +941,7 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
     virtual std::string name() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 
@@ -932,7 +967,7 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
     anatomist::MObject* groupObject() const;
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 
@@ -951,7 +986,7 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
     anatomist::AObject* createdObject();
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 
@@ -970,7 +1005,7 @@ typedef std::set<anatomist::AObject * > set_AObjectPtr;
     anatomist::AObject* createdObject();
 
   protected:
-    virtual void doit();
+    virtual void doit() /ReleaseGIL/;
   };
 
 

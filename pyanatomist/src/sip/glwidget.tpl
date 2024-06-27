@@ -12,7 +12,7 @@ class GLWidgetManager : anatomist::View
   public:
     virtual ~GLWidgetManager();
 
-%#if QT_VERSION >= 0x060000%
+%#if 1 // QT_VERSION >= 0x060000%
     QOpenGLWidget *qglWidget ();
 %#else%
     QGLWidget *qglWidget ();
@@ -86,7 +86,7 @@ class GLWidgetManager : anatomist::View
 
 
 
-%#if QT_VERSION >= 0X060000%
+%#if 1 // QT_VERSION >= 0x060000 // #ifdef ANA_USE_QOPENGLWIDGET%
 class QAGLWidget : QOpenGLWidget, anatomist::GLWidgetManager
 %#else%
 class QAGLWidget : QGLWidget, anatomist::GLWidgetManager
@@ -100,7 +100,7 @@ class QAGLWidget : QGLWidget, anatomist::GLWidgetManager
 
   public:
 
-%#if QT_VERSION >= 0X060000%
+%#if 1 // QT_VERSION >= 0x060000 // #ifdef ANA_USE_QOPENGLWIDGET%
     QAGLWidget( anatomist::AWindow*, QWidget* = 0,
                 const char* = 0,
                 const QOpenGLWidget * = 0,

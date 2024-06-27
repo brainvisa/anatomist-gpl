@@ -67,29 +67,14 @@ class PaletteContrastAction(anatomist.Action):
                     else:
                         initpal = [pal.min1(), pal.max1()]
                         self._palettes[o] = initpal
-                    if pal.zeroCenteredAxis1():
-                        diff2 = [abs(diff[0]), abs(diff[1])]
-                        val = initpal[1] + diff[diff2.index(max(diff2))]
-                        minval = 1. - val
-                        glc = o.glAPI()
-                        if glc:
-                            extr = glc.glTexExtrema(0)
-                            valmin = extr.minquant[0]
-                            valmax = extr.maxquant[0]
-                            del extr, glc
-                            if valmin != valmax:
-                                maxq = valmin + val * (valmax - valmin)
-                                minq = -maxq
-                                minval = (minq - valmin) / (valmax - valmin)
-                    else:
-                        val = initpal[1] + diff[1]
-                        minval = initpal[0] + diff[0]
-                        threshold = 0.5
-                        if val < initpal[0] and initpal[1] > initpal[0]:
-                            if diff[1] < -threshold:
-                                val = initpal[0] + diff[1] + threshold
-                            else:
-                                val = initpal[0]
+                    val = initpal[1] + diff[1]
+                    minval = initpal[0] + diff[0]
+                    threshold = 0.5
+                    if val < initpal[0] and initpal[1] > initpal[0]:
+                        if diff[1] < -threshold:
+                            val = initpal[0] + diff[1] + threshold
+                        else:
+                            val = initpal[0]
                     a.theProcessor().execute('SetObjectPalette', objects=[o],
                                              min=minval, max=val)
                 elif isinstance(o, anatomist.MObject):

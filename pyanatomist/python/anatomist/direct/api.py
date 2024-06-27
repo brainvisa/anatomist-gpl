@@ -54,22 +54,19 @@ If the Anatomist object is created outside the main thread, you must get a threa
 >>> import anatomist.api as anatomist
 
 """
-from __future__ import print_function
 
-from __future__ import absolute_import
 from anatomist import cpp
 from anatomist import base
-import operator
 from soma import aims
 from soma.qt_gui import qt_backend
 import os
 import sys
-import types
 import weakref
-import sys
 import numpy as np
 import six
 from anatomist.base import isSequenceType, isMappingType
+from functools import partial
+import time
 
 try:
     from soma.qt_gui.qt_backend.QtCore import QString
@@ -408,7 +405,7 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                 return None
             return objects
 
-    class _ObjectLoaded(object):
+    class _ObjectLoaded:
 
         '''internal.'''
 
@@ -419,16 +416,68 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             self.filename = filename
 
         def loaded(self, obj, filename):
-            self.anatomistinstance._loadCbks.remove(self)
+            # print('LOADED.', obj)
             if obj is None:
                 self.callback(None, filename)
             else:
-                o = self.anatomistinstance.typeObject(obj)
+                o = self.anatomistinstance.typedObject(obj)
                 o.releaseAppRef()
                 if self.duplicate:
                     # the original object has been loaded hidden, duplicate it
                     o = self.anatomistinstance.duplicateObject(o)
                 self.callback(o, filename)
+
+        def remove_callback(self, cmd):
+            # print('REMOVE callback')
+            self.anatomistinstance._loadCbks.remove(self)
+
+    def loadObjects(self, filenames, object_names=[],
+                    restrict_object_types=None,
+                    forceReload=True, duplicate=False, hidden=False,
+                    parallel=True, asyncCallback=None):
+        if not isinstance(object_names, list):
+            object_names = [object_names] * len(filenames)
+        #if not isinstance(forceReload, list):
+            #forceReload = [forceReload] * len(filenames)
+        #if not isinstance(duplicate, list):
+            #duplicate = [duplicate] * len(filenames)
+
+        options = {}
+        if restrict_object_types:
+            restrict_object_types['__syntax__'] = 'dictionary'
+            options['restrict_object_types'] = restrict_object_types
+        if hidden:
+            options['hidden'] = 1
+        if asyncCallback:
+            options['asynchronous'] = 1
+
+        c = cpp.LoadObjectsCommand(filenames, [-1] * len(filenames),
+                                   object_names,
+                                   aims.Object(options),
+                                   cpp.CommandContext.defaultContext(),
+                                   parallel)
+        if asyncCallback:
+            print('connect callback')
+            cbk = self._ObjectLoaded(self, duplicate, asyncCallback, filenames)
+            self._loadCbks.add(cbk)
+            c.objectLoaded.connect(cbk.loaded)
+            c.loadFinished.connect(cbk.remove_callback)
+
+        self.execute(c)
+
+        if not asyncCallback:
+            objs = c.loadedObjects()
+            objects = []
+            for obj in objs:
+                o = self.typedObject(obj)
+                objects.append(o)
+                o.releaseAppRef()
+                if duplicate:
+                    # the original object has been loaded hidden, duplicate it
+                    copyObject = self.duplicateObject(o)
+                    objects.append(copyObject)
+
+            return objects
 
     def duplicateObject(self, source, shallowCopy=True):
         """
