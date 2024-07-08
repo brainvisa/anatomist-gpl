@@ -101,7 +101,7 @@ public:
   virtual ~Action();
   virtual std::string name() const = 0;
   virtual bool viewableAction() const;
-  virtual bool isSingleton();
+  virtual bool isSingleton() const;
   anatomist::View * view();
   virtual QWidget* actionView(QWidget *);
 };
