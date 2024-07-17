@@ -51,7 +51,7 @@ def setup_virtualGL():
             # set VGL_DISPLAY to be the initial (3D accelerated) display
             os.environ['VGL_DISPLAY'] = original_display
             print('VGL_DISPLAY:', original_display)
-        # needed if linGL is not directly linked against the executable
+        # needed if libGL is not directly linked against the executable
         os.environ['VGL_GLLIB'] = 'libGL.so.1'
         preload = ['libdlfaker']
         # vglrun may use either librrfaker or libvglfaker depending on its

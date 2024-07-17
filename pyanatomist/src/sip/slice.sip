@@ -56,6 +56,7 @@ public:
   Point3df offset() const;
   void setPlane( const Point4df & plane );
   Point4df plane() const;
+  void invertSlice();
 
   virtual void sliceChanged();
 
