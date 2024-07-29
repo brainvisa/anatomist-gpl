@@ -1,9 +1,4 @@
-#!/usr/bin/env python
 
-# test dataset: /neurospin/unicog/protocols/IRMf/Dighiero_Dehaene_7TLinguistics_2023/
-
-import sys
-from soma.qt_gui import ipkernel_tools
 import anatomist.direct.api as ana
 from soma.qt_gui.qt_backend import Qt
 from soma import aims
@@ -601,19 +596,3 @@ class ContrastPanel(Qt.QMainWindow):
         if osp.exists(xfmf):
             sb_to_mni = aims.read(xfmf)
         return sb_to_mni
-
-
-if __name__ == '__main__':
-    ipkernel_tools.before_start_ipkernel()
-
-    a = ana.Anatomist(*sys.argv)
-    # exits abruptly when closing the control window. Works around the callback
-    # problem: when the event loop runs through ipython kernel,
-    # QApplication.aboutToQuit signals are never executed, thus cannot actually
-    # quit.
-    a.setExitOnQuit(True)
-
-    cp = ContrastPanel()
-    cp.show()
-
-    ipkernel_tools.start_ipkernel_qt_engine()
