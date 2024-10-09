@@ -72,7 +72,7 @@ log = logging.getLogger(__name__)
 log.setLevel("CRITICAL")
 #log.setLevel("DEBUG")
 log.addHandler(logging.StreamHandler())
-debug = True
+debug = False
 
 if debug:
     from ipywidgets import HTML
