@@ -42,6 +42,40 @@ public:
   void setMax1( float x );
   void setMin2( float x );
   void setMax2( float x );
+
+  float absMin1( const anatomist::AObject * obj ) const;
+%Docstring
+  get the absolute min for a given object
+%End
+  float absMax1( const anatomist::AObject * obj ) const;
+%Docstring
+  get the absolute max for a given object
+%End
+  float absMin2( const anatomist::AObject * obj ) const;
+%Docstring
+  get the absolute min for a given object
+%End
+  float absMax2( const anatomist::AObject * obj ) const;
+%Docstring
+  get the absolute max for a given object
+%End
+  void setAbsMin1( const anatomist::AObject * obj, float x );
+%Docstring
+  set the min from an absolute value for a given object
+%End
+  void setAbsMax1( const anatomist::AObject * obj, float x );
+%Docstring
+  set the max from an absolute value for a given object
+%End
+  void setAbsMin2( const anatomist::AObject * obj, float x );
+%Docstring
+  set the min from an absolute value for a given object
+%End
+  void setAbsMax2( const anatomist::AObject * obj, float x );
+%Docstring
+  set the max from an absolute value for a given object
+%End
+
   bool zeroCenteredAxis1() const;
   bool zeroCenteredAxis2() const;
   void setZeroCenteredAxis1( bool );
