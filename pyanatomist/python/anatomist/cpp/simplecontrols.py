@@ -31,15 +31,17 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
-from __future__ import absolute_import
+'''Simplified controls useful to avoid complex interactions.
+
+When you need them in a custom application, you need to register them first in
+the :class:`ControlManager`. They are already registered in the action/control
+dictionaries.
+'''
+
 import anatomist.cpp as anatomist
 from soma.qt_gui.qt_backend import QtCore, QtGui
 import os
 import six
-
-'''Simplified controls useful to avoid complex interactions.
-When you need them in a custom application, you need to register them first in the ControlManager. They are already registered in the action/control dictionaries.
-'''
 
 
 class ResetFOVAction(anatomist.Action):

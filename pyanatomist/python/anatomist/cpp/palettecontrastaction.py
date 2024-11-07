@@ -31,6 +31,11 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+''' Module providing a control to set the colormap ranges
+
+Main class: :class:`PaletteContrastAction`
+'''
+
 import anatomist.cpp as anatomist
 from soma.qt_gui.qt_backend import QtCore, QtGui
 
@@ -39,10 +44,15 @@ testControl = False
 
 
 class PaletteContrastAction(anatomist.Action):
+    ''' Anatomist Action class for palette contrasts adjustment
+    '''
+
     def name(self):
         return 'PaletteContrastAction'
 
     def startContrast(self, x, y, globx, globy):
+        'action start'
+
         self._start = (x, y)
         self._palettes = {}
         self._showGraphicsView(self.view())
@@ -79,6 +89,8 @@ class PaletteContrastAction(anatomist.Action):
         self._drawPaletteInGraphicsView(self.view())
 
     def moveContrastMin(self, x, y, globx, globy):
+        'action move'
+
         win = self.view().aWindow()
         objs = list(win.Objects())
         diff = ((x - self._start[0]) / 500., (y - self._start[1]) / 500.)
@@ -98,11 +110,15 @@ class PaletteContrastAction(anatomist.Action):
                     objs += [mo for mo in o if mo not in objs]
 
     def stopContrast(self, x, y, globx, globy):
+        'action stop'
+
         del self._start
         del self._palettes
         self._removeGraphicsView(self.view())
 
     def resetPalette(self):
+        'reset the palette to standard values'
+
         win = self.view().aWindow()
         objs = win.Objects()
         a = anatomist.Anatomist()

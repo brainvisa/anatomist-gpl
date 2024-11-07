@@ -31,15 +31,29 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+''' Mini palette widget
+
+Main class: :class:`MiniPaletteWidget`.
+
+Other classes are part of the infrastructure and may be considered private.
+'''
+
 import anatomist.cpp as anatomist
 from soma.qt_gui.qt_backend import Qt
 import weakref
+import numpy as np
 
 
 class _MiniPaletteWidgetobserver(anatomist.Observer):
-    # MiniPaletteWidget cannot inherit directly both QWidget and Observer:
-    # it causes crashes in Observable::notifyObservers, the multiple
-    # inheritance seems to cause corruption somawhere in sip binidings
+    ''' Observer connecting MiniPaletteWidget and the anatomist object.
+
+    MiniPaletteWidget cannot inherit directly both QWidget and Observer:
+    it causes crashes in Observable::notifyObservers, the multiple
+    inheritance seems to cause corruption somawhere in sip bindings, so we use
+    a separate observer object.
+
+    You should not matter about this, it is a private class.
+    '''
 
     def __init__(self, palwid, object=None):
         super().__init__()
@@ -58,40 +72,180 @@ class _MiniPaletteWidgetobserver(anatomist.Observer):
             self.palwid().update(observer, arg)
 
 
-class MiniPaletteWidget(Qt.QWidget):
+class ClickableGraphicsView(Qt.QGraphicsView):
+    ''' QGraphicsView which emits signal for mouse press, move and release
+    events.
 
-    def __init__(self, object=None, allow_edit=True):
+    The normal QGraphicsView captures such events and do not expose them, so a
+    widget containing the graphics view cannot react to mouse events, even if
+    the graphivs view does nothing with them.
+    '''
+
+    mouse_pressed = Qt.Signal(Qt.QMouseEvent)
+    ''' mouse_pressed = Qt.Signal(Qt.QMouseEvent)
+
+    signal emitted upon mouse press event
+    '''
+    mouse_moved = Qt.Signal(Qt.QMouseEvent)
+    ''' mouse_moved = Qt.Signal(Qt.QMouseEvent)
+
+    signal emitted upon mouse move event
+    '''
+    mouse_released = Qt.Signal(Qt.QMouseEvent)
+    ''' mouse_released = Qt.Signal(Qt.QMouseEvent)
+
+    signal emitted upon mouse release event
+    '''
+
+    def mousePressEvent(self, event):
+        super().mousePressEvent(event)
+        self.mouse_pressed.emit(event)
+
+    def mouseMoveEvent(self, event):
+        super().mouseMoveEvent(event)
+        self.mouse_moved.emit(event)
+
+    def mouseReleaseEvent(self, event):
+        super().mouseReleaseEvent(event)
+        self.mouse_released.emit(event)
+
+
+class MiniPaletteWidget(Qt.QWidget):
+    ''' MiniPaletteWidget is the main class of the module.
+
+    It provides a small sized palette widget which can be used both to display
+    the palette in a GUI, and to edit the palette range (optionally).
+
+    The palette view displayes the palette assigned to an object, and the view
+    may be zoomed to a given values range.
+
+    The palatte may be zoomed in/out using the mouse wheel. This action will
+    not change the palette settings, but only the view displayed.
+
+    Edition is possible if enabled, either using the allow_edit constructor
+    parameter, or using the method :meth:`allow_edit`.
+
+    Edition is triggered in 2 modes:
+
+    - if ``click_to_edit`` is True (the default), a click on the palette will
+      open the editor mode.
+    - otherwise a mouse hover will open it, and it will be closed when the
+      mouse leaves the editor, without the need for a user click.
+
+    The edition mode opens a popup frameless widget, with sliders.
+    See :class:`MiniPaletteWidgetTranscient`.
+    '''
+
+    range_changed = Qt.Signal(float, float)
+    ''' range_changed = Qt.Signal(float, float)
+
+    signal emitted when the zoom range has changed (after a mouse wheel event,
+    typically)
+    '''
+    palette_clicked = Qt.Signal()
+    ''' palette_clicked = Qt.Signal()
+
+    signal emitted when the palete view is clicked, and ``click_to_edit`` mode
+    is disabled.
+    '''
+
+    def __init__(self, object=None, allow_edit=True, edit_parent=0,
+                 click_to_edit=True, auto_range=False):
+        '''
+        Parameters
+        ----------
+        object: :class:`AObject` or None
+            object to display or edit the palette for
+        allow_edit: bool
+            if True, an editor will popup, either by clicking on the widget, or
+            by "hovering" it if ``click_to_edit`` is False.
+        edit_parent: :class:`QWidget` or None or 0
+            the parent widget passed to the editor widget, if edition is
+            allowed. The special value ``0`` means that the parent will be the
+            :class:`MiniPaletteWidget`, ``self``.
+        click_to_edit: bool
+            if False, the edition widget will popup as soon as the mouse cursor
+            passes over the palette widget, without clicking.
+            If True, only a user click will open the editor window.
+        auto_range: bool
+            For edition mode, allow the auto-zoom mode when palette range is
+            modified.
+        '''
         super().__init__()
         self.aobj = None
         self.obs = None
         self.editor = None
+        self.edit_parent = edit_parent
+        self.min1 = 0.
+        self.max1 = 1.
+        self.click_to_edit = click_to_edit
+        self.auto_range = auto_range
         self._tmpitems = []
         lay = Qt.QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
-        self.graphicsview = Qt.QGraphicsView()
+        self.graphicsview = ClickableGraphicsView()
         lay.addWidget(self.graphicsview)
+        self.graphicsview.setFocusPolicy(Qt.Qt.NoFocus)
         #self.pixlabel = Qt.QLabel()
         #self.pixlabel.setFixedSize(150, 30)
         #lay.addWidget(self.pixlabel)
         if object is not None:
             self.set_object(object)
-        self.allow_edit(allow_edit)
+        self.allow_edit(allow_edit, edit_parent=edit_parent)
+        self.graphicsview.mouse_released.connect(self.gv_released)
 
     def set_object(self, obj):
+        'set or change the observed object'
+
         if self.obs is not None:
             self.obs = None
         self.aobj = weakref.ref(obj)
+
+        if obj is not None:
+            glc = obj.glAPI()
+            if glc:
+                extr = glc.glTexExtrema(0)
+                pal = obj.palette()
+                valmin = extr.minquant[0]
+                valmax = extr.maxquant[0]
+                if pal.zeroCenteredAxis1():
+                    valmax = np.max(np.abs((valmin, valmax)))
+                    valmin = -valmax
+            self.set_range(valmin, valmax)
+
         self.obs = _MiniPaletteWidgetobserver(self, obj)
         self.update_display()
 
-    def allow_edit(self, allow):
+    def allow_edit(self, allow, edit_parent=0):
+        ''' Enalbes or disable the edition capabilities
+
+        Parameters
+        ----------
+        allow: bool
+            if True, an editor will popup, either by clicking on the widget, or
+            by "hovering" it if ``click_to_edit`` is False.
+        edit_parent: :class:`QWidget` or None or 0
+            the parent widget passed to the editor widget, if edition is
+            allowed. The special value ``0`` means that the parent will be the
+            :class:`MiniPaletteWidget`, ``self``.
+        '''
+
         self.edit_allowed = allow
+        self.edit_parent = edit_parent
         if allow:
             self.setFocusPolicy(Qt.Qt.StrongFocus)
         else:
             self.setFocusPolicy(Qt.Qt.NoFocus)
 
+    def set_range(self, min1, max1):
+        'set the view range in object values'
+
+        self.min1 = min1
+        self.max1 = max1
+
     def update_display(self):
+        'redraws the palette view'
+
         if self.aobj is None:
             return
         if self.aobj() is None:
@@ -127,7 +281,11 @@ class MiniPaletteWidget(Qt.QWidget):
         if baseh > 30:
             baseh = 30
         baseh2 = gheight - baseh + 3
-        img = pal.toQImage(w, baseh2 - baseh - 1)
+        # print('rel values:', pal.relValue1(obj, self.min1), pal.relValue1(obj, self.max1))
+        # print('pal minmax:', pal.min1(), pal.max1())
+        img = pal.toQImage(w, baseh2 - baseh - 1,
+                           pal.relValue1(obj, self.min1),
+                           pal.relValue1(obj, self.max1))
         pix = Qt.QPixmap.fromImage(img)
         scene = gv.scene()
         paintpen = Qt.QPen(Qt.QColor(150, 150, 100))
@@ -153,8 +311,21 @@ class MiniPaletteWidget(Qt.QWidget):
         tr = pixitem.transform()
         tr.translate(6, baseh + 1)
         pixitem.setTransform(tr)
-        xmin = 6 + w * pal.min1()
-        xmax = 6 + w * pal.max1()
+        palmin = pal.absMin1(obj)
+        palmax = pal.absMax1(obj)
+        valmin = self.min1
+        valmax = self.max1
+
+        xmin = 6 + w * (palmin - valmin) / (valmax - valmin)
+        xmax = 6 + w * (palmax - valmin) / (valmax - valmin)
+        pmin = pal.min1()
+        #pmax = pal.max1()
+        #if pal.zeroCenteredAxis1():
+            #pmin = 0.5 + pmin / 2
+            #pmax = 0.5 + pmax / 2
+        #xmin = 6 + w * pmin
+        #xmax = 6 + w * pmax
+        # print('xmin, xmax:', xmin, xmax)
         if xmin >= 0 and xmin < w:
             line = Qt.QGraphicsLineItem(
                 xmin, baseh2, xmin, gheight-5, item0)
@@ -163,16 +334,9 @@ class MiniPaletteWidget(Qt.QWidget):
             line = Qt.QGraphicsLineItem(
                 xmax, baseh2, xmax, gheight-5, item0)
             line.setPen(paintpen)
-        valmin = 0.
-        valmax = 1.
-        glc = obj.glAPI()
-        if glc:
-            extr = glc.glTexExtrema(0)
-            valmin = extr.minquant[0]
-            valmax = extr.maxquant[0]
-            del extr, glc
-        palmin = valmin + (valmax - valmin) * pal.min1()
-        palmax = valmin + (valmax - valmin) * pal.max1()
+
+        # print('valmin, valmax:', valmin, valmax)
+        # print('palmin, palmax:', palmin, palmax)
         textpen = Qt.QPen(Qt.QColor(160, 100, 40))
         text = self._textGraphicsItem(self._format(palmin), xmin, baseh2 + 3,
                                       xmax, gwidth - 5, parentitem=item0)
@@ -218,10 +382,16 @@ class MiniPaletteWidget(Qt.QWidget):
         tr = text.transform()
         x = xpos + 3
         w = text.boundingRect().right()
-        if x < xmax and x + w >= xmax - 3:
+        # avoid intersecting xmax
+        # print('text:', x, w, xmax, hardmax, ':', text.text())
+        if xpos < xmax and x + w >= xmax - 3:
             x = xmax - 3 - w
+            # avoid intersecting its own line marker
+            if x <= xpos and x + w >= xpos and xpos >= w + 3:
+                x = xpos - w - 3
         if x < 4:
             x = 4
+        # avoid hardmax (right end of the view)
         if hardmax is not None and x + w >= hardmax:
             x = hardmax - w - 3
         tr.translate(x, ypos)
@@ -229,11 +399,21 @@ class MiniPaletteWidget(Qt.QWidget):
         return text
 
     def show_editor(self):
+        'pops up the editor, if the edition is allowed'
+
         if not self.edit_allowed:
             return
+        # print('show_editor')
 
         if self.editor is None:
-            self.editor = MiniPaletteWidgetTranscient(self.aobj(), self)
+            parent = self.edit_parent
+            if parent == 0:
+                # artifical way of saying we are the parent
+                parent = self
+            self.editor = MiniPaletteWidgetTranscient(
+                self.aobj(), self, parent=parent,
+                opened_by_click=self.click_to_edit, auto_range=self.auto_range)
+            self.editor.editor_closed.connect(self.editor_closed)
         else:
             self.editor.reposition()
         self.editor.show()
@@ -244,24 +424,86 @@ class MiniPaletteWidget(Qt.QWidget):
 
     def focusInEvent(self, event):
         super().focusInEvent(event)
-        self.show_editor()
+        if not self.click_to_edit:
+            self.show_editor()
 
     def focusOutEvent(self, event):
         super().focusOutEvent(event)
-        #self.hide_editor()
 
     def enterEvent(self, event):
         super().enterEvent(event)
-        self.show_editor()
+        if not self.click_to_edit:
+            self.show_editor()
 
     def leaveEvent(self, event):
         super().leaveEvent(event)
-        #self.hide_editor()
+
+    def mouseReleaseEvent(self, event):
+        super().mouseReleaseEvent(event)
+        if self.click_to_edit:
+            event.accept()
+            self.show_editor()
+
+    def gv_released(self, event):
+        if self.click_to_edit:
+            event.accept()
+            self.show_editor()
+        else:
+            self.palette_clicked.emit()
+
+    def wheelEvent(self, event):
+        # super().wheelEvent(event)
+        event.accept()
+        if event.angleDelta().y() > 0:
+            scale = 0.5
+        else:
+            scale = 2.
+        c = (self.max1 + self.min1) / 2.
+        nmin = c - (self.max1 - self.min1) / 2 * scale
+        nmax = c + (self.max1 - self.min1) / 2 * scale
+        self.set_range(nmin, nmax)
+        self.update_display()
+        self.range_changed.emit(nmin, nmax)
+
+    def editor_closed(self):
+        self.set_range(self.editor.minipw.minipw.min1,
+                       self.editor.minipw.minipw.max1)
+        self.update_display()
 
 
 class _MiniPWSlider(Qt.QSlider):
+    ''' Specialized slider class for palette editor
+    :class:`MiniPaletteWidgetEdit`.
+
+    Internal class, please consider it private.
+
+    It features float min/max values matching an AObject texture values,
+    magnets which mark some given significant values, and emits signals when
+    the slider is moved.
+
+    The values range can be changed afterwards.
+    '''
 
     abs_value_changed = Qt.Signal(float)
+    ''' abs_value_changed = Qt.Signal(float)
+
+    signal emitted when the value changes, in object texture value scale
+    '''
+    slider_pressed = Qt.Signal(str)
+    ''' slider_pressed = Qt.Signal(str)
+
+    signal emitted when the slider is pressed
+    '''
+    slider_moved = Qt.Signal(str)
+    ''' slider_moved = Qt.Signal(str)
+
+    signal emitted when the slider is moved
+    '''
+    slider_released = Qt.Signal(str)
+    ''' slider_released = Qt.Signal(str)
+
+    signal emitted when the slider is released
+    '''
 
     def __init__(self, orientation=None, parent=None):
         if orientation is not None:
@@ -275,8 +517,12 @@ class _MiniPWSlider(Qt.QSlider):
         self.magnets = []
         self.pressval = None
         self.mag_size = 20.
+        self.set_range(0, 1000)
 
     def set_magnets(self, magnets):
+        ''' Magnets are "attractive" values, where the mouse must be moved
+        further to pass them when moving the slider.
+        '''
         self.magnets = magnets
         # print('magnets:', self.magnets)
 
@@ -290,8 +536,8 @@ class _MiniPWSlider(Qt.QSlider):
         d = self.max1 - self.min1
         if d == 0:
             d = 1.
-        # print('set value:', value, int((value - self.min1) * 1000 / d))
-        self.setValue(int(value * 1000 / d))
+        # print('set value:', value, int((value - self.min1) * 1000 / d), ', range:', self.min1, self.max1)
+        self.setValue(int((value - self.min1) * 1000 / d))
 
     def abs_value(self):
         return self.current_val
@@ -300,6 +546,7 @@ class _MiniPWSlider(Qt.QSlider):
         self.presspos = event.pos()
         self.pressval = self.current_val
         super().mousePressEvent(event)
+        self.slider_pressed.emit(self.objectName())
 
     def mouseMoveEvent(self, event):
         super().mouseMoveEvent(event)
@@ -347,35 +594,83 @@ class _MiniPWSlider(Qt.QSlider):
             # print('new nval:', nval)
             self.set_value(nval)
             self.abs_value_changed.emit(nval)
+        self.slider_moved.emit(self.objectName())
 
     def mouseReleaseEvent(self, event):
         super().mouseReleaseEvent(event)
         absval = self.abs_value()
-        self.current_val = absval
+        #self.current_val = absval
         self.abs_value_changed.emit(absval)
+        self.slider_released.emit(self.objectName())
 
 
 class MiniPaletteWidgetEdit(Qt.QWidget):
+    ''' Mini palette editor widget.
 
-    def __init__(self, object=None):
+    :class:`MiniPaletteWidgetEdit` is part of the :class:`MiniPaletteWidget`
+    infrastructure and in most cases will not be used directly.
+
+    However a GUI may incorporate the editor widget.
+
+    It is normally used within :class:`MiniPaletteWidgetTranscient`, itself
+    used in the edition mode of :class:`MiniPaletteWidget`. In turn,
+    :class:`MiniPaletteWidgetEdit` contains a non-editable
+    :class:`MiniPaletteWidget` object.
+
+    The editor thus presents a palette view, plus 2 sliders to set the min and
+    max range of the palette. The view may be zoomed using the mouse wheel (see
+    :class:`MiniPaletteWidget`), and it can also use an automatic zoom mode, if
+    ``auto_range=True`` is passed to the constructor, or :meth:`set_auto_range`
+    is called. In auto range mode, the zoom range is adapted after each user
+    interaction on sliders (after the mouse is released).
+    '''
+
+    def __init__(self, object=None, auto_range=False):
         super().__init__()
         layout = Qt.QVBoxLayout()
         self.setLayout(layout)
         self.minslider = _MiniPWSlider(Qt.Qt.Horizontal)
-        self.minipw = MiniPaletteWidget(allow_edit=False)
+        self.minslider.setObjectName('min_slider')
+        self.minipw = MiniPaletteWidget(allow_edit=False, click_to_edit=False)
         self.maxslider = _MiniPWSlider(Qt.Qt.Horizontal)
+        self.maxslider.setObjectName('max_slider')
+        self.auto_range = False
         layout.addWidget(self.minslider)
         layout.addWidget(self.minipw)
         layout.addWidget(self.maxslider)
         self.set_object(object)
         self.minslider.abs_value_changed.connect(self.min_changed)
         self.maxslider.abs_value_changed.connect(self.max_changed)
+        self.set_auto_range(auto_range)
+        self.minipw.range_changed.connect(self.set_range)
+        self.minipw.palette_clicked.connect(self.select_palette)
 
     def set_object(self, obj):
+        'set or change the observed object'
+
         self.minipw.set_object(obj)
         if obj.glAPI() is None or obj.glAPI().glTexExtrema() is None:
             return
         self.minipw.obs = _MiniPaletteWidgetobserver(self, obj)
+        self.adjust_range()
+
+    def set_auto_range(self, auto_range):
+        'allows or disables the auto-zoom mode'
+
+        if auto_range == self.auto_range:
+            return
+        self.auto_range = auto_range
+        if auto_range:
+            self.minslider.slider_released.connect(self.adjust_range)
+            self.maxslider.slider_released.connect(self.adjust_range)
+        else:
+            self.minslider.slider_released.disconnect(self.adjust_range)
+            self.maxslider.slider_released.disconnect(self.adjust_range)
+
+    def adjust_range(self):
+        'auto-range function'
+
+        obj = self.minipw.aobj()
         if obj is not None:
             pal = obj.palette()
             te = obj.glAPI().glTexExtrema()
@@ -393,15 +688,23 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
             pal.setMax1(max1)
             rmax = max((abs(tmax), abs(tmin), absmax1, absmin1))
             if pal.zeroCenteredAxis1():
-                rmin = min((absmin1, absmax1, 0))
+                if rmax > max((abs(absmin1), abs(absmax1))) * 2:
+                    rmax = max((abs(absmin1), abs(absmax1))) * 2
+                # rmin = min((absmin1, absmax1, 0))
+                rmin = -rmax
             else:
                 rmin = min((absmin1, absmax1, tmin, tmax))
+            # print('set range:', rmin, rmax)
             self.minslider.set_range(rmin, rmax)
             self.maxslider.set_range(rmin, rmax)
             self.minslider.set_value(absmin1)
             self.maxslider.set_value(absmax1)
+            self.minipw.set_range(rmin, rmax)
+            self.minipw.update_display()
 
     def update_display(self):
+        'redraws the palette and sliders values'
+
         self.minipw.update_display()
         obj = self.minipw.aobj()
         if obj is not None:
@@ -427,22 +730,59 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
             pal = obj.palette()
             if pal.absMin1(obj) != value:
                 pal.setAbsMin1(obj, value)
-                obj.setChanged()
+                obj.glSetTexImageChanged()
                 obj.notifyObservers()
 
     def max_changed(self, value):
+        # print('max_changed:', value)
         obj = self.minipw.aobj()
         if obj is not None:
             pal = obj.palette()
             if pal.absMax1(obj) != value:
                 pal.setAbsMax1(obj, value)
-                obj.setChanged()
+                obj.glSetTexImageChanged()
                 obj.notifyObservers()
+
+    def set_range(self, rmin, rmax):
+        self.minslider.set_range(rmin, rmax)
+        self.maxslider.set_range(rmin, rmax)
+        obj = self.minipw.aobj()
+        if obj is not None:
+            pal = obj.palette()
+            absmin1 = pal.absMin1(obj)
+            absmax1 = pal.absMax1(obj)
+            self.minslider.set_value(absmin1)
+            self.maxslider.set_value(absmax1)
+
+    def select_palette(self):
+        print('select palette')
+        menu = Qt.QMenu('Select palette')
+        res = menu.exec()
 
 
 class MiniPaletteWidgetTranscient(Qt.QWidget):
+    ''' The transcient palette editor widget features a
+    :class:`MiniPaletteWidgetEdit` which shows up upon given conditions (see
+    :class:`MiniPaletteWidget`) and closes when the editor widget loses focus.
 
-    def __init__(self, object=None, parent=None):
+    More precisely, if opened by a click, a complete focus loss is needed to
+    close the window (which is generally triggered by another user action like
+    a click at some other place or a keyboard focus change, using <tab> for
+    instance).
+
+    If not opened by a click, the widget will close as soon as the mouse
+    pointer leaves the widget surface, or when the focus is lost, thus not
+    requiring a click or keyboard user action.
+    '''
+
+    editor_closed = Qt.Signal()
+    ''' editor_closed = Qt.Signal()
+
+    signal emitted when the editor widget closes
+    '''
+
+    def __init__(self, object=None, pw=None, parent=None,
+                 opened_by_click=False, auto_range=False):
         super().__init__(parent, Qt.Qt.Popup | Qt.Qt.FramelessWindowHint)
         self.setObjectName('frameless_minipalette')
         #self.setAutoFillBackground(False)
@@ -452,25 +792,75 @@ class MiniPaletteWidgetTranscient(Qt.QWidget):
         layout = Qt.QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
-        self.minipw = MiniPaletteWidgetEdit(object)
+        self.pw = pw
+        self._out_focus = False
+        self._released = True
+        self.opened_by_click = opened_by_click
+        self.minipw = MiniPaletteWidgetEdit(object, auto_range=auto_range)
         layout.addWidget(self.minipw)
         self.reposition()
+        self.minipw.minslider.slider_pressed.connect(self.slider_pressed)
+        self.minipw.maxslider.slider_pressed.connect(self.slider_pressed)
+        self.minipw.minslider.slider_released.connect(self.slider_released)
+        self.minipw.maxslider.slider_released.connect(self.slider_released)
 
     def reposition(self):
-        parent = self.parentWidget()
-        if parent is not None:
-            rect = parent.geometry()
-            rect.setTop(max((rect.top() - 30, 0)))
-            rect.setLeft(max((rect.left() - 9, 0)))
-            rect.setWidth(rect.width() + 9)
-            rect.setHeight(rect.height() + 30)
+        ''' Repositions / resizes the widget to superpose on its
+        :class:`MiniPaletteWidget`
+        '''
+        pw = self.pw
+        if pw is not None:
+            pw.ensurePolished()
+            rect = pw.geometry()
+            # print('rect:', rect)
+            pos = pw.mapToGlobal(Qt.QPoint(0, 0))
+            # print('global:', pos)
+            #  parent = self.parentWidget()
+            # print('width:', pw.width())
+            # print('parent:', parent)
+            #if parent is not None:
+                #pos = parent.mapFromGlobal(pos)
+                #print('to parent:', pos)
+            rect.setTop(max((pos.y() - 30, 0)))
+            rect.setLeft(max((pos.x() - 9, 0)))
+            rect.setWidth(pw.width() + 9)
+            rect.setHeight(pw.height() + 30)
             self.setGeometry(rect)
 
     def leaveEvent(self, event):
         super().leaveEvent(event)
-        self.close()
+        # if opened by a click (an explicit active action),
+        # don't close when leaving the window: the user will do another
+        # explicit action (click outside) to close the editor.
+        if not self.opened_by_click:
+            self._out_focus = True
+            self.close_if_finished()
 
     def focusOutEvent(self, event):
         super().focusOutEvent(event)
-        self.close()
+        self._out_focus = True
+        self.close_if_finished()
 
+    def enterEvent(self, event):
+        super().enterEvent(event)
+        self._out_focus = False
+
+    def focusInEvent(self, event):
+        super().focusInEvent(event)
+        self._out_focus = False
+
+    def close_if_finished(self):
+        if self._out_focus and self._released:
+            self.close()
+
+    def slider_pressed(self):
+        self._released = False
+
+    def slider_released(self):
+        self._released = True
+        self.close_if_finished()
+
+    def closeEvent(self, event):
+        super().closeEvent(event)
+        if event.isAccepted():
+            self.editor_closed.emit()

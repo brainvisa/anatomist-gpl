@@ -31,13 +31,24 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
-from __future__ import absolute_import
+''' Follower object module
+
+A "follower" object is a small representation of the bounding box of an object
+(a cube or parallelepiped) which follows its position and orientation.
+
+main class: :class:``ObjectFollowerCube`
+'''
+
 import anatomist.cpp as anatomist
 from soma import aims
 import numpy
 
 
 class ObjectFollowerCube(anatomist.ASurface_2):
+    ''' Cube (or parallelepiped) representing the bounding box of an object,
+    or of several objects.
+    '''
+
     def __init__(self, obj):
         anatomist.ASurface_2.__init__(self)
         self.GetMaterial().set({'ghost': 1})
@@ -50,6 +61,8 @@ class ObjectFollowerCube(anatomist.ASurface_2):
         return self._objects
 
     def setObserved(self, obj):
+        'sets the observed objects'
+
         #print 'setObserved', len(obj)
         oldobj = [i for i in self._objects]
         for i in oldobj:
@@ -74,6 +87,8 @@ class ObjectFollowerCube(anatomist.ASurface_2):
             self.redraw()
 
     def boundingbox(self):
+        'object(s) bounding box'
+
         #print 'ObjectFollowerCube.boundingbox', len( self._objects )
         bbox = []
         for obj in self._objects:
@@ -97,6 +112,8 @@ class ObjectFollowerCube(anatomist.ASurface_2):
         return (aims.vector_FLOAT(bbox[0]), aims.vector_FLOAT(bbox[1]))
 
     def redraw(self):
+        're-calculates the bounding mesh'
+
         if hasattr(self, '_redrawing'):
             return
         self._redrawing = True

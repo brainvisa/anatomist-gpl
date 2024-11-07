@@ -32,6 +32,8 @@ Sub-modules
 
 - The C++ bindings are built on top of :pyaims:`PyAims <index.html>`
 
+- :doc:`pyanatomist_addons`
+
 - :doc:`pyanatomist_wip`
 
 - Description of the :anadev:`commands system <commands.html>`
