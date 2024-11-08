@@ -469,9 +469,27 @@ class MiniPaletteWidget(Qt.QWidget):
             c = (pal.absMax1(obj) + pal.absMin1(obj)) / 2
         nmin = c - (self.max1 - self.min1) / 2 * scale
         nmax = c + (self.max1 - self.min1) / 2 * scale
-        self.set_range(nmin, nmax)
+
+        te = obj.glAPI().glTexExtrema()
+        tmin = te.minquant[0]
+        tmax = te.maxquant[0]
+        absmin1 = pal.absMin1(obj)
+        absmax1 = pal.absMax1(obj)
+        rmax = max((abs(tmax), abs(tmin), absmax1, absmin1))
+        if pal.zeroCenteredAxis1():
+            if nmax < rmax:
+                rmax = nmax
+            rmin = -rmax
+        else:
+            rmin = min((absmin1, absmax1, tmin, tmax))
+            if rmin < nmin:
+                rmin = nmin
+            if rmax > nmax:
+                rmax = nmax
+
+        self.set_range(rmin, rmax)
         self.update_display()
-        self.range_changed.emit(nmin, nmax)
+        self.range_changed.emit(rmin, rmax)
 
     def editor_closed(self):
         self.set_range(self.editor.minipw.minipw.min1,
@@ -809,7 +827,7 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
     def gv_moved(self, event):
         pos = event.pos()
         if pos.x() >= self.minipw.graphicsview.width() - 40 \
-                and pos.y() <= self.minipw.graphicsview.height() * 0.3:
+                and pos.y() <= 80:
             if self.auto_btn is None:
                 self.auto_btn = Qt.QToolButton(self.minipw)
                 icon_path = aims.carto.Paths.findResourceFile('icons/auto.png',
