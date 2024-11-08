@@ -158,5 +158,25 @@ private:
   PaletteList();
 };
 
+
+  class PaletteSelectWidget : public QTableWidget
+  {
+%TypeHeaderCode
+#include <anatomist/color/paletteselectwidget.h>
+%End
+
+  public:
+    PaletteSelectWidget( QWidget *parent = 0 );
+    virtual ~PaletteSelectWidget();
+    std::string selectedPalette() const;
+    void selectPalette( const std::string & name );
+
+    static void fillPalette( const rc_ptr_APalette pal,
+                             QPixmap & pix );
+
+  signals:
+    void paletteSelected( const std::string & palette );
+  };
+
 };
 
