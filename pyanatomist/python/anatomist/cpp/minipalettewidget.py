@@ -39,6 +39,7 @@ Other classes are part of the infrastructure and may be considered private.
 '''
 
 import anatomist.cpp as anatomist
+from soma import aims
 from soma.qt_gui.qt_backend import Qt
 import weakref
 import numpy as np
@@ -642,10 +643,14 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
         self.maxslider = _MiniPWSlider(Qt.Qt.Horizontal)
         self.maxslider.setObjectName('max_slider')
         self.auto_range = False
+        self.auto_btn = None
+        self.auto_btn_timer = None
         layout.addWidget(self.minslider)
         layout.addWidget(self.minipw)
         layout.addWidget(self.maxslider)
         self.set_object(object)
+        self.minipw.graphicsview.setMouseTracking(True)
+        self.minipw.graphicsview.mouse_moved.connect(self.gv_moved)
         self.minslider.abs_value_changed.connect(self.min_changed)
         self.maxslider.abs_value_changed.connect(self.max_changed)
         self.set_auto_range(auto_range)
@@ -800,6 +805,33 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
             pal.setRefPalette(apal)
             obj.glSetTexImageChanged()
             obj.notifyObservers()
+
+    def gv_moved(self, event):
+        pos = event.pos()
+        if pos.x() >= self.minipw.graphicsview.width() - 40 \
+                and pos.y() <= self.minipw.graphicsview.height() * 0.3:
+            if self.auto_btn is None:
+                self.auto_btn = Qt.QToolButton(self.minipw)
+                icon_path = aims.carto.Paths.findResourceFile('icons/auto.png',
+                                                              'anatomist')
+                icon = Qt.QIcon(icon_path)
+                self.auto_btn.setIcon(icon)
+                self.auto_btn.setFixedSize(32, 32)
+                self.auto_btn.setCheckable(True)
+                self.auto_btn.setChecked(self.auto_range)
+                self.auto_btn.setToolTip('auto-scale mode')
+                self.auto_btn.toggled.connect(self.set_auto_range)
+            self.auto_btn.move(self.minipw.graphicsview.width() - 40, 30)
+            self.auto_btn.show()
+            if self.auto_btn_timer is None:
+                self.auto_btn_timer = Qt.QTimer(self)
+                self.auto_btn_timer.setSingleShot(True)
+                self.auto_btn_timer.setInterval(2000)
+                self.auto_btn_timer.timeout.connect(self.clear_auto_btn)
+            self.auto_btn_timer.start()
+
+    def clear_auto_btn(self):
+        self.auto_btn.hide()
 
 
 class MiniPaletteWidgetTranscient(Qt.QWidget):
