@@ -458,7 +458,14 @@ class MiniPaletteWidget(Qt.QWidget):
             scale = 0.5
         else:
             scale = 2.
-        c = (self.max1 + self.min1) / 2.
+        obj = self.aobj()
+        if obj is None:
+            return
+        pal = obj.palette()
+        if pal.zeroCenteredAxis1():
+            c = (self.max1 + self.min1) / 2.
+        else:
+            c = (pal.absMax1(obj) + pal.absMin1(obj)) / 2
         nmin = c - (self.max1 - self.min1) / 2 * scale
         nmax = c + (self.max1 - self.min1) / 2 * scale
         self.set_range(nmin, nmax)
@@ -694,6 +701,19 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
                 rmin = -rmax
             else:
                 rmin = min((absmin1, absmax1, tmin, tmax))
+                if abs(absmax1 - absmin1) < abs(rmax - rmin) / 2:
+                    s = abs(absmax1 - absmin1)
+                    c = (absmin1 + absmax1) / 2
+                    rmin2 = c - s
+                    rmax2 = c + s
+                    if rmin < rmin2:
+                        rmin = rmin2
+                    else:
+                        c = (rmin + max((absmin1, absmax1))) / 2
+                        s = max((absmin1, absmax1)) - rmin
+                        rmax2 = c + s
+                    if rmax > rmax2:
+                        rmax = rmax2
             # print('set range:', rmin, rmax)
             self.minslider.set_range(rmin, rmax)
             self.maxslider.set_range(rmin, rmax)
@@ -755,9 +775,31 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
             self.maxslider.set_value(absmax1)
 
     def select_palette(self):
-        print('select palette')
-        menu = Qt.QMenu('Select palette')
-        res = menu.exec()
+        dial = Qt.QDialog(self, Qt.Qt.Popup | Qt.Qt.FramelessWindowHint)
+        lay = Qt.QVBoxLayout()
+        dial.setLayout(lay)
+        palsel = anatomist.PaletteSelectWidget(self)
+        lay.addWidget(palsel)
+        butl = Qt.QHBoxLayout()
+        lay.addLayout(butl)
+        but = Qt.QPushButton('Done')
+        but.setSizePolicy(Qt.QSizePolicy.Fixed, Qt.QSizePolicy.Fixed)
+        butl.addWidget(but)
+        but.setDefault(True)
+        but.clicked.connect(dial.accept)
+        palsel.paletteSelected.connect(self.set_palette)
+        dial.resize(500, 800)
+        dial.exec()
+
+    def set_palette(self, palname):
+        obj = self.minipw.aobj()
+        if obj is not None:
+            pal = obj.palette()
+            ana = anatomist.Anatomist()
+            apal = ana.palettes().find(palname)
+            pal.setRefPalette(apal)
+            obj.glSetTexImageChanged()
+            obj.notifyObservers()
 
 
 class MiniPaletteWidgetTranscient(Qt.QWidget):
