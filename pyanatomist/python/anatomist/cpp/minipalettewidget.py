@@ -43,6 +43,7 @@ from soma import aims
 from soma.qt_gui.qt_backend import Qt
 import weakref
 import numpy as np
+import time
 
 
 class _MiniPaletteWidgetobserver(anatomist.Observer):
@@ -530,6 +531,12 @@ class _MiniPWSlider(Qt.QSlider):
 
     signal emitted when the slider is released
     '''
+    slider_double_clicked = Qt.Signal()
+    ''' slider_released = Qt.Signal(str)
+
+    signal emitted when the slider is double-clicked
+    '''
+    double_click_time = 0.3
 
     def __init__(self, orientation=None, parent=None):
         if orientation is not None:
@@ -540,10 +547,13 @@ class _MiniPWSlider(Qt.QSlider):
         self.setMaximum(1000)
         self.setValue(500)
         self.presspos = None
+        self.last_release_time = None
         self.magnets = []
+        self.default = None
         self.pressval = None
         self.mag_size = 20.
         self.set_range(0, 1000)
+        self.slider_double_clicked.connect(self.reset_default)
 
     def set_magnets(self, magnets):
         ''' Magnets are "attractive" values, where the mouse must be moved
@@ -551,6 +561,9 @@ class _MiniPWSlider(Qt.QSlider):
         '''
         self.magnets = magnets
         # print('magnets:', self.magnets)
+
+    def set_default(self, value):
+        self.default = value
 
     def set_range(self, min1, max1):
         # print('set range:', min1, max1)
@@ -628,6 +641,17 @@ class _MiniPWSlider(Qt.QSlider):
         #self.current_val = absval
         self.abs_value_changed.emit(absval)
         self.slider_released.emit(self.objectName())
+        t = time.time()
+        if self.last_release_time is not None \
+                and t - self.last_release_time < self.double_click_time:
+            self.slider_double_clicked.emit()
+        else:
+            self.last_release_time = t
+
+    def reset_default(self):
+        if self.default is not None:
+            self.set_value(self.default)
+            self.abs_value_changed.emit(self.default)
 
 
 class MiniPaletteWidgetEdit(Qt.QWidget):
@@ -760,8 +784,10 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
                 mag.add(max((abs(te.minquant[0]), abs(te.maxquant[0]))))
             mag = sorted(mag)
             self.minslider.set_magnets(mag)
+            self.minslider.set_default(self.defmin)
             self.minslider.set_value(pal.absMin1(obj))
             self.maxslider.set_magnets(mag)
+            self.maxslider.set_default(self.defmax)
             self.maxslider.set_value(pal.absMax1(obj))
 
     def update(self, observable, arg):
