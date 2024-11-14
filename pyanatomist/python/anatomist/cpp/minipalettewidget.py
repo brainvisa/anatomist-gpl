@@ -68,9 +68,9 @@ class _MiniPaletteWidgetobserver(anatomist.Observer):
         if self.aobj is not None and not self.aobj.isNull():
             self.aobj.deleteObserver(self)
 
-    def update(self, observer, arg):
+    def update(self, observable, arg):
         if self.palwid() is not None:
-            self.palwid().update(observer, arg)
+            self.palwid().update(observable, arg)
 
 
 class ClickableGraphicsView(Qt.QGraphicsView):
@@ -172,6 +172,7 @@ class MiniPaletteWidget(Qt.QWidget):
             For edition mode, allow the auto-zoom mode when palette range is
             modified.
         '''
+        # print('create', self)
         super().__init__()
         self.aobj = None
         self.obs = None
@@ -187,9 +188,6 @@ class MiniPaletteWidget(Qt.QWidget):
         self.graphicsview = ClickableGraphicsView()
         lay.addWidget(self.graphicsview)
         self.graphicsview.setFocusPolicy(Qt.Qt.NoFocus)
-        #self.pixlabel = Qt.QLabel()
-        #self.pixlabel.setFixedSize(150, 30)
-        #lay.addWidget(self.pixlabel)
         if object is not None:
             self.set_object(object)
         self.allow_edit(allow_edit, edit_parent=edit_parent)
@@ -376,7 +374,10 @@ class MiniPaletteWidget(Qt.QWidget):
                           parentitem=None):
         text = Qt.QGraphicsSimpleTextItem(text, parentitem)
         font = text.font()
-        font.setPointSize(6)
+        fsize = 6
+        if self.width() >= 200 and self.height() >= 80:
+            fsize = 8
+        font.setPointSize(fsize)
         text.setFont(font)
         tr = text.transform()
         x = xpos + 3
