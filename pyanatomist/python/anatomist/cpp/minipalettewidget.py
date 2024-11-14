@@ -61,12 +61,12 @@ class _MiniPaletteWidgetobserver(anatomist.Observer):
         self.palwid = weakref.ref(palwid)
         self.aobj = None
         if object is not None:
-            self.aobj = weakref.ref(object)
+            self.aobj = anatomist.weak_shared_ptr_AObject(object)
         object.addObserver(self)
 
     def __del__(self):
-        if self.aobj is not None and self.aobj() is not None:
-            self.aobj().deleteObserver(self)
+        if self.aobj is not None and not self.aobj.isNull():
+            self.aobj.deleteObserver(self)
 
     def update(self, observer, arg):
         if self.palwid() is not None:
@@ -195,14 +195,20 @@ class MiniPaletteWidget(Qt.QWidget):
         self.allow_edit(allow_edit, edit_parent=edit_parent)
         self.graphicsview.mouse_released.connect(self.gv_released)
 
+    def get_object(self):
+        if self.aobj is None or self.aobj.isNull():
+            return None
+        return self.aobj.get()
+
     def set_object(self, obj):
         'set or change the observed object'
 
         if self.obs is not None:
             self.obs = None
-        self.aobj = weakref.ref(obj)
+        self.aobj = None
 
         if obj is not None:
+            self.aobj = anatomist.weak_shared_ptr_AObject(obj)
             glc = obj.glAPI()
             if glc:
                 extr = glc.glTexExtrema(0)
@@ -247,20 +253,12 @@ class MiniPaletteWidget(Qt.QWidget):
     def update_display(self):
         'redraws the palette view'
 
-        if self.aobj is None:
-            return
-        if self.aobj() is None:
+        if self.get_object() is None:
             self.obs = None
             self.aobj = None
             return
 
         self._drawPaletteInGraphicsView()
-
-        #w = self.pixlabel.width()
-        #h = self.pixlabel.height()
-        #img = self.aobj().palette().toQImage(w, h)
-        #pix = Qt.QPixmap.fromImage(img)
-        #self.pixlabel.setPixmap(pix)
 
     def update(self, observable, arg):
         self.update_display()
@@ -271,7 +269,7 @@ class MiniPaletteWidget(Qt.QWidget):
 
     def _drawPaletteInGraphicsView(self):
         gv = self.graphicsview
-        obj = self.aobj()
+        obj = self.get_object()
         if obj is None:
             return
         pal = obj.palette()
@@ -402,7 +400,8 @@ class MiniPaletteWidget(Qt.QWidget):
     def show_editor(self):
         'pops up the editor, if the edition is allowed'
 
-        if not self.edit_allowed:
+        obj = self.get_object()
+        if not self.edit_allowed or obj is None:
             return
         # print('show_editor')
 
@@ -412,7 +411,7 @@ class MiniPaletteWidget(Qt.QWidget):
                 # artifical way of saying we are the parent
                 parent = self
             self.editor = MiniPaletteWidgetTranscient(
-                self.aobj(), self, parent=parent,
+                obj, self, parent=parent,
                 opened_by_click=self.click_to_edit, auto_range=self.auto_range)
             self.editor.editor_closed.connect(self.editor_closed)
         else:
@@ -459,7 +458,7 @@ class MiniPaletteWidget(Qt.QWidget):
             scale = 0.5
         else:
             scale = 2.
-        obj = self.aobj()
+        obj = self.get_object()
         if obj is None:
             return
         pal = obj.palette()
@@ -700,7 +699,7 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
     def adjust_range(self):
         'auto-range function'
 
-        obj = self.minipw.aobj()
+        obj = self.minipw.get_object()
         if obj is not None:
             pal = obj.palette()
             te = obj.glAPI().glTexExtrema()
@@ -749,7 +748,7 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
         'redraws the palette and sliders values'
 
         self.minipw.update_display()
-        obj = self.minipw.aobj()
+        obj = self.minipw.get_object()
         if obj is not None:
             te = obj.glAPI().glTexExtrema()
             pal = obj.palette()
@@ -768,7 +767,7 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
         self.update_display()
 
     def min_changed(self, value):
-        obj = self.minipw.aobj()
+        obj = self.minipw.get_object()
         if obj is not None:
             pal = obj.palette()
             if pal.absMin1(obj) != value:
@@ -778,7 +777,7 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
 
     def max_changed(self, value):
         # print('max_changed:', value)
-        obj = self.minipw.aobj()
+        obj = self.minipw.get_object()
         if obj is not None:
             pal = obj.palette()
             if pal.absMax1(obj) != value:
@@ -789,7 +788,7 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
     def set_range(self, rmin, rmax):
         self.minslider.set_range(rmin, rmax)
         self.maxslider.set_range(rmin, rmax)
-        obj = self.minipw.aobj()
+        obj = self.minipw.get_object()
         if obj is not None:
             pal = obj.palette()
             absmin1 = pal.absMin1(obj)
@@ -815,7 +814,7 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
         dial.exec()
 
     def set_palette(self, palname):
-        obj = self.minipw.aobj()
+        obj = self.minipw.get_object()
         if obj is not None:
             pal = obj.palette()
             ana = anatomist.Anatomist()
