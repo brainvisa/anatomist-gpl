@@ -38,6 +38,7 @@ Main class: :class:`PaletteContrastAction`
 
 import anatomist.cpp as anatomist
 from soma.qt_gui.qt_backend import QtCore, QtGui
+from anatomist.cpp.minipalettewidget import MiniPaletteGraphics
 
 
 testControl = False
@@ -56,7 +57,7 @@ class PaletteContrastAction(anatomist.Action):
         self._start = (x, y)
         self._palettes = {}
         self._showGraphicsView(self.view())
-        self._tmpitems = []
+        self.minipw = None
         self._drawPaletteInGraphicsView(self.view())
 
     def moveContrast(self, x, y, globx, globy):
@@ -152,14 +153,9 @@ class PaletteContrastAction(anatomist.Action):
         gv.show()
 
     def _removeGraphicsView(self, view):
-        gv = self._graphicsViewOnWindow(view)
-        scene = gv.scene()
-        if scene:
-            for item in self._tmpitems:
-                scene.removeItem(item)
-        self._tmpitems = []
-        if view.qglWidget().parent() is not gv:
-            gv.hide()
+        self.minipw = None
+        import gc
+        gc.collect()
 
     def _drawPaletteInGraphicsView(self, view):
         gv = self._graphicsViewOnWindow(view)
@@ -176,110 +172,13 @@ class PaletteContrastAction(anatomist.Action):
                     objs += [mo for mo in o if mo not in objs]
         if obj is None:
             return
-        gwidth = 150
-        gheight = 50
-        w = gwidth - 12
-        baseh = int(round((gheight - 10) * 0.33 + 5))
-        baseh2 = int(round((gheight - 10) * 0.66 + 5))
-        img = pal.toQImage(w, baseh2 - baseh - 1)
-        pix = QtGui.QPixmap.fromImage(img)
-        scene = gv.scene()
-        paintpen = QtGui.QPen(QtGui.QColor(150, 150, 100))
-        if scene is None:
-            scene = QtGui.QGraphicsScene(gv)
-            gv.setScene(scene)
-        for item in self._tmpitems:
-            scene.removeItem(item)
-        self._tmpitems = []
-        item0 = QtGui.QGraphicsRectItem(0, 0, gwidth, gheight)
-        item0.setPen(QtGui.QPen(QtGui.QColor(80, 80, 30)))
-        scene.addItem(item0)
-        self._tmpitems.append(item0)
-        item = QtGui.QGraphicsRectItem(5, baseh, gwidth - 10, baseh2 - baseh,
-                                       item0)
-        item.setPen(paintpen)
-        item = QtGui.QGraphicsLineItem(5, baseh, 5, 5, item0)
-        item.setPen(paintpen)
-        item = QtGui.QGraphicsLineItem(gwidth - 5, baseh, gwidth - 5, 5, item0)
-        item.setPen(paintpen)
-        pixitem = QtGui.QGraphicsPixmapItem(pix, item0)
-        tr = pixitem.transform()
-        tr.translate(6, baseh + 1)
-        pixitem.setTransform(tr)
-        xmin = 6 + w * pal.min1()
-        xmax = 6 + w * pal.max1()
-        if xmin >= 0 and xmin < w:
-            line = QtGui.QGraphicsLineItem(
-                xmin, baseh2, xmin, gheight-5, item0)
-            line.setPen(paintpen)
-        if xmax >= 0 and xmax < w:
-            line = QtGui.QGraphicsLineItem(
-                xmax, baseh2, xmax, gheight-5, item0)
-            line.setPen(paintpen)
-        valmin = 0.
-        valmax = 1.
-        glc = obj.glAPI()
-        if glc:
-            extr = glc.glTexExtrema(0)
-            valmin = extr.minquant[0]
-            valmax = extr.maxquant[0]
-            del extr, glc
-        palmin = valmin + (valmax - valmin) * pal.min1()
-        palmax = valmin + (valmax - valmin) * pal.max1()
-        textpen = QtGui.QPen(QtGui.QColor(160, 100, 40))
-        text = self._textGraphicsItem(self._format(palmin), xmin, baseh2 + 3,
-                                      xmax, gwidth - 5, parentitem=item0)
-        text.setPen(textpen)
-        text = self._textGraphicsItem(self._format(palmax), xmax, baseh2 + 3,
-                                      xmin, gwidth - 5, parentitem=item0)
-        text.setPen(textpen)
-        textpen = QtGui.QPen(QtGui.QColor(120, 120, 40))
-        text = self._textGraphicsItem(self._format(valmin), 8, 5,
-                                      gwidth - 5, gwidth - 5, parentitem=item0)
-        text.setPen(textpen)
-        text = self._textGraphicsItem(self._format(valmax), gwidth - 10, 5,
-                                      gwidth - 5, gwidth - 5, parentitem=item0)
-        text.setPen(textpen)
-        tr = item0.transform()
-        tr.translate((gv.width() - gwidth) / 2, gv.height() - gheight - 5)
-        item0.setTransform(tr)
 
-    @staticmethod
-    def _format(num):
-        x = abs(num)
-        if x < 0.1 or x > 100000:
-            if x == 0.:
-                return '0'
-            return '%.3e' % num
-        if x < 1:
-            return '%.4f' % num
-        if x < 10:
-            return '%.3f' % num
-        elif x < 100:
-            return '%.2f' % num
-        elif x < 1000:
-            return '%.1f' % num
-        else:
-            return '%.0f' % num
-
-    def _textGraphicsItem(self, text, xpos, ypos, xmax, hardmax=None,
-                          parentitem=None):
-        text = QtGui.QGraphicsSimpleTextItem(text, parentitem)
-        font = text.font()
-        font.setPointSize(6)
-        text.setFont(font)
-        tr = text.transform()
-        x = xpos + 3
-        w = text.boundingRect().right()
-        if x < xmax and x + w >= xmax - 3:
-            x = xmax - 3 - w
-        if x < 4:
-            x = 4
-        if hardmax is not None and x + w >= hardmax:
-            x = hardmax - w - 3
-        tr.translate(x, ypos)
-        text.setTransform(tr)
-        return text
+        if self.minipw is None:
+            gwidth = 150
+            gheight = 60
+            self.minipw = MiniPaletteGraphics(gv, object=obj, width=gwidth,
+                                              height=gheight, top=-70)
+        self.minipw.update_display()
 
 
 ad = anatomist.ActionDictionary.instance()

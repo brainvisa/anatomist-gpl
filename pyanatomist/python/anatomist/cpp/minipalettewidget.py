@@ -33,7 +33,12 @@
 
 ''' Mini palette widget
 
-Main class: :class:`MiniPaletteWidget`.
+Main classes: :class:`MiniPaletteWidget`, :class:`MiniPaletteGraphics`.
+
+The former is a QWidget, the latter is an object which draws in a
+QGraphicsView. MiniPaletteWidget is using MiniPaletteGraphics under the hood,
+but the latter can be used independently to display a palette view in an
+existing QGrpahicsView.
 
 Other classes are part of the infrastructure and may be considered private.
 '''
@@ -112,6 +117,276 @@ class ClickableGraphicsView(Qt.QGraphicsView):
         self.mouse_released.emit(event)
 
 
+class MiniPaletteGraphics:
+    ''' MiniPaletteGraphics is an element which draws a palette in a
+    GrpahicsView scene. It is used by MiniPaletteWidget, but can be used alone
+    in a QGraphicsView.
+
+    It provides a small sized palette widget which can be used to display
+    the palette.
+
+    The palette view displayes the palette assigned to an object, and the view
+    may be zoomed to a given values range.
+    '''
+
+    def __init__(self, graphicsview, object=None, width=None, height=None,
+                 left=None, top=None):
+        '''
+        Parameters
+        ----------
+        graphicsview: :class:`QGraphicsView` object
+            the existing graphic view where the palette should be drawn
+        object: :class:`AObject` or None
+            object to display or edit the palette for
+        width: float
+            width of the display in the graphics view. None (default) means
+            whole scene width.
+        height: float
+            height of the display in the graphics view. None (default) means
+            whole scene height.
+        left: float
+            left position of the display in the graphics view. None (default)
+            means centered in scene.
+        top: float
+            top position of the display in the graphics view. None (default)
+            means centered in scene.
+        '''
+        # print('create', self)
+        super().__init__()
+        self.aobj = None
+        self.obs = None
+        self._width = width
+        self._height = height
+        self._left = left
+        self._top = top
+        self.min1 = 0.
+        self.max1 = 1.
+        self._tmpitems = []
+        self.graphicsview = graphicsview
+        if object is not None:
+            self.set_object(object)
+
+    def __del__(self):
+        self.clear()
+
+    def get_object(self):
+        if self.aobj is None or self.aobj.isNull():
+            return None
+        return self.aobj.get()
+
+    def set_object(self, obj):
+        'set or change the observed object'
+
+        if self.obs is not None:
+            self.obs = None
+        self.aobj = None
+
+        if obj is not None:
+            self.aobj = anatomist.weak_shared_ptr_AObject(obj)
+            glc = obj.glAPI()
+            if glc:
+                extr = glc.glTexExtrema(0)
+                pal = obj.palette()
+                valmin = extr.minquant[0]
+                valmax = extr.maxquant[0]
+                if pal.zeroCenteredAxis1():
+                    valmax = np.max(np.abs((valmin, valmax)))
+                    valmin = -valmax
+            self.set_range(valmin, valmax)
+
+        self.obs = _MiniPaletteWidgetobserver(self, obj)
+        #self.update_display()
+
+    def set_range(self, min1, max1):
+        'set the view range in object values'
+
+        self.min1 = min1
+        self.max1 = max1
+
+    def update_display(self):
+        'redraws the palette view'
+
+        if self.get_object() is None:
+            self.obs = None
+            self.aobj = None
+            return
+
+        self._drawPaletteInGraphicsView()
+
+    def resize(self, x, y, w, h):
+        self._left = x
+        self._top = y
+        self._width = w
+        self._height = h
+        self.update_display()
+
+    def width(self):
+        if self._width is None:
+            return self.graphicsview.width()
+        return self._width
+
+    def height(self):
+        if self._height is None:
+            return self.graphicsview.height()
+        return self._height
+
+    def top(self):
+        if self._top is None:
+            return (self.graphicsview.height() - self.height()) / 2
+        if self._top >= 0:
+            return self._top
+        return self.graphicsview.height() + self._top
+
+    def left(self):
+        if self._left is None:
+            return (self.graphicsview.width() - self.width()) / 2
+        if self._left >= 0:
+            return self._left
+        return self.graphicsview.width() + self._left
+
+    def clear(self):
+        scene = self.graphicsview.scene()
+        if scene is not None:
+            for item in self._tmpitems:
+                scene.removeItem(item)
+        self._tmpitems = []
+
+    def update(self, observable, arg):
+        self.update_display()
+
+    def _drawPaletteInGraphicsView(self):
+        gv = self.graphicsview
+        obj = self.get_object()
+        if obj is None:
+            return
+        pal = obj.palette()
+        gwidth = self.width() - 2
+        gheight = self.height() - 2
+
+        w = gwidth - 12
+        baseh = int(round((gheight - 10) * 0.33 + 5))
+        if baseh > 30:
+            baseh = 30
+        baseh2 = gheight - baseh + 3
+        # print('rel values:', pal.relValue1(obj, self.min1), pal.relValue1(obj, self.max1))
+        # print('pal minmax:', pal.min1(), pal.max1())
+        img = pal.toQImage(w, baseh2 - baseh - 1,
+                           pal.relValue1(obj, self.min1),
+                           pal.relValue1(obj, self.max1))
+        pix = Qt.QPixmap.fromImage(img)
+        self.clear()
+        scene = gv.scene()
+        paintpen = Qt.QPen(Qt.QColor(150, 150, 100))
+        if scene is None:
+            scene = Qt.QGraphicsScene(gv)
+            gv.setScene(scene)
+        scene.setSceneRect(0, 0, gv.width() - 2, gv.height() - 2)
+        item0 = Qt.QGraphicsRectItem(0, 0, gwidth, gheight)
+        item0.setPen(Qt.QPen(Qt.QColor(80, 80, 30)))
+        scene.addItem(item0)
+        self._tmpitems.append(item0)
+        item = Qt.QGraphicsRectItem(5, baseh, gwidth - 10, baseh2 - baseh,
+                                    item0)
+        item.setPen(paintpen)
+        item = Qt.QGraphicsLineItem(5, baseh, 5, 5, item0)
+        item.setPen(paintpen)
+        item = Qt.QGraphicsLineItem(gwidth - 5, baseh, gwidth - 5, 5, item0)
+        item.setPen(paintpen)
+        pixitem = Qt.QGraphicsPixmapItem(pix, item0)
+        tr = pixitem.transform()
+        tr.translate(6, baseh + 1)
+        pixitem.setTransform(tr)
+        palmin = pal.absMin1(obj)
+        palmax = pal.absMax1(obj)
+        valmin = self.min1
+        valmax = self.max1
+
+        xmin = 6 + w * (palmin - valmin) / (valmax - valmin)
+        xmax = 6 + w * (palmax - valmin) / (valmax - valmin)
+        pmin = pal.min1()
+        #pmax = pal.max1()
+        #if pal.zeroCenteredAxis1():
+            #pmin = 0.5 + pmin / 2
+            #pmax = 0.5 + pmax / 2
+        #xmin = 6 + w * pmin
+        #xmax = 6 + w * pmax
+        # print('xmin, xmax:', xmin, xmax)
+        if xmin >= 0 and xmin < w:
+            line = Qt.QGraphicsLineItem(
+                xmin, baseh2, xmin, gheight-5, item0)
+            line.setPen(paintpen)
+        if xmax >= 0 and xmax < w:
+            line = Qt.QGraphicsLineItem(
+                xmax, baseh2, xmax, gheight-5, item0)
+            line.setPen(paintpen)
+
+        # print('valmin, valmax:', valmin, valmax)
+        # print('palmin, palmax:', palmin, palmax)
+        textpen = Qt.QPen(Qt.QColor(160, 100, 40))
+        text = self._textGraphicsItem(self._format(palmin), xmin, baseh2 + 3,
+                                      xmax, gwidth - 5, parentitem=item0)
+        text.setPen(textpen)
+        text = self._textGraphicsItem(self._format(palmax), xmax, baseh2 + 3,
+                                      xmin, gwidth - 5, parentitem=item0)
+        text.setPen(textpen)
+        textpen = Qt.QPen(Qt.QColor(120, 120, 40))
+        text = self._textGraphicsItem(self._format(valmin), 8, 5,
+                                      gwidth - 5, gwidth - 5, parentitem=item0)
+        text.setPen(textpen)
+        text = self._textGraphicsItem(self._format(valmax), gwidth - 10, 5,
+                                      gwidth - 5, gwidth - 5, parentitem=item0)
+        text.setPen(textpen)
+        tr = item0.transform()
+        tr.translate(self.left(), self.top())
+        item0.setTransform(tr)
+
+    @staticmethod
+    def _format(num):
+        x = abs(num)
+        if x < 0.1 or x > 100000:
+            if x == 0.:
+                return '0'
+            return '%.3e' % num
+        if x < 1:
+            return '%.4f' % num
+        if x < 10:
+            return '%.3f' % num
+        elif x < 100:
+            return '%.2f' % num
+        elif x < 1000:
+            return '%.1f' % num
+        else:
+            return '%.0f' % num
+
+    def _textGraphicsItem(self, text, xpos, ypos, xmax, hardmax=None,
+                          parentitem=None):
+        text = Qt.QGraphicsSimpleTextItem(text, parentitem)
+        font = text.font()
+        fsize = 6
+        if self.width() >= 200 and self.height() >= 80:
+            fsize = 8
+        font.setPointSize(fsize)
+        text.setFont(font)
+        tr = text.transform()
+        x = xpos + 3
+        w = text.boundingRect().right()
+        # avoid intersecting xmax
+        # print('text:', x, w, xmax, hardmax, ':', text.text())
+        if xpos < xmax and x + w >= xmax - 3:
+            x = xmax - 3 - w
+            # avoid intersecting its own line marker
+            if x <= xpos and x + w >= xpos and xpos >= w + 3:
+                x = xpos - w - 3
+        if x < 4:
+            x = 4
+        # avoid hardmax (right end of the view)
+        if hardmax is not None and x + w >= hardmax:
+            x = hardmax - w - 3
+        tr.translate(x, ypos)
+        text.setTransform(tr)
+        return text
+
+
 class MiniPaletteWidget(Qt.QWidget):
     ''' MiniPaletteWidget is the main class of the module.
 
@@ -175,12 +450,9 @@ class MiniPaletteWidget(Qt.QWidget):
         '''
         # print('create', self)
         super().__init__()
-        self.aobj = None
         self.obs = None
         self.editor = None
         self.edit_parent = edit_parent
-        self.min1 = 0.
-        self.max1 = 1.
         self.click_to_edit = click_to_edit
         self.auto_range = auto_range
         self._tmpitems = []
@@ -189,37 +461,22 @@ class MiniPaletteWidget(Qt.QWidget):
         self.graphicsview = ClickableGraphicsView()
         lay.addWidget(self.graphicsview)
         self.graphicsview.setFocusPolicy(Qt.Qt.NoFocus)
+        self.minipg = MiniPaletteGraphics(self.graphicsview, object)
         if object is not None:
             self.set_object(object)
         self.allow_edit(allow_edit, edit_parent=edit_parent)
         self.graphicsview.mouse_released.connect(self.gv_released)
 
+    def __del__(self):
+        self.clear()
+
     def get_object(self):
-        if self.aobj is None or self.aobj.isNull():
-            return None
-        return self.aobj.get()
+        return self.minipg.get_object()
 
     def set_object(self, obj):
         'set or change the observed object'
 
-        if self.obs is not None:
-            self.obs = None
-        self.aobj = None
-
-        if obj is not None:
-            self.aobj = anatomist.weak_shared_ptr_AObject(obj)
-            glc = obj.glAPI()
-            if glc:
-                extr = glc.glTexExtrema(0)
-                pal = obj.palette()
-                valmin = extr.minquant[0]
-                valmax = extr.maxquant[0]
-                if pal.zeroCenteredAxis1():
-                    valmax = np.max(np.abs((valmin, valmax)))
-                    valmin = -valmax
-            self.set_range(valmin, valmax)
-
-        self.obs = _MiniPaletteWidgetobserver(self, obj)
+        self.minipg.set_object(obj)
         self.update_display()
 
     def allow_edit(self, allow, edit_parent=0):
@@ -246,158 +503,19 @@ class MiniPaletteWidget(Qt.QWidget):
     def set_range(self, min1, max1):
         'set the view range in object values'
 
-        self.min1 = min1
-        self.max1 = max1
+        self.minipg.set_range(min1, max1)
 
     def update_display(self):
         'redraws the palette view'
 
-        if self.get_object() is None:
-            self.obs = None
-            self.aobj = None
-            return
-
-        self._drawPaletteInGraphicsView()
-
-    def update(self, observable, arg):
-        self.update_display()
+        self.minipg.update_display()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.update_display()
 
-    def _drawPaletteInGraphicsView(self):
-        gv = self.graphicsview
-        obj = self.get_object()
-        if obj is None:
-            return
-        pal = obj.palette()
-        gwidth = self.width() - 2
-        gheight = self.height() - 2
-        w = gwidth - 12
-        baseh = int(round((gheight - 10) * 0.33 + 5))
-        if baseh > 30:
-            baseh = 30
-        baseh2 = gheight - baseh + 3
-        # print('rel values:', pal.relValue1(obj, self.min1), pal.relValue1(obj, self.max1))
-        # print('pal minmax:', pal.min1(), pal.max1())
-        img = pal.toQImage(w, baseh2 - baseh - 1,
-                           pal.relValue1(obj, self.min1),
-                           pal.relValue1(obj, self.max1))
-        pix = Qt.QPixmap.fromImage(img)
-        scene = gv.scene()
-        paintpen = Qt.QPen(Qt.QColor(150, 150, 100))
-        if scene is None:
-            scene = Qt.QGraphicsScene(gv)
-            gv.setScene(scene)
-        for item in self._tmpitems:
-            scene.removeItem(item)
-        scene.setSceneRect(0, 0, gwidth, gheight)
-        self._tmpitems = []
-        item0 = Qt.QGraphicsRectItem(0, 0, gwidth, gheight)
-        item0.setPen(Qt.QPen(Qt.QColor(80, 80, 30)))
-        scene.addItem(item0)
-        self._tmpitems.append(item0)
-        item = Qt.QGraphicsRectItem(5, baseh, gwidth - 10, baseh2 - baseh,
-                                    item0)
-        item.setPen(paintpen)
-        item = Qt.QGraphicsLineItem(5, baseh, 5, 5, item0)
-        item.setPen(paintpen)
-        item = Qt.QGraphicsLineItem(gwidth - 5, baseh, gwidth - 5, 5, item0)
-        item.setPen(paintpen)
-        pixitem = Qt.QGraphicsPixmapItem(pix, item0)
-        tr = pixitem.transform()
-        tr.translate(6, baseh + 1)
-        pixitem.setTransform(tr)
-        palmin = pal.absMin1(obj)
-        palmax = pal.absMax1(obj)
-        valmin = self.min1
-        valmax = self.max1
-
-        xmin = 6 + w * (palmin - valmin) / (valmax - valmin)
-        xmax = 6 + w * (palmax - valmin) / (valmax - valmin)
-        pmin = pal.min1()
-        #pmax = pal.max1()
-        #if pal.zeroCenteredAxis1():
-            #pmin = 0.5 + pmin / 2
-            #pmax = 0.5 + pmax / 2
-        #xmin = 6 + w * pmin
-        #xmax = 6 + w * pmax
-        # print('xmin, xmax:', xmin, xmax)
-        if xmin >= 0 and xmin < w:
-            line = Qt.QGraphicsLineItem(
-                xmin, baseh2, xmin, gheight-5, item0)
-            line.setPen(paintpen)
-        if xmax >= 0 and xmax < w:
-            line = Qt.QGraphicsLineItem(
-                xmax, baseh2, xmax, gheight-5, item0)
-            line.setPen(paintpen)
-
-        # print('valmin, valmax:', valmin, valmax)
-        # print('palmin, palmax:', palmin, palmax)
-        textpen = Qt.QPen(Qt.QColor(160, 100, 40))
-        text = self._textGraphicsItem(self._format(palmin), xmin, baseh2 + 3,
-                                      xmax, gwidth - 5, parentitem=item0)
-        text.setPen(textpen)
-        text = self._textGraphicsItem(self._format(palmax), xmax, baseh2 + 3,
-                                      xmin, gwidth - 5, parentitem=item0)
-        text.setPen(textpen)
-        textpen = Qt.QPen(Qt.QColor(120, 120, 40))
-        text = self._textGraphicsItem(self._format(valmin), 8, 5,
-                                      gwidth - 5, gwidth - 5, parentitem=item0)
-        text.setPen(textpen)
-        text = self._textGraphicsItem(self._format(valmax), gwidth - 10, 5,
-                                      gwidth - 5, gwidth - 5, parentitem=item0)
-        text.setPen(textpen)
-        tr = item0.transform()
-        tr.translate((gv.width() - gwidth) / 2, gv.height() - gheight - 5)
-        item0.setTransform(tr)
-
-    @staticmethod
-    def _format(num):
-        x = abs(num)
-        if x < 0.1 or x > 100000:
-            if x == 0.:
-                return '0'
-            return '%.3e' % num
-        if x < 1:
-            return '%.4f' % num
-        if x < 10:
-            return '%.3f' % num
-        elif x < 100:
-            return '%.2f' % num
-        elif x < 1000:
-            return '%.1f' % num
-        else:
-            return '%.0f' % num
-
-    def _textGraphicsItem(self, text, xpos, ypos, xmax, hardmax=None,
-                          parentitem=None):
-        text = Qt.QGraphicsSimpleTextItem(text, parentitem)
-        font = text.font()
-        fsize = 6
-        if self.width() >= 200 and self.height() >= 80:
-            fsize = 8
-        font.setPointSize(fsize)
-        text.setFont(font)
-        tr = text.transform()
-        x = xpos + 3
-        w = text.boundingRect().right()
-        # avoid intersecting xmax
-        # print('text:', x, w, xmax, hardmax, ':', text.text())
-        if xpos < xmax and x + w >= xmax - 3:
-            x = xmax - 3 - w
-            # avoid intersecting its own line marker
-            if x <= xpos and x + w >= xpos and xpos >= w + 3:
-                x = xpos - w - 3
-        if x < 4:
-            x = 4
-        # avoid hardmax (right end of the view)
-        if hardmax is not None and x + w >= hardmax:
-            x = hardmax - w - 3
-        tr.translate(x, ypos)
-        text.setTransform(tr)
-        return text
+    def clear(self):
+        self.minipg.clear()
 
     def show_editor(self):
         'pops up the editor, if the edition is allowed'
@@ -465,11 +583,11 @@ class MiniPaletteWidget(Qt.QWidget):
             return
         pal = obj.palette()
         if pal.zeroCenteredAxis1():
-            c = (self.max1 + self.min1) / 2.
+            c = (self.minipg.max1 + self.min1) / 2.
         else:
             c = (pal.absMax1(obj) + pal.absMin1(obj)) / 2
-        nmin = c - (self.max1 - self.min1) / 2 * scale
-        nmax = c + (self.max1 - self.min1) / 2 * scale
+        nmin = c - (self.minipg.max1 - self.minipg.min1) / 2 * scale
+        nmax = c + (self.minipg.max1 - self.minipg.min1) / 2 * scale
 
         te = obj.glAPI().glTexExtrema()
         tmin = te.minquant[0]
@@ -493,8 +611,8 @@ class MiniPaletteWidget(Qt.QWidget):
         self.range_changed.emit(rmin, rmax)
 
     def editor_closed(self):
-        self.set_range(self.editor.minipw.minipw.min1,
-                       self.editor.minipw.minipw.max1)
+        self.set_range(self.editor.minipw.minipw.minipg.min1,
+                       self.editor.minipw.minipw.minipg.max1)
         self.update_display()
 
 
