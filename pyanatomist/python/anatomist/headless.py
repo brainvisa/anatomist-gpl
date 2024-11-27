@@ -330,6 +330,36 @@ def on_parent_exit(signame):
     return set_parent_exit_signal
 
 
+def test_qt_offscreen():
+    # test OpenGL context creation in a separate process
+    script = '''from soma.qt_gui.qt_backend import Qt
+import os
+import sys
+
+Qt.QCoreApplication.setAttribute(Qt.Qt.AA_ShareOpenGLContexts)
+app = Qt.QApplication([sys.argv[0], '-platform', 'offscreen'])
+# sip.transferto(app, None)  # to prevent deletion just after now
+
+# test OpenGL context creation
+context = Qt.QOpenGLContext()
+if not context.create():
+    res = 1
+else:
+    res = 0
+sys.exit(res)
+'''
+    cmd = [sys.executable, '-c', script]
+    try:
+        res = True
+        subprocess.check_call(cmd)
+        print('Qt offscreen works.')
+    except Exception:
+        print('Qt offscreen does not work.')
+        res = False
+
+    return res
+
+
 def setup_headless_xvfb(allow_virtualgl=True, force_virtualgl=force_virtualgl):
     ''' Sets up a headless virtual X server and tunes the current process
     libraries to use it appropriately.
@@ -554,6 +584,16 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
     qtapp = test_qapp()
     print('qtapp:', qtapp)
     result.qtapp = qtapp
+    if not test_qt_offscreen():
+        # a context cannot be created: happens if a X server connection cannot
+        # be obtained. The offscreen mode of Qt doesn't show widgets,
+        # but for OpenGL, it requires a X11 connection (on linux systems)
+        print('Cannot allocate an OpenGL context. Using Xvfb if possible.')
+        if qtapp is None:
+            # only if no QtApp has been built, try the xvfb method
+            return setup_headless_xvfb(allow_virtualgl=allow_virtualgl,
+                                   force_virtualgl=force_virtualgl)
+        qtapp = 'QApp'
 
     if qtapp == 'QApp':
         # QApplication has already opened the current display: we cannot change
@@ -569,17 +609,6 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
     Qt.QCoreApplication.setAttribute(Qt.Qt.AA_ShareOpenGLContexts)
     app = Qt.QApplication([sys.argv[0], '-platform', 'offscreen'])
     # sip.transferto(app, None)  # to prevent deletion just after now
-
-    # test OpenGL context creation
-    context = Qt.QOpenGLContext()
-    if not context.create():
-        # a context cannot be created: happens if a X server connection cannot
-        # be obtained. The offscreen mode of Qt doesn't show widgets,
-        # but for OpenGL, it requires a X11 connection (on linux systems)
-        print('Cannot allocate an OpenGL context. Using Xvfb if possible.')
-        del app
-        return setup_headless_xvfb(allow_virtualgl=allow_virtualgl,
-                                   force_virtualgl=force_virtualgl)
 
     result.qt_offscreen = True
     result.headless = True
