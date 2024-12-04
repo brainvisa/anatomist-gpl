@@ -194,6 +194,7 @@ def test_qapp():
     return None
 
 
+
 def find_mesa():
     ''' Try to find a software Mesa library in the libraries search path.
     Parses the LD_LIBRARY_PATH env variable and libs listed by the command
@@ -421,12 +422,19 @@ def setup_headless_xvfb(allow_virtualgl=True, force_virtualgl=force_virtualgl):
     result.qtapp = qtapp
 
     if qtapp == 'QApp':
-        # QApplication has already opened the current display: we cannot change
-        # it afterwards.
-        print('QApplication already instantiated, headless Anatomist is not '
-              'possible.')
-        result.headless = False
-        return result
+        import sip
+        from soma.qt_gui.qt_backend import QtWidgets
+
+        sip.delete(QtWidgets.QApplication.instance())
+        # it seems that deleting the QApplication and recreating it actually
+        # works (but virtualGL should not be used).
+
+        ## QApplication has already opened the current display: we cannot change
+        ## it afterwards.
+        #print('QApplication already instantiated, headless Anatomist is not '
+              #'possible.')
+        #result.headless = False
+        #return result
 
     use_xvfb = True
     glxinfo_cmd = distutils.spawn.find_executable('glxinfo')
@@ -589,10 +597,10 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
         # be obtained. The offscreen mode of Qt doesn't show widgets,
         # but for OpenGL, it requires a X11 connection (on linux systems)
         print('Cannot allocate an OpenGL context. Using Xvfb if possible.')
-        if qtapp is None:
+        if qtapp != 'QApp':
             # only if no QtApp has been built, try the xvfb method
             return setup_headless_xvfb(allow_virtualgl=allow_virtualgl,
-                                   force_virtualgl=force_virtualgl)
+                                       force_virtualgl=force_virtualgl)
         qtapp = 'QApp'
 
     if qtapp == 'QApp':
