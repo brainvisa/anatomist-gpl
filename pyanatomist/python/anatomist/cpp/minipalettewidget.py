@@ -1024,8 +1024,8 @@ class MiniPaletteWidgetTranscient(Qt.QWidget):
         self.setObjectName('frameless_minipalette')
         #self.setAutoFillBackground(False)
         #self.setStyleSheet(
-          #'QWidget#frameless_minipalette{margin: 20px; padding: 20px; background-color: transparent; color: red;};'
-          #'QSlider{background-color: transparent;}')
+            #'QWidget#frameless_minipalette{margin: 20px; padding: 20px; background-color: transparent; color: red;};'
+            #'QSlider{background-color: transparent;}')
         layout = Qt.QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
