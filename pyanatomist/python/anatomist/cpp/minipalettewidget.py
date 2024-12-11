@@ -955,6 +955,7 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
         but.setDefault(True)
         but.clicked.connect(dial.accept)
         palsel.paletteSelected.connect(self.set_palette)
+        palsel.itemDoubleClicked.connect(dial.accept)
         dial.resize(500, 800)
         dial.exec()
 
@@ -1095,6 +1096,13 @@ class MiniPaletteWidgetTranscient(Qt.QWidget):
     def slider_released(self):
         self._released = True
         self.close_if_finished()
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Qt.Key_Escape:
+            event.accept()
+            self.close()
+        else:
+            super().keyPressEvent(event)
 
     def closeEvent(self, event):
         super().closeEvent(event)
