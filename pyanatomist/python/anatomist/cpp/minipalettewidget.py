@@ -460,7 +460,7 @@ class MiniPaletteWidget(Qt.QWidget):
         lay.setContentsMargins(0, 0, 0, 0)
         self.graphicsview = ClickableGraphicsView()
         lay.addWidget(self.graphicsview)
-        self.graphicsview.setFocusPolicy(Qt.Qt.NoFocus)
+        self.graphicsview.setFocusPolicy(Qt.Qt.FocusPolicy.NoFocus)
         self.minipg = MiniPaletteGraphics(self.graphicsview, object)
         if object is not None:
             self.set_object(object)
@@ -496,9 +496,9 @@ class MiniPaletteWidget(Qt.QWidget):
         self.edit_allowed = allow
         self.edit_parent = edit_parent
         if allow:
-            self.setFocusPolicy(Qt.Qt.StrongFocus)
+            self.setFocusPolicy(Qt.Qt.FocusPolicy.StrongFocus)
         else:
-            self.setFocusPolicy(Qt.Qt.NoFocus)
+            self.setFocusPolicy(Qt.Qt.FocusPolicy.NoFocus)
 
     def set_range(self, min1, max1):
         'set the view range in object values'
@@ -942,7 +942,8 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
             self.maxslider.set_value(absmax1)
 
     def select_palette(self):
-        dial = Qt.QDialog(self, Qt.Qt.Popup | Qt.Qt.FramelessWindowHint)
+        dial = Qt.QDialog(self,
+                          Qt.Qt.WindowType.Popup | Qt.Qt.FramelessWindowHint)
         lay = Qt.QVBoxLayout()
         dial.setLayout(lay)
         palsel = anatomist.PaletteSelectWidget(self)
@@ -1020,7 +1021,8 @@ class MiniPaletteWidgetTranscient(Qt.QWidget):
 
     def __init__(self, object=None, pw=None, parent=None,
                  opened_by_click=False, auto_range=False):
-        super().__init__(parent, Qt.Qt.Popup | Qt.Qt.FramelessWindowHint)
+        super().__init__(parent,
+                         Qt.Qt.WindowType.Popup | Qt.Qt.FramelessWindowHint)
         self.setObjectName('frameless_minipalette')
         #self.setAutoFillBackground(False)
         #self.setStyleSheet(
