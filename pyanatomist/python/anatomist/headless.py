@@ -337,6 +337,12 @@ def test_qt_offscreen():
 import os
 import sys
 
+if Qt.QT_VERSION >= 0x060000:
+    # in Qt6 we get the message
+    # "QOpenGLWidget is not supported on this platform."
+    # then the application crashes when using AWindow3D.snapshot().
+    sys.exit(1)
+
 Qt.QCoreApplication.setAttribute(
     Qt.Qt.ApplicationAttribute.AA_ShareOpenGLContexts)
 app = Qt.QApplication([sys.argv[0], '-platform', 'offscreen'])
