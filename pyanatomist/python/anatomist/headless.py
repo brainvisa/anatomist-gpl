@@ -337,7 +337,8 @@ def test_qt_offscreen():
 import os
 import sys
 
-Qt.QCoreApplication.setAttribute(Qt.Qt.AA_ShareOpenGLContexts)
+Qt.QCoreApplication.setAttribute(
+    Qt.Qt.ApplicationAttribute.AA_ShareOpenGLContexts)
 app = Qt.QApplication([sys.argv[0], '-platform', 'offscreen'])
 # sip.transferto(app, None)  # to prevent deletion just after now
 
