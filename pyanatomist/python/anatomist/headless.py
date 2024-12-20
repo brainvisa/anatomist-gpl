@@ -95,12 +95,14 @@ def test_glx(glxinfo_cmd=None, xdpyinfo_cmd=None, timeout=5.):
     through xdpyinfo (not always trustable), 0 otherwise.
     '''
     if glxinfo_cmd is None:
-        glxinfo_cmd = distutils.spawn.find_executable('glxinfo')
+        glxinfo_cmd = shutil.which('glxinfo')
+        if glxinfo_cmd is not None:
+            glxinfo_cmd = [glxinfo_cmd]
     if glxinfo_cmd not in (None, []):
-        glxinfo = u''
+        glxinfo = ''
         t0 = time.time()
         t1 = 0
-        while glxinfo == u'' and t1 <= timeout:
+        while glxinfo == '' and t1 <= timeout:
             # universal_newlines = open stdout/stderr in text mode (Unicode)
             process = Popen(glxinfo_cmd, stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE,
@@ -491,11 +493,13 @@ def setup_headless_xvfb(allow_virtualgl=True, force_virtualgl=force_virtualgl):
                 print('VirtualGL found.')
                 vglglxinfo_cmd = None
                 vglxdpyinfo_cmd = None
+                disp = original_display
+                if disp is None:
+                    disp = ""  # will fail but the command will run
                 if glxinfo_cmd:
-                    vglglxinfo_cmd = [vgl, '-d', original_display, glxinfo_cmd]
+                    vglglxinfo_cmd = [vgl, '-d', disp, glxinfo_cmd]
                 if xdpyinfo_cmd:
-                    vglxdpyinfo_cmd = [vgl, '-d', original_display,
-                                       xdpyinfo_cmd]
+                    vglxdpyinfo_cmd = [vgl, '-d', disp, xdpyinfo_cmd]
                 if test_glx(glxinfo_cmd=vglglxinfo_cmd,
                             xdpyinfo_cmd=vglxdpyinfo_cmd, timeout=0):
                     print('VirtualGL should work.')
