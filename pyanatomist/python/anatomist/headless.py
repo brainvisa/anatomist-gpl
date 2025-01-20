@@ -219,10 +219,20 @@ def find_mesa():
         if p not in spaths:
             paths.append(p)
             spaths.add(p)
+    if os.path.exists('/proc/self/maps'):
+        # add lib paths not configured but found via rpaths
+        with open('/proc/self/maps') as f:
+            for line in f.readlines():
+                lib = line.strip().split()[-1]
+                p = os.path.abspath(os.path.dirname(lib))
+                if p not in spaths:
+                    paths.append(p)
+                    spaths.add(p)
     for path in paths:
-        test_gl = os.path.join(path, 'mesa', 'libGL.so.1')
-        if os.path.exists(test_gl):
-            return test_gl
+        for p in ['mesa', 'mesalib/lib', '../mesalib/lib']:
+            test_gl = os.path.abspath(os.path.join(path, p, 'libGL.so.1'))
+            if os.path.exists(test_gl):
+                return test_gl
     return None
 
 
@@ -237,7 +247,7 @@ def start_xvfb(displaynum=None):
         else:
             raise RuntimeError('Too many X servers')
     else:
-        tdisplay = str(displaynum)
+        tdisplay = int(displaynum)
     xvfb = Popen(['Xvfb', '-screen', '0', '1280x1024x24',
                   '+extension', 'GLX', ':%d' % tdisplay],
                  preexec_fn=on_parent_exit('SIGINT'))
@@ -524,8 +534,16 @@ def setup_headless_xvfb(allow_virtualgl=True, force_virtualgl=force_virtualgl):
             mesa = find_mesa()
             if mesa:
                 print('MESA found:', mesa)
-                mesa_lib = ctypes.CDLL(mesa, ctypes.RTLD_GLOBAL)
-                os.environ['LD_PRELOAD'] = mesa
+                preload = mesa
+                try:
+                    mesa_lib = ctypes.CDLL(mesa, ctypes.RTLD_GLOBAL)
+                except OSError:
+                    glapi = os.path.join(os.path.dirname(mesa),
+                                         'libglapi.so.0')
+                    ctypes.CDLL(glapi, ctypes.RTLD_GLOBAL)
+                    mesa_lib = ctypes.CDLL(mesa, ctypes.RTLD_GLOBAL)
+                    preload = f'{glapi}:{mesa}'
+                os.environ['LD_PRELOAD'] = preload
                 os.environ['LD_LIBRARY_PATH'] \
                     = os.path.dirname(mesa) + ':' \
                     + os.getenv('LD_LIBRARY_PATH')
@@ -577,12 +595,19 @@ def setup_headless_xvfb(allow_virtualgl=True, force_virtualgl=force_virtualgl):
     if virtual_display_proc is not None:
         atexit.register(terminate_virtual_display)
 
+    # for an obscure unknown reason, we now need to use the offscreen mode of
+    # Qt, even,t through xvfb, otherwise it cannot build an OpenGL conext.
+    from soma.qt_gui.qt_backend import Qt
+
+    app = Qt.QApplication([sys.argv[0], '-platform', 'offscreen'])
+    # we need to keep a reference to the qapp, otherwise it gets
+    # replaced with a QCoreApplication instance for an unknown reason.
+    result.qapp = app
+
     return result
 
 
 def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
-
-    from soma.qt_gui.qt_backend import Qt
 
     class Result(object):
         def __init__(self):
@@ -601,7 +626,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
     result.original_display = original_display
 
     qtapp = test_qapp()
-    print('qtapp:', qtapp)
+    # print('qtapp:', qtapp)
     result.qtapp = qtapp
     if not test_qt_offscreen():
         # a context cannot be created: happens if a X server connection cannot
@@ -624,6 +649,7 @@ def setup_headless(allow_virtualgl=True, force_virtualgl=force_virtualgl):
         return result
 
     print('starting QApplication offscreen.')
+    from soma.qt_gui.qt_backend import Qt
     print('former app:', Qt.QApplication.instance())
     Qt.QCoreApplication.setAttribute(
         Qt.Qt.ApplicationAttribute.AA_ShareOpenGLContexts)
