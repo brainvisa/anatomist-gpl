@@ -79,47 +79,9 @@ class _MiniPaletteWidgetobserver(anatomist.Observer):
             self.palwid().update(observable, arg)
 
 
-class ClickableGraphicsView(Qt.QGraphicsView):
-    ''' QGraphicsView which emits signal for mouse press, move and release
-    events.
-
-    The normal QGraphicsView captures such events and do not expose them, so a
-    widget containing the graphics view cannot react to mouse events, even if
-    the graphivs view does nothing with them.
-    '''
-
-    mouse_pressed = Qt.Signal(Qt.QMouseEvent)
-    ''' mouse_pressed = Qt.Signal(Qt.QMouseEvent)
-
-    signal emitted upon mouse press event
-    '''
-    mouse_moved = Qt.Signal(Qt.QMouseEvent)
-    ''' mouse_moved = Qt.Signal(Qt.QMouseEvent)
-
-    signal emitted upon mouse move event
-    '''
-    mouse_released = Qt.Signal(Qt.QMouseEvent)
-    ''' mouse_released = Qt.Signal(Qt.QMouseEvent)
-
-    signal emitted upon mouse release event
-    '''
-
-    def mousePressEvent(self, event):
-        super().mousePressEvent(event)
-        self.mouse_pressed.emit(event)
-
-    def mouseMoveEvent(self, event):
-        super().mouseMoveEvent(event)
-        self.mouse_moved.emit(event)
-
-    def mouseReleaseEvent(self, event):
-        super().mouseReleaseEvent(event)
-        self.mouse_released.emit(event)
-
-
 class MiniPaletteGraphics:
     ''' MiniPaletteGraphics is an element which draws a palette in a
-    GrpahicsView scene. It is used by MiniPaletteWidget, but can be used alone
+    GraphicsView scene. It is used by MiniPaletteWidget, but can be used alone
     in a QGraphicsView.
 
     It provides a small sized palette widget which can be used to display
@@ -195,7 +157,6 @@ class MiniPaletteGraphics:
             self.set_range(valmin, valmax)
 
         self.obs = _MiniPaletteWidgetobserver(self, obj)
-        #self.update_display()
 
     def set_range(self, min1, max1):
         'set the view range in object values'
@@ -458,14 +419,14 @@ class MiniPaletteWidget(Qt.QWidget):
         self._tmpitems = []
         lay = Qt.QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
-        self.graphicsview = ClickableGraphicsView()
+        self.graphicsview = anatomist.QClickGraphicsView()
         lay.addWidget(self.graphicsview)
         self.graphicsview.setFocusPolicy(Qt.Qt.FocusPolicy.NoFocus)
         self.minipg = MiniPaletteGraphics(self.graphicsview, object)
         if object is not None:
             self.set_object(object)
         self.allow_edit(allow_edit, edit_parent=edit_parent)
-        self.graphicsview.mouse_released.connect(self.gv_released)
+        self.graphicsview.mouseReleased.connect(self.gv_released)
 
     def __del__(self):
         self.clear()
@@ -810,7 +771,7 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
         layout.addWidget(self.maxslider)
         self.set_object(object)
         self.minipw.graphicsview.setMouseTracking(True)
-        self.minipw.graphicsview.mouse_moved.connect(self.gv_moved)
+        self.minipw.graphicsview.mouseMoved.connect(self.gv_moved)
         self.minslider.abs_value_changed.connect(self.min_changed)
         self.maxslider.abs_value_changed.connect(self.max_changed)
         self.set_auto_range(auto_range)
