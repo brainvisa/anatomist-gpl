@@ -56,7 +56,7 @@ class _MiniPaletteWidgetobserver(anatomist.Observer):
 
     MiniPaletteWidget cannot inherit directly both QWidget and Observer:
     it causes crashes in Observable::notifyObservers, the multiple
-    inheritance seems to cause corruption somawhere in sip bindings, so we use
+    inheritance seems to cause corruption somewhere in sip bindings, so we use
     a separate observer object.
 
     You should not matter about this, it is a private class.
