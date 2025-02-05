@@ -176,8 +176,8 @@ class PaletteContrastAction(anatomist.Action):
         if self.minipw is None:
             gwidth = 150
             gheight = 60
-            self.minipw = MiniPaletteGraphics(gv, obj, gwidth, gheight, -10000,
-                                              -70)
+            self.minipw = MiniPaletteGraphics(gv, obj, 0, gwidth, gheight,
+                                              -10000, -70)
         self.minipw.updateDisplay()
 
 

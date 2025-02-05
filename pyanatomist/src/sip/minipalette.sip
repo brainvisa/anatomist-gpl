@@ -23,7 +23,7 @@ namespace anatomist
 
   public:
     MiniPaletteGraphics( QGraphicsView *graphicsview,
-                         anatomist::AObject *object=0,
+                         anatomist::AObject *object=0, int dim=0,
                          float width=-10000, float height=-10000,
                          float left=-10000, float top=-10000 );
 %Docstring
@@ -50,9 +50,9 @@ namespace anatomist
     virtual ~MiniPaletteGraphics();
 
     anatomist::AObject *getObject();
-    void setObject( anatomist::AObject *obj );
+    void setObject( anatomist::AObject *obj, int dim=0 );
 %Docstring
-    set or change the observed object
+    set or change the observed object. dim is the texure dimension observed
 %End
 
     void setRange( float min1, float max1 );
@@ -66,6 +66,7 @@ namespace anatomist
     virtual void update( const anatomist::Observable *observable, void *arg );
     float min1() const;
     float max1() const;
+    int observedDimension() const;
 
   private:
     MiniPaletteGraphics( const anatomist::MiniPaletteGraphics & );
@@ -105,7 +106,8 @@ namespace anatomist
 %End
 
   public:
-    MiniPaletteWidget( anatomist::AObject *object = 0, bool allow_edit = true,
+    MiniPaletteWidget( anatomist::AObject *object = 0, int dim = 0,
+                       bool allow_edit = true,
                        bool self_parent = true, QWidget *edit_parent = 0,
                        bool click_to_edit = true, bool auto_range = false );
 %Docstring
@@ -113,6 +115,8 @@ namespace anatomist
         ----------
         object: :class:`AObject` or None
             object to display or edit the palette for
+        dim: int
+            texture dimension observed
         allow_edit: bool
             if True, an editor will popup, either by clicking on the widget, or
             by "hovering" it if ``click_to_edit`` is False.
@@ -131,7 +135,7 @@ namespace anatomist
 
     virtual ~MiniPaletteWidget();
     anatomist::AObject *getObject();
-    void setObject( anatomist::AObject *obj );
+    void setObject( anatomist::AObject *obj, int dim = 0 );
     void allowEdit( bool allow, bool self_parent = true,
                     QWidget *edit_parent = 0 );
 %Docstring
@@ -167,6 +171,7 @@ namespace anatomist
     void hideEditor();
     anatomist::MiniPaletteGraphics *miniPaletteGraphics();
     QGraphicsView *graphicsView();
+    int observedDimension() const;
 
   signals:
     void rangeChanged( float, float );
@@ -203,10 +208,11 @@ namespace anatomist
 
   public:
     MiniPaletteWidgetEdit( anatomist::AObject *object=0,
+                           int dim = 0,
                            bool auto_range=false );
     virtual ~MiniPaletteWidgetEdit();
 
-    void setObject( anatomist::AObject *obj );
+    void setObject( anatomist::AObject *obj, int dim = 0 );
     void updateDisplay();
 %Docstring
         redraws the palette and sliders values
@@ -261,6 +267,7 @@ namespace anatomist
 
   public:
     MiniPaletteWidgetTranscient( anatomist::AObject *object = 0,
+                                 int dim = 0,
                                  anatomist::MiniPaletteWidget* pw = 0,
                                  QWidget *parent = 0,
                                  bool opened_by_click = false,
