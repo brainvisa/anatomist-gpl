@@ -79,275 +79,6 @@ class _MiniPaletteWidgetobserver(anatomist.Observer):
             self.palwid().update(observable, arg)
 
 
-class MiniPaletteGraphics:
-    ''' MiniPaletteGraphics is an element which draws a palette in a
-    GraphicsView scene. It is used by MiniPaletteWidget, but can be used alone
-    in a QGraphicsView.
-
-    It provides a small sized palette widget which can be used to display
-    the palette.
-
-    The palette view displayes the palette assigned to an object, and the view
-    may be zoomed to a given values range.
-    '''
-
-    def __init__(self, graphicsview, object=None, width=None, height=None,
-                 left=None, top=None):
-        '''
-        Parameters
-        ----------
-        graphicsview: :class:`QGraphicsView` object
-            the existing graphic view where the palette should be drawn
-        object: :class:`AObject` or None
-            object to display or edit the palette for
-        width: float
-            width of the display in the graphics view. None (default) means
-            whole scene width.
-        height: float
-            height of the display in the graphics view. None (default) means
-            whole scene height.
-        left: float
-            left position of the display in the graphics view. None (default)
-            means centered in scene.
-        top: float
-            top position of the display in the graphics view. None (default)
-            means centered in scene.
-        '''
-        # print('create', self)
-        super().__init__()
-        self.aobj = None
-        self.obs = None
-        self._width = width
-        self._height = height
-        self._left = left
-        self._top = top
-        self.min1 = 0.
-        self.max1 = 1.
-        self._tmpitems = []
-        self.graphicsview = graphicsview
-        if object is not None:
-            self.set_object(object)
-
-    def __del__(self):
-        self.clear()
-
-    def get_object(self):
-        if self.aobj is None or self.aobj.isNull():
-            return None
-        return self.aobj.get()
-
-    def set_object(self, obj):
-        'set or change the observed object'
-
-        if self.obs is not None:
-            self.obs = None
-        self.aobj = None
-
-        if obj is not None:
-            self.aobj = anatomist.weak_shared_ptr_AObject(obj)
-            glc = obj.glAPI()
-            if glc:
-                extr = glc.glTexExtrema(0)
-                pal = obj.palette()
-                valmin = extr.minquant[0]
-                valmax = extr.maxquant[0]
-                if pal.zeroCenteredAxis1():
-                    valmax = np.max(np.abs((valmin, valmax)))
-                    valmin = -valmax
-            self.set_range(valmin, valmax)
-
-        self.obs = _MiniPaletteWidgetobserver(self, obj)
-
-    def set_range(self, min1, max1):
-        'set the view range in object values'
-
-        self.min1 = min1
-        self.max1 = max1
-
-    def update_display(self):
-        'redraws the palette view'
-
-        if self.get_object() is None:
-            self.obs = None
-            self.aobj = None
-            return
-
-        self._drawPaletteInGraphicsView()
-
-    def resize(self, x, y, w, h):
-        self._left = x
-        self._top = y
-        self._width = w
-        self._height = h
-        self.update_display()
-
-    def width(self):
-        if self._width is None:
-            return self.graphicsview.width()
-        return self._width
-
-    def height(self):
-        if self._height is None:
-            return self.graphicsview.height()
-        return self._height
-
-    def top(self):
-        if self._top is None:
-            return (self.graphicsview.height() - self.height()) / 2
-        if self._top >= 0:
-            return self._top
-        return self.graphicsview.height() + self._top
-
-    def left(self):
-        if self._left is None:
-            return (self.graphicsview.width() - self.width()) / 2
-        if self._left >= 0:
-            return self._left
-        return self.graphicsview.width() + self._left
-
-    def clear(self):
-        scene = self.graphicsview.scene()
-        if scene is not None:
-            for item in self._tmpitems:
-                scene.removeItem(item)
-        self._tmpitems = []
-
-    def update(self, observable, arg):
-        self.update_display()
-
-    def _drawPaletteInGraphicsView(self):
-        gv = self.graphicsview
-        obj = self.get_object()
-        if obj is None:
-            return
-        pal = obj.palette()
-        gwidth = self.width() - 2
-        gheight = self.height() - 2
-
-        w = gwidth - 12
-        baseh = int(round((gheight - 10) * 0.33 + 5))
-        if baseh > 30:
-            baseh = 30
-        baseh2 = gheight - baseh + 3
-        # print('rel values:', pal.relValue1(obj, self.min1), pal.relValue1(obj, self.max1))
-        # print('pal minmax:', pal.min1(), pal.max1())
-        img = pal.toQImage(w, baseh2 - baseh - 1,
-                           pal.relValue1(obj, self.min1),
-                           pal.relValue1(obj, self.max1))
-        pix = Qt.QPixmap.fromImage(img)
-        self.clear()
-        scene = gv.scene()
-        paintpen = Qt.QPen(Qt.QColor(150, 150, 100))
-        if scene is None:
-            scene = Qt.QGraphicsScene(gv)
-            gv.setScene(scene)
-        scene.setSceneRect(0, 0, gv.width() - 2, gv.height() - 2)
-        item0 = Qt.QGraphicsRectItem(0, 0, gwidth, gheight)
-        item0.setPen(Qt.QPen(Qt.QColor(80, 80, 30)))
-        scene.addItem(item0)
-        self._tmpitems.append(item0)
-        item = Qt.QGraphicsRectItem(5, baseh, gwidth - 10, baseh2 - baseh,
-                                    item0)
-        item.setPen(paintpen)
-        item = Qt.QGraphicsLineItem(5, baseh, 5, 5, item0)
-        item.setPen(paintpen)
-        item = Qt.QGraphicsLineItem(gwidth - 5, baseh, gwidth - 5, 5, item0)
-        item.setPen(paintpen)
-        pixitem = Qt.QGraphicsPixmapItem(pix, item0)
-        tr = pixitem.transform()
-        tr.translate(6, baseh + 1)
-        pixitem.setTransform(tr)
-        palmin = pal.absMin1(obj)
-        palmax = pal.absMax1(obj)
-        valmin = self.min1
-        valmax = self.max1
-
-        xmin = 6 + w * (palmin - valmin) / (valmax - valmin)
-        xmax = 6 + w * (palmax - valmin) / (valmax - valmin)
-        pmin = pal.min1()
-        #pmax = pal.max1()
-        #if pal.zeroCenteredAxis1():
-            #pmin = 0.5 + pmin / 2
-            #pmax = 0.5 + pmax / 2
-        #xmin = 6 + w * pmin
-        #xmax = 6 + w * pmax
-        # print('xmin, xmax:', xmin, xmax)
-        if xmin >= 0 and xmin < w:
-            line = Qt.QGraphicsLineItem(
-                xmin, baseh2, xmin, gheight-5, item0)
-            line.setPen(paintpen)
-        if xmax >= 0 and xmax < w:
-            line = Qt.QGraphicsLineItem(
-                xmax, baseh2, xmax, gheight-5, item0)
-            line.setPen(paintpen)
-
-        # print('valmin, valmax:', valmin, valmax)
-        # print('palmin, palmax:', palmin, palmax)
-        textpen = Qt.QPen(Qt.QColor(160, 100, 40))
-        text = self._textGraphicsItem(self._format(palmin), xmin, baseh2 + 3,
-                                      xmax, gwidth - 5, parentitem=item0)
-        text.setPen(textpen)
-        text = self._textGraphicsItem(self._format(palmax), xmax, baseh2 + 3,
-                                      xmin, gwidth - 5, parentitem=item0)
-        text.setPen(textpen)
-        textpen = Qt.QPen(Qt.QColor(120, 120, 40))
-        text = self._textGraphicsItem(self._format(valmin), 8, 5,
-                                      gwidth - 5, gwidth - 5, parentitem=item0)
-        text.setPen(textpen)
-        text = self._textGraphicsItem(self._format(valmax), gwidth - 10, 5,
-                                      gwidth - 5, gwidth - 5, parentitem=item0)
-        text.setPen(textpen)
-        tr = item0.transform()
-        tr.translate(self.left(), self.top())
-        item0.setTransform(tr)
-
-    @staticmethod
-    def _format(num):
-        x = abs(num)
-        if x < 0.1 or x > 100000:
-            if x == 0.:
-                return '0'
-            return '%.3e' % num
-        if x < 1:
-            return '%.4f' % num
-        if x < 10:
-            return '%.3f' % num
-        elif x < 100:
-            return '%.2f' % num
-        elif x < 1000:
-            return '%.1f' % num
-        else:
-            return '%.0f' % num
-
-    def _textGraphicsItem(self, text, xpos, ypos, xmax, hardmax=None,
-                          parentitem=None):
-        text = Qt.QGraphicsSimpleTextItem(text, parentitem)
-        font = text.font()
-        fsize = 6
-        if self.width() >= 200 and self.height() >= 80:
-            fsize = 8
-        font.setPointSize(fsize)
-        text.setFont(font)
-        tr = text.transform()
-        x = xpos + 3
-        w = text.boundingRect().right()
-        # avoid intersecting xmax
-        # print('text:', x, w, xmax, hardmax, ':', text.text())
-        if xpos < xmax and x + w >= xmax - 3:
-            x = xmax - 3 - w
-            # avoid intersecting its own line marker
-            if x <= xpos and x + w >= xpos and xpos >= w + 3:
-                x = xpos - w - 3
-        if x < 4:
-            x = 4
-        # avoid hardmax (right end of the view)
-        if hardmax is not None and x + w >= hardmax:
-            x = hardmax - w - 3
-        tr.translate(x, ypos)
-        text.setTransform(tr)
-        return text
-
-
 class MiniPaletteWidget(Qt.QWidget):
     ''' MiniPaletteWidget is the main class of the module.
 
@@ -411,18 +142,16 @@ class MiniPaletteWidget(Qt.QWidget):
         '''
         # print('create', self)
         super().__init__()
-        self.obs = None
         self.editor = None
         self.edit_parent = edit_parent
         self.click_to_edit = click_to_edit
         self.auto_range = auto_range
-        self._tmpitems = []
         lay = Qt.QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         self.graphicsview = anatomist.QClickGraphicsView()
         lay.addWidget(self.graphicsview)
         self.graphicsview.setFocusPolicy(Qt.Qt.FocusPolicy.NoFocus)
-        self.minipg = MiniPaletteGraphics(self.graphicsview, object)
+        self.minipg = anatomist.MiniPaletteGraphics(self.graphicsview, object)
         if object is not None:
             self.set_object(object)
         self.allow_edit(allow_edit, edit_parent=edit_parent)
@@ -432,12 +161,12 @@ class MiniPaletteWidget(Qt.QWidget):
         self.clear()
 
     def get_object(self):
-        return self.minipg.get_object()
+        return self.minipg.getObject()
 
     def set_object(self, obj):
         'set or change the observed object'
 
-        self.minipg.set_object(obj)
+        self.minipg.setObject(obj)
         self.update_display()
 
     def allow_edit(self, allow, edit_parent=0):
@@ -464,12 +193,12 @@ class MiniPaletteWidget(Qt.QWidget):
     def set_range(self, min1, max1):
         'set the view range in object values'
 
-        self.minipg.set_range(min1, max1)
+        self.minipg.setRange(min1, max1)
 
     def update_display(self):
         'redraws the palette view'
 
-        self.minipg.update_display()
+        self.minipg.updateDisplay()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
@@ -544,11 +273,11 @@ class MiniPaletteWidget(Qt.QWidget):
             return
         pal = obj.palette()
         if pal.zeroCenteredAxis1():
-            c = (self.minipg.max1 + self.min1) / 2.
+            c = (self.minipg.max1() + self.minipg.min1) / 2.
         else:
             c = (pal.absMax1(obj) + pal.absMin1(obj)) / 2
-        nmin = c - (self.minipg.max1 - self.minipg.min1) / 2 * scale
-        nmax = c + (self.minipg.max1 - self.minipg.min1) / 2 * scale
+        nmin = c - (self.minipg.max1() - self.minipg.min1()) / 2 * scale
+        nmax = c + (self.minipg.max1() - self.minipg.min1()) / 2 * scale
 
         te = obj.glAPI().glTexExtrema()
         tmin = te.minquant[0]
@@ -572,165 +301,9 @@ class MiniPaletteWidget(Qt.QWidget):
         self.range_changed.emit(rmin, rmax)
 
     def editor_closed(self):
-        self.set_range(self.editor.minipw.minipw.minipg.min1,
-                       self.editor.minipw.minipw.minipg.max1)
+        self.set_range(self.editor.minipw.minipw.minipg.min1(),
+                       self.editor.minipw.minipw.minipg.max1())
         self.update_display()
-
-
-class _MiniPWSlider(Qt.QSlider):
-    ''' Specialized slider class for palette editor
-    :class:`MiniPaletteWidgetEdit`.
-
-    Internal class, please consider it private.
-
-    It features float min/max values matching an AObject texture values,
-    magnets which mark some given significant values, and emits signals when
-    the slider is moved.
-
-    The values range can be changed afterwards.
-    '''
-
-    abs_value_changed = Qt.Signal(float)
-    ''' abs_value_changed = Qt.Signal(float)
-
-    signal emitted when the value changes, in object texture value scale
-    '''
-    slider_pressed = Qt.Signal(str)
-    ''' slider_pressed = Qt.Signal(str)
-
-    signal emitted when the slider is pressed
-    '''
-    slider_moved = Qt.Signal(str)
-    ''' slider_moved = Qt.Signal(str)
-
-    signal emitted when the slider is moved
-    '''
-    slider_released = Qt.Signal(str)
-    ''' slider_released = Qt.Signal(str)
-
-    signal emitted when the slider is released
-    '''
-    slider_double_clicked = Qt.Signal()
-    ''' slider_released = Qt.Signal(str)
-
-    signal emitted when the slider is double-clicked
-    '''
-    double_click_time = 0.3
-
-    def __init__(self, orientation=None, parent=None):
-        if orientation is not None:
-            super().__init__(orientation, parent)
-        else:
-            super().__init__(parent)
-        self.setMinimum(0)
-        self.setMaximum(1000)
-        self.setValue(500)
-        self.presspos = None
-        self.last_release_time = None
-        self.magnets = []
-        self.default = None
-        self.pressval = None
-        self.mag_size = 20.
-        self.set_range(0, 1000)
-        self.slider_double_clicked.connect(self.reset_default)
-
-    def set_magnets(self, magnets):
-        ''' Magnets are "attractive" values, where the mouse must be moved
-        further to pass them when moving the slider.
-        '''
-        self.magnets = magnets
-        # print('magnets:', self.magnets)
-
-    def set_default(self, value):
-        self.default = value
-
-    def set_range(self, min1, max1):
-        # print('set range:', min1, max1)
-        self.min1 = min1
-        self.max1 = max1
-
-    def set_value(self, value):
-        self.current_val = value
-        d = self.max1 - self.min1
-        if d == 0:
-            d = 1.
-        # print('set value:', value, int((value - self.min1) * 1000 / d), ', range:', self.min1, self.max1)
-        self.setValue(int((value - self.min1) * 1000 / d))
-
-    def abs_value(self):
-        return self.current_val
-
-    def mousePressEvent(self, event):
-        self.presspos = event.pos()
-        self.pressval = self.current_val
-        super().mousePressEvent(event)
-        self.slider_pressed.emit(self.objectName())
-
-    def mouseMoveEvent(self, event):
-        super().mouseMoveEvent(event)
-        if self.presspos is not None:
-            xdiff = event.pos().x() - self.presspos.x()
-            # print('move:', xdiff)
-            nval_i = xdiff / self.width()
-            nval = self.pressval + nval_i * (self.max1 - self.min1)
-            # print('nval:', nval)
-            vrange = [min((self.pressval, nval)), max((self.pressval, nval))]
-            # print('vrange:', vrange)
-            nval_set = False
-            if xdiff < 0:
-                mrange = reversed(self.magnets)
-            else:
-                mrange = self.magnets
-            for m in mrange:
-                if m > vrange[0] and m < vrange[1]:
-                    if xdiff > 0:
-                        xdiff -= self.mag_size
-                        nval_i = xdiff / self.width()
-                        old_nval = nval
-                        nval = self.pressval + nval_i * (self.max1 - self.min1)
-                        # print('x:', xdiff, ', nv:', nval)
-                        if old_nval >= m and nval <= m:
-                            nval = m
-                            nval_set = True
-                            break
-                    else:
-                        xdiff += self.mag_size
-                        nval_i = xdiff / self.width()
-                        old_nval = nval
-                        nval = self.pressval + nval_i * (self.max1 - self.min1)
-                        # print('x:', xdiff, ', nv:', nval)
-                        if old_nval <= m and nval >= m:
-                            nval = m
-                            nval_set = True
-                            break
-                    vrange = [min((self.pressval, nval)),
-                              max((self.pressval, nval))]
-            if not nval_set:
-                # print('new xdiff:', xdiff)
-                nval_i = xdiff / self.width()
-                nval = self.pressval + nval_i * (self.max1 - self.min1)
-            # print('new nval:', nval)
-            self.set_value(nval)
-            self.abs_value_changed.emit(nval)
-        self.slider_moved.emit(self.objectName())
-
-    def mouseReleaseEvent(self, event):
-        super().mouseReleaseEvent(event)
-        absval = self.abs_value()
-        #self.current_val = absval
-        self.abs_value_changed.emit(absval)
-        self.slider_released.emit(self.objectName())
-        t = time.time()
-        if self.last_release_time is not None \
-                and t - self.last_release_time < self.double_click_time:
-            self.slider_double_clicked.emit()
-        else:
-            self.last_release_time = t
-
-    def reset_default(self):
-        if self.default is not None:
-            self.set_value(self.default)
-            self.abs_value_changed.emit(self.default)
 
 
 class MiniPaletteWidgetEdit(Qt.QWidget):
@@ -758,10 +331,10 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
         super().__init__()
         layout = Qt.QVBoxLayout()
         self.setLayout(layout)
-        self.minslider = _MiniPWSlider(Qt.Qt.Horizontal)
+        self.minslider = anatomist.QMagnetSlider(Qt.Qt.Horizontal)
         self.minslider.setObjectName('min_slider')
         self.minipw = MiniPaletteWidget(allow_edit=False, click_to_edit=False)
-        self.maxslider = _MiniPWSlider(Qt.Qt.Horizontal)
+        self.maxslider = anatomist.QMagnetSlider(Qt.Qt.Horizontal)
         self.maxslider.setObjectName('max_slider')
         self.auto_range = False
         self.auto_btn = None
@@ -772,8 +345,8 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
         self.set_object(object)
         self.minipw.graphicsview.setMouseTracking(True)
         self.minipw.graphicsview.mouseMoved.connect(self.gv_moved)
-        self.minslider.abs_value_changed.connect(self.min_changed)
-        self.maxslider.abs_value_changed.connect(self.max_changed)
+        self.minslider.absValueChanged.connect(self.min_changed)
+        self.maxslider.absValueChanged.connect(self.max_changed)
         self.set_auto_range(auto_range)
         self.minipw.range_changed.connect(self.set_range)
         self.minipw.palette_clicked.connect(self.select_palette)
@@ -794,11 +367,11 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
             return
         self.auto_range = auto_range
         if auto_range:
-            self.minslider.slider_released.connect(self.adjust_range)
-            self.maxslider.slider_released.connect(self.adjust_range)
+            self.minslider.sliderReleased.connect(self.adjust_range)
+            self.maxslider.sliderReleased.connect(self.adjust_range)
         else:
-            self.minslider.slider_released.disconnect(self.adjust_range)
-            self.maxslider.slider_released.disconnect(self.adjust_range)
+            self.minslider.sliderReleased.disconnect(self.adjust_range)
+            self.maxslider.sliderReleased.disconnect(self.adjust_range)
 
     def adjust_range(self):
         'auto-range function'
@@ -841,10 +414,10 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
                     if rmax > rmax2:
                         rmax = rmax2
             # print('set range:', rmin, rmax)
-            self.minslider.set_range(rmin, rmax)
-            self.maxslider.set_range(rmin, rmax)
-            self.minslider.set_value(absmin1)
-            self.maxslider.set_value(absmax1)
+            self.minslider.setRange(rmin, rmax)
+            self.maxslider.setRange(rmin, rmax)
+            self.minslider.setValue(absmin1)
+            self.maxslider.setValue(absmax1)
             self.minipw.set_range(rmin, rmax)
             self.minipw.update_display()
 
@@ -862,12 +435,12 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
                 mag.add(0)
                 mag.add(max((abs(te.minquant[0]), abs(te.maxquant[0]))))
             mag = sorted(mag)
-            self.minslider.set_magnets(mag)
-            self.minslider.set_default(self.defmin)
-            self.minslider.set_value(pal.absMin1(obj))
-            self.maxslider.set_magnets(mag)
-            self.maxslider.set_default(self.defmax)
-            self.maxslider.set_value(pal.absMax1(obj))
+            self.minslider.setMagnets(mag)
+            self.minslider.setDefault(self.defmin)
+            self.minslider.setValue(pal.absMin1(obj))
+            self.maxslider.setMagnets(mag)
+            self.maxslider.setDefault(self.defmax)
+            self.maxslider.setValue(pal.absMax1(obj))
 
     def update(self, observable, arg):
         self.update_display()
@@ -892,15 +465,15 @@ class MiniPaletteWidgetEdit(Qt.QWidget):
                 obj.notifyObservers()
 
     def set_range(self, rmin, rmax):
-        self.minslider.set_range(rmin, rmax)
-        self.maxslider.set_range(rmin, rmax)
+        self.minslider.setRange(rmin, rmax)
+        self.maxslider.setRange(rmin, rmax)
         obj = self.minipw.get_object()
         if obj is not None:
             pal = obj.palette()
             absmin1 = pal.absMin1(obj)
             absmax1 = pal.absMax1(obj)
-            self.minslider.set_value(absmin1)
-            self.maxslider.set_value(absmax1)
+            self.minslider.setValue(absmin1)
+            self.maxslider.setValue(absmax1)
 
     def select_palette(self):
         dial = Qt.QDialog(self,
@@ -999,10 +572,10 @@ class MiniPaletteWidgetTranscient(Qt.QWidget):
         self.minipw = MiniPaletteWidgetEdit(object, auto_range=auto_range)
         layout.addWidget(self.minipw)
         self.reposition()
-        self.minipw.minslider.slider_pressed.connect(self.slider_pressed)
-        self.minipw.maxslider.slider_pressed.connect(self.slider_pressed)
-        self.minipw.minslider.slider_released.connect(self.slider_released)
-        self.minipw.maxslider.slider_released.connect(self.slider_released)
+        self.minipw.minslider.sliderPressed.connect(self.slider_pressed)
+        self.minipw.maxslider.sliderPressed.connect(self.slider_pressed)
+        self.minipw.minslider.sliderPressed.connect(self.slider_released)
+        self.minipw.maxslider.sliderPressed.connect(self.slider_released)
 
     def reposition(self):
         ''' Repositions / resizes the widget to superpose on its

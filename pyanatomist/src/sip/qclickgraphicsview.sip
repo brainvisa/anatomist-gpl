@@ -20,17 +20,17 @@ public:
   virtual ~QClickGraphicsView();
 
 signals:
-  void mousePressed( const QMouseEvent * );
+  void mousePressed( QMouseEvent * );
 %Docstring
   signal emitted upon mouse press event
 %End
 
-  void mouseMoved( const QMouseEvent * );
+  void mouseMoved( QMouseEvent * );
 %Docstring
   signal emitted upon mouse move event
 %End
 
-  void mouseReleased( const QMouseEvent * );
+  void mouseReleased( QMouseEvent * );
 %Docstring
   signal emitted upon mouse release event
 %End

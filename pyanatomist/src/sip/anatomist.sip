@@ -84,6 +84,8 @@
 %Include volumeview_RGBA.sip
 
 %Include qclickgraphicsview.sip
+%Include qmagnetslider.sip
+%Include minipalette.sip
 
 
 class AnatomistSip

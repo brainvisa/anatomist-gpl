@@ -38,7 +38,7 @@ Main class: :class:`PaletteContrastAction`
 
 import anatomist.cpp as anatomist
 from soma.qt_gui.qt_backend import QtCore, QtGui
-from anatomist.cpp.minipalettewidget import MiniPaletteGraphics
+from anatomist.cpp import MiniPaletteGraphics
 
 
 testControl = False
@@ -176,9 +176,9 @@ class PaletteContrastAction(anatomist.Action):
         if self.minipw is None:
             gwidth = 150
             gheight = 60
-            self.minipw = MiniPaletteGraphics(gv, object=obj, width=gwidth,
-                                              height=gheight, top=-70)
-        self.minipw.update_display()
+            self.minipw = MiniPaletteGraphics(gv, obj, gwidth, gheight, -10000,
+                                              -70)
+        self.minipw.updateDisplay()
 
 
 ad = anatomist.ActionDictionary.instance()
