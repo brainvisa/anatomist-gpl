@@ -13,6 +13,7 @@ Other functions are used by HeadlessAnatomist implementation.
 
 from soma.qt_gui import headless
 from soma.qt_gui.headless import setup_headless
+from soma.qt_gui import qt_backend
 import importlib
 
 hanatomist = None
@@ -113,7 +114,9 @@ def HeadlessAnatomist(*args, **kwargs):
         kwargs = dict(kwargs)
         del kwargs['force_virtualgl']
 
-    result = headless.setup_headless(allow_virtualgl=allow_virtualgl,
+    qt_backend.set_headless(True, True)
+    result = headless.setup_headless(need_opengl=True,
+                                     allow_virtualgl=allow_virtualgl,
                                      force_virtualgl=inst_force_virtualgl)
 
     implementation = kwargs.get('implementation', 'direct')
