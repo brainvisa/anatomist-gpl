@@ -166,7 +166,9 @@ private:
 %End
 
   public:
-    PaletteSelectWidget( QWidget *parent = 0 );
+    PaletteSelectWidget( QWidget *parent = 0,
+                         const std::string & selected = "",
+                         bool allow_none = false );
     virtual ~PaletteSelectWidget();
     std::string selectedPalette() const;
     void selectPalette( const std::string & name );

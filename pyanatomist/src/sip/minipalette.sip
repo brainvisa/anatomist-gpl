@@ -25,7 +25,8 @@ namespace anatomist
     MiniPaletteGraphics( QGraphicsView *graphicsview,
                          anatomist::AObject *object=0, int dim=0,
                          float width=-10000, float height=-10000,
-                         float left=-10000, float top=-10000 );
+                         float left=-10000, float top=-10000,
+                         bool with_view=true );
 %Docstring
       Parameters
       ----------
@@ -45,17 +46,19 @@ namespace anatomist
       top:
           top position of the display in the graphics view. -10000 (default)
           means centered in scene.
+      with_view: bool
+          if False, the palette view will not be displayed.
 %End
 
     virtual ~MiniPaletteGraphics();
 
     anatomist::AObject *getObject();
-    void setObject( anatomist::AObject *obj, int dim=0 );
+    void setObject( anatomist::AObject *obj, int dims=1 );
 %Docstring
     set or change the observed object. dim is the texure dimension observed
 %End
 
-    void setRange( float min1, float max1 );
+    void setRange( float min, float max, int dim );
     void updateDisplay();
     void resize( float x, float y, float w, float h );
     float width() const;
@@ -64,9 +67,9 @@ namespace anatomist
     float left() const;
     void clear();
     virtual void update( const anatomist::Observable *observable, void *arg );
-    float min1() const;
-    float max1() const;
-    int observedDimension() const;
+    float min( int dim ) const;
+    float max( int dim ) const;
+    int observedDimensions() const;
 
   private:
     MiniPaletteGraphics( const anatomist::MiniPaletteGraphics & );
@@ -109,7 +112,8 @@ namespace anatomist
     MiniPaletteWidget( anatomist::AObject *object = 0, int dim = 0,
                        bool allow_edit = true,
                        bool self_parent = true, QWidget *edit_parent = 0,
-                       bool click_to_edit = true, bool auto_range = false );
+                       bool click_to_edit = true, bool auto_range = false,
+                       bool with_view = true );
 %Docstring
         Parameters
         ----------
@@ -131,6 +135,8 @@ namespace anatomist
         auto_range: bool
             For edition mode, allow the auto-zoom mode when palette range is
             modified.
+      with_view: bool
+          if False, the palette view will not be displayed.
 %End
 
     virtual ~MiniPaletteWidget();
@@ -152,7 +158,7 @@ namespace anatomist
             :class:`MiniPaletteWidget`, ``self``.
 %End
 
-    void setRange( float min1, float max1 );
+    void setRange( float min, float max );
 %Docstring
         set the view range in object values
 %End
@@ -209,10 +215,13 @@ namespace anatomist
   public:
     MiniPaletteWidgetEdit( anatomist::AObject *object=0,
                            int dim = 0,
-                           bool auto_range=false );
+                           bool auto_range=false,
+                           bool with_view = true,
+                           bool allow_no_palette = false );
     virtual ~MiniPaletteWidgetEdit();
 
     void setObject( anatomist::AObject *obj, int dim = 0 );
+    AObject* getObject();
     void updateDisplay();
 %Docstring
         redraws the palette and sliders values
@@ -222,6 +231,7 @@ namespace anatomist
     anatomist::MiniPaletteWidget *miniPaletteWidget();
     QSlider *minSlider();
     QSlider *maxSlider();
+    int observedDimension() const;
 
   public slots:
     void adjustRange();
