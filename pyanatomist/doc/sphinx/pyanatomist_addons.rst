@@ -16,12 +16,6 @@ followerobject
 .. automodule:: anatomist.cpp.followerobject
   :members:
 
-minipalettewidget
-~~~~~~~~~~~~~~~~~
-
-.. automodule:: anatomist.cpp.minipalettewidget
-  :members:
-
 palettecontrastaction
 ~~~~~~~~~~~~~~~~~~~~~
 
