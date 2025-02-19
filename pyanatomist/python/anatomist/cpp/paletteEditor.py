@@ -31,7 +31,14 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
-from __future__ import absolute_import
+''' Palette editor widget.
+
+This seems to be an older attempt for a small palette edition widget.
+A newer one is found in :mod:`anatomist.cpp.minipalettewidget`, whose author was not aware of this one.
+
+However this one is used in BrainVisa nuclear imaging toolbox, so cannot be removed until we replace its uses with the newer one.
+'''
+
 from soma.qt_gui.qt_backend import QtCore, QtGui
 from soma import aims
 from soma.qt_gui.rangeSlider import QRangeSlider
@@ -43,6 +50,8 @@ import six
 
 
 class PaletteEditor(QtGui.QGroupBox):
+    ''' Palette editor widget
+    '''
 
     paletteMinMaxChanged = QtCore.Signal(object)
 

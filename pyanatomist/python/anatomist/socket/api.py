@@ -55,27 +55,19 @@ To do this, use the constructor with forceNewInstance parameter :
 
 """
 
-from __future__ import print_function
-
-from __future__ import absolute_import
 from anatomist import base
 from soma.html import htmlEscape
-
 import threading
-import types
-import string
 import time
 import sys
 import os
-import distutils.spawn
+import shutil
 import atexit
-import six
 
 from soma.qt_gui.io import Socket
 from soma.qt_gui.qtThread import QtThreadCall
 from soma.qt_gui.qt_backend.QtCore import QProcess
 from soma.qt_gui.qt_backend.Qt import qApp
-from six.moves import map
 
 try:
     from soma import somaqt
@@ -114,7 +106,7 @@ class Anatomist(base.Anatomist):
         lock for thread safety when accessing the singleton instance
     """
     talairachMNIReferentialId = '803552a6-ac4d-491d-99f5-b938392b674b'
-    anatomistExecutable = distutils.spawn.find_executable('anatomist')
+    anatomistExecutable = shutil.which('anatomist')
     mainThread = None
 
     def __new__(cls, *args, **kwargs):
@@ -941,12 +933,7 @@ class Anatomist(base.Anatomist):
         if not self.launched:
             return
         # remove exit handler
-        if six.PY2:
-            for x in atexit._exithandlers:
-                if len(x) > 0 and x[0] == self.close:
-                    atexit._exithandlers.remove(x)
-        else:
-            atexit.unregister(self.close)
+        atexit.unregister(self.close)
         super(Anatomist, self).close()
         if self.newanatomist:
             isRunning = (self.anaServerProcess.state() == QProcess.Running)
@@ -995,7 +982,7 @@ class Anatomist(base.Anatomist):
         for (name, value) in kwargs.items():
             if value is not None:
                 if isinstance(value, (tuple, list)):
-                    value = ' '.join(map(str, value))
+                    value = ' '.join([str(v) for v in value])
                 elif hasattr(value, 'items') and hasattr(value, 'has_key'):
                     # special case of dictionaries: they should convert to
                     # carto Trees, and have the __syntax__ property first
@@ -1036,7 +1023,7 @@ class Anatomist(base.Anatomist):
         if not self.launched:
             raise RuntimeError('Anatomist is not running.')
         args = dict((k, self.convertParamsToIDs(v))
-                    for k, v in six.iteritems(kwargs) if v is not None)
+                    for k, v in kwargs.items() if v is not None)
         requestID = self.newRequestID()
         # an id is added to the request in order to retrieve the corresponding
         # answer among messages read on the socket

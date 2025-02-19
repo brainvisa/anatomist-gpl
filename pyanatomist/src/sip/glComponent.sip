@@ -93,6 +93,10 @@ typedef std::vector<float> vector_FLOAT;
     bool = true ) const;
   virtual bool glHasChanged( anatomist::GLComponent::glPart ) const;
 
+  virtual void glSetTexImageChanged( bool x = true,
+                                     unsigned tex = 0 ) const ;
+  virtual void glSetTexEnvChanged( bool x = true, unsigned tex = 0 ) const;
+
   virtual anatomist::GLPrimitives glMainGLL( const anatomist::ViewState & );
 
   virtual bool glMakeBodyGLL( const anatomist::ViewState & state,
