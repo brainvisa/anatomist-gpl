@@ -272,12 +272,11 @@ class VectorFieldTransforms(Singleton):
             # print(source_id)
             source_ref = self.referential_from_id(source_id)
             for dest_id, trans in dest_def.items():
+                if dest_id == 'alias':
+                    continue
                 dest_ref = self.referential_from_id(dest_id)
-                print(dest_id, repr(trans), dest_ref.uuid())
-                inv = False
                 sr = source_ref
                 if trans.startswith('inv:'):
-                    inv = True
                     trans = trans[4:]
                     sr = dest_ref
                     dest_ref = source_ref
@@ -427,6 +426,8 @@ class LinkROIAction(ana.cpp.ContinuousTrackball):
         '''
         if hasattr(obj, 'attributed'):
             att = obj.attributed()
+            if att is None:
+                return None
             label_attribute = 'label'
             if hasattr(obj, 'getInternalRep'):
                 iobj = obj.getInternalRep()
@@ -481,7 +482,7 @@ class LinkROIAction(ana.cpp.ContinuousTrackball):
             if trans:
                 # Coordinate must be transformed to go to the target
                 # referential
-                o_box = trans.transformBoundingBox(*o_box)
+                o_box = trans.transformBoundingBox(o_box[0][:3], o_box[1][:3])
             if not bbox:
                 bbox = list(o_box)
             else:
