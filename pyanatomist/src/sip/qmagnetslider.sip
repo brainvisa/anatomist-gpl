@@ -33,8 +33,8 @@ namespace anatomist
 %End
 
     void setDefault( float value );
-    void setRange( float min1, float max1 );
-    void setValue( float value );
+    void setAbsRange( float min1, float max1 );
+    void setAbsValue( float value );
     float absValue() const;
     void resetDefault();
 
