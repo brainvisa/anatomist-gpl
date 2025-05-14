@@ -2024,9 +2024,12 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
 
         @staticmethod
         def findBlock(widget):
-            for x in Anatomist.AWindowsBlock._widgets:
-                if x.widget == widget:
-                    return x
+            wid = widget
+            while wid is not None:
+                for x in Anatomist.AWindowsBlock._widgets:
+                    if x.widget == wid:
+                        return x
+                wid = wid.parent()
             return None
 
     #
