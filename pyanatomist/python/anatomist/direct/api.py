@@ -1347,7 +1347,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
             if isinstance(obj, _string_or_qstring):
                 return True
             name = obj.__class__.__name__
-            begins = ('AimsTimeSurface_', 'TimeTexture_', 'AimsRGB', 'AimsHSV')
+            begins = ('AimsTimeSurface_', 'TimeTexture_', 'AimsRGB', 'AimsHSV',
+                      'AGraph')
             for n in begins:
                 if name.startswith(n) or name.startswith('rc_ptr_' + n):
                     return True
