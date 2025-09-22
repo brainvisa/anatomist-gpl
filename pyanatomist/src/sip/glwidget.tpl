@@ -66,10 +66,10 @@ class GLWidgetManager : anatomist::View
     bool hasTransparentObjects() const;
     void setTransparentObjects( bool );
     bool depthPeelingAllowed() const;
-    bool depthPeelingEnabled() const;
-    void enableDepthPeeling( bool );
-    unsigned depthPeelingPasses() const;
-    void setDepthPeelingPasses( unsigned );
+    bool useDepthPeeling() const;
+    void setUseDepthPeeling( bool );
+    unsigned nbLayers() const;
+    void setNbLayers( int );
     unsigned numTextureUnits() const;
     anatomist::AWindow *aWindow();
     virtual int width() = 0;
