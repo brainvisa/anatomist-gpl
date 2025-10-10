@@ -90,7 +90,8 @@ public:
   bool isTransparent() const;
   Volume_RGBA* colors ();
   QImage* toQImage( int w = 0, int h = 0, float min1 = 0., float max1 = 1.,
-                    float min2 = 0., float max2 = 1. ) const;
+                    float zero1 = 0.5, float min2 = 0., float max2 = 1.,
+                    float zero2 = 0.5 ) const;
 %Docstring
     qimage = palette.toQImage(w=0, h=0, min1=0., max1=1., min2=0., max2=1.)
 
