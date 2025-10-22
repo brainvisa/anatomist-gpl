@@ -46,7 +46,7 @@ namespace anatomist
     bool hasObject(anatomist::AObject *) const;
     float getTime() const;
     virtual void setTime( float time );
-    virtual Point3df getPosition() const;
+    virtual const Point3df & getPosition() const;
     virtual vector_FLOAT getFullPosition() const;
     virtual void setPosition( const Point3df &position,
       const anatomist::Referential *refdep );
