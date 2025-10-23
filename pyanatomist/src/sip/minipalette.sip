@@ -58,7 +58,7 @@ namespace anatomist
     set or change the observed object. dim is the texure dimension observed
 %End
 
-    void setRange( float min, float max, int dim );
+    void setRange( double min, double max, int dim );
     void updateDisplay();
     void resize( float x, float y, float w, float h );
     float width() const;
@@ -67,8 +67,8 @@ namespace anatomist
     float left() const;
     void clear();
     virtual void update( const anatomist::Observable *observable, void *arg );
-    float min( int dim ) const;
-    float max( int dim ) const;
+    double min( int dim ) const;
+    double max( int dim ) const;
     int observedDimensions() const;
 
   private:
@@ -158,7 +158,7 @@ namespace anatomist
             :class:`MiniPaletteWidget`, ``self``.
 %End
 
-    void setRange( float min, float max );
+    void setRange( double min, double max );
 %Docstring
         set the view range in object values
 %End
@@ -180,7 +180,7 @@ namespace anatomist
     int observedDimension() const;
 
   signals:
-    void rangeChanged( float, float );
+    void rangeChanged( double, double );
     void paletteClicked();
   };
 
@@ -244,9 +244,9 @@ namespace anatomist
         allows or disables the auto-zoom mode
 %End
 
-    void minChanged( float value );
-    void maxChanged( float value );
-    void setRange( float rmin, float rmax );
+    void minChanged( double value );
+    void maxChanged( double value );
+    void setRange( double rmin, double rmax );
     void selectPalette();
     void setPalette( const std::string & palname );
     void gvMoved( QMouseEvent *event );

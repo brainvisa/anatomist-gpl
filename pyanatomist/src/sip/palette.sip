@@ -34,48 +34,48 @@ public:
   rc_ptr_APalette refPalette2() const;
   void setRefPalette( rc_ptr_APalette pal );
   void setRefPalette2( rc_ptr_APalette pal );
-  float min1() const;
-  float max1() const;
-  float min2() const;
-  float max2() const;
-  void setMin1( float x );
-  void setMax1( float x );
-  void setMin2( float x );
-  void setMax2( float x );
-  float relValue1( const AObject * obj, float absval ) const;
-  float relValue2( const AObject * obj, float absval ) const;
-  float absValue1( const AObject * obj, float relval ) const;
-  float absValue2( const AObject * obj, float relval ) const;
+  double min1() const;
+  double max1() const;
+  double min2() const;
+  double max2() const;
+  void setMin1( double x );
+  void setMax1( double x );
+  void setMin2( double x );
+  void setMax2( double x );
+  double relValue1( const AObject * obj, double absval ) const;
+  double relValue2( const AObject * obj, double absval ) const;
+  double absValue1( const AObject * obj, double relval ) const;
+  double absValue2( const AObject * obj, double relval ) const;
 
-  float absMin1( const anatomist::AObject * obj ) const;
+  double absMin1( const anatomist::AObject * obj ) const;
 %Docstring
   get the absolute min for a given object
 %End
-  float absMax1( const anatomist::AObject * obj ) const;
+  double absMax1( const anatomist::AObject * obj ) const;
 %Docstring
   get the absolute max for a given object
 %End
-  float absMin2( const anatomist::AObject * obj ) const;
+  double absMin2( const anatomist::AObject * obj ) const;
 %Docstring
   get the absolute min for a given object
 %End
-  float absMax2( const anatomist::AObject * obj ) const;
+  double absMax2( const anatomist::AObject * obj ) const;
 %Docstring
   get the absolute max for a given object
 %End
-  void setAbsMin1( const anatomist::AObject * obj, float x );
+  void setAbsMin1( const anatomist::AObject * obj, double x );
 %Docstring
   set the min from an absolute value for a given object
 %End
-  void setAbsMax1( const anatomist::AObject * obj, float x );
+  void setAbsMax1( const anatomist::AObject * obj, double x );
 %Docstring
   set the max from an absolute value for a given object
 %End
-  void setAbsMin2( const anatomist::AObject * obj, float x );
+  void setAbsMin2( const anatomist::AObject * obj, double x );
 %Docstring
   set the min from an absolute value for a given object
 %End
-  void setAbsMax2( const anatomist::AObject * obj, float x );
+  void setAbsMax2( const anatomist::AObject * obj, double x );
 %Docstring
   set the max from an absolute value for a given object
 %End
@@ -89,8 +89,9 @@ public:
   virtual void fill();
   bool isTransparent() const;
   Volume_RGBA* colors ();
-  QImage* toQImage( int w = 0, int h = 0, float min1 = 0., float max1 = 1.,
-                    float min2 = 0., float max2 = 1. ) const;
+  QImage* toQImage( int w = 0, int h = 0, double min1 = 0., double max1 = 1.,
+                    double zero1 = 0.5, double min2 = 0., double max2 = 1.,
+                    double zero2 = 0.5 ) const;
 %Docstring
     qimage = palette.toQImage(w=0, h=0, min1=0., max1=1., min2=0., max2=1.)
 
@@ -131,7 +132,7 @@ Maximum size of the OpenGL palette image, after scaling.
 %End
   int glMaxSizeY() const;
   void glSetMaxSize( int glmaxsizex, int glmaxsizey );
-  AimsRGBA normColor( float x, float y = 0 ) const;
+  AimsRGBA normColor( double x, double y = 0 ) const;
   AimsRGBA normColor( const Point2df & pos ) const;
 };
 
