@@ -5,6 +5,14 @@ namespace anatomist
   {
 %TypeHeaderCode
 #include <anatomist/surface/textobject.h>
+#include <anatomist/surface/surface.h>
+#ifndef PYANA_ASURFACE_3_DEFINED
+#define PYANA_ASURFACE_3_DEFINED
+namespace anatomist
+{
+  typedef ASurface<3> ASurface_3;
+}
+#endif
 %End
 
   public:

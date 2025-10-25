@@ -86,6 +86,7 @@
 %Include qclickgraphicsview.sip
 %Include qmagnetslider.sip
 %Include minipalette.sip
+%Include rendercontext.sip
 
 
 class AnatomistSip
