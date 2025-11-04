@@ -311,6 +311,9 @@ public:
   set_STRING mouseReleaseActionLinkNames() const;
   set_STRING mouseDoubleClickActionLinkNames() const;
   set_STRING mouseMoveActionLinkNames() const;
+
+  void inhibitAction( const std::string & action, bool inhibit );
+  const set_STRING & inhibitedActions() const;
 };
 
 
