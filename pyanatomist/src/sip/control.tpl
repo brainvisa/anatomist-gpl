@@ -52,7 +52,10 @@ class Action
         }
     }
     else
+    {
       sipType = sipType_anatomist_Trackball;
+      *sipCppRet = static_cast<anatomist::Trackball *>(sipCpp);
+    }
   }
   else if( dynamic_cast<anatomist::WindowActions *>( sipCpp ) )
     sipType = sipType_anatomist_WindowActions;
@@ -91,6 +94,16 @@ class Action
   {
     sipType = sipType_anatomist_MovieAction;
     *sipCppRet = static_cast<anatomist::MovieAction *>( sipCpp );
+  }
+  else if (dynamic_cast<anatomist::PinchZoomAction *>(sipCpp))
+  {
+    sipType = sipType_anatomist_PinchZoomAction;
+    *sipCppRet = static_cast<anatomist::PinchZoomAction *>(sipCpp);
+  }
+  else if (dynamic_cast<anatomist::TouchRotateAction *>(sipCpp))
+  {
+    sipType = sipType_anatomist_TouchRotateAction;
+    *sipCppRet = static_cast<anatomist::TouchRotateAction *>(sipCpp);
   }
   else
     sipType = 0;
@@ -212,6 +225,48 @@ public:
     virtual anatomist::Control::WheelActionLink* clone() const = 0 /Factory/;
   };
 
+  class PanActionLink {
+  public:
+    virtual ~PanActionLink() ;
+    virtual void execute( QPanGesture* ) = 0 ;
+    virtual anatomist::Control::PanActionLink* clone() const = 0 /Factory/;
+  };
+
+  class TapActionLink {
+  public:
+    virtual ~TapActionLink() ;
+    virtual void execute( QTapGesture* ) = 0 ;
+    virtual anatomist::Control::TapActionLink* clone() const = 0 /Factory/;
+  };
+
+  class TapAndHoldActionLink {
+  public:
+    virtual ~TapAndHoldActionLink() ;
+    virtual void execute( QTapAndHoldGesture* ) = 0 ;
+    virtual anatomist::Control::TapAndHoldActionLink* clone() const = 0 /Factory/;
+  };
+
+  class PinchActionLink {
+  public:
+    virtual ~PinchActionLink() ;
+    virtual void execute( QPinchGesture* ) = 0 ;
+    virtual anatomist::Control::PinchActionLink* clone() const = 0 /Factory/;
+  };
+
+  class SwipeActionLink {
+  public:
+    virtual ~SwipeActionLink() ;
+    virtual void execute( QSwipeGesture* ) = 0 ;
+    virtual anatomist::Control::SwipeActionLink* clone() const = 0 /Factory/;
+  };
+
+  class TouchActionLink {
+  public:
+    virtual ~TouchActionLink() ;
+    virtual void execute( QTouchEvent* ) = 0 ;
+    virtual anatomist::Control::TouchActionLink* clone() const = 0 /Factory/;
+  };
+
   class SelectionChangedActionLink
   {
   public:
@@ -283,6 +338,37 @@ public:
       const anatomist::Control::MouseActionLink &, 
       bool )
     /PyName=_mouseLongEventSubscribe/;
+  bool pinchEventSubscribe( const anatomist::Control::PinchActionLink & startMethod,
+                            const anatomist::Control::PinchActionLink & moveMethod,
+                            const anatomist::Control::PinchActionLink & stopMethod,
+                            const anatomist::Control::PinchActionLink & cancelMethod )
+    /PyName=_pinchEventSubscribe/;
+  bool panEventSubscribe( const anatomist::Control::PanActionLink & startMethod,
+                          const anatomist::Control::PanActionLink & moveMethod,
+                          const anatomist::Control::PanActionLink & stopMethod,
+                          const anatomist::Control::PanActionLink & cancelMethod )
+    /PyName=_panEventSubscribe/;
+  bool swipeEventSubscribe( const anatomist::Control::SwipeActionLink & startMethod,
+                            const anatomist::Control::SwipeActionLink & moveMethod,
+                            const anatomist::Control::SwipeActionLink & stopMethod,
+                            const anatomist::Control::SwipeActionLink & cancelMethod )
+    /PyName=_swipeEventSubscribe/;
+  bool tapEventSubscribe( const anatomist::Control::TapActionLink & startMethod,
+                          const anatomist::Control::TapActionLink & moveMethod,
+                          const anatomist::Control::TapActionLink & stopMethod,
+                          const anatomist::Control::TapActionLink & cancelMethod )
+    /PyName=_tapEventSubscribe/;
+  bool tapAndHoldEventSubscribe(
+    const anatomist::Control::TapAndHoldActionLink & startMethod,
+    const anatomist::Control::TapAndHoldActionLink & moveMethod,
+    const anatomist::Control::TapAndHoldActionLink & stopMethod,
+    const anatomist::Control::TapAndHoldActionLink & cancelMethod )
+    /PyName=_tapAndHoldEventSubscribe/;
+  bool touchEventSubscribe( Qt::KeyboardModifiers state,
+                            const anatomist::Control::TouchActionLink & startMethod,
+                            const anatomist::Control::TouchActionLink & moveMethod,
+                            const anatomist::Control::TouchActionLink & stopMethod )
+    /PyName=_touchEventSubscribe/;
 
   bool keyPressEventUnsubscribe( int, Qt::KeyboardModifiers );
   bool keyReleaseEventUnsubscribe( int, Qt::KeyboardModifiers );
@@ -304,6 +390,12 @@ public:
     const SelectionChangedActionLink& actionMethod )
     /PyName=_selectionChangedEventSubscribe/;
   bool selectionChangedEventUnsubscribe();
+  bool pinchEventUnsubscribe();
+  bool panEventUnsubscribe();
+  bool swipeEventUnsubscribe();
+  bool tapEventUnsubscribe();
+  bool tapAndHoldEventUnsubscribe();
+  bool touchEventUnsubscribe( Qt::KeyboardModifiers state );
 
   set_STRING keyPressActionLinkNames() const;
   set_STRING keyReleaseActionLinkNames() const;

@@ -581,6 +581,84 @@ class PySelectionChangedActionLink(Control.SelectionChangedActionLink):
         return PySelectionChangedActionLink(self._method)
 
 
+class PyPanActionLink(Control.PanActionLink):
+
+    def __init__(self, method):
+        Control.PanActionLink.__init__(self)
+        self._method = method
+
+    def execute(self, gesture):
+        self._method(gesture)
+
+    def clone(self):
+        return PyPanActionLink(self._method)
+
+
+class PyTapActionLink(Control.TapActionLink):
+
+    def __init__(self, method):
+        Control.TapActionLink.__init__(self)
+        self._method = method
+
+    def execute(self, gesture):
+        self._method(gesture)
+
+    def clone(self):
+        return PyTapActionLink(self._method)
+
+
+class PyTapAndHoldActionLink(Control.TapAndHoldActionLink):
+
+    def __init__(self, method):
+        Control.TapAndHoldActionLink.__init__(self)
+        self._method = method
+
+    def execute(self, gesture):
+        self._method(gesture)
+
+    def clone(self):
+        return PyTapAndHoldActionLink(self._method)
+
+
+class PyPinchActionLink(Control.PinchActionLink):
+
+    def __init__(self, method):
+        Control.PinchActionLink.__init__(self)
+        self._method = method
+
+    def execute(self, gesture):
+        self._method(gesture)
+
+    def clone(self):
+        return PyPinchActionLink(self._method)
+
+
+class PySwipeActionLink(Control.SwipeActionLink):
+
+    def __init__(self, method):
+        Control.SwipeActionLink.__init__(self)
+        self._method = method
+
+    def execute(self, gesture):
+        self._method(gesture)
+
+    def clone(self):
+        return PySwipeActionLink(self._method)
+
+
+class PyTouchActionLink(Control.TouchActionLink):
+
+    def __init__(self, method):
+        Control.TouchActionLink.__init__(self)
+        self._method = method
+
+    def execute(self, event):
+        self._method(event)
+
+    def clone(self):
+        return PyTouchActionLink(self._method)
+
+
 class PyActionCreator(ActionDictionary.ActionCreatorBase):
 
     def __init__(self, function):
@@ -689,6 +767,30 @@ Control.wheelEventSubscribe = lambda self, func: \
 Control.selectionChangedEventSubscribe = lambda self, func: \
     self._selectionChangedEventSubscribe(
         PySelectionChangedActionLink(func))
+Control.panEventSubscribe = lambda self, func1, func2, func3, func4: \
+    self._panEventSubscribe(
+        PyPanActionLink(func1), PyPanActionLink(func2), PyPanActionLink(func3),
+        PyPanActionLink(func4))
+Control.tapEventSubscribe = lambda self, func1, func2, func3, func4: \
+    self._tapEventSubscribe(
+        PyTapActionLink(func1), PyTapActionLink(func2), PyTapActionLink(func3),
+        PyTapActionLink(func4))
+Control.tapAndHoldEventSubscribe = lambda self, func1, func2, func3, func4: \
+    self._tapAndHoldEventSubscribe(
+        PyTapAndHoldActionLink(func1), PyTapAndHoldActionLink(func2),
+        PyTapAndHoldActionLink(func3), PyTapAndHoldActionLink(func4))
+Control.pinchEventSubscribe = lambda self, func1, func2, func3, func4: \
+    self._pinchEventSubscribe(
+        PyPinchActionLink(func1), PyPinchActionLink(func2), PyPinchActionLink(func3),
+        PyPinchActionLink(func4))
+Control.swipeEventSubscribe = lambda self, func1, func2, func3, func4: \
+    self._swipeEventSubscribe(
+        PySwipeActionLink(func1), PySwipeActionLink(func2), PySwipeActionLink(func3),
+        PySwipeActionLink(func4))
+Control.touchEventSubscribe = lambda self, modifier, func1, func2, func3: \
+    self._touchEventSubscribe(
+        modifier, PyTouchActionLink(func1), PyTouchActionLink(func2),
+        PyTouchActionLink(func3))
 
 aims.convertersObjectToPython.update({
                                      'AObject': AObject.fromObject,
