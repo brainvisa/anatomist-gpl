@@ -105,7 +105,7 @@ namespace anatomist
     static int classType();
     virtual bool CanRemove( anatomist::AObject* obj );
     virtual bool render( anatomist::GLPrimitives & prim,
-                         const anatomist::RenderContext & rc );
+                         anatomist::RenderContext & rc );
     virtual void setFileName( const std::string & fname );
     virtual void SetExtrema();
     virtual void adjustPalette();
