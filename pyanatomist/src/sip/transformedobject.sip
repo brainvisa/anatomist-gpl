@@ -18,7 +18,7 @@ namespace anatomist
 
     virtual bool renderingIsObserverDependent() const;
     virtual bool render( anatomist::GLPrimitives &,
-      const anatomist::ViewState & );
+      anatomist::RenderContext & );
     void setPosition( const Point3df & );
     Point3df position() const;
     void setOffset( const Point3df & );

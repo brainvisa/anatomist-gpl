@@ -95,7 +95,7 @@ namespace anatomist
 
     virtual void setInternalsChanged();
     virtual void internalUpdate();
-    virtual bool render( anatomist::GLPrimitives &, const anatomist::ViewState & );
+    virtual bool render( anatomist::GLPrimitives &, anatomist::RenderContext & );
 
     void setType(int);
     void SetMaterial(const anatomist::Material &mat);
