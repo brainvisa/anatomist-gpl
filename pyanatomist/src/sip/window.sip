@@ -234,6 +234,12 @@ public:
 
   virtual int polygonAtCursorPosition( int x, int y,
                                        const anatomist::AObject* obj );
+  const aims::Quaternion & getViewPointQuaternion() const;
+  float getViewPointZoom() const;
+  Point3df getViewPointRotationCenter() const;
+  void setViewPoint(const aims::Quaternion & quaternion,
+         float zoom,
+         const Point3df & center);
   ViewType viewType() const;
   bool isViewOblique() const;
   const aims::Quaternion & sliceQuaternion() const;
