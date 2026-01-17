@@ -261,6 +261,9 @@ namespace anatomist
 
     bool allowsOverwriteOnSave() const;
     void setAllowsOverwriteOnSave( bool x );
+
+  protected:
+    virtual void cleanup();
   };
 
 };

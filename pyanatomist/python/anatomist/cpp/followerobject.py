@@ -53,9 +53,13 @@ class ObjectFollowerCube(anatomist.ASurface_2):
         anatomist.ASurface_2.__init__(self)
         self.GetMaterial().set({'ghost': 1})
         self._objects = []
-        # print 'ObjectFollowerCube.__init__, objects:', len( obj )
+        # print('ObjectFollowerCube.__init__, objects:', len( obj ))
         self.setSurface(aims.AimsTimeSurface_2_VOID())
         self.setObserved(obj)
+
+    def __del__(self):
+        self.deleteObservers()
+        self.cleanup()
 
     def observed(self):
         return self._objects
@@ -63,27 +67,29 @@ class ObjectFollowerCube(anatomist.ASurface_2):
     def setObserved(self, obj):
         'sets the observed objects'
 
-        #print 'setObserved', len(obj)
+        # print('setObserved', len(obj))
         oldobj = [i for i in self._objects]
         for i in oldobj:
-            self.unregisterObservable(i.get())
+            i.deleteObserver(self)
         del oldobj
         self._objects = [anatomist.weak_ptr_AObject(i) for i in obj]
         for i in obj:
-            self.registerObservable(i)
+            i.addObserver(self)
         self.redraw()
 
     def update(self, obs, param):
-        #print 'ObjectFollowerCube.update'
+        # print('ObjectFollowerCube.update')
         if obs in self._objects:
             self.redraw()
             self.notifyObservers(obs)
 
     def unregisterObservable(self, obs):
-        #print 'ObjectFollowerCube.unregisterObservable', obs
+        # print('ObjectFollowerCube.unregisterObservable', obs)
         obss = anatomist.weak_ptr_AObject(obs)
         if obss in self._objects:
+            # print('objects:', len(self._objects))
             self._objects = [i for i in self._objects if i != obss]
+            super().unregisterObservable(obs)
             self.redraw()
 
     def boundingbox(self):
@@ -117,7 +123,7 @@ class ObjectFollowerCube(anatomist.ASurface_2):
         if hasattr(self, '_redrawing'):
             return
         self._redrawing = True
-        #print 'ObjectFollowerCube.redraw'
+        # print('ObjectFollowerCube.redraw')
         mesh = self.surface()
         if mesh.isNull():
             self.setSurface(aims.AimsTimeSurface_2_VOID())
