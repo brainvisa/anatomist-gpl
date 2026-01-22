@@ -81,7 +81,7 @@ class ObjectFollowerCube(anatomist.ASurface_2):
         # print('ObjectFollowerCube.update')
         if obs in self._objects:
             self.redraw()
-            self.notifyObservers(obs)
+            self.notifyObservers()
 
     def unregisterObservable(self, obs):
         # print('ObjectFollowerCube.unregisterObservable', obs)
