@@ -213,6 +213,38 @@ class Zoom3DAction : anatomist::Action
 };
 
 
+class PinchZoomAction : anatomist::Action
+{
+%TypeHeaderCode
+#include <anatomist/window3D/control3D.h>
+%End
+
+  public:
+    PinchZoomAction();
+    virtual ~PinchZoomAction();
+
+    void pinchStart( QPinchGesture *gesture );
+    void pinchMove( QPinchGesture *gesture );
+    void pinchStop( QPinchGesture *gesture );
+};
+
+
+class TouchRotateAction : anatomist::Action
+{
+%TypeHeaderCode
+#include <anatomist/window3D/control3D.h>
+%End
+
+  public:
+    TouchRotateAction();
+    virtual ~TouchRotateAction();
+
+    void touchStart( QTouchEvent *event );
+    void touchMove( QTouchEvent *event );
+    void touchStop( QTouchEvent *event );
+};
+
+
 class Translate3DAction : anatomist::Action
 {
 %TypeHeaderCode
