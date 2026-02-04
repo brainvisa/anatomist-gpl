@@ -17,8 +17,6 @@ class GLWidgetManager : anatomist::View
 %#else%
     QGLWidget *qglWidget ();
 %#endif%
-    void setPrimitives( const anatomist::GLPrimitives & );
-    anatomist::GLPrimitives primitives() const;
 
     void clearLists();
     void setExtrema( const Point3df &, const Point3df & );
