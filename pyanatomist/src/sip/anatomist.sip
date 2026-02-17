@@ -104,12 +104,14 @@ public:
   void releaseWindow( anatomist::AWindow * );
   void takeWindowRef( anatomist::AWindow * );
 %MethodCode
-  theAnatomist->takeWindowRef( a0 );
+  if( theAnatomist )
+    theAnatomist->takeWindowRef( a0 );
 %End
   void releaseObject( anatomist::AObject * );
   void takeObjectRef( anatomist::AObject * );
 %MethodCode
-  theAnatomist->takeObjectRef( a0 );
+  if( theAnatomist )
+    theAnatomist->takeObjectRef( a0 );
 %End
   QString anatomistSharedPath();
   QString anatomistHomePath();
@@ -133,23 +135,30 @@ public:
 
   void registerObject( anatomist::AObject *, bool = true );
 %MethodCode
-  theAnatomist->registerObject( a0, a1 );
+  if( theAnatomist )
+    theAnatomist->registerObject( a0, a1 );
 %End
   void unregisterObject( anatomist::AObject * );
 %MethodCode
-  theAnatomist->unregisterObject( a0 );
+  if( theAnatomist )
+    theAnatomist->unregisterObject( a0 );
 %End
   void registerWindow( anatomist::AWindow * );
 %MethodCode
-  theAnatomist->registerWindow( a0 );
+  if( theAnatomist )
+    theAnatomist->registerWindow( a0 );
 %End
   void unregisterWindow( anatomist::AWindow * );
 %MethodCode
-  theAnatomist->unregisterWindow( a0 );
+  if( theAnatomist )
+    theAnatomist->unregisterWindow( a0 );
 %End
   anatomist::Referential *centralReferential() const;
 %MethodCode
-  sipRes = theAnatomist->centralReferential();
+  if( theAnatomist )
+    sipRes = theAnatomist->centralReferential();
+  else
+    sipRes = 0;
 %End
   int verbose();
 %MethodCode
@@ -157,39 +166,51 @@ public:
 %End
   void mapObject( anatomist::AObject * obj );
 %MethodCode
-  theAnatomist->mapObject( a0 );
+  if( theAnatomist )
+    theAnatomist->mapObject( a0 );
 %End
   void unmapObject( anatomist::AObject * obj );
 %MethodCode
-  theAnatomist->unmapObject( a0 );
+  if( theAnatomist )
+    theAnatomist->unmapObject( a0 );
 %End
 
   anatomist::Transformation*
     getTransformation( const anatomist::Referential*,
                        const anatomist::Referential* );
 %MethodCode
-  sipRes = theAnatomist->getTransformation( a0, a1 );
+  if( theAnatomist )
+    sipRes = theAnatomist->getTransformation( a0, a1 );
+  else
+    sipRes = 0;
 %End
 
   std::string objectsFileFilter() const;
 %MethodCode
-  sipRes = new std::string( theAnatomist->objectsFileFilter() );
+  if( theAnatomist )
+    sipRes = new std::string( theAnatomist->objectsFileFilter() );
+  else
+    sipRes = new std::string;
 %End
 
   void addObjectsFileFilter( const std::string & filter );
 %MethodCode
-  theAnatomist->addObjectsFileFilter( *a0 );
+  if( theAnatomist )
+    theAnatomist->addObjectsFileFilter( *a0 );
 %End
 
   void updateFileDialogObjectsFilter();
 %MethodCode
-  theAnatomist->updateFileDialogObjectsFilter();
+  if( theAnatomist )
+    theAnatomist->updateFileDialogObjectsFilter();
 %End
 
   static std::string version();
 %MethodCode
-  sipRes = new std::string( anatomist::Anatomist::versionString() );
+    sipRes = new std::string( anatomist::Anatomist::versionString() );
 %End
+
+  static bool hasApplication();
 };
 
 

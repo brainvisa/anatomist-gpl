@@ -91,6 +91,7 @@ public:
   void quit();
   bool exitOnQuit() const;
   void setExitOnQuit( bool x );
+  static bool hasApplication();
 };
 
 

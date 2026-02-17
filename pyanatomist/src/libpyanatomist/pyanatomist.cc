@@ -265,6 +265,13 @@ void AnatomistSip::setExitOnQuit( bool x )
   theAnatomist->setExitOnQuit( x );
 }
 
+
+bool AnatomistSip::hasApplication()
+{
+  return theAnatomist != 0;
+}
+
+
 // ------------------------
 
 carto::rc_ptr<Volume_U8>

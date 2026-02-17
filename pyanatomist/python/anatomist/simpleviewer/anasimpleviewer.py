@@ -48,6 +48,7 @@ from six.moves import zip
 qt_backend.set_qt_backend(compatible_qt5=True)
 from soma.qt_gui.qt_backend import QtCore, QtGui, Qt
 from soma.qt_gui.qt_backend import uic
+from soma.qt_gui.qt_backend import sip
 from soma.qt_gui.qt_backend.uic import loadUi
 import six
 
@@ -734,22 +735,25 @@ class AnaSimpleViewer(Qt.QObject):
     def deleteObjectsFromFiles(self, files):
         '''Delete the given objects given by their file names
         '''
-        a = ana.Anatomist('-b')
-        objs = [o for o in a.getObjects() if o.filename in files]
-        self.deleteObjects(objs)
+        if ana.Anatomist.hasApplication():
+            a = ana.Anatomist('-b')
+            objs = [o for o in a.getObjects() if o.filename in files]
+            self.deleteObjects(objs)
 
     def closeAll(self, close_ana=True):
         '''Exit'''
         print("Exiting")
-        a = ana.Anatomist('-b')
-        # remove windows from their parent to prevent them to be brutally
-        # deleted by Qt.
-        w = None
-        for w in self.awindows:
-            w.hide()
-            self.viewgridlay.removeWidget(w.internalRep._get())
-            w.setParent(None)
-        del w
+        if ana.Anatomist.hasApplication():
+            a = ana.Anatomist('-b')
+            # remove windows from their parent to prevent them to be brutally
+            # deleted by Qt.
+            w = None
+            for w in self.awindows:
+                w.hide()
+                if not sip.isdeleted(self.viewgridlay):
+                    self.viewgridlay.removeWidget(w.internalRep._get())
+                w.setParent(None)
+            del w
         self.awindows = []
         self.viewgridlay = None
         self.volrender = None
@@ -759,7 +763,7 @@ class AnaSimpleViewer(Qt.QObject):
         self.awidget.close()
         self.awidget = None
         del self.fdialog
-        if close_ana:
+        if close_ana and ana.Anatomist.hasApplication():
             a = ana.Anatomist()
             a.close()
 
