@@ -16,9 +16,11 @@ import numpy as np
 temp_dirs = []
 older_cwd = os.getcwd()
 install_dir = os.path.join(aims.carto.Paths.globalShared(), 'brainvisa_demo')
+test_exist_files=['data_for_anatomist/subject01/subject01.nii']
 try:
     # download demo data
-    demotools.install_demo_data('demo_data.zip', install_dir=install_dir)
+    demotools.install_demo_data('demo_data.zip', install_dir=install_dir,
+                                test_exist_files=test_exist_files)
 except Exception:
     # maybe we don't have write permission in the directory
     # try again in a temp directory
@@ -26,7 +28,8 @@ except Exception:
     temp_dirs.append(install_dir)
 
     # download demo data
-    demotools.install_demo_data('demo_data.zip', install_dir=install_dir)
+    demotools.install_demo_data('demo_data.zip', install_dir=install_dir,
+                                test_exist_files=test_exist_files)
 
 os.chdir(install_dir)
 print('we are working in:', install_dir)
