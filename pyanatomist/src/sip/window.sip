@@ -254,7 +254,10 @@ public:
   bool fog() const;
   void resizeView( int w, int h );
   QImage snapshotImage( int width=0, int height=0, int bufmode=0 );
-  virtual rc_ptr_ViewState viewState(bool slice=false);
+  virtual rc_ptr_ViewState viewState(
+    bool slice=false,
+    anatomist::ViewState::glSelectRenderMode
+      = anatomist::ViewState::glSELECTRENDER_NONE);
 
 signals:
   void refreshed();

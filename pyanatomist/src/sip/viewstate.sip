@@ -19,8 +19,24 @@ class ViewState
 %End
 
 public:
-  ViewState( float t = 0, anatomist::AWindow * = 0 );
-  ViewState( const vector_FLOAT & timedims, anatomist::AWindow * = 0 );
+    enum glSelectRenderMode
+    {
+      /// no selection
+      glSELECTRENDER_NONE,
+      /// select a single object
+      glSELECTRENDER_OBJECT,
+      /// select multiple objects in a neighbourhood
+      glSELECTRENDER_OBJECTS,
+      /// select a polygon in a mesh
+      glSELECTRENDER_POLYGON,
+    };
+
+  ViewState( float t = 0, anatomist::AWindow * = 0,
+              anatomist::ViewState::glSelectRenderMode
+                = anatomist::ViewState::glSELECTRENDER_NONE );
+  ViewState( const vector_FLOAT & timedims, anatomist::AWindow * = 0,
+             anatomist::ViewState::glSelectRenderMode
+               = anatomist::ViewState::glSELECTRENDER_NONE );
   virtual ~ViewState();
 
   virtual anatomist::SliceViewState *sliceVS();
