@@ -405,7 +405,7 @@ class LinkROIAction(ana.cpp.ContinuousTrackball):
             trans = VectorFieldTransforms().get_transformation(
                 oref, dref, allow_compose=True)
             if trans is None or trans.isNull():
-                print('no trans')
+                # print('no trans')
                 continue
             # print('trans:', trans.get())
             # transform the cursor position (non-linearly)
