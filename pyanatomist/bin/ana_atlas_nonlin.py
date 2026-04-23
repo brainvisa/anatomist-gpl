@@ -17,7 +17,6 @@ import sys
 import time
 import numpy as np
 import yaml
-import uuid
 import os
 import os.path as osp
 import collections
@@ -47,7 +46,6 @@ class VectorFieldTransforms(Singleton):
         super(VectorFieldTransforms, self).__init__()
         self._transformations = {}
         self._refs_from_names = {}
-        self._ref_alias = {}
 
     def add_transformation(self, source_ref, dest_ref, transform):
         '''
@@ -73,6 +71,13 @@ class VectorFieldTransforms(Singleton):
                 transform = [0, 0, 0,  1, 0, 0,  0, 1, 0,  0, 0, 1]
             a = ana.Anatomist()
             a.loadTransformation(transform, source_ref, dest_ref)
+        elif isinstance(transform, aims.AffineTransformation3d):
+            a = ana.Anatomist()
+            tvec = transform.affine()[:3, 3, 0, 0].tolist()
+            tvec += transform.affine()[0, :3, 0, 0].tolist()
+            tvec += transform.affine()[1, :3, 0, 0].tolist()
+            tvec += transform.affine()[2, :3, 0, 0].tolist()
+            a.createTransformation(tvec, source_ref, dest_ref)
         else:
             # non-linear: use our new system
             if hasattr(source_ref, 'getInternalRep'):
@@ -116,7 +121,7 @@ class VectorFieldTransforms(Singleton):
         # print('get_transformation', source_ref, dest_ref)
 
         trans = self._transformations.get(source_ref, {}).get(dest_ref)
-        # print('    direct:', trans)
+        # print('    direct:', trans, ', from:', len(self._transformations.get(source_ref, {})))
         if isinstance(trans, str):
             # the transformation is a filename, load it
             # this is a lazy-load mechanism
@@ -139,6 +144,12 @@ class VectorFieldTransforms(Singleton):
                     # register the composition in the graph
                     self.add_transformation(source_ref, dest_ref, trans)
 
+        # if trans is None or trans.isNull():
+        #     print('no trans.')
+        # else:
+        #     print('found trans:', trans.get())
+        # print('transformations:', self._transformations)
+        # print('refs from nams:', self._refs_from_names)
         return trans
 
     def load_transformation(self, filename, source_ref=None, dest_ref=None):
@@ -182,6 +193,7 @@ class VectorFieldTransforms(Singleton):
             except IndexError:
                 return None
 
+            # print('chain from:', space.uuid())
             # TODO detect ambiguities (multiple same-length chains)
             if space == to_space:
                 chain = []
@@ -196,14 +208,19 @@ class VectorFieldTransforms(Singleton):
                     in self._transformations.get(space, {}).items():
                 if target_space not in visited:
                     visited.add(target_space)
+                    # print('visit:', target_space.uuid())
                     to_visit.append(target_space)
                     back_pointers[target_space] = (space, transform)
             # add builtin transformations to the graph
             for target_space in all_refs:
                 if target_space not in visited:
                     transform = a.getTransformation(space, target_space)
-                    if transform is not None:
+                    if transform is not None and not (
+                            transform.isGenerated()
+                            and a.getTransformation(
+                                target_space, space).isGenerated()):
                         visited.add(target_space)
+                        # print('visit(native):', target_space.uuid())
                         to_visit.append(target_space)
                         transform = transform.motion()  # get aims trans
                         back_pointers[target_space] = (space, transform)
@@ -222,39 +239,21 @@ class VectorFieldTransforms(Singleton):
             return ref
         a = ana.Anatomist()
         # is ref_id an UUID ?
-        aliases = self._ref_alias.get(ref_id, set())
-        aliases.add(ref_id)
-        try:
-            for alias in aliases:
-                ref = self._refs_from_names.get(alias)
-                if ref is not None:
-                    self._refs_from_names[ref_id] = ref
-                    for alias2 in aliases:
-                        self._refs_from_names[alias2] = ref
-                        self._ref_alias[alias2] = aliases
-                    return ref
-            for alias in aliases:
-                ref = ana.cpp.Referential.referentialOfUUID(alias)
-                if ref is not None:
-                    break
-            if not ref:
-                ref = a.createReferential()
-                ref.header()['uuid'] = ref_id
-            else:
-                ref = a.Referential(a, ref)
-        except ValueError:
+        ref = ana.cpp.Referential.referentialOfUUID(ref_id)
+        if ref is None:
             # no, it's a name: try by name
-            refs = [r for r in a.getReferentials()
-                    if r.header().get('name ') in aliases]
-            if len(refs) != 0:
-                ref = refs[0]
-            else:
-                ref = a.createReferential()
+            for r in a.getReferentials():
+                if r.header().get('name ') == ref_id:
+                    return ref
+        if ref is None:
+            ref = a.createReferential()
+            uuid = ref.uuid()
+            ref.header()['uuid'] = ref_id
+            if ref.uuid() == '00000000-0000-0000-0000-000000000000':
+                # not an uuid
+                ref.header()['uuid'] = uuid
                 ref.header()['name'] = ref_id
-        aliases.add(ref.uuid())
-        for alias in aliases:
-            self._refs_from_names[alias] = ref
-            self._ref_alias[alias] = aliases
+            self._refs_from_names[ref.uuid()] = ref.getInternalRep()
 
         return ref
 
@@ -290,6 +289,37 @@ class VectorFieldTransforms(Singleton):
             dirname = '.'
             graph.loadTransformationsGraph(graphd, dirname)
         graph.registerInverseTransformations()
+
+        # register all refs
+        a = ana.Anatomist()
+        for vertex in graph.vertices():
+            ref_id = vertex['uuid']
+            aliases = set(vertex.get('alias', set()))
+            aliases.add(ref_id)
+            ref = None
+            for rid in aliases:
+                ref = ana.cpp.Referential.referentialOfUUID(rid)
+                if ref is not None:
+                    break
+            if ref is None:
+                for r in a.getReferentials():
+                    if r.header().get('name') in aliases:
+                        ref = r
+                        break
+                if ref is None:
+                    ref = a.createReferential()
+                    uuid = ref.uuid()
+                    ref.header()['uuid'] = ref_id
+                    if ref.uuid() == '00000000-0000-0000-0000-000000000000':
+                        # not an uuid
+                        ref.header()['uuid'] = uuid
+                        ref.header()['name'] = ref_id
+                        aliases.add(uuid)
+                    ref = ref.getInternalRep()
+            ref_id = ref.uuid()
+            for rid in aliases:
+                self._refs_from_names[rid] = ref
+
         for edge in graph.edges():
             source_def, dest_def = edge.vertices()
             source_id = source_def['uuid']
@@ -297,27 +327,14 @@ class VectorFieldTransforms(Singleton):
             trans = edge['transformation']
             if trans.isNull():
                 trans = None
-
-            aliases = source_def.get('alias')
-            if aliases:
-                aliases = set(aliases)
-                aliases.add(source_id)
-                for alias in aliases:
-                    self._ref_alias[alias] = aliases
-            aliases = dest_def.get('alias')
-            if aliases:
-                aliases = set(aliases)
-                aliases.add(dest_id)
-                for alias in aliases:
-                    self._ref_alias[alias] = aliases
-
+            else:
+                trans = trans.get()
             source_ref = self.referential_from_id(source_id)
             dest_ref = self.referential_from_id(dest_id)
-            sr = source_ref
             filename = edge.get('filename')
             if trans is None and filename is not None:
                 trans = filename
-            self.add_transformation(sr, dest_ref, trans)
+            self.add_transformation(source_ref, dest_ref, trans)
         # print('load_transformations_graph done.')
 
 
@@ -381,15 +398,16 @@ class LinkROIAction(ana.cpp.ContinuousTrackball):
             dref = win.getReferential().getInternalRep()
             if dref is oref:
                 continue
-            trans = a.getTransformation(oref, dref)
-            if trans:
-                continue  # already an affine transfo
+            # trans = a.getTransformation(oref, dref)
+            # if trans:
+            #     continue  # already an affine transfo
             print('look for non-linear trans', oref.uuid(), 'to', dref.uuid())
             trans = VectorFieldTransforms().get_transformation(
                 oref, dref, allow_compose=True)
-            # print('trans:', trans)
             if trans is None or trans.isNull():
+                print('no trans')
                 continue
+            # print('trans:', trans.get())
             # transform the cursor position (non-linearly)
             tpos = trans.transform(pos)
             print('transformed pos:', list(tpos))
