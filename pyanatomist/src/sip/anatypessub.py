@@ -436,6 +436,41 @@ typessub.update({'anatomist::EventHandler':
                   'testPyType': '',
                   },
 
+                 'QOpenGLShaderProgram':
+                 {'typecode': 'QOpenGLShaderProgram',
+                     'pyFromC': 'pyanatomistConvertFrom_QOpenGLShaderProgram',
+                     'CFromPy': 'pyanatomistConvertTo_QOpenGLShaderProgram',
+                     'castFromSip': '(QOpenGLShaderProgram *)',
+                     'deref': '*',
+                     'pyderef': '*',
+                     'address': '&',
+                     'pyaddress': '&',
+                     'defScalar': '',
+                     'defNumpyBindings': '',
+                     'new': 'new QOpenGLShaderProgram',
+                     'NumType': 'PyArray_OBJECT',
+                     'PyType': 'QOpenGLShaderProgram',
+                     'sipClass': 'QOpenGLShaderProgram',
+                     'typeinclude': '#include <QOpenGLShaderProgram>',
+                     'sipinclude': '#include <QOpenGLShaderProgram>\n'
+                     '#ifndef RC_PTR_QOpenGLShaderProgram_DEFINED\n'
+                     '#define RC_PTR_QOpenGLShaderProgram_DEFINED\n'
+                     'namespace carto {\n'
+                     'template <>\n'
+                     'class RefConstruction<QOpenGLShaderProgram> : QOpenGLShaderProgram, virtual DefaultRefConstruction\n'
+                     '{\n'
+                     '  template <class R>  friend class ref;\n'
+                     '  template <class R>  friend class const_ref;\n'
+                     '  RefConstruction();\n'
+                     '  static const QOpenGLShaderProgram *release( const_ref<QOpenGLShaderProgram> *item )\n'
+                     '  { return DefaultRefConstruction::release( item ); }\n'
+                     '};\n'
+                     '}\n'
+                     '#endif\n',
+                     'module': 'anatomist',
+                     'testPyType': '',
+                  },
+
                  'anatomist::GLItem':
                  {'typecode': 'GLItem',
                      'pyFromC': 'pyanatomistConvertFrom_GLItem',

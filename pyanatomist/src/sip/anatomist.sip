@@ -52,6 +52,7 @@
 %Include set_ReferentialPtr.sip
 %Include set_TransformationPtr.sip
 %Include vector_AObjectPtr.sip
+%Include rcptr_QOpenGLShaderProgram.sip
 //%Include map_U32_set_AObjectPtr.sip
 //%Include map_U32_set_AWindowPtr.sip
 
