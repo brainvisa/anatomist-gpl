@@ -196,7 +196,7 @@ typedef std::vector<float> vector_FLOAT;
   }
   else
   {
-    std::vector<int> dims( 2, sipCpp->glNumVertex( *a0 ) );
+    std::vector<int> dims( 2, sipCpp->glTexCoordSize( *a0 ) );
     dims[1] = int( sipCpp->glDimTex( *a0, a1 ) );
 
     PyArray_Descr *descr = PyArray_DescrFromType( NPY_FLOAT32 );
