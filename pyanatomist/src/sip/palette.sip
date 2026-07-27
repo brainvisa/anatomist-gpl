@@ -42,9 +42,12 @@ public:
   void setMax1( double x );
   void setMin2( double x );
   void setMax2( double x );
-  double relValue1( const AObject * obj, double absval ) const;
-  double relValue2( const AObject * obj, double absval ) const;
-  double absValue1( const AObject * obj, double relval ) const;
+  double relValue1( const AObject *obj, double absval ) const;
+  double relValue2( const AObject *obj, double absval ) const;
+  double absValue1( const AObject *obj, double relval ) const;
+  double relValue1( const GLComponent *glc, double absval ) const;
+  double relValue2( const GLComponent *glc, double absval ) const;
+  double absValue1( const GLComponent *glc, double relval ) const;
   double absValue2( const AObject * obj, double relval ) const;
 
   double absMin1( const anatomist::AObject * obj ) const;
