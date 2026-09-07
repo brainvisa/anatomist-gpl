@@ -2292,7 +2292,7 @@ class Anatomist(Singleton):
                 in this case, snapshot is a list of filenames separated by
                 space characters: so the file name/path must not contain any
                 space character (this restriction doesn't apply if a single
-                window is used). Node: escape character ("\ ") are not
+                window is used). Node: escape characters ("\\ ") are not
                 supported yet.
             snapshot_width: int (optional)
                 Snapshot or recorded images width. If unspecified, fit the
