@@ -1805,6 +1805,8 @@ class Anatomist(base.Anatomist, cpp.Anatomist):
                 t = self.internalRep.subtype()
                 if t == 0:
                     t = self.internalRep.type()
+                if hasattr(t, 'value'):  # PyQt6
+                    t = t.value
                 return cpp.AWindowFactory.typeString(t)
             elif name == "group":  # window group can change so it is not saved in an attribute
                 return self.anatomistinstance.AWindowsGroup(self.anatomistinstance, self.internalRep.Group())

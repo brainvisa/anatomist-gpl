@@ -68,7 +68,7 @@ class Simple2DControl(anatomist.Control):
                                      pool.action('LinkAction').execLink,
                                      pool.action('LinkAction').execLink,
                                      pool.action('LinkAction').endLink, True)
-        self.mouseLongEventSubscribe(key.MidButton, ShiftModifier,
+        self.mouseLongEventSubscribe(key.MiddleButton, ShiftModifier,
                                      pool.action("Zoom3DAction").beginZoom,
                                      pool.action("Zoom3DAction").moveZoom,
                                      pool.action("Zoom3DAction").endZoom, True)
@@ -77,7 +77,7 @@ class Simple2DControl(anatomist.Control):
                                     pool.action("Trackball").setCenter)
         self.keyPressEventSubscribe(key.Key_C, AltModifier,
                                     pool.action("Trackball").showRotationCenter)
-        self.mouseLongEventSubscribe(key.MidButton, ControlModifier,
+        self.mouseLongEventSubscribe(key.MiddleButton, ControlModifier,
                                      pool.action(
                                          "Translate3DAction").beginTranslate,
                                      pool.action(
@@ -143,7 +143,7 @@ class Simple3DControl(Simple2DControl):
         ControlModifier = key.ControlModifier
         Simple2DControl.eventAutoSubscription(self, pool)
         self.mouseLongEventSubscribe(
-            key.MidButton, NoModifier,
+            key.MiddleButton, NoModifier,
             pool.action('ContinuousTrackball').beginTrackball,
             pool.action('ContinuousTrackball').moveTrackball,
             pool.action('ContinuousTrackball').endTrackball, True)
