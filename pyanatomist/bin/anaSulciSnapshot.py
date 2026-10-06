@@ -32,11 +32,8 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
-from __future__ import print_function
-from __future__ import absolute_import
 import os
 import sys
-import sip
 import numpy
 import time
 from optparse import OptionParser
@@ -45,6 +42,7 @@ from soma import aims, aimsalgo
 import anatomist.direct.api as anatomist
 import soma.qt_gui.qt_backend.QtCore as qt
 import soma.qt_gui.qt_backend.QtGui as qtgui
+import sip
 
 
 def setCamera(win, orientation):
