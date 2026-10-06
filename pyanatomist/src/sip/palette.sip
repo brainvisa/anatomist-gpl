@@ -108,6 +108,9 @@ public:
     allow to zoom the palette view on specific object values bounds.
 %End
 
+  rc_ptr_Volume_RGBA toVolume( int w, int h, double min1, double max1,
+                    double zero1, double min2 = 0., double max2 = 1.,
+                    double zero2 = 0.5 ) const;
   rc_ptr_Volume_RGBA toVolume( int w = 0, int h = 0, bool scaled = true );
 
   int maxSizeX() const;
