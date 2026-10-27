@@ -11,6 +11,9 @@ namespace anatomist
       RenderContext(AWindow3D* win, anatomist::GLWidgetManager* widgetManager);
       ~RenderContext();
       //rc_ptr_anatomist::PrimList renderObjects( const std::list<carto::shared_ptr<anatomist::AObject>> & objs);
+    private : 
+      RenderContext( const anatomist::RenderContext & );
+      anatomist::RenderContext & operator=( const anatomist::RenderContext & );
   };
 };
 
